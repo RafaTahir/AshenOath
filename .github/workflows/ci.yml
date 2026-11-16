@@ -1,0 +1,30 @@
+name: Architecture Gate
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  architecture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            outputs/AshenOathTheRoadBetweenCrowns/scripts
+            outputs/AshenOathTheRoadBetweenCrowns/tools/check_architecture.py
+            outputs/AshenOathTheRoadBetweenCrowns/tools/architecture_baseline.json
+            outputs/AshenOathTheRoadBetweenCrowns/data
+          sparse-checkout-cone-mode: false
+      - name: Exercise static gate rules
+        run: python3 outputs/AshenOathTheRoadBetweenCrowns/tools/check_architecture.py --self-test
+      - name: Enforce architecture ratchet
+        run: python3 outputs/AshenOathTheRoadBetweenCrowns/tools/check_architecture.py
+      - name: Validate authored JSON syntax
+        run: python3 -c "import glob, json; [json.load(open(f, encoding='utf-8')) for f in glob.glob('outputs/AshenOathTheRoadBetweenCrowns/data/*.json')]; print('JSON OK')"

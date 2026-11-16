@@ -1,0 +1,2196 @@
+{
+  "definitions": {
+    "duck_meta_calls": "Executable has_method/call/get_meta/set_meta calls; excludes definitions/comments/strings.",
+    "has_dynamic_get_set": "Presence of _get/_set definitions; companion inventory prevents new proxies.",
+    "lines": "Physical splitlines count, including blank/comment lines.",
+    "unseeded_rand_calls": "Global randf/randi/randf_range/randi_range calls; not owned RNG methods.",
+    "untyped_funcs": "Named functions or lambdas missing any parameter type or explicit return type.",
+    "wallclock_calls": "Executable Time.get_ticks_* calls."
+  },
+  "files": {
+    "scripts/actor_spatial_index.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 69,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 2,
+      "wallclock_calls": 0
+    },
+    "scripts/arrow_flight.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 12,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/arrow_projectile.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 41,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/arrow_visual.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 17,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/asset_database.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 235,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/asset_spawn_helper.gd": {
+      "duck_meta_calls": 107,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 1548,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 5,
+      "wallclock_calls": 7
+    },
+    "scripts/audio_manager.gd": {
+      "duck_meta_calls": 12,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 1907,
+      "unseeded_rand_calls": 23,
+      "untyped_funcs": 7,
+      "wallclock_calls": 2
+    },
+    "scripts/bandit_frontier.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 78,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/board_game_opponent.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 43,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/board_square.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 34,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/boss_encounter.gd": {
+      "duck_meta_calls": 21,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 195,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/bow_presentation.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 260,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/bow_reticle.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 42,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/bracken_field_trial.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 169,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 3,
+      "wallclock_calls": 0
+    },
+    "scripts/bridge_surface_contract.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 25,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/camera_controller.gd": {
+      "duck_meta_calls": 28,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 1168,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 2
+    },
+    "scripts/campaign_record_presentation.gd": {
+      "duck_meta_calls": 3,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 73,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/campaign_revision.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 160,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 5,
+      "wallclock_calls": 0
+    },
+    "scripts/campaign_story_overlay.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 110,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 7,
+      "wallclock_calls": 0
+    },
+    "scripts/castle_patrol.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 26,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/cemetery_evidence_presentation.gd": {
+      "duck_meta_calls": 2,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 34,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/cemetery_staging.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 6,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/character_animation_driver.gd": {
+      "duck_meta_calls": 49,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 1504,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/character_animation_fusion.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 184,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/character_face_driver.gd": {
+      "duck_meta_calls": 9,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 482,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 1
+    },
+    "scripts/character_identity_profile.gd": {
+      "duck_meta_calls": 18,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 300,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/character_life_modifier.gd": {
+      "duck_meta_calls": 9,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 652,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/character_material_bindings.gd": {
+      "duck_meta_calls": 14,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 143,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/character_node_manifest.gd": {
+      "duck_meta_calls": 4,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 35,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/character_presence.gd": {
+      "duck_meta_calls": 13,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 86,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/character_presentation.gd": {
+      "duck_meta_calls": 32,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 752,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/character_role_contract.gd": {
+      "duck_meta_calls": 18,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 145,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/character_role_spec.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 251,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/character_visual_contract.gd": {
+      "duck_meta_calls": 5,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 105,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/combat_body_query.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 187,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/combat_feedback.gd": {
+      "duck_meta_calls": 21,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 584,
+      "unseeded_rand_calls": 5,
+      "untyped_funcs": 5,
+      "wallclock_calls": 0
+    },
+    "scripts/combat_manager.gd": {
+      "duck_meta_calls": 21,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 542,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 6,
+      "wallclock_calls": 0
+    },
+    "scripts/combat_vfx_coordinator.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 156,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/community_activity.gd": {
+      "duck_meta_calls": 13,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 485,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 2,
+      "wallclock_calls": 0
+    },
+    "scripts/community_campaign.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 199,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 19,
+      "wallclock_calls": 0
+    },
+    "scripts/community_ending.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 111,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 14,
+      "wallclock_calls": 0
+    },
+    "scripts/community_presentation.gd": {
+      "duck_meta_calls": 25,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 298,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 10,
+      "wallclock_calls": 0
+    },
+    "scripts/companion_controller.gd": {
+      "duck_meta_calls": 6,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 799,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/companion_pose.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 53,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/connected_route_geometry.gd": {
+      "duck_meta_calls": 12,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 457,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/covenant_resolution.gd": {
+      "duck_meta_calls": 4,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 135,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 7,
+      "wallclock_calls": 0
+    },
+    "scripts/crafting_manager.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 68,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/day_night_controller.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 76,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/dialogue_history.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 31,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/dialogue_manager.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 423,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 2,
+      "wallclock_calls": 0
+    },
+    "scripts/dialogue_runtime_coordinator.gd": {
+      "duck_meta_calls": 14,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 179,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/dialogue_topic_navigation.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 46,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/display_metrics_bridge.gd": {
+      "duck_meta_calls": 4,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 124,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/ending_catalog.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 90,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 6,
+      "wallclock_calls": 0
+    },
+    "scripts/enemy_ai.gd": {
+      "duck_meta_calls": 37,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 2216,
+      "unseeded_rand_calls": 2,
+      "untyped_funcs": 3,
+      "wallclock_calls": 2
+    },
+    "scripts/epilogue_resolver.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 193,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 10,
+      "wallclock_calls": 0
+    },
+    "scripts/equipment_loadout.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 233,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/everyday_life.gd": {
+      "duck_meta_calls": 14,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 668,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 5,
+      "wallclock_calls": 2
+    },
+    "scripts/everyday_world_presentation.gd": {
+      "duck_meta_calls": 3,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 227,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/field_device.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 85,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/fishing_activity.gd": {
+      "duck_meta_calls": 2,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 198,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 2,
+      "wallclock_calls": 0
+    },
+    "scripts/game.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 95,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/gamepad_profile.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 61,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/greyfen_archery_range.gd": {
+      "duck_meta_calls": 4,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 389,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 4,
+      "wallclock_calls": 0
+    },
+    "scripts/greyfen_frontier.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 74,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/greyfen_gathering.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 120,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 6,
+      "wallclock_calls": 0
+    },
+    "scripts/greyfen_guidance.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 87,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 7,
+      "wallclock_calls": 0
+    },
+    "scripts/greyfen_life_controller.gd": {
+      "duck_meta_calls": 107,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 2430,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 9,
+      "wallclock_calls": 20
+    },
+    "scripts/greyfen_social_presentation.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 17,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/greyfen_village_details.gd": {
+      "duck_meta_calls": 26,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 559,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 4,
+      "wallclock_calls": 0
+    },
+    "scripts/grounded_feet_modifier.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 150,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/hart_woodland.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 81,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/health_component.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 49,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/held_prop_geometry.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 132,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/hud.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 2,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/hud/combat_feedback.gd": {
+      "duck_meta_calls": 5,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 502,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/hud/dialogue_panel.gd": {
+      "duck_meta_calls": 19,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 650,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 9,
+      "wallclock_calls": 0
+    },
+    "scripts/hud/hud_api.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 735,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/hud/hud_component.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 994,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 10,
+      "wallclock_calls": 0
+    },
+    "scripts/hud/hud_input.gd": {
+      "duck_meta_calls": 10,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 328,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/hud/hud_layout.gd": {
+      "duck_meta_calls": 15,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 734,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/hud/hud_lifecycle.gd": {
+      "duck_meta_calls": 2,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 101,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/hud/hud_root.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 279,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 10,
+      "wallclock_calls": 0
+    },
+    "scripts/hud/hud_state.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 251,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/hud/hud_style.gd": {
+      "duck_meta_calls": 4,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 140,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 2,
+      "wallclock_calls": 0
+    },
+    "scripts/hud/inventory_panel.gd": {
+      "duck_meta_calls": 17,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 932,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 50,
+      "wallclock_calls": 0
+    },
+    "scripts/hud/menu_panel.gd": {
+      "duck_meta_calls": 43,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 912,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 40,
+      "wallclock_calls": 0
+    },
+    "scripts/hud/quest_panel.gd": {
+      "duck_meta_calls": 2,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 139,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/hud/save_panel.gd": {
+      "duck_meta_calls": 2,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 187,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 15,
+      "wallclock_calls": 0
+    },
+    "scripts/hud/settings_panel.gd": {
+      "duck_meta_calls": 9,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 346,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 10,
+      "wallclock_calls": 0
+    },
+    "scripts/hud_emblem.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 79,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/hud_layout_policy.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 219,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/hud_navigation_dial.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 178,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/hud_navigation_state.gd": {
+      "duck_meta_calls": 6,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 91,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/hud_notice_queue.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 58,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 2
+    },
+    "scripts/hud_reflow_state.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 175,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/hud_visual_style.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 126,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/immutable_collision_shapes.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 60,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/impact_particles.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 86,
+      "unseeded_rand_calls": 6,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/input_router.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 1526,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 12
+    },
+    "scripts/interactable.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 110,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/interaction_focus_service.gd": {
+      "duck_meta_calls": 11,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 282,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 1
+    },
+    "scripts/interactive_world_prop.gd": {
+      "duck_meta_calls": 9,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 118,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/interior_occlusion.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 38,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/inventory_manager.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 423,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 2,
+      "wallclock_calls": 0
+    },
+    "scripts/journal_evidence_navigation.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 69,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/journey_continuity_coordinator.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 219,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/journey_flow_director.gd": {
+      "duck_meta_calls": 2,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 182,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/journey_load_runtime.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 222,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 8,
+      "wallclock_calls": 2
+    },
+    "scripts/journey_menu_panel.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 67,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/living_cast_stations.gd": {
+      "duck_meta_calls": 22,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 301,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 3,
+      "wallclock_calls": 0
+    },
+    "scripts/minigame_manager.gd": {
+      "duck_meta_calls": 4,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 660,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 11,
+      "wallclock_calls": 0
+    },
+    "scripts/mobile_touch_controls.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 439,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/mobile_touch_layout.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 82,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/native_attack_profiles.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 65,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/npc_ambient.gd": {
+      "duck_meta_calls": 10,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 233,
+      "unseeded_rand_calls": 2,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/oath_gate_portal.gd": {
+      "duck_meta_calls": 7,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 313,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/object_inspection.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 113,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 2,
+      "wallclock_calls": 0
+    },
+    "scripts/objective_view_model.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 47,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/opening_care_scene.gd": {
+      "duck_meta_calls": 5,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 309,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 2,
+      "wallclock_calls": 0
+    },
+    "scripts/opening_soundscape.gd": {
+      "duck_meta_calls": 2,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 68,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/performance_budget_monitor.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 256,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 3
+    },
+    "scripts/performance_comparison_options.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 41,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/physics_query_scratch.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 27,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/player_controller.gd": {
+      "duck_meta_calls": 32,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 2760,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 2,
+      "wallclock_calls": 1
+    },
+    "scripts/preparation_panel.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 93,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/preparation_view_model.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 267,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 10,
+      "wallclock_calls": 0
+    },
+    "scripts/prepared_actor_catalog.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 17,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/prepared_audio_bank.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 5,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/prepared_audio_catalog.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 66,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/prepared_forest_trees.gd": {
+      "duck_meta_calls": 4,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 160,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/prepared_static_batches.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 16,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/prepared_zone_geometry.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 43,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/production_observation_bridge.gd": {
+      "duck_meta_calls": 3,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 649,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 2
+    },
+    "scripts/progression_manager.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 468,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 7,
+      "wallclock_calls": 0
+    },
+    "scripts/prop_craft_geometry.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 98,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/qa_browser_telemetry.gd": {
+      "duck_meta_calls": 8,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 570,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/quest_beat_director.gd": {
+      "duck_meta_calls": 2,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 147,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/quest_hud_coordinator.gd": {
+      "duck_meta_calls": 16,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 359,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/quest_manager.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 641,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/quest_presentation_state.gd": {
+      "duck_meta_calls": 4,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 232,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/regional_meet.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 89,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 5,
+      "wallclock_calls": 0
+    },
+    "scripts/river_motion_controller.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 173,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/runtime_actor_factory.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 24,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/runtime_asset_anchor.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 9,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/runtime_pack_manager.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 978,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 2,
+      "wallclock_calls": 5
+    },
+    "scripts/runtime_service_registry.gd": {
+      "duck_meta_calls": 21,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 345,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 30,
+      "wallclock_calls": 3
+    },
+    "scripts/saga_activities.gd": {
+      "duck_meta_calls": 53,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 1287,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/saga_catalog.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 443,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 3,
+      "wallclock_calls": 0
+    },
+    "scripts/saga_encounters.gd": {
+      "duck_meta_calls": 4,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 86,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 3,
+      "wallclock_calls": 0
+    },
+    "scripts/saga_work_presentation.gd": {
+      "duck_meta_calls": 4,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 523,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 12,
+      "wallclock_calls": 0
+    },
+    "scripts/save_manager.gd": {
+      "duck_meta_calls": 8,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 1395,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 21,
+      "wallclock_calls": 3
+    },
+    "scripts/saved_journey_model.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 96,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/seamless_world_service.gd": {
+      "duck_meta_calls": 25,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 1042,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 23
+    },
+    "scripts/settings_delta.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 13,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/settings_manager.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 476,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/shared_resource_requests.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 99,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/sky_backdrop.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 219,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/source_text.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 63,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/spatial_bounds_index.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 50,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/spatial_surface_contract.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 76,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/spectral_monster_presentation.gd": {
+      "duck_meta_calls": 3,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 120,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/stamina_component.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 50,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/startup_loading_view.gd": {
+      "duck_meta_calls": 6,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 212,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 2,
+      "wallclock_calls": 2
+    },
+    "scripts/static_multimesh_upload.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 72,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/stationary_work_grip.gd": {
+      "duck_meta_calls": 3,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 81,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/story_activity_director.gd": {
+      "duck_meta_calls": 10,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 1044,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 16,
+      "wallclock_calls": 0
+    },
+    "scripts/story_actor_presence.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 9,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/story_cast_profile.gd": {
+      "duck_meta_calls": 5,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 331,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 4,
+      "wallclock_calls": 0
+    },
+    "scripts/story_choice_presenter.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 188,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 4,
+      "wallclock_calls": 0
+    },
+    "scripts/story_decision_coordinator.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 24,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 2,
+      "wallclock_calls": 0
+    },
+    "scripts/story_encounter_director.gd": {
+      "duck_meta_calls": 9,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 445,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 6,
+      "wallclock_calls": 0
+    },
+    "scripts/story_head_modifier.gd": {
+      "duck_meta_calls": 2,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 160,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/story_honor.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 56,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/story_journal.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 106,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 11,
+      "wallclock_calls": 0
+    },
+    "scripts/story_journal_model.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 681,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 21,
+      "wallclock_calls": 0
+    },
+    "scripts/story_performance.gd": {
+      "duck_meta_calls": 4,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 190,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 2,
+      "wallclock_calls": 0
+    },
+    "scripts/story_route_catalog.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 292,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 4,
+      "wallclock_calls": 0
+    },
+    "scripts/story_scene_direction.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 151,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/story_state.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 396,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 2,
+      "wallclock_calls": 0
+    },
+    "scripts/story_wardrobe.gd": {
+      "duck_meta_calls": 5,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 69,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/story_world_director.gd": {
+      "duck_meta_calls": 13,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 518,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 31,
+      "wallclock_calls": 0
+    },
+    "scripts/story_world_scenes.gd": {
+      "duck_meta_calls": 2,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 114,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 5,
+      "wallclock_calls": 0
+    },
+    "scripts/surface_feedback_manager.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 36,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/systems/character_animation_graph.gd": {
+      "duck_meta_calls": 2,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 214,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/systems/character_motion_step.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 15,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/systems/character_palette.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 64,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/systems/character_silhouette.gd": {
+      "duck_meta_calls": 11,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 275,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/systems/combat_coordinator.gd": {
+      "duck_meta_calls": 39,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 907,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 10,
+      "wallclock_calls": 0
+    },
+    "scripts/systems/dialogue_service.gd": {
+      "duck_meta_calls": 3,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 426,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 1
+    },
+    "scripts/systems/game_bindings.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 1245,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 24,
+      "wallclock_calls": 0
+    },
+    "scripts/systems/game_definitions.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 146,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/systems/game_state.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 481,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/systems/hud_coordinator.gd": {
+      "duck_meta_calls": 6,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 311,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/systems/interaction_service.gd": {
+      "duck_meta_calls": 16,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 484,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 6,
+      "wallclock_calls": 0
+    },
+    "scripts/systems/inventory_service.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 199,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/systems/npc_routine_director.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 127,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 3,
+      "wallclock_calls": 0
+    },
+    "scripts/systems/opening_startup_service.gd": {
+      "duck_meta_calls": 50,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 1007,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 30
+    },
+    "scripts/systems/quest_service.gd": {
+      "duck_meta_calls": 2,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 316,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/systems/save_service.gd": {
+      "duck_meta_calls": 4,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 187,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 1
+    },
+    "scripts/systems/session_service.gd": {
+      "duck_meta_calls": 9,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 463,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 3,
+      "wallclock_calls": 13
+    },
+    "scripts/systems/world_presentation_service.gd": {
+      "duck_meta_calls": 6,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 956,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 7,
+      "wallclock_calls": 3
+    },
+    "scripts/systems/zone_lifecycle_service.gd": {
+      "duck_meta_calls": 36,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 1098,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 4,
+      "wallclock_calls": 13
+    },
+    "scripts/third_party/chess/Chess.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 917,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 5,
+      "wallclock_calls": 0
+    },
+    "scripts/third_party/chess/ChessEngine.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 316,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 2,
+      "wallclock_calls": 5
+    },
+    "scripts/third_party/chess/Move.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 34,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/undercroft_memorial.gd": {
+      "duck_meta_calls": 3,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 150,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/vendor_service.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 350,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 12,
+      "wallclock_calls": 0
+    },
+    "scripts/village_consequence_routines.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 52,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 2,
+      "wallclock_calls": 0
+    },
+    "scripts/visual_director.gd": {
+      "duck_meta_calls": 9,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 748,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/world_atlas.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 94,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/world_landscape_presentation.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 22,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/world_material_library.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 410,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/world_motion_controller.gd": {
+      "duck_meta_calls": 12,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 105,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/world_prop_controller.gd": {
+      "duck_meta_calls": 22,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 316,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/world_read_scope.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 37,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/world_sector_manifest.gd": {
+      "duck_meta_calls": 2,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 343,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 10,
+      "wallclock_calls": 0
+    },
+    "scripts/world_vfx_controller.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 252,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/world_visual_upgrade.gd": {
+      "duck_meta_calls": 23,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 167,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 3,
+      "wallclock_calls": 0
+    },
+    "scripts/wychwood_evidence_presentation.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 19,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/wychwood_terrain_presentation.gd": {
+      "duck_meta_calls": 3,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 29,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/zone_budget.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 95,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/zone_build_context.gd": {
+      "duck_meta_calls": 18,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 502,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 10,
+      "wallclock_calls": 0
+    },
+    "scripts/zone_composition_router.gd": {
+      "duck_meta_calls": 3,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 120,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/zone_construction_host.gd": {
+      "duck_meta_calls": 88,
+      "dynamic_get_set_funcs": [
+        "_get",
+        "_set"
+      ],
+      "has_dynamic_get_set": true,
+      "lines": 4283,
+      "unseeded_rand_calls": 2,
+      "untyped_funcs": 26,
+      "wallclock_calls": 0
+    },
+    "scripts/zone_residency_service.gd": {
+      "duck_meta_calls": 35,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 480,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 5
+    },
+    "scripts/zone_runtime_coordinator.gd": {
+      "duck_meta_calls": 38,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 716,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 12
+    },
+    "scripts/zone_scene_catalog.gd": {
+      "duck_meta_calls": 3,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 86,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/zone_spatial_service.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 550,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/zone_streaming_service.gd": {
+      "duck_meta_calls": 1,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 234,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/zones/bandit_road_section.gd": {
+      "duck_meta_calls": 2,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 86,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/zones/campaign_finale_section.gd": {
+      "duck_meta_calls": 4,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 488,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/zones/campaign_section.gd": {
+      "duck_meta_calls": 2,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 142,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/zones/campaign_wilderness_section.gd": {
+      "duck_meta_calls": 9,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 349,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/zones/campaign_wilds_presentation.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 81,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/zones/castle_vargan_section.gd": {
+      "duck_meta_calls": 6,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 473,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/zones/cemetery_section.gd": {
+      "duck_meta_calls": 48,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 516,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/zones/community_section.gd": {
+      "duck_meta_calls": 4,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 136,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/zones/greyfen_section.gd": {
+      "duck_meta_calls": 33,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 774,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 2,
+      "wallclock_calls": 0
+    },
+    "scripts/zones/river_section.gd": {
+      "duck_meta_calls": 13,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 500,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 1,
+      "wallclock_calls": 0
+    },
+    "scripts/zones/ruins_section.gd": {
+      "duck_meta_calls": 0,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 31,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    },
+    "scripts/zones/wychwood_section.gd": {
+      "duck_meta_calls": 32,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 530,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
+    }
+  },
+  "scan_root": "scripts",
+  "schema_version": 1,
+  "source_commit": "3707be3e87aee3fb51aa42a931ebe55d6a4a90b0"
+}
