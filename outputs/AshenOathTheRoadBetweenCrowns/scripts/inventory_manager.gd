@@ -1,5 +1,8 @@
 extends Node
 
+const Ammo = preload("res://scripts/models/ammo_loadout_model.gd")
+var _ammo_state: Dictionary = {}
+
 signal changed
 signal message(text: String)
 signal oil_time_changed
@@ -55,12 +58,10 @@ func load_items(path: String) -> void:
 			item_defs[id] = {"name":reward.name, "description":reward.description, "type":"keepsake", "effect":reward.effects}
 
 func add_item(id: String, amount: int = 1) -> void:
-	var target := int(items.get(id, 0)) + amount
 	if get_item_type(id) == "ammo":
-		var cap := get_ammo_cap(id)
-		if cap > 0:
-			target = mini(target, cap)
-	items[id] = maxi(target, 0)
+		add_ammo(id, amount)
+		return
+	items[id] = maxi(int(items.get(id, 0)) + amount, 0)
 	changed.emit()
 
 func add_ingredients(new_items: Dictionary) -> void:
@@ -110,17 +111,25 @@ func get_ammo_count(id: String) -> int:
 	return int(items.get(id, 0)) if get_item_type(id) == "ammo" else 0
 
 func get_ammo_cap(id: String) -> int:
-	return int(item_defs.get(id, {}).get("cap", 0))
+	return int(Ammo.FAMILY_CAPS.get(id, item_defs.get(id, {}).get("cap", 0)))
 
 func add_ammo(id: String, amount: int) -> int:
-	if get_item_type(id) != "ammo":
-		return 0
-	var before := get_ammo_count(id)
-	var cap := get_ammo_cap(id)
-	var target := before + amount if cap <= 0 else mini(before + amount, cap)
-	items[id] = maxi(target, 0)
+	if get_item_type(id) != "ammo": return 0
+	var model: Ammo = _ammo_model()
+	var before: int = model.count(id)
+	if amount < 0:
+		model.consume(id, mini(-amount, before))
+	else:
+		model.pickup(id, amount)
+	items.merge(model.counts, true)
+	_ammo_state = model.save_state()
 	changed.emit()
-	return target - before
+	return model.count(id) - before
+
+func _ammo_model() -> Ammo:
+	var model: Ammo = Ammo.new()
+	model.load_inventory({"items": items, "ammo_loadout": _ammo_state})
+	return model
 
 func apply_oil(id: String) -> bool:
 	if get_item_type(id) != "oil" or not can_consume(id):
@@ -308,6 +317,8 @@ func consume(id: String) -> bool:
 	if not can_consume(id):
 		message.emit("No %s left." % item_defs.get(id, {}).get("name", id))
 		return false
+	if get_item_type(id) == "ammo":
+		return add_ammo(id, -1) == -1
 	items[id] = int(items[id]) - 1
 	changed.emit()
 	return true
@@ -316,21 +327,17 @@ func get_item_name(id: String) -> String:
 	return str(item_defs.get(id, {}).get("name", id))
 
 func save_state() -> Dictionary:
-	return {
-		"items": items.duplicate(true),
-		"ingredients": ingredients.duplicate(true),
-		"active_oil": active_oil,
-		"oil_version": OIL_STATE_VERSION,
-		"oil_remaining_seconds": oil_remaining_seconds,
-		"coin": coin,
-		"quick_slots": quick_slots.duplicate(),
-		"sort_mode": sort_mode,
-		"kit_category": kit_category,
-		"weapon_upgrades": weapon_upgrades.duplicate(),
+	return _ammo_model().write_inventory({
+		"items": items.duplicate(true), "ingredients": ingredients.duplicate(true),
+		"active_oil": active_oil, "oil_version": OIL_STATE_VERSION, "oil_remaining_seconds": oil_remaining_seconds,
+		"coin": coin, "quick_slots": quick_slots.duplicate(), "sort_mode": sort_mode,
+		"kit_category": kit_category, "weapon_upgrades": weapon_upgrades.duplicate(),
 		"reward_deliveries": reward_deliveries.duplicate(true)
-	}
+	})
 
 func load_state(state: Dictionary, allow_legacy_oil := true) -> void:
+	state = Ammo.migrate_inventory(state)
+	_ammo_state = state.ammo_loadout.duplicate(true)
 	# Missing legacy fields use the same defaults as a fresh load, never the
 	# inventory belonging to the session that this save is replacing.
 	items = STARTING_ITEMS.duplicate(true)
@@ -340,13 +347,13 @@ func load_state(state: Dictionary, allow_legacy_oil := true) -> void:
 		for id in saved_items.keys():
 			if typeof(id) != TYPE_STRING:
 				continue
-			var quantity := _restore_quantity(saved_items[id])
-			items[id] = mini(quantity, get_ammo_cap(id)) if get_item_type(id) == "ammo" else quantity
+			var quantity := Ammo.quantity(saved_items[id])
+			items[id] = quantity
 	var saved_ingredients = state.get("ingredients", {})
 	if typeof(saved_ingredients) == TYPE_DICTIONARY:
 		for id in saved_ingredients.keys():
 			if typeof(id) == TYPE_STRING:
-				ingredients[id] = _restore_quantity(saved_ingredients[id])
+				ingredients[id] = Ammo.quantity(saved_ingredients[id])
 	var saved_oil := str(state.get("active_oil", ""))
 	active_oil = ""
 	oil_remaining_seconds = 0.0
@@ -361,7 +368,7 @@ func load_state(state: Dictionary, allow_legacy_oil := true) -> void:
 			if typeof(remaining) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(remaining)) and float(remaining) > 0.0:
 				active_oil = saved_oil
 				oil_remaining_seconds = minf(float(remaining), get_oil_duration_seconds(saved_oil))
-	coin = _restore_quantity(state.get("coin", STARTING_COIN))
+	coin = Ammo.quantity(state.get("coin", STARTING_COIN))
 	quick_slots = DEFAULT_QUICK_SLOTS.duplicate()
 	var saved_slots: Variant = state.get("quick_slots", {})
 	if saved_slots is Dictionary:
@@ -385,7 +392,7 @@ func load_state(state: Dictionary, allow_legacy_oil := true) -> void:
 				if quantities is Dictionary:
 					for id: Variant in quantities:
 						if id is String and (item_defs.has(id) if category == "items" else STARTING_INGREDIENTS.has(id)):
-							delivery[category][id] = _restore_quantity(quantities[id])
+							delivery[category][id] = Ammo.quantity(quantities[id])
 			reward_deliveries[claim] = delivery
 	var saved_upgrades: Variant = state.get("weapon_upgrades", [])
 	if saved_upgrades is Array:
@@ -393,14 +400,6 @@ func load_state(state: Dictionary, allow_legacy_oil := true) -> void:
 			if id is String and get_item_type(id) == "blade_upgrade" and id not in weapon_upgrades:
 				weapon_upgrades.append(id)
 	changed.emit()
-
-func _restore_quantity(value: Variant) -> int:
-	if typeof(value) not in [TYPE_INT, TYPE_FLOAT]:
-		return 0
-	var number := float(value)
-	if not is_finite(number) or number != floorf(number):
-		return 0
-	return int(clampf(number, 0.0, 2147483647.0))
 
 func _read_json(path: String):
 	if not FileAccess.file_exists(path):
@@ -410,6 +409,7 @@ func _read_json(path: String):
 	var parsed = JSON.parse_string(file.get_as_text())
 	return parsed if parsed != null else {}
 func reset_starting_loadout() -> void:
+	_ammo_state.clear()
 	reward_deliveries.clear()
 	items = STARTING_ITEMS.duplicate(true)
 	ingredients = STARTING_INGREDIENTS.duplicate(true)

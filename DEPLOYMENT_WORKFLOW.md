@@ -16,10 +16,24 @@ Use `outputs/AshenOathTheRoadBetweenCrowns/tools/build_story_release.ps1` for
 necessary production compilation. It does not launch gameplay.
 Use a fresh output directory under `.release-gate`; preserve previous artifacts.
 
+For code-only releases, `-ReuseCommittedAssets` requires production ancestry and
+identical committed/local asset, authoring, palette, animation and compiler inputs
+against fetched `origin/main`. Any difference rejects reuse and requires the full
+asset build. It retains committed derivatives instead of regenerating unrelated
+Blender/audio resources. Terrain and every script-bearing pack are rebuilt; the
+isolated exported actor/resource check, ownership, hashes and size gates remain.
+The output's `asset-reuse.json` records scope and baseline. Reuse is not new visual
+acceptance and never permits reusing old code-bearing packs.
+
 Publish with `tools/publish_living_road.ps1 -Ticket ... -Message ... -CommitPaths ...`
 from the canonical project. Supply explicit source/generated paths; unrelated
 staged and untracked work is preserved. The publisher reads the Vercel CLI login
 or `VERCEL_TOKEN`, without saving credentials in the repository.
+
+When the canonical checkout contains unrelated work, `-AllowRegisteredWorktree`
+permits an isolated D: worktree of that same repository. The publisher checks its
+shared Git directory and registered worktree identity; all branch, project,
+package and fast-forward guards still apply. Other directories remain rejected.
 
 The publisher enables automatic domain assignment, binds commit/package identity,
 pushes development, rechecks main's ancestry, then pushes main. Vercel owns the

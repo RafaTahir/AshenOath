@@ -3,10 +3,6 @@ extends RefCounted
 
 const ZoneCompositionRouter = preload("res://scripts/zone_composition_router.gd")
 
-## Small lifecycle contract shared by the host and release verifiers.
-## Builders remain owned by ZoneCompositionRouter; this object owns the
-## transition state and records failed/activated zone builds without hiding
-## errors or changing manager ownership.
 
 var host
 var quest_manager: Node
@@ -35,6 +31,7 @@ var _previous_root: Node3D
 var _arrival_recovered := false
 var _prewarmed_runtime_pending := false
 var _restoring_source := false
+var _transition_epoch: int = -1
 
 func retains_source_spatial(service: Node) -> bool:
 	return is_instance_valid(_source_root) and service == _source_spatial
@@ -51,8 +48,6 @@ func configure(presentation: Node, beats: Node, focus: Node, quests: Node) -> vo
 func normalize_zone_request(zone_id: String, spawn_position: Vector3) -> Dictionary:
 	var normalized := zone_id.strip_edges().to_lower()
 	var registered: Array[String] = ZoneCompositionRouter.registered_zones()
-	# The router is preloaded by the host, so this fallback keeps the contract
-	# usable in isolated unit tests without inventing an alternate zone list.
 	if registered.is_empty() and host != null and host.has_method("_zone_display_name"):
 		registered = [normalized]
 	if normalized == "" or (not registered.is_empty() and normalized not in registered):
@@ -97,7 +92,7 @@ func record_playable_transition(zone_id: String, elapsed_ms: float, support_read
 	last_activation["playable_ms"] = elapsed_ms
 	last_activation["support_ready"] = support_ready
 	if support_ready:
-		host._on_progression_arrival(zone_id)
+		host._systems["quest"]._on_progression_arrival(zone_id)
 
 func begin_transition(zone_id: String, previous_zone: String, spawn_position: Vector3) -> void:
 	preload("res://scripts/greyfen_archery_range.gd").stop_activity(host)
@@ -176,6 +171,7 @@ func activate(zone_id: String, root: Node3D, reused: bool) -> void:
 	}
 
 func rollback(zone_id: String, previous_zone: String, errors: Array) -> void:
+	host.world_transition.fail(_transition_epoch, "; ".join(errors))
 	failure_count += 1
 	pending_zone = ""
 	last_failure = {
@@ -199,9 +195,6 @@ func snapshot() -> Dictionary:
 	}
 
 func dispose() -> void:
-	# The coordinator is a RefCounted lifecycle object owned by game.gd. Clear
-	# its service references explicitly before the host is freed so a verifier or
-	# scene reload cannot retain a stale owner graph past shutdown.
 	host = null
 	_source_root = null
 	_source_spatial = null
@@ -231,6 +224,8 @@ func _node_count(root: Node) -> int:
 	return count
 
 func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
+	_transition_epoch = host.world_transition.request_travel(zone_id)
+	if _transition_epoch < 0: return
 	_continuous_arrival = host.seamless_world.crossing_for(zone_id).duplicate() if host.seamless_world != null else {}
 	var previous_root: Node3D = host.zone_root
 	_previous_root = previous_root
@@ -241,8 +236,6 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	zone_id = zone_id.strip_edges().to_lower()
 	if host.asset_helper != null:
 		host.asset_helper.set_zone_scope(zone_id)
-	# Synchronous visual imports must never overlap a zone swap. The prewarm
-	# coroutine is resumed after the player is playable again.
 	host.campaign_visual_prewarm_suspended = true
 	if host.performance_budget_monitor != null:
 		host.performance_budget_monitor.suspend()
@@ -288,8 +281,6 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	host.compass_cache_valid = false
 	host.last_compass_zone = ""
 	host.last_compass_signature = ""
-	# Guidance belongs to the previous route. Clear it before the new zone
-	# refreshes its own contextual hint so stale prompts cannot survive a gate.
 	host.hud.set_guidance_hint("")
 	host.current_zone_id = zone_id
 	if zone_id != "greyfen":
@@ -321,9 +312,6 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if host.camera_rig != null and host.camera_rig.has_method("set_zone"):
 		host.camera_rig.set_zone(zone_id,not _continuous_arrival.is_empty())
 	host.hud.set_prompt("")
-	# Target health belongs to the active encounter. Clear it before the new
-	# zone starts so Castle, finale, and dialogue views cannot inherit a dead
-	# Wychwood target from the previous route.
 	host.hud.hide_enemy()
 	if reused_zone:
 		host.spatial_service = destination_spatial
@@ -380,7 +368,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			])
 			if host.zone_runtime_coordinator != null:
 				host.zone_runtime_coordinator.rollback(zone_id, previous_zone_id, build_validation.get("errors", []))
-			host._recover_failed_zone_load(previous_zone_id)
+			host._systems["zone_lifecycle"]._recover_failed_zone_load(previous_zone_id)
 			return
 		host._flush_environment_batches()
 		host._install_world_prop_controller(zone_id)
@@ -394,7 +382,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		# visible frame.
 		host._end_zone_world_reads()
 		host.active_zone_signature = host._zone_state_signature(zone_id)
-	host._bind_spatial_player_body()
+	host._systems["zone_lifecycle"]._bind_spatial_player_body()
 	host.interaction_candidates.clear()
 	host.interaction_area_cache_ready = false
 	host.interaction_focus_dirty = true
@@ -404,10 +392,6 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		host.zone_root.set_meta("zone_resource_owner", "active")
 		host.zone_root.set_meta("zone_resource_id", zone_id)
 		host.zone_root.set_meta("prepared_encounter_packs",host._zone_encounter_packs(zone_id))
-		if reused_zone:
-			host.runtime_light_count = int(host.zone_root.get_meta("runtime_light_count",0))
-		else:
-			host.zone_root.set_meta("runtime_light_count",host.runtime_light_count)
 		host.world_vfx = host.zone_root.get_node_or_null("WorldVFXController")
 		if zone_id == "deep_wood":
 			host.CampaignWildernessSection.new().publish_rooks_false_road(ZoneBuildContext.new(host, zone_id))
@@ -418,13 +402,10 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		if host.zone_runtime_coordinator != null:
 			host.zone_runtime_coordinator.activate(zone_id, host.zone_root, reused_zone)
 	host._trim_route_zone_cache([previous_zone_id] if previous_zone_id != zone_id else [])
-	# Avoid recursive diagnostic walks during every transition; on Web/ANGLE those
-	# allocations made cached arrivals visibly slower.
 	print("ZONE_COMPOSITION: id=%s reused=%s visible=%s position=%s" % [
 		zone_id, reused_zone, host.zone_root.visible, host.zone_root.global_position,
 	])
 	host.active_zone_signature = host._zone_state_signature()
-	# Complete navigation before the arrival can publish control.
 	var navigation_pending = not using_prewarmed_spatial and not using_cached_spatial
 	var life_controller = host.zone_root.find_child("GreyfenLifeController", true, false)
 	if life_controller != null and life_controller.has_method("set_spatial_service"):
@@ -438,20 +419,13 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	print("LOADING: zone_stage=visual_applied elapsed=%.1f" % (float(Time.get_ticks_usec() - host.loading_started_usec) / 1000.0))
 	if host.zone_streaming != null and host.zone_streaming.has_method("prewarm_neighbors") and not host.should_defer_neighbor_prewarm():
 		host.zone_streaming.prewarm_neighbors(zone_id)
-	# Generated campaign ambience and music can allocate several seconds of WAV
-	# data on first use. Mark it for the first settled frame instead of making
-	# audio synthesis part of the player's transition lock. Greyfen remains on
-	# the opening path because its menu prewarm already prepares those cues.
 	if zone_id == "greyfen" or bool(host.zone_root.get_meta("prepared_audio_complete",false)):
-		host._apply_zone_audio(zone_id)
+		host._systems["zone_lifecycle"]._apply_zone_audio(zone_id)
 	else:
 		host.zone_root.set_meta("zone_audio_pending", true)
-	# Authored arrivals are already reserved by the zone builder. Preserve their
-	# exact route position here; nearest_safe() is an emergency recovery API and
-	# can otherwise move a valid arrival to a distant edge anchor.
 	var safe_spawn: Vector3 = _continuous_arrival.position if not _continuous_arrival.is_empty() else (spawn_pos if WorldSectorManifest.connector_contains(zone_id,spawn_pos,0.0,host.story_state) else host.spatial_service.validate_position(spawn_pos, 0.8, host.spatial_service.bank_for(spawn_pos)))
 	if host.player == null:
-		host._spawn_player(safe_spawn)
+		host._systems["zone_lifecycle"]._spawn_player(safe_spawn)
 	else:
 		host.player.visible = true
 		if not using_prewarmed_spatial:
@@ -461,22 +435,18 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 				var gameplay_camera = host.camera_rig.find_child("Camera3D", true, false) as Camera3D
 				if gameplay_camera != null:
 					gameplay_camera.current = true
-	# Greyfen's life controller is constructed with the zone. New Game now creates
-	host._apply_pending_player_restore()
+	host._systems["save"]._apply_pending_player_restore()
 	if zone_id == "greyfen":
-		host._restore_greyfen_cemetery_state()
-	# Kael after collision is ready, so bind the final player instance here.
+		host._systems["quest"]._restore_greyfen_cemetery_state()
 	if life_controller != null:
 		life_controller.player = host.player
 	host._install_opening_soundscape(zone_id)
-	# This finalizer owns the focused render audit once, before control. Do not
-	# repeat it here and again on a deferred first-playable frame.
 	host._finish_zone_runtime_finalize(zone_id, host.zone_root, host.spatial_service, host.active_enemies.duplicate(), navigation_pending)
 	preload("res://scripts/character_animation_driver.gd").record_configuration(host.zone_root, "kael", host.player.animation_driver)
 	var actors := preload("res://scripts/character_animation_driver.gd").zone_contract(host.zone_root)
 	if not bool(actors.ok):
 		rollback(zone_id, previous_zone_id, actors.errors)
-		host._recover_failed_zone_load(previous_zone_id)
+		host._systems["zone_lifecycle"]._recover_failed_zone_load(previous_zone_id)
 		return
 	if host.performance_budget_monitor != null:
 		var quality_preset = str(host.settings.settings.get("quality_preset", "balanced")) if host.settings != null else "balanced"
@@ -522,15 +492,13 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 var _continuous_arrival: Dictionary = {}
 
 func advance_transition() -> void:
-	if not host.zone_transition_pending:
+	if not host.zone_transition_pending or (not _restoring_source and not host.world_transition.accepts(_transition_epoch, host.current_zone_id)):
 		return
 	host.zone_transition_frames += 1
 	if host.player == null or host.spatial_service == null:
 		return
 	var grounded: Variant = host._grounded_spawn_position(host.pending_spawn_position)
 	_arrival_recovered = false
-	# A slow first frame can consume the wall-time budget before the collision
-	# grace elapses. Probe the existing recovery point before declaring failure.
 	if grounded == null and (host.zone_transition_frames > 3 or Time.get_ticks_msec() >= _support_deadline_msec):
 		var recovery: Vector3 = host.spatial_service.nearest_safe(host.pending_spawn_position, host.spatial_service.bank_for(host.pending_spawn_position))
 		grounded = host._grounded_spawn_position(recovery)
@@ -544,8 +512,8 @@ func advance_transition() -> void:
 				return
 			var failed_zone: String = host.current_zone_id
 			rollback(failed_zone, source_zone, ["No confirmed destination collision beneath the arrival or recovery position."])
-			host._record_loading_metrics({"zone": failed_zone, "support_ready": false, "error": "arrival_support_missing"})
-			host._recover_failed_zone_load(source_zone)
+			host._systems["zone_lifecycle"]._record_loading_metrics({"zone": failed_zone, "support_ready": false, "error": "arrival_support_missing"})
+			host._systems["zone_lifecycle"]._recover_failed_zone_load(source_zone)
 		return
 	if host.zone_transition_frames < 2:
 		return
@@ -556,19 +524,22 @@ func advance_transition() -> void:
 
 func _complete_supported_arrival(grounded: Vector3) -> void:
 	var zone_id: String = host.current_zone_id
+	if not host.world_transition.commit(zone_id, _transition_epoch, true, is_instance_valid(host.zone_root)): return
 	if host.combat != null:
 		host.combat.activate_devices(host)
 	if _prewarmed_runtime_pending:
-		host._activate_prewarmed_player_runtime()
+		host._systems["zone_lifecycle"]._activate_prewarmed_player_runtime()
 		_prewarmed_runtime_pending = false
 	if zone_id in ZoneCompositionRouter.CAMPAIGN_ZONES:
-		host._apply_campaign_arrival(zone_id)
-	for flag_id: String in host.zone_root.get_meta("prepared_story_flags", {}):
-		host.story_state.set_flag(flag_id, host.zone_root.get_meta("prepared_story_flags")[flag_id])
-	host.zone_root.remove_meta("prepared_story_flags")
+		host._systems["quest"]._apply_campaign_arrival(zone_id)
+	var scope := preload("res://scripts/core/zone_instance_scope.gd").for_root(host.zone_root)
+	for flag_id: String in scope.prepared_story_flags:
+		host.story_state.set_flag(flag_id, scope.prepared_story_flags[flag_id])
+	scope.prepared_story_flags.clear()
+	scope.preparing = false
 	host.zone_root.remove_meta("prepared_arrival_pending")
 	host.zone_root.remove_meta("arrival_support_pending")
-	host._publish_zone_arrival(zone_id, host.zone_root)
+	host._systems["zone_lifecycle"]._publish_zone_arrival(zone_id, host.zone_root)
 	host.active_zone_signature = host._zone_state_signature(zone_id)
 	sync_zone(zone_id)
 	host._refresh_tracker()
@@ -591,7 +562,7 @@ func _complete_supported_arrival(grounded: Vector3) -> void:
 		host.seamless_world.on_zone_activated(zone_id, grounded)
 	_release_source()
 	var elapsed_ms = float(Time.get_ticks_usec() - host.loading_started_usec) / 1000.0
-	host._record_loading_metrics({
+	host._systems["zone_lifecycle"]._record_loading_metrics({
 		"zone": host.current_zone_id,
 		"to_playable_ms": elapsed_ms,
 		"support_ready": true,
@@ -604,11 +575,11 @@ func _complete_supported_arrival(grounded: Vector3) -> void:
 	print("LOADING: zone=%s playable_ms=%.1f" % [host.current_zone_id, elapsed_ms])
 	host.loading_started_usec = 0
 	host.hud.hide_loading()
-	host._start_campaign_visual_prewarm()
-	host._schedule_deferred_visual_roles(host.zone_root)
-	host._schedule_deferred_zone_audio(host.current_zone_id, host.zone_root)
+	host._systems["startup"]._start_campaign_visual_prewarm()
+	host._systems["startup"]._schedule_deferred_visual_roles(host.zone_root)
+	host._systems["zone_lifecycle"]._schedule_deferred_zone_audio(host.current_zone_id, host.zone_root)
 	if host.game_started:
-		host._schedule_zone_autosave()
+		host._systems["zone_lifecycle"]._schedule_zone_autosave()
 
 func _release_source() -> void:
 	if is_instance_valid(_source_root) and _source_root != host.zone_root and not host.route_zone_cache.values().has(_source_root):
@@ -641,6 +612,7 @@ func recover_failed_transition(previous_zone_id: String) -> void:
 		host.zone_root = null
 	host._release_active_spatial_service()
 	if host.route_zone_cache.has(previous_zone_id) and is_instance_valid(host.route_zone_cache[previous_zone_id]):
+		_transition_epoch = host.world_transition.request_travel(previous_zone_id, true)
 		host.zone_root = host._activate_cached_zone(previous_zone_id)
 		host.zone_root.set_meta("arrival_support_pending", true)
 		var cached_spatial_service: Node = host.route_spatial_cache.get(previous_zone_id)
@@ -654,11 +626,10 @@ func recover_failed_transition(previous_zone_id: String) -> void:
 		host.route_zone_signatures.erase(previous_zone_id)
 		host.current_zone_id = previous_zone_id
 		host.world_vfx = host.zone_root.get_node_or_null("WorldVFXController")
-		host.runtime_light_count = int(host.zone_root.get_meta("runtime_light_count", 0))
 		if host.asset_helper != null:
 			host.asset_helper.set_zone_scope(previous_zone_id)
 		activate(previous_zone_id, host.zone_root, true)
-		host._bind_spatial_player_body()
+		host._systems["zone_lifecycle"]._bind_spatial_player_body()
 		if host.camera_rig != null:
 			host.camera_rig.set_zone(previous_zone_id)
 		if host.visual_director != null:
@@ -669,7 +640,7 @@ func recover_failed_transition(previous_zone_id: String) -> void:
 		host.compass_cache_valid = false
 		host.interaction_focus_dirty = true
 		host.interaction_focus_cache_valid = false
-		host._apply_zone_audio(previous_zone_id)
+		host._systems["zone_lifecycle"]._apply_zone_audio(previous_zone_id)
 	host._sync_camera_enemy_cache()
 	var restored := is_instance_valid(host.zone_root)
 	if host.player != null:
@@ -702,6 +673,7 @@ func recover_failed_transition(previous_zone_id: String) -> void:
 	_release_source()
 
 func _complete_source_recovery(grounded: Vector3) -> void:
+	if not host.world_transition.commit(host.current_zone_id, _transition_epoch, true, is_instance_valid(host.zone_root)): return
 	host.zone_root.remove_meta("arrival_support_pending")
 	host.player.global_position = grounded
 	host.player.reset_physics_interpolation()

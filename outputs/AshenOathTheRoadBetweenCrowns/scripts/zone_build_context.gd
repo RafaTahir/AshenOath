@@ -11,19 +11,24 @@ var operation_count := 0
 var operations: Array[String] = []
 var owned_root: Node3D
 var _owns_destination := false
-var owned_fields: Dictionary = {}
-var rng := RandomNumberGenerator.new()
+const Scope = preload("res://scripts/core/zone_instance_scope.gd")
+const Seeded = preload("res://scripts/core/seeded_rng.gd")
+var scope: Scope = Scope.new()
+var rng: Seeded:
+	get: return scope.rng
+	set(value): scope.rng = value
 var _first_step := true
-var generation := 0
+var generation: int:
+	get: return scope.generation
+	set(value): scope.generation = value
 var cursor := 0
 var cancelled := false
 var failure := ""
 var _builder_reference: WeakRef
-const FIELDS_META := "zone_construction_fields"
 
 var zone_root: Node3D:
 	get:
-		return owned_root if not cancelled and is_instance_valid(owned_root) else null
+		return owned_root if not cancelled and scope.is_current(generation) else null
 var quests:
 	get:
 		return _host.quests
@@ -41,38 +46,25 @@ func _init(game_host: Node, id: String, profile: String = "full") -> void:
 	_host = game_host.coordinator if game_host.has_method("retire_construction_host") else game_host
 	zone_id = id
 	build_profile = profile
-	rng.seed = 78233
-	if is_instance_valid(game_host.zone_root):
+	if is_instance_valid(game_host.zone_root) and str(game_host.zone_root.name) == id:
 		owned_root = game_host.zone_root
-		owned_fields = fields_for(owned_root)
+		scope = fields_for(owned_root)
 		_owns_destination = owned_root != _host.zone_root
-		if _host.scene_rng != null:
-			rng = _host.scene_rng
+		scope.preparing = scope.preparing or not bool(_host.get("game_started"))
+		if scope.builder_reference == null and _host.scene_rng != null:
+			rng = Seeded.new(_host.scene_rng.seed)
+			rng.set_state(_host.scene_rng.state)
 
-static func new_fields() -> Dictionary:
-	var areas: Array[Area3D] = []
-	var trees: Array[Dictionary] = []
-	var deadfalls: Array[Transform3D] = []
-	var boxes: Array[Dictionary] = []
-	var terrain: Array[Dictionary] = []
-	return {"active_enemies":[], "interaction_candidates":[],
-		"interaction_area_cache":areas, "interaction_area_cache_ready":false,
-		"runtime_light_count":0, "tree_batch_data":trees, "deadfall_batch_data":deadfalls,
-		"prop_batch_data":{}, "visual_box_batch_data":boxes, "terrain_patch_batch_data":terrain,
-		"house_batch_data":{}, "house_module_batch_data":{}, "environment_batches_flushed":false,
-		"world_props":null, "world_vfx":null, "spatial_service":null,
-		"encounter_spatial_index":preload("res://scripts/actor_spatial_index.gd").new(),
-		"interaction_focus_dirty":true}
+static func new_fields() -> Scope:
+	return Scope.new()
 
-static func fields_for(root: Node3D) -> Dictionary:
-	if not root.has_meta(FIELDS_META):
-		root.set_meta(FIELDS_META, new_fields())
-	return root.get_meta(FIELDS_META)
+static func fields_for(root: Node3D) -> Scope:
+	return Scope.for_root(root)
 
 static func active_host(host: Node) -> Node3D:
 	if not is_instance_valid(host.zone_root):
 		return null
-	var reference: WeakRef = host.zone_root.get_meta("zone_construction_host") if host.zone_root.has_meta("zone_construction_host") else null
+	var reference: WeakRef = fields_for(host.zone_root).builder_reference
 	var existing := reference.get_ref() as Node3D if reference != null else null
 	if existing != null:
 		return existing
@@ -83,7 +75,7 @@ func construction_host() -> Node3D:
 		return null
 	var existing := _builder_reference.get_ref() as Node3D if _builder_reference != null else null
 	if existing == null:
-		var reference: WeakRef = zone_root.get_meta("zone_construction_host") if zone_root.has_meta("zone_construction_host") else null
+		var reference: WeakRef = scope.builder_reference
 		existing = reference.get_ref() as Node3D if reference != null else null
 	if existing != null:
 		return existing
@@ -95,31 +87,32 @@ func construction_host() -> Node3D:
 	var coordinator: Node = _host.coordinator if _host.has_method("retire_construction_host") else _host
 	coordinator.add_child(builder)
 	_builder_reference = weakref(builder)
-	zone_root.set_meta("zone_construction_host", _builder_reference)
-	zone_root.tree_exiting.connect(builder.retire_construction_host)
+	scope.builder_reference = _builder_reference
 	return builder
 
 func is_preparing() -> bool:
-	return _owns_destination and is_instance_valid(owned_root) and _host.zone_root != owned_root
+	return scope.preparing or (_owns_destination and is_instance_valid(owned_root) and _host.zone_root != owned_root)
 
 func cancel() -> void:
+	scope.cancel()
 	cancelled = true
-	generation += 1
 
 func step_result(state: String = "progress") -> Dictionary:
-	return {"state":"cancelled" if cancelled else ("failed" if not failure.is_empty() else state),
+	return {"state":"cancelled" if cancelled or scope.cancelled else ("failed" if not failure.is_empty() else state),
 		"zone":zone_id, "generation":generation, "next_step":cursor, "error":failure}
 
 func own(root: Node3D, spatial: Node) -> void:
 	owned_root = root
 	_owns_destination = true
-	owned_fields = fields_for(root)
-	owned_fields.spatial_service = spatial
-	rng = RandomNumberGenerator.new()
-	rng.seed = 78233
+	scope = fields_for(root)
+	scope.spatial_service = spatial
+	scope.zone_id = zone_id
+	scope.preparing = true
+	rng = Seeded.new(78233)
 
 func run_step(action: Callable) -> bool:
 	if zone_root == null or not is_instance_valid(_host) or not action.is_valid():
+		failure = "Cancelled or unavailable construction owner for " + zone_id
 		return false
 	_host._begin_zone_world_reads(zone_id,_first_step)
 	_first_step = false
@@ -129,20 +122,19 @@ func run_step(action: Callable) -> bool:
 	_host._end_zone_world_reads()
 	preload("res://scripts/prepared_zone_geometry.gd").set_zone_scope(str(_host.current_zone_id))
 	_host.asset_helper.set_zone_scope(str(_host.current_zone_id))
-	if result is bool and result and not cancelled:
+	if result is bool and result and zone_root != null:
 		cursor += 1
 		return true
 	failure = "Construction step %d did not complete for %s." % [cursor, zone_id]
 	return false
 
-func use_scene_rng(seed_value: int) -> RandomNumberGenerator:
+func use_scene_rng(seed_value: int) -> Seeded:
 	var owner: ZoneBuildContext = construction_host().context
 	var previous := owner.rng
-	owner.rng = RandomNumberGenerator.new()
-	owner.rng.seed = seed_value
+	owner.rng = Seeded.new(seed_value)
 	return previous
 
-func restore_scene_rng(previous: RandomNumberGenerator) -> void:
+func restore_scene_rng(previous: Seeded) -> void:
 	construction_host().context.rng = previous
 
 func is_opening_fast() -> bool:
@@ -152,7 +144,7 @@ func is_opening_boot() -> bool:
 	return zone_id == "greyfen" and build_profile == "opening_boot"
 
 func add_node(node: Node, parent: Node = null) -> void:
-	if _owns_destination and not is_instance_valid(owned_root):
+	if zone_root == null:
 		return
 	var target := parent if parent != null else zone_root
 	if not is_instance_valid(target):
@@ -181,14 +173,10 @@ func is_objective_done(quest_id: String, objective_id: String) -> bool:
 	return quests.is_objective_done(quest_id, objective_id)
 
 func set_story_flag(flag_id: String, value: Variant) -> void:
-	if cancelled or not is_instance_valid(owned_root):
+	if zone_root == null:
 		return
 	if is_preparing():
-		if not is_instance_valid(owned_root):
-			return
-		var pending: Dictionary = owned_root.get_meta("prepared_story_flags",{})
-		pending[flag_id] = value
-		owned_root.set_meta("prepared_story_flags",pending)
+		scope.prepared_story_flags[flag_id] = value
 		return
 	story_state.set_flag(flag_id, value)
 
@@ -199,7 +187,7 @@ func crow_shrine_choice_ready() -> bool:
 	return _host._crow_shrine_choice_ready()
 
 func road_ready_to_report() -> bool:
-	return _host._road_ready_to_report()
+	return _host._systems["quest"]._road_ready_to_report()
 
 func wychwood_wave_progress() -> int:
 	return clampi(int(_host.wychwood_pack_kills), 0, 5)

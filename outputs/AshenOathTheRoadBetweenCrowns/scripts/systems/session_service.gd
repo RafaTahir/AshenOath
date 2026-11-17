@@ -127,7 +127,7 @@ func _dispatch_gameplay_action(action: String, target_instance_id: int = 0) -> v
 			_host.get_tree().paused = true
 			_show_preparation_menu()
 		"touch_more":
-			_show_touch_actions()
+			_systems["hud"]._show_touch_actions()
 		"companion_command":
 			_show_companion_commands()
 
@@ -242,7 +242,7 @@ func tick_session(delta: float) -> void:
 	# Loading is lifecycle work, not simulation. Settings may reload a world
 	# while paused; its completion must not require Resume behind the loader.
 	if game_started and player != null and zone_transition_pending:
-		_advance_zone_transition()
+		_systems["zone_lifecycle"]._advance_zone_transition()
 		return
 	if not game_started or player == null or _host.get_tree().paused:
 		return
@@ -256,7 +256,7 @@ func tick_session(delta: float) -> void:
 	if _journey_load_pending():
 		journey_loading.try_finish(_host)
 		return
-	_record_first_control()
+	_systems["zone_lifecycle"]._record_first_control()
 	if input_router.consume_companion_menu_request():
 		_show_companion_commands()
 		return
@@ -265,16 +265,16 @@ func tick_session(delta: float) -> void:
 	if inventory != null and input_router.is_gameplay_context() and player.can_control and not player.transition_locked \
 			and player.health_component.health > 0.0 and not zone_load_request_pending and not opening_pack_waiting and not campaign_pack_waiting:
 		inventory.advance_oil(delta)
-	_keep_player_in_world()
+	_systems["zone_lifecycle"]._keep_player_in_world()
 	interaction_focus_cooldown -= delta
 	if interaction_focus_cooldown <= 0.0:
 		interaction_focus_cooldown = 0.10
-		if _interaction_focus_needs_refresh():
-			_update_interaction_focus()
+		if _systems["interaction"]._interaction_focus_needs_refresh():
+			_systems["interaction"]._update_interaction_focus()
 	tutorial_refresh_cooldown -= delta
 	if tutorial_refresh_cooldown <= 0.0:
 		tutorial_refresh_cooldown = 0.10
-		_update_tutorial_prompts()
+		_systems["hud"]._update_tutorial_prompts()
 	target_status_refresh_cooldown -= delta
 	if target_status_refresh_cooldown <= 0.0:
 		target_status_refresh_cooldown = 0.10
@@ -290,8 +290,8 @@ func tick_session(delta: float) -> void:
 	compass_refresh_cooldown -= delta
 	if compass_refresh_cooldown <= 0.0:
 		compass_refresh_cooldown = 0.50
-		if _compass_needs_refresh():
-			_update_compass()
+		if _systems["hud"]._compass_needs_refresh():
+			_systems["hud"]._update_compass()
 
 func _play_voice_smoke_test(voice_id: String, label: String) -> void:
 	if audio == null:
@@ -414,7 +414,7 @@ func _new_game() -> void:
 	if hud != null and hud.has_method("arm_loading") and not route_zone_cache.has("greyfen"):
 		hud.arm_loading("Opening Greyfen...")
 	_host.get_tree().paused = false
-	_start_new_game_world()
+	_systems["zone_lifecycle"]._start_new_game_world()
 
 func _cancel_new_game_request() -> void:
 	if game_started or _journey_load_pending():

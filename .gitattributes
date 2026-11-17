@@ -1,5 +1,7 @@
 # Certified Web exports must survive Git checkout byte-for-byte.
 .gitattributes -text whitespace=cr-at-eol
+# Phase 5 archives preserve historical worktree bytes across Windows/Linux checkout.
+outputs/AshenOathTheRoadBetweenCrowns/docs/archive/phase5/** -text whitespace=cr-at-eol,-blank-at-eol
 web/** -text
 # Captured verification artifacts keep the bytes used by their evidence hashes.
 outputs/AshenOathTheRoadBetweenCrowns/release_reports/hardening_stage2_20261101/** -text whitespace=cr-at-eol
@@ -198,8 +200,10 @@ web/runtime_pack_manifest.json whitespace=cr-at-eol
 # Monster pigment source and inspection evidence retain exact bytes.
 outputs/AshenOathTheRoadBetweenCrowns/data/monster_material_profiles.json -text whitespace=cr-at-eol
 art_source/art_recovery_v2/evidence/monster_vitality_20261118/** -text whitespace=cr-at-eol
-outputs/AshenOathTheRoadBetweenCrowns/scripts/monster_material_palette.gd -text whitespace=cr-at-eol
-outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_attack_shape.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/scripts/views/monster_material_view.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/scripts/views/monster_pigment_material.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/scripts/views/character_material_budget_view.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/scripts/models/enemy_attack_shape_model.gd -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/shaders/monster_pigment* -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/tools/verify_monster_material_profiles.py -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/tools/verify_monster_material_runtime.gd -text whitespace=cr-at-eol

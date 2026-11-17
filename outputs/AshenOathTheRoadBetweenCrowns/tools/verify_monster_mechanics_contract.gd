@@ -1,7 +1,7 @@
 extends SceneTree
 
 ## Focused headless mechanics fixture. No level, renderer capture or save data.
-const Shape = preload("res://scripts/enemy_attack_shape.gd")
+const Shape = preload("res://scripts/models/enemy_attack_shape_model.gd")
 const Feedback = preload("res://scripts/combat_feedback.gd")
 
 class EnemyProbe extends "res://scripts/enemy_ai.gd":
@@ -187,7 +187,7 @@ func _run() -> void:
 	enemy.rotation.y = 0.73
 	enemy._show_windup_marker()
 	_check(enemy.windup_marker.visible and enemy.windup_marker.position.is_equal_approx(Vector3(0, 0.055, 0)), "boss warning uses actor origin")
-	_check(str(enemy.windup_marker.get_meta("attack_id")) == "root_lanes" and float(enemy.windup_marker.get_meta("attack_radius")) == 4.0, "boss warning uses current phase and authoritative radius")
+	_check(enemy.windup_marker.mesh.resource_name == "attack_footprint:root_lanes:4.000000", "boss warning uses current phase and authoritative radius")
 	_check(enemy.windup_marker.get_parent() == enemy, "windup warning follows actor commitment without another timer")
 	enemy._cancel_pending_strike()
 	_check(not enemy.windup_marker.visible, "cancelled strike immediately hides footprint")

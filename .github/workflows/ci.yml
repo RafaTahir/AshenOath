@@ -1,0 +1,55 @@
+name: Deterministic Replay and Architecture Gate
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  unified-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            outputs/AshenOathTheRoadBetweenCrowns/scripts
+            outputs/AshenOathTheRoadBetweenCrowns/tools
+            outputs/AshenOathTheRoadBetweenCrowns/data
+            outputs/AshenOathTheRoadBetweenCrowns/scenes
+            outputs/AshenOathTheRoadBetweenCrowns/shaders
+            outputs/AshenOathTheRoadBetweenCrowns/docs/archive
+            outputs/AshenOathTheRoadBetweenCrowns/project.godot
+            outputs/AshenOathTheRoadBetweenCrowns/assets/ui/fonts/Spectral-Medium.ttf
+            outputs/AshenOathTheRoadBetweenCrowns/assets/icons/iron_trap.svg
+            outputs/AshenOathTheRoadBetweenCrowns/assets_external/ui/greyfen_menu_stylized.png
+            outputs/AshenOathTheRoadBetweenCrowns/assets/ui/story_chapters_atlas.png
+          sparse-checkout-cone-mode: false
+      - name: Cache pinned Godot 4.6.3
+        id: godot-cache
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ~/.cache/ashen-oath/godot-4.6.3
+          key: godot-4.6.3-linux-x86_64-d0bc2113065e481c
+      - name: Install official headless-capable Godot
+        if: steps.godot-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          target="$HOME/.cache/ashen-oath/godot-4.6.3"
+          mkdir -p "$target"
+          archive="$RUNNER_TEMP/godot-4.6.3.zip"
+          curl --fail --location --retry 3 --output "$archive" \
+            https://github.com/godotengine/godot-builds/releases/download/4.6.3-stable/Godot_v4.6.3-stable_linux.x86_64.zip
+          echo "d0bc2113065e481c9c2c2b2c37daa4e8be3fe9e27f0ab9ab0b6096e9a37907f3  $archive" | sha256sum --check --strict
+          unzip -q "$archive" -d "$target"
+          chmod +x "$target/Godot_v4.6.3-stable_linux.x86_64"
+      - name: Run all static and deterministic contracts
+        shell: bash
+        run: |
+          export GODOT_BIN="$HOME/.cache/ashen-oath/godot-4.6.3/Godot_v4.6.3-stable_linux.x86_64"
+          python3 outputs/AshenOathTheRoadBetweenCrowns/tools/run_checks.py --require-godot

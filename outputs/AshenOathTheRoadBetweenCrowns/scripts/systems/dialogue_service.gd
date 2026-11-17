@@ -241,7 +241,7 @@ func _apply_dialogue_action(action: Dictionary) -> bool:
 			story_state.set_flag("record_hall_unlocked", true)
 			_show_current_objective_guidance(5.0)
 	elif type == "ending":
-		return _complete_ending(action.get("ending", ""))
+		return _systems["quest"]._complete_ending(action.get("ending", ""))
 	else:
 		return false
 	if audio != null:
@@ -307,13 +307,13 @@ func _dialogue_action_available(action: Dictionary) -> bool:
 			return false
 		return quest_id != "" and objective_id != "" and quests.is_active(quest_id) and not quests.is_objective_done(quest_id, objective_id)
 	if type == "resolve_side_quest":
-		return quest_id != "" and quests.is_active(quest_id) and _quest_required_objectives_done(quest_id)
+		return quest_id != "" and quests.is_active(quest_id) and _systems["quest"]._quest_required_objectives_done(quest_id)
 	if type == "story_choice" and quest_id != "" and objective_id != "":
 		if quest_id == "main_road_of_crows" and objective_id == "return_village" and _legacy_report_choice_required():
 			return true
 		if not quests.is_active(quest_id) or quests.is_objective_done(quest_id, objective_id):
 			return false
-		return _story_choice_prerequisites_done(quest_id, objective_id)
+		return _systems["quest"]._story_choice_prerequisites_done(quest_id, objective_id)
 	return true
 
 func _dialogue_action_unavailable_reason(action: Dictionary) -> String:

@@ -156,11 +156,15 @@ def source_contract(project, source):
         extensions = material_extensions(material, label)
         require(isinstance(material.get("doubleSided", False), bool), label + ": invalid culling flag")
         alpha = material.get("alphaMode", "OPAQUE")
-        require(alpha in {"OPAQUE", "MASK", "BLEND"}, label + ": unsupported alpha mode")
+        require(alpha in {"OPAQUE", "BLEND"}, label + ": only retained opaque/blended materials are supported")
         number(material.get("alphaCutoff", 0.5), 0, 1, label + "/alphaCutoff")
         pbr = material.get("pbrMetallicRoughness", {})
         vector(pbr.get("baseColorFactor", [1, 1, 1, 1]), 4, 0, 1, label + "/baseColorFactor")
         vector(material.get("emissiveFactor", [0, 0, 0]), 3, 0, 1, label + "/emissiveFactor")
+        require(not any(material.get("emissiveFactor", [0, 0, 0])) and not material.get("emissiveTexture"),
+                label + ": emission is not used by the retained roster or supported by this pigment binder")
+        require(not material.get("occlusionTexture"),
+                label + ": ambient occlusion textures are not supported by this pigment binder")
         number(pbr.get("metallicFactor", 1), 0, 1, label + "/metallicFactor")
         number(pbr.get("roughnessFactor", 1), 0, 1, label + "/roughnessFactor")
         textures = {}
@@ -340,8 +344,10 @@ def main():
                 "external_texture_inputs_unique": len({path for row in contracts.values() for path in row["external_texture_inputs"]})},
             "feature_contract": {"uv_sets": [0], "texture_transforms": "rejected",
                 "material_extensions": "scalar neutral specular/IOR and scalar clearcoat; textures and other extensions rejected",
-                "alpha_modes": ["OPAQUE", "MASK", "BLEND"], "orm_channels": {"occlusion": "r", "roughness": "g", "metallic": "b"},
-                "preserve": ["raw GLB bytes", "external texture bytes", "normal scale", "PBR factors", "emission", "vertex colors", "alpha", "culling"]},
+                "alpha_modes": ["OPAQUE", "BLEND"], "orm_channels": {"roughness": "g", "metallic": "b"},
+                "emission": "not used by retained roster; nonzero factors and textures rejected",
+                "ambient_occlusion": "not used by retained roster; textures rejected",
+                "preserve": ["raw GLB bytes", "external texture bytes", "normal scale", "PBR factors", "scalar specular/IOR", "scalar clearcoat", "vertex colors", "alpha", "culling"]},
             "acceptance": {"source_byte_identity": True, "static_profile_validation": True,
                 "runtime_binding_observed": False, "visual_accepted": False, "user_accepted": False},
             "coverage": coverage}

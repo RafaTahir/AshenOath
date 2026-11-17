@@ -230,7 +230,7 @@ func clear_runtime_caches() -> void:
 	_path_owners.clear()
 	prepared_animation_libraries.clear()
 	preload("res://scripts/character_identity_profile.gd").clear_material_cache()
-	preload("res://scripts/monster_material_palette.gd").clear_material_cache()
+	preload("res://scripts/views/monster_material_view.gd").clear_material_cache()
 
 func clear_runtime_diagnostics() -> void:
 	runtime_role_diagnostics.clear()
@@ -1125,7 +1125,7 @@ func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", 
 	if path.begins_with("res://assets_external/design_pack_v1/"):
 		root.set_meta("source_forward_positive_z", true)
 	if authored_creature:
-		if not preload("res://scripts/monster_material_palette.gd").prepare(root, path):
+		if not preload("res://scripts/views/monster_material_view.gd").prepare(root, path):
 			return
 		# Capture the final native-surface variants so restoration and prepared
 		# scenes retain the same palette instead of reviving the old gray atlas.
@@ -1194,29 +1194,8 @@ func _apply_universal_character_material_budget(root: Node3D, path: String) -> v
 		for mesh_instance in _collect_meshes(root):
 			mesh_instance.set_meta("universal_material_budget", "single_material_prebaked_atlas")
 		return
-	# The low-poly Universal meshes carry normal maps on every body/head surface.
-	# Preserve geometry, albedo, vertex colours, scalar response, skeletons and
-	# sockets while collapsing that redundant branch before the first frame.
-	for mesh_instance in _collect_meshes(root):
-		if mesh_instance.mesh == null or mesh_instance.mesh.get_surface_count() == 0:
-			continue
-		var local_mesh := mesh_instance.mesh.duplicate(false) as Mesh
-		if local_mesh == null:
-			continue
-		var changed := false
-		for surface_index in range(local_mesh.get_surface_count()):
-			var source := local_mesh.surface_get_material(surface_index)
-			if not (source is StandardMaterial3D):
-				continue
-			var material := (source as StandardMaterial3D).duplicate() as StandardMaterial3D
-			if material.normal_enabled or material.normal_texture != null:
-				material.normal_enabled = false
-				material.normal_texture = null
-				changed = true
-			local_mesh.surface_set_material(surface_index, material)
-		if changed:
-			mesh_instance.mesh = local_mesh
-			mesh_instance.set_meta("universal_material_budget", "normal_maps_collapsed")
+	for mesh_instance: MeshInstance3D in preload("res://scripts/views/character_material_budget_view.gd").collapse_normals(_collect_meshes(root)):
+		mesh_instance.set_meta("universal_material_budget", "normal_maps_collapsed")
 
 func _has_skeleton(root: Node) -> bool:
 	if root.has_meta("prepared_skeleton_paths"):

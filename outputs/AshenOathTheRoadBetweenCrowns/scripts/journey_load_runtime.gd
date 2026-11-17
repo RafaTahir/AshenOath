@@ -4,10 +4,9 @@ const RuntimePacks = preload("res://scripts/runtime_pack_manager.gd")
 const PREPARATION_TIMEOUT_MSEC := RuntimePacks.PREPARATION_TIMEOUT_MSEC
 const Journal = preload("res://scripts/story_journal.gd")
 const Continuity = preload("res://scripts/journey_continuity_coordinator.gd")
-
+var _transition_epoch: int = -1
 func pending(game) -> bool:
 	return not game.journey_continuity.restore_request().is_empty()
-
 func request(game, prepared: Dictionary) -> void:
 	if not bool(prepared.get("ok", false)) or game.resource_shutdown_prepared:
 		return
@@ -51,6 +50,10 @@ func request(game, prepared: Dictionary) -> void:
 		game.player.set_transition_locked(true)
 	game.hud.begin_journey_load(prepared)
 	var target: String = str(staged.get("target_zone", "greyfen"))
+	_transition_epoch = game.world_transition.request_travel(target, true)
+	if _transition_epoch < 0:
+		cancel(game, "The session is closing.")
+		return
 	var encounter_packs: Array[String] = game._zone_encounter_packs(target, prepared.get("data", {}))
 	if OS.has_feature("web"):
 		if game.runtime_packs == null:
@@ -79,7 +82,7 @@ func request(game, prepared: Dictionary) -> void:
 				return
 	if not _is_current(game, generation):
 		return
-	# Services load once, after their destination's packs and before any mutation.
+	for pack: String in game.runtime_packs.required_zone_packs(target, encounter_packs): game.world_transition.pack_mounted(pack, _transition_epoch)
 	game.hud.update_journey_load_progress(target, -1.0, "Preparing the recorded journey...")
 	await game.get_tree().process_frame
 	if not _is_current(game, generation):
@@ -108,8 +111,6 @@ func request(game, prepared: Dictionary) -> void:
 	if game.runtime_packs == null:
 		cancel(game, "The destination's content is unavailable. Select the saved journey to retry.")
 		return
-	# Keep the recorded journey unclaimed until every destination environment
-	# texture has decoded; parent meshes can otherwise hide missing textures.
 	var required_packs: Array[String] = game.runtime_packs.required_zone_packs(target, encounter_packs)
 	game.hud.update_journey_load_progress(target, -1.0, "Preparing destination materials...")
 	game.asset_helper.begin_resource_attempt()
@@ -135,9 +136,8 @@ func request(game, prepared: Dictionary) -> void:
 		return
 	game.hud.set_journey_load_applying()
 	game.hud.clear_journey_transients(true)
-	game._apply_loaded_journey(claimed.get("data", {}))
+	game._systems["save"]._apply_loaded_journey(claimed.get("data", {}))
 	try_finish(game)
-
 func try_finish(game) -> void:
 	var staged: Dictionary = game.journey_continuity.restore_request()
 	if str(staged.get("phase", "")) != "applying":
@@ -172,7 +172,7 @@ func cancel(game, reason: String = "Journey loading cancelled.", present: bool =
 		return
 	if not shutdown:
 		print("JOURNEY: load_cancelled destination=%s phase=%s reason=%s" % [str(staged.get("target_zone", "")), str(staged.get("phase", "")), reason])
-	# An abandoned generation cannot claim its payload when a download finishes.
+	game.world_transition.cancel(_transition_epoch)
 	game.zone_pack_request_serial += 1
 	var source: Dictionary = cancelled.get("source", {})
 	if not bool(source.get("direct_data", false)):
@@ -216,7 +216,7 @@ func publish_arrival(game) -> void:
 		game.hud.present_journey_return(model)
 
 func _is_current(game, generation: int) -> bool:
-	if not is_instance_valid(game) or game.resource_shutdown_prepared:
+	if not is_instance_valid(game) or not game.world_transition.accepts(_transition_epoch) or game.resource_shutdown_prepared:
 		return false
 	var request: Dictionary = game.journey_continuity.restore_request()
 	return int(request.get("generation", -1)) == generation and str(request.get("phase", "")) == "preparing"

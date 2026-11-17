@@ -8,6 +8,7 @@ param(
     [switch]$FinalizeExistingVoices,
     [switch]$DialogueVoicesOnly,
     [switch]$CharacterAssetsOnly,
+    [switch]$ReuseCommittedAssets,
     [switch]$Publish,
     [string]$PublishMessage = "",
     [string]$Ticket = "",
@@ -26,6 +27,7 @@ $RepositoryRoot = [System.IO.Path]::GetFullPath((Split-Path -Parent (Split-Path 
 $GeneratedRoot = Join-Path $RepositoryRoot ".release-gate"
 $WebRoot = Join-Path $RepositoryRoot "web"
 $ArtGatePath = Join-Path $RepositoryRoot 'art_source/art_recovery_v2/quality_gate.json'
+if ($ReuseCommittedAssets -and -not (Test-Path -LiteralPath $ArtGatePath -PathType Leaf)) { throw 'Committed-asset reuse requires the existing art publication gate.' }
 if (Test-Path -LiteralPath $ArtGatePath) {
     $ArtGate = Get-Content -LiteralPath $ArtGatePath -Raw | ConvertFrom-Json
     $CandidateAuthorization = $ArtGate.status -eq 'user_authorized_candidate_publication' -and $ArtGate.publication_authorized -eq $true
@@ -49,6 +51,7 @@ if (Test-Path -LiteralPath $ArtGatePath) {
     } }
 }
 $DeploymentPolicy = Get-Content -LiteralPath (Join-Path $ProjectRoot 'data/deployment_policy.json') -Raw | ConvertFrom-Json
+if ($ReuseCommittedAssets -and ($CharacterAssetsOnly -or $BuildVoices)) { throw '-ReuseCommittedAssets cannot rebuild characters or voices.' }
 if ($Publish -and $SkipWebCopy) { throw "-Publish requires the generated web transport to be copied." }
 if ($Publish -and (-not $PublishPaths.Count -or $Ticket -notmatch '^(LR|OPT)-\d{3}$')) { throw "-Publish requires a supported ticket ID and explicit -PublishPaths for authored source." }
 
@@ -104,6 +107,41 @@ foreach ($directory in @($ExportRoot, $PackRoot, $LogRoot)) {
     New-Item -ItemType Directory -Force -Path $directory | Out-Null
 }
 
+if ($ReuseCommittedAssets) {
+    # Reuse only immutable, committed production derivatives. Script-bearing
+    # packs are still exported below; this never copies old executable packs.
+    $assetBaseline = (& git -C $RepositoryRoot rev-parse --verify origin/main).Trim()
+    if ($LASTEXITCODE -ne 0) { throw 'Committed-asset reuse requires the fetched production branch.' }
+    & git -C $RepositoryRoot merge-base --is-ancestor $assetBaseline HEAD
+    if ($LASTEXITCODE -ne 0) { throw 'Integrate production before reusing its asset derivatives.' }
+    $relativeProject = $ProjectRoot.Substring($RepositoryRoot.Length).TrimStart('\','/').Replace('\','/')
+    $reusePaths = @('art_source/art_recovery_v2', 'plans/living-road/music-samples') + @(
+        'assets','assets_external','data','scenes','shaders',
+        'scripts/asset_spawn_helper.gd','scripts/character_animation_driver.gd',
+        'scripts/character_identity_profile.gd','scripts/character_role_spec.gd',
+        'tools/build_prepared_actors.gd','tools/build_prepared_audio.gd',
+        'tools/split_prepared_audio.gd','tools/build_living_cast_libraries.gd',
+        'tools/build_living_cast_stage2_libraries.gd','tools/build_prepared_companion.gd',
+        'tools/build_living_cast_station_props.gd','tools/build_living_world_blender.gd',
+        'tools/build_story_score.py'
+    ) | ForEach-Object { if ($_.StartsWith('art_source/') -or $_.StartsWith('plans/')) { $_ } else { "$relativeProject/$_" } }
+    $changedInputs = @(& git -C $RepositoryRoot diff --name-only $assetBaseline HEAD -- @reusePaths)
+    if ($LASTEXITCODE -ne 0 -or $changedInputs.Count) { throw "Asset inputs changed; use the full production build. Changed paths: $($changedInputs -join ', ')" }
+    $dirtyInputs = @(& git -C $RepositoryRoot status --porcelain -- @reusePaths)
+    if ($LASTEXITCODE -ne 0 -or $dirtyInputs.Count) { throw 'Asset inputs have local changes; do not reuse uncommitted derivatives.' }
+    $reuseReceipt = [ordered]@{
+        policy = 'unchanged_committed_derivatives_v1'
+        baseline_commit = $assetBaseline
+        source_commit = $SourceCommit
+        compared_paths = $reusePaths
+        committed_and_worktree_inputs_unchanged = $true
+        script_bearing_packs_reexported = $true
+        actor_package_integrity = 'required_after_export'
+        visual_acceptance = 'not_established_by_reuse'
+    }
+    [IO.File]::WriteAllText((Join-Path $OutputDirectory 'asset-reuse.json'), (($reuseReceipt | ConvertTo-Json -Depth 5) + [Environment]::NewLine), [Text.UTF8Encoding]::new($false))
+}
+
 # Keep the system awake only while this build process is active. Closing the
 # laptop lid or a manual sleep request remains under the user's control.
 Add-Type -TypeDefinition @'
@@ -122,9 +160,9 @@ Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_source_catalog
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "prepare_runtime_dialogue.py")) "runtime-dialogue"
 }
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "prepare_runtime_pack_layout.py"), "--defer-environment") "pack-layout"
-if (-not $CharacterAssetsOnly) {
-Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_story_score.py")) "story-score"
 $DesignPackCast = Test-Path (Join-Path $ProjectRoot "data/design_pack_assets.json")
+if (-not $CharacterAssetsOnly -and -not $ReuseCommittedAssets) {
+Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_story_score.py")) "story-score"
 if (-not $DesignPackCast) {
     Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_living_faces.py")) "living-faces"
 }
@@ -144,9 +182,11 @@ foreach ($script in @("greyfen_life_controller", "story_state", "hud")) {
     Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--check-only", "--script", "res://scripts/$script.gd") ("compile-" + $script)
 }
 if (-not $CharacterAssetsOnly) {
+if (-not $ReuseCommittedAssets) {
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "split_prepared_audio.gd")) "prepared-audio-split"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_audio.gd"), "--", "--approved-arrangements") "approved-arrangements"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_station_props.gd")) "living-cast-station-props"
+}
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_zone_geometry.gd")) "prepared-zone-geometry"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_directional_gaits.gd")) "directional-gaits"
 if (-not $DesignPackCast) {
@@ -181,8 +221,10 @@ if ($HasLivingCampaign) {
             throw "Combined living-cast source requires $SceneryStep; integrate the complete scenery handoff before packaging."
         }
     }
-    Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_world_blender.gd")) "living-world-compile"
-    Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "verify_living_world_split.gd")) "living-world-union"
+    if (-not $ReuseCommittedAssets) {
+        Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_world_blender.gd")) "living-world-compile"
+        Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "verify_living_world_split.gd")) "living-world-union"
+    }
 }
 if ($HasLivingCampaign) {
     # Measured grips are bound to exact prepared scenes. Repacking identical
@@ -191,7 +233,7 @@ if ($HasLivingCampaign) {
 } else {
     Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_actors.gd")) "prepared-actors"
 }
-if ($HasLivingCampaign) {
+if ($HasLivingCampaign -and -not $ReuseCommittedAssets) {
     # Strict grip metadata binds the final prepared geometry. Refresh only
     # library ownership afterward so the verified actor bytes stay unchanged.
     $FaceRepairHelper = Join-Path $RepositoryRoot 'art_source/art_recovery_v2/tools/face_repair_provenance.py'

@@ -1,13 +1,11 @@
 extends "res://scripts/hud/hud_component.gd"
 ## Hud input: explicit view operations; requests leave through typed signals.
-
 func set_input_source(source: Node) -> void:
 	input_source = source
 	if is_instance_valid(source):
 		_settings_source = source.get("settings_manager")
 	if input_source != null:
 		set_input_device(str(input_source.get("active_device")))
-
 func set_gamepad_profile(profile: Dictionary) -> void:
 	gamepad_profile = profile.duplicate(true)
 	if input_device == "gamepad" and active_menu in ["controls", "remap"] and not remap_waiting:
@@ -15,7 +13,6 @@ func set_gamepad_profile(profile: Dictionary) -> void:
 			show_controls_menu(controls_back_target)
 		else:
 			show_remap_menu(remap_back_target, remap_page)
-
 func restore_input_focus() -> void:
 	if _journey_load_active:
 		if not _journey_load_applying:
@@ -24,21 +21,18 @@ func restore_input_focus() -> void:
 	if dialogue_layer != null and dialogue_layer.visible:
 		_restore_dialogue_reading_state()
 		return
-	if menu_layer != null and menu_layer.visible and input_source != null and input_source.has_method("focus_first_enabled"):
+	if menu_layer != null and menu_layer.visible and input_source != null and supports(input_source, "focus_first_enabled"):
 		navigation.restore(_rendered_screen, menu_layer)
-
 func _set_ui_pointer(context: String = "menu") -> void:
-	if input_source != null and input_source.has_method("set_ui_context"):
+	if input_source != null and supports(input_source, "set_ui_context"):
 		input_source.set_ui_context(context)
-	elif input_source != null and input_source.has_method("release_pointer"):
+	elif input_source != null and supports(input_source, "release_pointer"):
 		input_source.release_pointer()
-
 func _set_gameplay_pointer() -> void:
-	if input_source != null and input_source.has_method("set_gameplay_context"):
+	if input_source != null and supports(input_source, "set_gameplay_context"):
 		input_source.set_gameplay_context()
-	elif input_source != null and input_source.has_method("restore_gameplay_pointer"):
+	elif input_source != null and supports(input_source, "restore_gameplay_pointer"):
 		input_source.restore_gameplay_pointer()
-
 func set_input_device(device: String) -> void:
 	input_device = device if device in ["keyboard_mouse", "gamepad", "touch"] else "keyboard_mouse"
 	_queue_responsive_layout()
@@ -51,14 +45,12 @@ func set_input_device(device: String) -> void:
 		hint_label.text = _format_input_text(raw_hint)
 	update_equipment(last_potions, last_bombs, last_oil_name, last_arrow_count, last_arrow_type, last_weapon_name, last_remedy_id, last_tool_id, last_oil_seconds)
 	_refresh_story_focus()
-
 func _action_label(action: String) -> String:
-	if input_source != null and input_source.has_method("action_label"):
+	if input_source != null and supports(input_source, "action_label"):
 		return "[%s]" % str(input_source.action_label(action))
 	return "[%s]" % action.capitalize()
-
 func _format_input_text(text: String) -> String:
-	if input_source != null and input_source.has_method("describe_action"):
+	if input_source != null and supports(input_source, "describe_action"):
 		var block: Dictionary = input_source.describe_action("block")
 		var guard_verb := "Toggle" if str(block.get("mode", "hold")) == "toggle" else "Hold"
 		var replacements := {
@@ -119,7 +111,7 @@ func _focus_after_rebuild(container: Node) -> void:
 func _focus_first_enabled(container: Node) -> void:
 	if container == null or not is_instance_valid(container):
 		return
-	if input_source != null and input_source.has_method("focus_first_enabled"):
+	if input_source != null and supports(input_source, "focus_first_enabled"):
 		if input_source.focus_first_enabled(container) != null:
 			return
 	for child in container.get_children():
@@ -233,7 +225,7 @@ func handle_input(event: InputEvent) -> void:
 			var logical_key := event.duplicate() as InputEventKey
 			logical_key.keycode = logical_key.physical_keycode
 			accept_event = logical_key
-		if not pointer and input_source != null and input_source.has_method("accept_event") and not input_source.accept_event(accept_event, "ui_accept", input_source.get_context()):
+		if not pointer and input_source != null and supports(input_source, "accept_event") and not input_source.accept_event(accept_event, "ui_accept", input_source.get_context()):
 			view.get_viewport().set_input_as_handled()
 			return
 		var candidate: Button
@@ -277,7 +269,7 @@ func handle_unhandled_input(event: InputEvent) -> void:
 		_cancel_journey_load()
 		view.get_viewport().set_input_as_handled()
 		return
-	if input_source != null and input_source.has_method("accept_event") and not input_source.accept_event(event, "ui_cancel", input_source.get_context()):
+	if input_source != null and supports(input_source, "accept_event") and not input_source.accept_event(event, "ui_cancel", input_source.get_context()):
 		view.get_viewport().set_input_as_handled()
 		return
 	if request_back():
@@ -326,3 +318,11 @@ func request_back() -> bool:
 		_return_to_parent()
 		return true
 	return false
+
+
+func read_tag(node: Object, key: StringName, fallback: Variant = null) -> Variant:
+	return node.get_meta(key, fallback) if is_instance_valid(node) else fallback
+func write_tag(node: Object, key: StringName, value: Variant) -> void:
+	if is_instance_valid(node): node.set_meta(key, value)
+func supports(node: Object, method: StringName) -> bool:
+	return is_instance_valid(node) and node.has_method(method)

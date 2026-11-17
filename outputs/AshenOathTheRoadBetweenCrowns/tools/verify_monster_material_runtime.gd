@@ -1,6 +1,6 @@
 extends SceneTree
 ## Source-isolated material ownership/PBR regression; no world or save access.
-const Palette = preload("res://scripts/monster_material_palette.gd")
+const Palette = preload("res://scripts/views/monster_material_view.gd")
 const Bindings = preload("res://scripts/character_material_bindings.gd")
 var errors: Array[String] = []
 var rows: Array[Dictionary] = []

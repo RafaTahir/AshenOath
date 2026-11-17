@@ -161,7 +161,7 @@ func _apply_runtime_settings(current_settings: Dictionary) -> void:
 		runtime_packs.quality_preset = preset
 		if changed and not game_started and (greyfen_prewarm_started or startup_packs_waiting \
 				or startup_prepare_failed or route_zone_cache.has("greyfen")):
-			_restart_menu_opening()
+			_systems["startup"]._restart_menu_opening()
 	if performance_budget_monitor != null:
 		performance_budget_monitor.quality = str(current_settings.get("quality_preset", "balanced"))
 	if SettingsDelta.changed(_applied_setting_groups, "audio", audio, current_settings, ["master_volume", "music_volume", "sfx_volume", "voice_volume", "quality_preset"]):

@@ -8,7 +8,7 @@ func load_save_state(data: Dictionary) -> void:
 	# Direct payload callers retain the same preparation boundary as file-backed
 	# selections. SaveManager owns identity/history for ordinary UI loads.
 	var migrated_data: Dictionary = data
-	if save_manager != null and save_manager.has_method("migrate_save_data"):
+	if save_manager != null:
 		migrated_data = save_manager.migrate_save_data(data)
 		if migrated_data.is_empty():
 			if hud != null:
@@ -64,7 +64,7 @@ func _apply_loaded_journey(data: Dictionary) -> void:
 	var discovered: Dictionary = seamless_world.discovered_sectors if seamless_world != null else {}
 	progression.restore_journey(quests, story_state, saved_sector, discovered)
 	# Restore entitlement ownership before migrating a legacy coating duration.
-	inventory.load_state(data.get("inventory", {}), int(data.get("migrated_from_version", data.get("version", 0))) < 13)
+	inventory.load_state(preload("res://scripts/models/ammo_loadout_model.gd").migrate_inventory(data.get("inventory", {}), data.get("equipment", {})), int(data.get("migrated_from_version", data.get("version", 0))) < 13)
 	if int(data.get("version", 0)) < 3 and quests.is_completed("main_road_of_crows"):
 		story_state.set_flag("legacy_report_choice_required", true)
 	load_world_state(data.get("world_state", {}))
@@ -78,7 +78,7 @@ func _apply_loaded_journey(data: Dictionary) -> void:
 		pos = Vector3(-7,1,11)
 		story_state.set_flag("saga_bog_arena_owner", "wychwood")
 		story_state.record_evidence("saga_bog_migration", {"zone":"deep_wood", "title":"The memory's northern clearing", "text":"The Bog Wretch and its pending memory core now have one owner in northern Wychwood. Return south along the existing path. Your recorded fight, choices, health and supplies are unchanged."})
-	pos = _safe_loaded_position(zone, pos)
+	pos = _systems["zone_lifecycle"]._safe_loaded_position(zone, pos)
 	# Campaign saves must follow the same streamed-pack handoff as a gate
 	# transition. Otherwise a legacy save opened directly in a later sector
 	# reaches the lazy builder before its script pack is mounted.

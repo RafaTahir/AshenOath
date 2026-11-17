@@ -12,8 +12,6 @@ const SWITCH_ADVANTAGE := 4.0
 const SWITCH_DWELL := 0.50
 const ROAD_INTENT_RADIUS := 8.0
 const AUTOMATIC_ROAD_RETRIES := 2
-# Keep speculative scene construction out of the required travel path until
-# it has earned runtime acceptance. Verified HTTP caching remains optional.
 const REQUIRE_PREPARED_ROADS := false
 
 signal boundary_transition_requested(source_zone: String, target_zone: String, edge_id: String)
@@ -41,6 +39,7 @@ var _neighbor_state := "idle"
 var _neighbor_quality := ""
 var _neighbor_signature := 0
 var _neighbor_epoch := 0
+var _transition_epoch: int = -1
 var _story_epoch := 0
 var _neighbor_failure := ""
 var _added_nodes: Array[WeakRef] = []
@@ -139,7 +138,7 @@ func _process(delta: float) -> void:
 		_clear_road_travel()
 		return
 	if _foreground: return
-	if _neighbor_scope != null and (not is_instance_valid(_neighbor_scope.owned_root) or _neighbor_quality != str(host.settings.settings.get("quality_preset","balanced"))): cancel_preparation()
+	if _neighbor_scope != null and (not host.world_transition.accepts(_transition_epoch) or not is_instance_valid(_neighbor_scope.owned_root) or _neighbor_quality != str(host.settings.settings.get("quality_preset","balanced"))): cancel_preparation()
 	if get_tree().paused or host._journey_load_pending() or not is_instance_valid(host.player) or not host.player.can_control or host._story_has_active_combat(): return
 	if host.opening_detail_pending or host.zone_transition_pending: return
 	if host.player.bow_aiming: return
@@ -168,12 +167,7 @@ func _process(delta: float) -> void:
 		cancel_preparation()
 		# Renderer-safe retirement owns the slot until it has released the root.
 		return
-	# Cold activation starts just before the common plane. Retain the source
-	# half while it still supports Kael, even if a state change invalidated it.
 	if contains_resident_passage(host.player.global_position) and not WorldSectorManifest.connector_contains(str(host.current_zone_id),host.player.global_position,0.0,host.story_state): return
-	# A retained root does not imply that all of its current pack requirements
-	# are mounted. Request them before the cached-root fast path, just as for a
-	# cold destination, or has_prepared() can hold the return forever.
 	if _neighbor_scope == null:
 		var job: Dictionary = _jobs.get(target,{})
 		if str(job.get("state","")) == "failed":
@@ -218,8 +212,6 @@ func _process(delta: float) -> void:
 		_advance_preparation()
 		if Time.get_ticks_usec() - slice_started >= allowance:
 			break
-	# A Godot scene publication is atomic. Repay an over-budget step with quiet
-	# frames instead of stacking expensive steps on an already slow frame.
 	var spent := float(Time.get_ticks_usec() - slice_started) / 1000000.0
 	_build_cooldown = minf(0.25, spent * 4.0)
 	if delta > 1.0 / 30.0: _build_cooldown = maxf(_build_cooldown,0.10)
@@ -298,7 +290,7 @@ func request_road_travel(target: String, arrival: Vector3) -> bool:
 	if not uses_prepared_roads():
 		_clear_road_travel()
 		cancel_preparation()
-		host._request_zone_load(str(edge.target),arrival if arrival != Vector3.ZERO else _road_arrival(edge))
+		host._systems["zone_lifecycle"]._request_zone_load(str(edge.target),arrival if arrival != Vector3.ZERO else _road_arrival(edge))
 		return true
 	_road_travel_serial += 1
 	_road_commit_queued = false
@@ -349,7 +341,7 @@ func _commit_road_travel(serial: int) -> void:
 	if not has_prepared(target): return
 	var arrival: Vector3 = _road_travel.arrival
 	_clear_road_travel()
-	host._request_zone_load(target,arrival)
+	host._systems["zone_lifecycle"]._request_zone_load(target,arrival)
 
 func _refresh_road_status() -> void:
 	if not is_instance_valid(host.zone_root): return
@@ -444,9 +436,6 @@ func _show_neighbor(edge: Dictionary) -> void:
 	if root.transform != placement: root.transform = placement
 	root.visible = true
 	host.zone_residency.begin_preview(root)
-	# A validated resident destination may be entered. Keeping this leaf shut
-	# until _crossing exists deadlocks warm travel: collision prevents Kael
-	# reaching the plane which creates _crossing in the first place.
 	preload("res://scripts/connected_route_geometry.gd").open_gate(host.zone_root,target,true)
 	preload("res://scripts/connected_route_geometry.gd").open_gate(root,str(edge.source),true)
 	_preview_root = root
@@ -521,8 +510,6 @@ func _neighbor_dependencies_current() -> bool:
 	if _neighbor_scope.cancelled or _neighbor_journey_id != str(host.save_manager.journey_id):
 		return false
 	if _neighbor_epoch == _story_epoch: return true
-	# A partial build's recorded reads grow after every successful step. Only
-	# already-consumed state can invalidate it; later steps read current state.
 	if _neighbor_scope.cursor > 0 and _neighbor_signature != host._zone_state_signature(_neighbor_scope.zone_id): return false
 	_neighbor_epoch = _story_epoch
 	return true
@@ -571,12 +558,18 @@ func finish_preparation(zone_id: String, keep_waiting: Callable) -> bool:
 	return false
 
 func _begin_neighbor(target: String) -> void:
+	_transition_epoch = host.world_transition.transition_epoch if host.world_transition.state == host.world_transition.State.COMMITTING_TRAVEL and host.world_transition.target_zone_id == target else host.world_transition.prepare_adjacent(target)
+	if _transition_epoch < 0: return
+	if host.runtime_packs != null:
+		for pack: String in host.runtime_packs.required_zone_packs(target, host._zone_encounter_packs(target)):
+			if host.runtime_packs.is_ready(pack): host.world_transition.pack_mounted(pack, _transition_epoch)
 	var builder_path := preload("res://scripts/zone_composition_router.gd").builder_path(target)
 	var builder_script := load(builder_path) as Script
 	if builder_script == null or not builder_script.can_instantiate():
 		_neighbor_failure = "The destination builder could not be loaded: " + target
 		_retry_after = Time.get_ticks_msec()+30000
 		_record_job(target,"failed",_neighbor_failure)
+		host.world_transition.fail(_transition_epoch, _neighbor_failure)
 		return
 	if is_instance_valid(_preview_root) and _preview_root != host.zone_root:
 		preload("res://scripts/connected_route_geometry.gd").close_gate(host.zone_root,str(_preview_root.get_meta("zone_resource_id","")),host.player.global_position)
@@ -637,13 +630,13 @@ func _build_neighbor_step(context: ZoneBuildContext) -> bool:
 		var builder := context.construction_host()
 		builder._apply_first_route_materials(context.zone_root)
 	elif _neighbor_step == steps+4:
-		context.owned_fields.spatial_service.build_navigation(context.zone_root)
+		context.scope.spatial_service.build_navigation(context.zone_root)
 	elif _neighbor_step >= steps+5 and _neighbor_step <= steps+7:
 		host.audio.prepare_streamed_destination(context.zone_id,_neighbor_step-steps-5,host.story_state)
 	elif _neighbor_step == steps+8:
 		var result := context.validate()
 		if not bool(result.ok): _neighbor_failure = str(result.errors); return false
-		for enemy: Node in context.owned_fields.active_enemies:
+		for enemy: Node in context.scope.active_enemies:
 			if not is_instance_valid(enemy.visual_root):
 				_neighbor_failure = "Missing required body: " + str(enemy.enemy_id); return false
 		context.zone_root.set_meta("opening_detail_complete",true)
@@ -652,7 +645,6 @@ func _build_neighbor_step(context: ZoneBuildContext) -> bool:
 		context.zone_root.set_meta("prepared_audio_complete",true)
 		context.zone_root.set_meta("prepared_encounter_packs",_neighbor_encounter_packs.duplicate())
 		context.zone_root.set_meta("prepared_journey_id",_neighbor_journey_id)
-		context.zone_root.set_meta("runtime_light_count",context.owned_fields.runtime_light_count)
 		_neighbor_state = "render_pending"; _neighbor_signature = host._zone_state_signature(context.zone_id)
 	return true
 
@@ -753,32 +745,28 @@ func _advance_render_preparation() -> void:
 		return
 	_neighbor_view.render_target_update_mode = SubViewport.UPDATE_DISABLED
 	_render_camera.queue_free(); _render_camera = null
+	if not host.world_transition.mark_prepared(_neighbor_scope.zone_id, _transition_epoch):
+		cancel_preparation(); return
 	_neighbor_state = "ready"
 	_neighbor_scope.zone_root.set_meta("prepared_render_complete",true)
 	_record_job(_neighbor_scope.zone_id,"ready")
 
 func publish_prepared(zone_id: String) -> bool:
+	if not host.world_transition.accepts(host.world_transition.transition_epoch, zone_id): return false
 	if _neighbor_scope == null: return false
 	if not _neighbor_failure.is_empty() or _neighbor_state != "ready" or _neighbor_scope.zone_id != zone_id or _neighbor_signature != host._zone_state_signature(zone_id):
 		cancel_preparation(); return false
 	var root := _neighbor_scope.owned_root
-	var spatial: Node = _neighbor_scope.owned_fields.spatial_service
-	var enemies: Array = _neighbor_scope.owned_fields.active_enemies
+	var spatial: Node = _neighbor_scope.scope.spatial_service
+	var enemies: Array = _neighbor_scope.scope.active_enemies
 	host.zone_residency.suspend_runtime(root)
 	host._cache_route_zone(zone_id,root,enemies,_neighbor_signature)
 	host._cache_route_spatial_service(zone_id,spatial)
-	# Switching the viewport's world delivers world notifications without
-	# _exit_tree(), preserving controller connections and the navigation owner.
-	# The root is already hidden and displaced before joining the active world.
 	_neighbor_view.set_meta("prepared_zone_view",true)
-	# Godot 4.6.3 releases own_world before detaching the viewport's scenario.
-	# Keep it alive until the world notifications and renderer handoff finish.
 	var retiring_world: World3D = _neighbor_view.find_world_3d()
 	_neighbor_view.own_world_3d = false
 	retiring_world = null
 	var camera := Camera3D.new(); camera.name = "ResidentCamera"
-	# This query-only camera copies the live view every render tick; a second
-	# physics interpolation schedule would smooth the copied pose twice.
 	camera.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	_neighbor_view.add_child(camera); camera.current = true
 	_neighbor_scope = null; _neighbor_builder = null
@@ -799,8 +787,6 @@ func _sync_owner_camera(root: Node3D) -> void:
 	var source: Camera3D = host.get_viewport().get_camera_3d()
 	var camera := _active_view.get_node("ResidentCamera") as Camera3D
 	if not is_instance_valid(source): return
-	# No second render pass: facial visibility queries still need the actual
-	# camera frame and viewport dimensions when their root lives in this owner.
 	_active_view.size = Vector2i(host.get_viewport().get_visible_rect().size)
 	camera.global_transform = source.global_transform
 	camera.projection = source.projection; camera.fov = source.fov
@@ -809,6 +795,7 @@ func _sync_owner_camera(root: Node3D) -> void:
 	camera.h_offset = source.h_offset; camera.v_offset = source.v_offset
 
 func cancel_preparation() -> void:
+	if is_instance_valid(host) and host.world_transition.state == host.world_transition.State.PRELOADING_ADJACENT: host.world_transition.cancel(_transition_epoch)
 	if is_instance_valid(_neighbor_view): _neighbor_view.render_target_update_mode = SubViewport.UPDATE_DISABLED
 	if is_instance_valid(_render_current): _render_current.layers = _render_layers
 	_render_current = null; _render_camera = null; _render_frame = -1; _render_nodes.clear()
@@ -912,16 +899,12 @@ func update_player(actor: Node3D, zone_id: String, delta: float) -> bool:
 	var bounds := _zone_bounds(source)
 	var edge := WorldSectorManifest.edge_for_position(source, actor.global_position, bounds, 0.85)
 	if not edge.is_empty() and not WorldSectorManifest.connection_between(source,str(edge.target)).is_empty(): return false
-	# An older save may already be inside an exit. Require leaving that entry
-	# trigger before it can fire, rather than bouncing back after the cooldown.
 	if not _arrival_edge.is_empty():
 		if str(edge.get("id", "")) == _arrival_edge:
 			return false
 		_arrival_edge = ""
 	if edge.is_empty():
 		return false
-	# Automatic boundary entry must obey the same earned opening as the
-	# authored gate; merely having a manifest edge cannot bypass that decision.
 	if not WorldSectorManifest.edge_available(edge,host.quests if host != null else null,host.story_state if host != null else null):
 		return false
 	var target := WorldSectorManifest.canonical(str(edge.get("target", "")))
@@ -942,8 +925,6 @@ func update_player(actor: Node3D, zone_id: String, delta: float) -> bool:
 	if not accepted:
 		pending_transition.clear()
 		return false
-	# The host can complete a synchronous local transition. Do not leave a
-	# stale pending lock after the new sector has already been activated.
 	if current_sector == target:
 		pending_transition.clear()
 	transition_count += 1
@@ -975,13 +956,12 @@ func on_zone_activated(zone_id: String, local_position: Vector3 = Vector3.ZERO) 
 	cooldown = 0.25
 	last_transition["state"] = "active"
 	last_transition["activated_at_usec"] = Time.get_ticks_usec()
-	# The background selector owns one useful neighbor after control settles.
-	# Do not import every adjacent region synchronously at an arrival.
 	if streaming_service != null:
 		streaming_service.retire_unneeded_zones(active_sector_ids)
 	sector_activated.emit(normalized)
 
 func on_zone_failed(zone_id: String, reason: String) -> void:
+	if host.world_transition.target_zone_id == zone_id: host.world_transition.fail(host.world_transition.transition_epoch, reason)
 	_crossing = {}
 	failed_transition_count += 1
 	pending_transition.clear()

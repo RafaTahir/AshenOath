@@ -33,9 +33,36 @@
     {"id": "PACK-003", "milestone": "A", "title": "Real versioned runtime packs", "status": "verified"},
     {"id": "STREAM-003", "milestone": "A", "title": "Verified pack streaming lifecycle", "status": "verified"},
     {"id": "LOAD-QA-002", "milestone": "A", "title": "Startup and cache acceptance", "status": "verified"},
-    {"id": "BOW-001", "milestone": "C", "title": "Hybrid bow aim and release", "status": "functional_but_incomplete"},
-    {"id": "AMMO-001", "milestone": "C", "title": "Capped arrow families and save migration", "status": "functional_but_incomplete"},
-    {"id": "SHOP-001", "milestone": "C", "title": "Tor and Mira vendor transactions", "status": "functional_but_incomplete"}
+    {
+      "id": "BOW-001", "milestone": "C", "title": "Hybrid bow aim and release",
+      "status": "functional_but_incomplete", "phase_2_implementation": "complete",
+      "simulation_verification": "verified",
+      "headless_integration": "verified",
+      "verification_scope": "Phase 2 deterministic combat and rendering-disabled physics arena; Phase 5 600-tick Greyfen-to-Wychwood model replay with real melee contacts, parry, two bow releases and one-arrow-per-release conservation. No browser-GPU signoff.",
+      "evidence": ["tools/tests/test_phase2_combat_and_bow.gd", "tools/tests/test_phase5_campaign_replay_benchmark.gd"],
+      "verification_command": "python3 outputs/AshenOathTheRoadBetweenCrowns/tools/run_checks.py --require-godot",
+      "graphical_acceptance": "unverified"
+    },
+    {
+      "id": "AMMO-001", "milestone": "C", "title": "Capped arrow families and save migration",
+      "status": "functional_but_incomplete",
+      "simulation_verification": "verified",
+      "headless_integration": "verified",
+      "verification_scope": "Phase 1 caps/overflow, cancellation, inventory adapter and v1-v13 migration; Phase 2 bow consumption; Phase 5 purchased quiver survives a fresh-session SavePayloadCodec checkpoint with identical canonical durable RunSnapshot. Not browser storage durability or rendered equipment approval.",
+      "evidence": ["tools/tests/test_phase1_core_and_economy.gd", "tools/tests/test_phase2_combat_and_bow.gd", "tools/tests/test_phase5_campaign_replay_benchmark.gd"],
+      "verification_command": "python3 outputs/AshenOathTheRoadBetweenCrowns/tools/run_checks.py --require-godot",
+      "graphical_acceptance": "unverified"
+    },
+    {
+      "id": "SHOP-001", "milestone": "C", "title": "Tor and Mira vendor transactions",
+      "status": "functional_but_incomplete",
+      "simulation_verification": "verified",
+      "headless_integration": "verified",
+      "verification_scope": "Phase 1 pure pricing, atomic rejection and vendor/inventory adapters; Phase 4 mounted real HUD Tor/Mira buy/sell intents and cleanup; Phase 5 exact coin/stock conservation through fresh-session checkpoint reload. Presentation, touch and browser-GPU signoff remain separate.",
+      "evidence": ["tools/tests/test_phase1_core_and_economy.gd", "tools/tests/test_phase4_cast_input_and_hud.gd", "tools/tests/test_phase5_campaign_replay_benchmark.gd"],
+      "verification_command": "python3 outputs/AshenOathTheRoadBetweenCrowns/tools/run_checks.py --require-godot",
+      "graphical_acceptance": "unverified"
+    }
   ],
   "known_blockers": [
     "software-browser cold engine readiness remains slightly above the 8-second typical target",

@@ -1,0 +1,128 @@
+extends SceneTree
+
+const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
+const CharacterPresentation = preload("res://scripts/character_presentation.gd")
+
+var failures: Array[String] = []
+var helper: Node
+var tested_game: Node
+var human_only := false
+
+func _initialize() -> void:
+	human_only = OS.get_cmdline_user_args().has("--human-only")
+	_verify_identity_driver_source()
+	helper = AssetSpawnHelper.new()
+	root.add_child(helper)
+	await process_frame
+	await _verify_asset_role("player_human", "Kael")
+	await _verify_asset_role("sister_anwen_human", "Sister Anwen")
+
+	var packed := load("res://scenes/main.tscn") as PackedScene
+	_assert(packed != null, "main scene is unavailable")
+	if packed != null:
+		tested_game = packed.instantiate()
+		root.add_child(tested_game)
+		await _frames(2)
+		tested_game.call("_new_game")
+		await _frames(8)
+		_verify_runtime_face(tested_game.player, "Kael")
+		var anwen = tested_game.zone_root.find_child("sister_anwen", true, false)
+		_verify_runtime_face(anwen, "Sister Anwen")
+		var life = tested_game.zone_root.find_child("GreyfenLifeController", true, false)
+		_assert(life != null and life.actors.size() >= 7, "Greyfen crowd is unavailable for face validation")
+		if life != null:
+			for entry in life.actors:
+				_verify_runtime_face(entry.node, str(entry.id))
+		if not human_only:
+			tested_game.call("_load_zone", "Wychwood", Vector3(0, 0.9, 9))
+			await _frames(8)
+			_assert(tested_game.active_enemies.size() == 5, "Wychwood enemies are unavailable for face validation")
+			for enemy in tested_game.active_enemies:
+				_verify_runtime_face(enemy, str(enemy.enemy_id))
+
+	await _finish()
+
+func _verify_identity_driver_source() -> void:
+	var source := FileAccess.get_file_as_string("res://scripts/character_identity_profile.gd")
+	for forbidden in [
+		"FeatureScaleNormalizer", "HeadFeatureSocket", "MonsterHeadFeatures", "_add_feature_box",
+		"_add_feature_sphere", "_add_human_face_details", "_add_monster_eye_details"
+	]:
+		_assert(not source.contains(forbidden), "character identity profile still contains synthetic anatomy helper: %s" % forbidden)
+
+func _verify_asset_role(role: String, label: String) -> void:
+	var visual: Node3D = helper.spawn_visual_role(role, "characters")
+	_assert(visual != null, "%s visual failed to instantiate" % label)
+	if visual == null:
+		return
+	var owner := Node3D.new()
+	root.add_child(owner)
+	owner.add_child(visual)
+	if role == "player_human":
+		CharacterPresentation.apply_player(owner, visual)
+	else:
+		CharacterPresentation.apply_npc(owner, role)
+	await _frames(1)
+	_verify_face_contract(owner if role != "player_human" else visual, label)
+	owner.queue_free()
+	await _frames(2)
+
+func _verify_runtime_face(actor: Node, label: String) -> void:
+	_assert(actor != null, "%s actor is missing" % label)
+	if actor == null:
+		return
+	# Presentation is applied to the gameplay actor for NPCs/enemies and to its
+	# visual child for the player. Check the actor root so both contracts are
+	# covered without losing the driver attached by CharacterPresentation.
+	_verify_face_contract(actor, label)
+
+func _verify_face_contract(root_node: Node, label: String) -> void:
+	var driver = root_node.find_child("CharacterFaceDriver", true, false)
+	_assert(driver != null and driver.has_method("get_contract_report"), "%s has no native face driver" % label)
+	if driver == null:
+		return
+	var report: Dictionary = driver.get_contract_report()
+	_assert(bool(report.get("valid", false)), "%s native face contract is invalid: %s" % [label, report])
+	var is_monster := str(report.get("contract_kind", "")) == "monster_native_anatomy"
+	_assert(int(report.get("native_face_surface_count", 0)) > 0, "%s has no native %s surfaces" % [label, "anatomy" if is_monster else "face/skin material"])
+	_assert(not bool(report.get("synthetic_geometry_created", true)), "%s face driver created synthetic geometry" % label)
+	_assert(not _has_legacy_overlay(root_node), "%s still contains legacy face/eye overlay anatomy" % label)
+
+func _has_legacy_overlay(root_node: Node) -> bool:
+	for child in root_node.find_children("*", "", true, false):
+		var token := str(child.name).to_lower().replace(" ", "").replace("-", "")
+		for forbidden in [
+			"faceplane", "eyewhite", "irisl", "irisr", "browl", "browr", "nosebridge", "mouthline", "hairline",
+			"headfeaturesocket", "monsterheadfeatures", "monsteredgedetail", "hunchedbackread",
+			"fake_neck", "proxy", "motionarm", "motionleg"
+		]:
+			if token.contains(forbidden.replace("_", "")):
+				return true
+	return false
+
+func _assert(condition: bool, message: String) -> void:
+	if not condition:
+		failures.append(message)
+		push_error(message)
+
+func _frames(count: int) -> void:
+	for _index in range(count):
+		await process_frame
+
+func _finish() -> void:
+	if is_instance_valid(tested_game):
+		if tested_game.has_method("finalize_resource_shutdown"):
+			tested_game.finalize_resource_shutdown()
+		tested_game.queue_free()
+		await _frames(12)
+	if is_instance_valid(helper):
+		helper.queue_free()
+		await _frames(2)
+	if failures.is_empty():
+		print("FACE-003 VERIFIER: PASS - native face materials and feature driver%s" % (" (human-only)" if human_only else ""))
+		quit(0)
+		return
+	print("FACE-003 VERIFIER: FAIL (%d)" % failures.size())
+	for failure in failures:
+		print("- %s" % failure)
+	quit(1)

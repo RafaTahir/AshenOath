@@ -3,6 +3,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Message,
     [Parameter(Mandatory = $true)][string[]]$CommitPaths,
     [string]$RuntimeEvidence = "",
+    [switch]$AllowRegisteredWorktree,
     [ValidateSet('codex/masterpiece-rebuild', 'codex/art-recovery-anwen')]
     [string]$DevelopmentBranch = 'codex/masterpiece-rebuild',
     [string]$PythonPath = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
@@ -11,7 +12,21 @@ param(
 $ErrorActionPreference = "Stop"
 $ProjectRoot = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $RepositoryRoot = [IO.Path]::GetFullPath((Split-Path -Parent (Split-Path -Parent $ProjectRoot)))
-if ($RepositoryRoot -ne 'D:\Projects\AshenOath') { throw 'Publish from the canonical D: repository.' }
+if ($RepositoryRoot -ne 'D:\Projects\AshenOath') {
+    if (-not $AllowRegisteredWorktree -or [IO.Path]::GetPathRoot($RepositoryRoot) -ne 'D:\') {
+        throw 'Publish from the canonical D: repository, or explicitly allow its registered D: worktree.'
+    }
+    $canonicalCommon = (& git -C 'D:\Projects\AshenOath' rev-parse --path-format=absolute --git-common-dir).Trim()
+    if ($LASTEXITCODE -ne 0) { throw 'The canonical repository identity is unavailable.' }
+    $actualCommon = (& git -C $RepositoryRoot rev-parse --path-format=absolute --git-common-dir).Trim()
+    if ($LASTEXITCODE -ne 0 -or [IO.Path]::GetFullPath($actualCommon) -ne [IO.Path]::GetFullPath($canonicalCommon)) {
+        throw 'The release worktree does not share the canonical repository.'
+    }
+    $registered = @(& git -C 'D:\Projects\AshenOath' worktree list --porcelain | Where-Object {
+        $_.StartsWith('worktree ') -and [IO.Path]::GetFullPath($_.Substring(9)) -eq $RepositoryRoot
+    })
+    if ($LASTEXITCODE -ne 0 -or $registered.Count -ne 1) { throw 'The release directory is not a registered canonical worktree.' }
+}
 if ($Ticket -notmatch '^(LR|MOBILE|BOOT|XP|OPT|WORLD-SAGA|FINISH|CAST)-\d{3}$') { throw 'Expected a supported project ticket ID.' }
 if (-not $CommitPaths.Count) { throw 'Explicit authored and generated commit paths are required.' }
 if ($RuntimeEvidence) {
@@ -66,6 +81,7 @@ $receipt = [ordered]@{
     production_url = 'https://ashenoath.vercel.app'
     deployment_method = 'git_automatic_production'
     development_branch = $DevelopmentBranch
+    repository_root = $RepositoryRoot
 }
 function Save-Receipt {
     [IO.File]::WriteAllText((Join-Path $RunRoot 'publication.json'), (($receipt | ConvertTo-Json -Depth 8) + [Environment]::NewLine), [Text.UTF8Encoding]::new($false))

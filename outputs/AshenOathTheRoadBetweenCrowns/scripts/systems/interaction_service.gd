@@ -61,7 +61,7 @@ func _handle_interaction(area) -> void:
 			for companion_action: Dictionary in dialogue_data.get("actions", []):
 				companion_action["companion_actor_instance"] = area.get_instance_id()
 		var report_chosen := false
-		if _road_ready_to_report() and area.interaction_id in ["sister_anwen", "notice_board", "retain_evidence"]:
+		if _systems["quest"]._road_ready_to_report() and area.interaction_id in ["sister_anwen", "notice_board", "retain_evidence"]:
 			report_chosen = true
 			dialogue_data = dialogue.get_dialogue("report_decision")
 		if area.interaction_id == "sister_anwen" and not quests.is_completed("main_road_of_crows") and not bool(tutorial_flags.get("anwen_talked", false)):
@@ -90,7 +90,7 @@ func _handle_interaction(area) -> void:
 		for option: Dictionary in dialogue_data.get("actions", []):
 			if not _dialogue_action_available(option):
 				option["available"] = false
-				option["unavailable_reason"] = _dialogue_action_unavailable_reason(option)
+				option["unavailable_reason"] = _systems["dialogue"]._dialogue_action_unavailable_reason(option)
 		_stage_dialogue_moment(area)
 		var topic_context_id: String = dialogue_runtime_coordinator.bind_topic_context(str(area.interaction_id), current_zone_id)
 		if not topic_context_id.is_empty():
@@ -106,7 +106,7 @@ func _handle_interaction(area) -> void:
 		# The displayed page owns its exact-text recording. A legacy scene-wide
 		# sequence here would cancel that page and could speak a different turn.
 	elif area.interaction_type == "clue":
-		if area.interaction_id == "chapel_door" and not _chapel_can_open():
+		if area.interaction_id == "chapel_door" and not _systems["quest"]._chapel_can_open():
 			if not quests.is_objective_done("main_bell_beneath_greyfen", "grave_truth"):
 				hud.toast("The chapel seal has no keyhole. The disturbed graves must explain the bell.")
 			else:
@@ -114,7 +114,7 @@ func _handle_interaction(area) -> void:
 			hud.set_guidance_hint("Finish the cemetery investigation before opening the chapel.", 5.0)
 			return
 		if area.quest_id == "main_road_of_crows":
-			_handle_road_of_crows_clue(area)
+			_systems["quest"]._handle_road_of_crows_clue(area)
 		elif area.interaction_id in ["sheepfold", "bandit_camp"]:
 			story_state.set_flag("black_dog_%s_inspected" % area.interaction_id, true)
 			_try_complete_black_dog_investigation()
@@ -223,7 +223,7 @@ func _handle_interaction(area) -> void:
 			_spawn_crow_shrine_choice()
 			_ensure_bell_eater()
 		elif area.interaction_id.begins_with("grave_"):
-			_ensure_cemetery_ambush()
+			_systems["quest"]._ensure_cemetery_ambush()
 		elif area.interaction_id.begins_with("vargan_"):
 			story_state.set_flag(area.interaction_id, true)
 			story_state.set_flag("castle_discovered", true)
@@ -260,7 +260,7 @@ func _handle_interaction(area) -> void:
 			return
 		if portal != null:
 			portal.mark_traveling()
-		_request_zone_load(area.zone_target, area.get_meta("spawn_pos"))
+		_systems["zone_lifecycle"]._request_zone_load(area.zone_target, area.get_meta("spawn_pos"))
 	elif area.interaction_type == "blocked_zone":
 		hud.toast(str(area.get_meta("message", "That road is barred tonight.")))
 
@@ -395,7 +395,7 @@ func _update_interaction_focus() -> void:
 		compass_dirty = true
 		if active_interactable != null:
 			_set_interactable_label_visible(active_interactable,true)
-	_publish_interaction_prompt()
+	_systems["session"]._publish_interaction_prompt()
 	interaction_focus_dirty = false
 	interaction_focus_cache_valid = true
 	last_focus_position = player.global_position

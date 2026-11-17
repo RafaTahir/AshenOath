@@ -1,5 +1,4 @@
 extends "res://scripts/systems/game_bindings.gd"
-## Owns startup operations; configure() injects dependencies.
 signal opening_phase_changed(phase: String)
 
 func _opening_stage_required_before_control(stage: String) -> bool:
@@ -63,9 +62,6 @@ func _cancel_campaign_visual_prewarm() -> void:
 func should_defer_visual_role(role: String, category: String) -> bool:
 	if category != "environment" or role not in CAMPAIGN_VISUAL_ROLES:
 		return false
-	# Potato/mobile intentionally omits optional campaign dressing. Do not leave
-	# markers for visuals that this quality tier is guaranteed to reject during
-	# deferred hydration; the gameplay-critical collision and route remain live.
 	if settings != null and str(settings.settings.get("quality_preset", "balanced")) == "potato":
 		return false
 	if asset_helper == null or not asset_helper.has_method("is_role_warmed"):
@@ -73,8 +69,6 @@ func should_defer_visual_role(role: String, category: String) -> bool:
 	return not bool(asset_helper.is_role_warmed(role))
 
 func should_defer_character_role(_role: String, _actor_id: String) -> bool:
-	# Destination packs already gate construction. Required people must have a
-	# body before their interaction is published, not a delayed visual marker.
 	return false
 
 func _schedule_deferred_visual_roles(root: Node3D) -> void:
@@ -89,10 +83,6 @@ func _schedule_deferred_visual_roles(root: Node3D) -> void:
 	_host.call_deferred("_run_deferred_visual_roles", root)
 
 func _run_deferred_visual_roles(root: Node3D) -> void:
-	# Let the arrival frame and its first input sample settle before parsing any
-	# text-backed dressing. This keeps secondary presentation out of the gate's
-	# measured handoff while retaining the authored asset replacement shortly
-	# after the player arrives.
 	var delay_timer := _create_owned_timer(0.45, true)
 	await delay_timer.timeout
 	if resource_shutdown_prepared or not game_started or root != zone_root or not is_instance_valid(root):
@@ -194,9 +184,6 @@ func _run_campaign_visual_prewarm(generation: int, role_index: int) -> void:
 		if generation == campaign_visual_prewarm_generation:
 			_host.call_deferred("_run_campaign_visual_prewarm", generation, role_index)
 		return
-	# Never parse an OBJ in the middle of a scene swap or a paused menu. One
-	# role per settled frame keeps imported castle dressing out of the cold
-	# transition while still warming the exact cache used by the builder.
 	if campaign_visual_prewarm_suspended or zone_transition_pending or zone_load_request_pending or _host.get_tree().paused:
 		await _host.get_tree().process_frame
 		_host.call_deferred("_run_campaign_visual_prewarm", generation, role_index)
@@ -219,7 +206,8 @@ func _run_campaign_visual_prewarm(generation: int, role_index: int) -> void:
 func _on_launch_accepted() -> void:
 	if startup_packs_waiting or greyfen_prewarm_started or game_started or _journey_load_pending() or route_zone_cache.has("greyfen"):
 		return
-	opening_prepare_generation += 1
+	opening_prepare_generation = world_transition.prepare_opening()
+	if opening_prepare_generation < 0: return
 	if runtime_packs != null:
 		runtime_packs.quality_preset = str(settings.settings.get("quality_preset", "balanced"))
 	var retry_failed := startup_prepare_failed
@@ -297,8 +285,8 @@ func _wait_for_startup_packs_then_prewarm(generation: int) -> void:
 func _begin_opening_prewarm() -> void:
 	if game_started or greyfen_prewarm_started or _journey_load_pending() or route_zone_cache.has("greyfen"):
 		return
-	# Prepare New Game while the menu is open even when Continue is available.
-	# Loading a save cancels this attempt through _discard_menu_opening().
+	if runtime_packs != null:
+		for pack: String in runtime_packs.required_startup_packs(): world_transition.pack_mounted(pack, opening_prepare_generation)
 	greyfen_prewarm_started = true
 	_host.call_deferred("_prepare_opening_services", opening_prepare_generation)
 
@@ -323,8 +311,6 @@ func _prepare_opening_services(generation: int) -> void:
 	_publish_web_opening_state("resources", "Preparing characters and materials...")
 	world_materials.begin_prewarm_attempt()
 	asset_helper.begin_resource_attempt()
-	# Decode required texture leaves before any prop or environment parent can
-	# be cached with an incomplete imported material graph, including headless.
 	var environment_status: Error = asset_helper.request_environment_resources(["opening"])
 	while _opening_attempt_current(generation):
 		if environment_status in [OK, ERR_BUSY]:
@@ -338,7 +324,6 @@ func _prepare_opening_services(generation: int) -> void:
 		await _host.get_tree().process_frame
 	if not _opening_attempt_current(generation):
 		return
-	# Both platforms now own the opening pack before requesting its resources.
 	if DisplayServer.get_name().to_lower() != "headless":
 		world_materials.prewarm_surfaces(["forest_ground", "cobblestone", "wet_mud", "medieval_brick", "plaster", "timber", "roof_tiles"], str(settings.settings.get("quality_preset", "balanced")))
 		var props_status: Error = asset_helper.request_resource_paths(CharacterPresentation.OPENING_OCCUPATION_PROP_PATHS)
@@ -360,25 +345,20 @@ func _prepare_opening_services(generation: int) -> void:
 		if population_status != OK:
 			_opening_prepare_failed("Greyfen's village bodies could not be prepared. Select Retry to try again.")
 			return
-	# Opening resources have mounted before this point on Web. Later character,
-	# monster and campaign packs remain independent of menu readiness.
 	print("LOADING: Greyfen prewarm begin")
 	_host.call_deferred("_prepare_opening_resources", generation)
 
 func _wait_for_opening_build_slot(generation: int) -> void:
-	# Settings/save browsing retains priority even after a queued New Game.
 	while _opening_attempt_current(generation) and hud.active_menu not in ["main", "startup"]:
 		await _host.get_tree().process_frame
 
 func _opening_attempt_current(generation: int) -> bool:
-	return generation == opening_prepare_generation and not resource_shutdown_prepared \
+	return world_transition.accepts(generation, "greyfen") and generation == opening_prepare_generation and not resource_shutdown_prepared \
 		and not game_started and not startup_prepare_failed and not _journey_load_pending()
 
 func _prepare_opening_resources(generation: int) -> void:
 	if not _opening_attempt_current(generation):
 		return
-	# Poll before drawing the world: first-use rendering must not consume the
-	# asset request timeout or obscure which resource actually failed.
 	if DisplayServer.get_name().to_lower() != "headless":
 		var deadline := Time.get_ticks_msec() + 30000
 		while _opening_attempt_current(generation):
@@ -398,6 +378,7 @@ func _prepare_opening_resources(generation: int) -> void:
 		_prewarm_greyfen_after_menu_frame(generation)
 
 func _discard_menu_opening() -> void:
+	world_transition.cancel(opening_prepare_generation)
 	opening_prepare_generation += 1
 	_clear_route_zone_cache()
 	_abort_opening_prewarm(zone_root, greyfen_prewarm_spatial_service, "", false)
@@ -415,18 +396,18 @@ func _restart_menu_opening() -> void:
 		_publish_web_opening_state("preparing", "Preparing the selected visual quality...")
 	var generation := opening_prepare_generation
 	await _host.get_tree().process_frame
-	if _opening_attempt_current(generation):
+	if generation == opening_prepare_generation and not resource_shutdown_prepared and not _journey_load_pending():
 		_on_launch_accepted()
 
 func _opening_prepare_failed(message: String) -> void:
 	if game_started or resource_shutdown_prepared:
 		return
-	# Retry must not retain a partial world that makes the next build early-out.
 	if zone_root != null or player != null or route_zone_cache.has("greyfen"):
 		_discard_menu_opening()
 	_host.get_viewport().disable_3d = true
 	_host.get_tree().paused = true
 	opening_prepare_generation += 1
+	world_transition.fail(opening_prepare_generation, message)
 	startup_packs_waiting = false
 	greyfen_prewarm_started = false
 	startup_prepare_failed = true
@@ -486,10 +467,8 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		generation = opening_prepare_generation
 	if not _opening_attempt_current(generation):
 		return
-	# Only this attempt may publish a prepared world. Early clicks queue a handoff.
 	if game_started or zone_root != null or route_zone_cache.has("greyfen"):
 		return
-	# Every required scenery/population stage finishes before control on both platforms.
 	var prewarm_started := Time.get_ticks_msec()
 	_publish_web_opening_state("building", "Building Greyfen's roads and scenery...")
 	print("LOADING: Greyfen prewarm build_begin")
@@ -570,7 +549,6 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		return
 	_add_visual_100_layer("greyfen")
 	_apply_first_route_materials(zone_root)
-	# Cleared below after every opening stage has been published under cover.
 	prewarm_root.set_meta("prewarm_navigation_pending", true)
 	prewarm_root.set_meta("opening_build_profile", "opening_boot")
 	_clear_environment_batch_buffers()
@@ -580,16 +558,13 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	await _wait_for_opening_build_slot(generation)
 	if not _opening_attempt_current(generation):
 		return
-	# Kael's rig and camera are also expensive to instantiate in WebGL. Prepare
-	# them while the launch/menu presentation is already covering the viewport.
 	phase_started = Time.get_ticks_msec()
-	_spawn_player(Vector3(0, 1, 9.8))
+	_systems["zone_lifecycle"]._spawn_player(Vector3(0, 1, 9.8))
 	if player == null or not player.has_required_body():
 		_abort_opening_prewarm(prewarm_root, prewarm_service, "Kael's authored body or colours could not be loaded. Select Retry to try again.")
 		return
 	camera_rig.prepare_view()
 	var player_ms := Time.get_ticks_msec() - phase_started
-	# Publish only the complete opening; intermediate builds need no GPU draw.
 	player.visible = false
 	player.set_transition_locked(true)
 	player.process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -599,16 +574,11 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		gameplay_camera.current = true
 	zone_root.process_mode = Node.PROCESS_MODE_PAUSABLE
 	zone_root.position = Vector3.ZERO
-	# `_load_zone()` applies this profile immediately before the first gameplay
-	# draw. Render the same environment here under the visible menu so WebGL does
-	# not compile Greyfen's real sky and lighting only after New Game is clicked.
 	if visual_director != null:
 		visual_director.apply_zone("greyfen", prewarm_root)
 		visual_director.set_opening_boot_budget(false)
 		prewarm_root.set_meta("opening_visual_profile_prewarmed", true)
 	var was_paused := _host.get_tree().paused
-	# Complete first-use mesh and texture decoding under the menu cover. Doing
-	# this after control is handed over causes visible 40-70 ms hydration frames.
 	opening_well_mesh = load("res://assets_external/environment/village/GreyfenWell_Authored.res") as ArrayMesh
 	if opening_well_mesh == null or opening_well_mesh.get_surface_count() != 6:
 		_host.get_tree().paused = was_paused
@@ -675,11 +645,9 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 			return
 		prewarm_root.set_meta("opening_unpaused_frame_prewarmed", true)
 		prewarm_root.set_meta("opening_first_frame_rendered", true)
+	if not world_transition.mark_prepared("greyfen", generation): return
 	prewarm_root.set_meta("opening_presentation_ready", true)
 	_host.get_tree().paused = was_paused
-	# New Game can activate Greyfen while this menu-covered prewarm is still
-	# finishing. Never let the background task overwrite the active zone or its
-	# spatial service after that handoff.
 	if game_started or zone_root != prewarm_root:
 		if prewarm_root != null and prewarm_root != zone_root and is_instance_valid(prewarm_root):
 			_retire_zone_root(prewarm_root)
@@ -691,7 +659,6 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		if hud != null and hud.has_method("set_new_game_ready"):
 			hud.set_new_game_ready(true)
 		return
-	# Retain the prepared resources while the menu owns the screen.
 	_host.get_viewport().disable_3d = true
 	_cache_route_zone("greyfen", zone_root, [], _zone_state_signature("greyfen"), true, false, false)
 	zone_root = null
@@ -700,7 +667,6 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		audio.prewarm_opening_audio()
 	if hud != null and hud.has_method("set_new_game_status"):
 		hud.set_new_game_status("Greyfen is ready.")
-	# The actual gameplay-camera frame above is the render readiness boundary.
 	greyfen_prewarm_started = false
 	_refresh_journey_models()
 	if hud != null:
@@ -716,17 +682,13 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	])
 	if new_game_start_pending:
 		_host.get_tree().paused = false
-		_start_new_game_world()
+		_systems["zone_lifecycle"]._start_new_game_world()
 
 func _apply_web_opening_boot_material_budget(world_root: Node, player_root: Node, force_for_test := false) -> void:
 	opening_boot_material_restore_generation += 1
 	opening_boot_material_restore_queue.clear()
 	if not force_for_test and not OS.has_feature("web"):
 		return
-	# Compatibility/ANGLE blocks the main thread while each lit spatial shader
-	# variant reports link completion. The menu-covered boot frame needs only the
-	# authored albedo and silhouette; restore the original materials after input
-	# is live, one renderer instance per frame.
 	for owner in [player_root, world_root]:
 		if owner == null or not is_instance_valid(owner):
 			continue
@@ -763,9 +725,6 @@ func _apply_opening_boot_material(geometry: GeometryInstance3D) -> void:
 		var boot_color := source_base.albedo_color
 		boot_color.a = 1.0
 		boot_material.albedo_color = boot_color
-	# The covered boot frame needs one shader family, not every authored texture,
-	# transparency, culling, and vertex-color combination. Original materials are
-	# restored progressively after input is live.
 	boot_material.albedo_texture = null
 	boot_material.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
 	boot_material.cull_mode = BaseMaterial3D.CULL_BACK
@@ -808,17 +767,11 @@ func _restore_opening_boot_materials(generation: int) -> void:
 func _run_opening_detail_stage(generation: int) -> void:
 	if resource_shutdown_prepared or generation != opening_detail_generation or not opening_detail_pending:
 		return
-	# Completion belongs to the cached zone, not to a transient scheduler index.
-	# Returning to Greyfen resumes outstanding work without duplicating scenery.
 	if zone_root != null and is_instance_valid(zone_root):
 		var completed: Dictionary = zone_root.get_meta("opening_completed_stages", {})
 		while opening_detail_stage_index < OPENING_DETAIL_STAGES.size() and completed.has(OPENING_DETAIL_STAGES[opening_detail_stage_index]):
 			opening_detail_stage_index += 1
 	var requested_stage_index := opening_detail_stage_index
-	# call_deferred only queues another idle callback; several callbacks can still
-	# drain in one browser turn. Let the playable scene settle for a short idle
-	# window first, then yield a real frame between every decoration chunk so the
-	# browser can paint and accept movement before late scenery compiles.
 	var stage := OPENING_DETAIL_STAGES[opening_detail_stage_index] if opening_detail_stage_index < OPENING_DETAIL_STAGES.size() else ""
 	if stage == "gameplay_base":
 		var gameplay_timer := _create_owned_timer(OPENING_GAMEPLAY_HYDRATE_DELAY_SECONDS, true)
@@ -835,18 +788,12 @@ func _run_opening_detail_stage(generation: int) -> void:
 	if not game_started or current_zone_id != "greyfen" or zone_root == null or not is_instance_valid(zone_root):
 		opening_detail_pending = false
 		return
-	# First-hour landmarks belong to the active settlement, not a quest reward.
-	# Publish during idle windows even at spawn; the stage/frame budget above
-	# still separates work from the initial handoff and from moving actors.
 	if player == null or not is_instance_valid(player):
 		var retry_timer := _create_owned_timer(OPENING_DETAIL_RETRY_SECONDS, true)
 		await retry_timer.timeout
 		if generation == opening_detail_generation and opening_detail_pending:
 			_host.call_deferred("_run_opening_detail_stage", generation)
 		return
-	# Every deferred visual/detail stage may reference opening-pack resources.
-	# Require the verified startup mount instead of silently constructing
-	# fallback presentation from the root PCK.
 	if OS.has_feature("web") and runtime_packs != null and not runtime_packs.is_ready("opening"):
 		if runtime_packs.get_state("opening") == "failed":
 			push_error("Opening detail pack failed: %s" % runtime_packs.get_last_error("opening"))
@@ -926,9 +873,6 @@ func _run_opening_detail_stage(generation: int) -> void:
 		if material_status == ERR_BUSY or facade_status == ERR_BUSY:
 			_host.call_deferred("_run_opening_detail_stage", generation)
 			return
-	# Each stage gets fresh buffers. Published MultiMeshes remain untouched,
-	# while late decoration is still grouped instead of creating one
-	# renderer instance per small prop.
 	environment_batches_flushed = false
 	var published_ids := {}
 	for child in zone_root.get_children():
@@ -983,8 +927,6 @@ func _run_opening_detail_stage(generation: int) -> void:
 	_record_opening_stage(zone_root, stage)
 	opening_detail_stage_index += 1
 	print("LOADING: Greyfen deferred_detail stage=%s ms=%d" % [stage, Time.get_ticks_msec() - started])
-	# Yield between chunks so movement, focus, and audio get a normal frame even
-	# on Web/ANGLE. A generation token cancels the continuation on zone travel.
 	_host.call_deferred("_run_opening_detail_stage", generation)
 
 func _defer_opening_renderables(published_nodes: Array[Node]) -> void:
