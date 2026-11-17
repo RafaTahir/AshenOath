@@ -230,6 +230,7 @@ func clear_runtime_caches() -> void:
 	_path_owners.clear()
 	prepared_animation_libraries.clear()
 	preload("res://scripts/character_identity_profile.gd").clear_material_cache()
+	preload("res://scripts/monster_material_palette.gd").clear_material_cache()
 
 func clear_runtime_diagnostics() -> void:
 	runtime_role_diagnostics.clear()
@@ -1123,6 +1124,14 @@ func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", 
 	_finalize_asset_root(root, role_name)
 	if path.begins_with("res://assets_external/design_pack_v1/"):
 		root.set_meta("source_forward_positive_z", true)
+	if authored_creature:
+		if not preload("res://scripts/monster_material_palette.gd").prepare(root, path):
+			return
+		# Capture the final native-surface variants so restoration and prepared
+		# scenes retain the same palette instead of reviving the old gray atlas.
+		if not CharacterMaterialBindings.capture(root, path):
+			push_error("Creature pigment bindings are incomplete: " + path)
+			return
 	if not prepared and CharacterAnimationFusion.is_shared_body(path):
 		# Retain both the imported source and immutable retargeted variants with
 		# this helper; actor AnimationPlayers own independent playback state.

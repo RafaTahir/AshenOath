@@ -194,3 +194,13 @@ outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json -text whitespac
 web/index.html whitespace=cr-at-eol
 web/release_manifest.json whitespace=cr-at-eol
 web/runtime_pack_manifest.json whitespace=cr-at-eol
+
+# Monster pigment source and inspection evidence retain exact bytes.
+outputs/AshenOathTheRoadBetweenCrowns/data/monster_material_profiles.json -text whitespace=cr-at-eol
+art_source/art_recovery_v2/evidence/monster_vitality_20261118/** -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/scripts/monster_material_palette.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/scripts/enemy_attack_shape.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/shaders/monster_pigment* -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/verify_monster_material_profiles.py -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/verify_monster_material_runtime.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/verify_monster_mechanics_contract.gd -text whitespace=cr-at-eol

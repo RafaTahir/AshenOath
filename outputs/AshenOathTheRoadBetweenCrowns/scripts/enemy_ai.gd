@@ -17,6 +17,7 @@ const CombatFeedback = preload("res://scripts/combat_feedback.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
 const MotionStep = preload("res://scripts/systems/character_motion_step.gd")
 const NativeAttackProfiles = preload("res://scripts/native_attack_profiles.gd")
+const AttackShape = preload("res://scripts/enemy_attack_shape.gd")
 # The role manifest owns the Ashwing source selected at runtime; do not pull
 # the large optional enemy asset into the browser boot dependency graph here.
 
@@ -352,20 +353,11 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = 0.0
 		velocity.z = 0.0
-		if can_see_player and attack_cooldown <= 0.0 and player.has_method("take_damage") and _attack_lane_clear() and _claim_attack_token():
+		if can_see_player and attack_cooldown <= 0.0 and player.has_method("take_damage") and _strike_presentation_ready() and _attack_lane_clear() and _claim_attack_token():
 			var attack_facing := Vector3(to_player.x, 0.0, to_player.z)
 			if attack_facing.length_squared() > 0.01:
 				look_at(global_position + attack_facing, Vector3.UP)
-			attack_cooldown = _attack_cooldown()
-			windup_time = _windup_duration()
-			pending_attack_time = windup_time
-			attack_windup_total = windup_time
-			if animation_driver != null:
-				_start_attack_animation()
-			attack_trace_start = _attack_contact_point()
-			attack_trace_end = attack_trace_start
-			_show_windup_marker()
-			windup_started.emit(self)
+			_begin_attack()
 	_step_motion(motion_delta)
 
 func _step_motion(delta: float) -> void:
@@ -492,8 +484,11 @@ func apply_damage(amount: float, source_tag: String = "") -> void:
 		_cancel_pending_strike()
 		_release_attack_token()
 	if animation_driver != null:
-		native_attack_tail_active = false
-		animation_driver.trigger_action("hit")
+		if animation_driver.trigger_action("hit"):
+			native_attack_tail_active = false
+			# The accepted reaction replaced Attack. Its old damage clock must not
+			# keep running against the new HitReact pose or retain the attack lane.
+			_cancel_pending_strike(false)
 
 func slow(seconds: float) -> void:
 	if not encounter_active:
@@ -645,7 +640,29 @@ func _strike_recovery() -> float:
 		return 0.34
 	return 0.48 if is_boss else 0.42
 
-func _start_attack_animation() -> void:
+func _strike_presentation_ready() -> bool:
+	if animation_driver == null or not animation_driver.action_active:
+		return true
+	return int(CharacterAnimationDriver.ACTION_PRIORITY.get(animation_driver.current_state, 0)) <= int(CharacterAnimationDriver.ACTION_PRIORITY.attack)
+
+func _begin_attack() -> bool:
+	if not _strike_presentation_ready():
+		_release_attack_token()
+		return false
+	windup_time = _windup_duration()
+	pending_attack_time = windup_time
+	attack_windup_total = windup_time
+	if animation_driver != null and not _start_attack_animation():
+		_cancel_pending_strike(false)
+		return false
+	attack_cooldown = _attack_cooldown()
+	attack_trace_start = _attack_contact_point()
+	attack_trace_end = attack_trace_start
+	_show_windup_marker()
+	windup_started.emit(self)
+	return true
+
+func _start_attack_animation() -> bool:
 	if not native_attack_profile.is_empty():
 		# EnemyAI still owns the unchanged telegraph/contact clock. Reach the
 		# calibrated pose of the complete strike exactly when that clock expires.
@@ -660,7 +677,8 @@ func _start_attack_animation() -> void:
 		animation_driver.set_external_tick(true)
 		if not animation_driver.trigger_action("attack", 1.0, 0.10, false, windup_time / fraction, true):
 			animation_driver.set_external_tick(false)
-		return
+			return false
+		return true
 	var clip: StringName = animation_driver.get_clip_for_state("windup")
 	# The retained Skeleton clip reaches its strike at 85% of its authored
 	# length. Preserve the telegraph clock and leave uncalibrated families alone.
@@ -668,13 +686,15 @@ func _start_attack_animation() -> void:
 	animation_driver.set_external_tick(true)
 	if not animation_driver.trigger_action("windup", 1.0, 0.10, false, duration):
 		animation_driver.set_external_tick(false)
+		return false
+	return true
 
 func _fit_native_attack_tail() -> void:
 	if native_attack_profile.is_empty() or animation_driver == null or not animation_driver.action_active or animation_driver.current_state != "attack":
 		return
 	native_attack_tail_active = animation_driver.fit_action_tail(float(native_attack_profile.contact_fraction), attack_recovery_time)
 
-func _cancel_pending_strike() -> void:
+func _cancel_pending_strike(interrupt_animation: bool = true) -> void:
 	native_attack_tail_active = false
 	var had_strike: bool = pending_attack_time > 0.0 or windup_time > 0.0
 	pending_attack_time = 0.0
@@ -682,7 +702,7 @@ func _cancel_pending_strike() -> void:
 	_release_attack_token()
 	if animation_driver != null:
 		animation_driver.set_external_tick(false)
-		if had_strike and not dead:
+		if interrupt_animation and had_strike and not dead:
 			animation_driver.stop_action()
 	_hide_windup_marker()
 
@@ -733,17 +753,7 @@ func _special_attack_hits_player(attack_id: String, radius: float) -> bool:
 	if offset.length_squared() <= 0.01:
 		return true
 	var local: Vector3 = global_transform.basis.inverse() * offset
-	if attack_id in ["ash_breath", "wing_blast", "swoop", "counter_lunge"]:
-		var forward := -global_transform.basis.z
-		forward.y = 0.0
-		if forward.length_squared() > 0.01 and forward.normalized().dot(offset.normalized()) < (0.32 if attack_id == "wing_blast" else 0.48):
-			return false
-	if attack_id == "root_lanes":
-		# The central gap between the three root lanes is intentional. Reading the
-		# telegraph and stepping sideways is safer than tanking a radial hit.
-		var lane := fmod(absf(local.x), 2.35)
-		return lane < 0.62 or lane > 1.72
-	return true
+	return AttackShape.contains(attack_id, local)
 
 func player_contact_distance() -> float:
 	return player.global_position.distance_to(global_position) if player != null else INF
@@ -809,7 +819,12 @@ func _engagement_target(target_position: Vector3 = Vector3.INF) -> Vector3:
 		side = -1.0 if encounter_slot % 2 == 0 else 1.0
 	var angle := deg_to_rad(approach_angle_degrees * side)
 	var desired: Vector3 = radial.normalized().rotated(Vector3.UP, angle)
-	return focus + desired * preferred_distance
+	# Standoff spacing is a waiting position. A ready melee actor must close
+	# inside its unchanged strike range rather than orbit outside it forever.
+	# Claim the shared attack token only when the strike actually starts.
+	var closing := can_see_player and attack_cooldown <= 0.0 and attack_recovery_time <= 0.0
+	var radius := minf(preferred_distance, attack_range * 0.85) if closing else preferred_distance
+	return focus + desired * radius
 
 func _update_perception(delta: float, player_distance: float) -> void:
 	perception_refresh_time = maxf(perception_refresh_time - delta, 0.0)
@@ -2203,6 +2218,9 @@ func _show_windup_marker() -> void:
 	if windup_marker == null:
 		windup_marker = CombatFeedback.warning_marker(self, self)
 	if windup_marker != null:
+		if is_boss:
+			var attack_id := _boss_attack_id()
+			CombatFeedback.configure_boss_warning(windup_marker, attack_id, _boss_attack_radius(attack_id))
 		windup_marker.visible = true
 
 func _hide_windup_marker() -> void:

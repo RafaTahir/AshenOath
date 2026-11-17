@@ -189,6 +189,13 @@ def compile_layout(defer_environment=False, require_prepared_forest=False):
             "res://shaders/spectral_veil.gdshader",
             "res://shaders/everyday_wear.gdshader",
             "res://data/spectral_monster_profiles.json",
+            "res://scripts/monster_material_palette.gd",
+            "res://shaders/monster_pigment.gdshader",
+            "res://shaders/monster_pigment_translucent.gdshader",
+            "res://shaders/monster_pigment_clearcoat.gdshader",
+            "res://shaders/monster_pigment_common.gdshaderinc",
+            "res://shaders/monster_pigment_surface.gdshaderinc",
+            "res://data/monster_material_profiles.json",
         })
         includes[name].update({"data/runtime_dialogue_index.json", "data/runtime_dialogue/*.json"})
         includes[name].update({"assets/ui/fonts/*.ttf", "assets/ui/fonts/OFL.txt"})

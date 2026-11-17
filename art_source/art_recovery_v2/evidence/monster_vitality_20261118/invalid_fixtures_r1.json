@@ -1,0 +1,165 @@
+{
+  "fixtures": [
+    {
+      "fixture": "missing_species",
+      "reason": "Pigment coverage must contain exactly M01..M20",
+      "rejected": true
+    },
+    {
+      "fixture": "human_profile_out_of_scope",
+      "reason": "Pigment coverage must contain exactly M01..M20",
+      "rejected": true
+    },
+    {
+      "fixture": "wrong_source_hash",
+      "reason": "M01: profile source/hash differs",
+      "rejected": true
+    },
+    {
+      "fixture": "spectral_source_out_of_scope",
+      "reason": "M01: profile source/hash differs",
+      "rejected": true
+    },
+    {
+      "fixture": "missing_material",
+      "reason": "M01: exact authored material-name coverage differs",
+      "rejected": true
+    },
+    {
+      "fixture": "unknown_material",
+      "reason": "M01: exact authored material-name coverage differs",
+      "rejected": true
+    },
+    {
+      "fixture": "unbounded_value_gain",
+      "reason": "M01/M01_PeatSkin/value_gain: expected finite number in [1.0, 1.24]",
+      "rejected": true
+    },
+    {
+      "fixture": "nonfinite_strength",
+      "reason": "M01/M01_PeatSkin/strength: expected finite number in [0.0, 1.0]",
+      "rejected": true
+    },
+    {
+      "fixture": "boolean_numeric_control",
+      "reason": "M01/M01_PeatSkin/strength: expected finite number in [0.0, 1.0]",
+      "rejected": true
+    },
+    {
+      "fixture": "malformed_color",
+      "reason": "M01/M01_PeatSkin: invalid sRGB color",
+      "rejected": true
+    },
+    {
+      "fixture": "unsupported_method",
+      "reason": "M01: unsupported pigment method",
+      "rejected": true
+    },
+    {
+      "fixture": "unknown_control",
+      "reason": "M01/M01_PeatSkin: unsupported/missing pigment controls",
+      "rejected": true
+    },
+    {
+      "fixture": "missing_realm_intent",
+      "reason": "M01: invalid narrative realm labels",
+      "rejected": true
+    },
+    {
+      "fixture": "wrong_scope_order",
+      "reason": "Wychwood must be the first authored scope",
+      "rejected": true
+    },
+    {
+      "fixture": "changed_raw_source",
+      "reason": "M01: source/material/texture bytes differ from baseline",
+      "rejected": true
+    },
+    {
+      "fixture": "changed_original_texture",
+      "reason": "M01: source/material/texture bytes differ from baseline",
+      "rejected": true
+    },
+    {
+      "fixture": "unknown_material_extension",
+      "reason": "fixture: unsupported material extension",
+      "rejected": true
+    },
+    {
+      "fixture": "textured_specular",
+      "reason": "fixture: textured specular extension is unsupported",
+      "rejected": true
+    },
+    {
+      "fixture": "colored_specular_unsupported",
+      "reason": "fixture: colored specular cannot be represented by scalar native state",
+      "rejected": true
+    },
+    {
+      "fixture": "nonfinite_ior",
+      "reason": "fixture/ior: expected finite number in [1, 3]",
+      "rejected": true
+    },
+    {
+      "fixture": "textured_clearcoat",
+      "reason": "fixture: textured clearcoat extension is unsupported",
+      "rejected": true
+    },
+    {
+      "fixture": "uv1_unsupported",
+      "reason": "res://.release-gate/monster-vitality-static-fixtures/uv1_unsupported.glb/Fixture/albedo: only UV0 is supported",
+      "rejected": true
+    },
+    {
+      "fixture": "uv_transform_unsupported",
+      "reason": "res://.release-gate/monster-vitality-static-fixtures/uv_transform_unsupported.glb/Fixture/albedo: UV/texture extensions unsupported",
+      "rejected": true
+    },
+    {
+      "fixture": "missing_required_uv",
+      "reason": "res://.release-gate/monster-vitality-static-fixtures/missing_required_uv.glb/Fixture/albedo: textured surface has no UV0",
+      "rejected": true
+    },
+    {
+      "fixture": "invalid_alpha_mode",
+      "reason": "res://.release-gate/monster-vitality-static-fixtures/invalid_alpha_mode.glb/Fixture: unsupported alpha mode",
+      "rejected": true
+    },
+    {
+      "fixture": "negative_metallic_factor",
+      "reason": "res://.release-gate/monster-vitality-static-fixtures/negative_metallic_factor.glb/Fixture/metallicFactor: expected finite number in [0, 1]",
+      "rejected": true
+    },
+    {
+      "fixture": "nonfinite_normal_scale",
+      "reason": "res://.release-gate/monster-vitality-static-fixtures/nonfinite_normal_scale.glb/Fixture/normal_scale: expected finite number in [0, 2]",
+      "rejected": true
+    },
+    {
+      "fixture": "network_texture_forbidden",
+      "reason": "External network image URI is forbidden",
+      "rejected": true
+    },
+    {
+      "accepted": true,
+      "fixture": "retained_blend_supported"
+    },
+    {
+      "accepted": true,
+      "fixture": "retained_mask_supported"
+    },
+    {
+      "accepted": true,
+      "fixture": "scalar_native_extensions_supported"
+    }
+  ],
+  "invalid_rejections": 28,
+  "kind": "pure_monster_material_invalid_fixtures",
+  "passed": true,
+  "profile_sha256": "c7056d3aad214afc71c6b11d1169fc5c469bbd757982861d6ca9dbbcc5ae7eb8",
+  "renderer_processes": 0,
+  "runtime_processes": 0,
+  "schema_version": 1,
+  "supported_feature_cases": 3,
+  "verifier_sha256": "b3c8cc33d37ca5ef52b8f4ce9da7bf0bae554ad4cd4b07e93b1bb8702d2be80b"
+}

@@ -1,0 +1,711 @@
+{
+  "schema_version": 1,
+  "palette_revision": "monster_vitality_20261118",
+  "source_policy": "presentation_only; immutable raw GLB geometry, skin, animation and texture bytes",
+  "color_space": "sRGB hex colors; shader pigment uniforms use source_color decoding",
+  "scope_order": [
+    "wychwood",
+    "greyfen_and_cemetery",
+    "old_mill_and_marsh",
+    "deep_wood",
+    "vargan_and_undercroft",
+    "record_hall",
+    "hart_glade"
+  ],
+  "observation": "authored presentation candidate; no new runtime/render observation or user visual acceptance",
+  "assets": {
+    "M01": {
+      "name": "Ghoulkin",
+      "source": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+      "source_sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d",
+      "realms": [
+        "wychwood",
+        "cemetery",
+        "ruins",
+        "marsh"
+      ],
+      "intent": "Bruised peat and warm wound tones distinguish a scavenger from the living forest; worn teeth and pale amber eyes remain separate.",
+      "method": "semantic",
+      "materials": {
+        "M01_PeatSkin": {
+          "method": "semantic",
+          "neutral_color": "#78704b",
+          "warm_color": "#95564b",
+          "cool_color": "#555d68",
+          "strength": 0.87,
+          "chroma_preservation": 0.5,
+          "highlight_preservation": 0.72,
+          "value_gain": 1.12
+        },
+        "M01_PaleEyes": {
+          "method": "semantic",
+          "neutral_color": "#c3b67a",
+          "warm_color": "#d5b06d",
+          "cool_color": "#a3b19b",
+          "strength": 0.85,
+          "chroma_preservation": 0.65,
+          "highlight_preservation": 0.9,
+          "value_gain": 1.03
+        },
+        "M01_Recessed_mouth": {
+          "method": "semantic",
+          "neutral_color": "#28151b",
+          "warm_color": "#4b2526",
+          "cool_color": "#24232e",
+          "strength": 0.55,
+          "chroma_preservation": 0.75,
+          "highlight_preservation": 0.92,
+          "value_gain": 1.0
+        },
+        "M01_Uneven_worn_teeth": {
+          "method": "semantic",
+          "neutral_color": "#c6b58b",
+          "warm_color": "#d6bf8e",
+          "cool_color": "#a6aca0",
+          "strength": 0.52,
+          "chroma_preservation": 0.8,
+          "highlight_preservation": 0.95,
+          "value_gain": 1.02
+        }
+      }
+    },
+    "M02": {
+      "name": "Wychwood Stalker",
+      "source": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+      "source_sha256": "8ab34c35c3a1ffdcb0d3341bf007518076b5f6c67e731c0e5291aec11aa55a8a",
+      "realms": [
+        "wychwood",
+        "record_hall"
+      ],
+      "intent": "Slate-green low-chroma hide, moss-dark folds and cold scar tones; retain warmer climbing keratin and ivory atlas islands.",
+      "method": "atlas_regions",
+      "materials": {
+        "Wychwood_Stalker_Main": {
+          "method": "atlas_regions",
+          "neutral_color": "#517c65",
+          "warm_color": "#927153",
+          "cool_color": "#4b6d80",
+          "strength": 0.88,
+          "chroma_preservation": 0.62,
+          "highlight_preservation": 0.88,
+          "value_gain": 1.1
+        }
+      }
+    },
+    "M03": {
+      "name": "Bog Wretch",
+      "source": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
+      "source_sha256": "bb44cc9312d528dc3d98002170956c3e0434acbed5dfc47f719b3db1a2ff0701",
+      "realms": [
+        "wychwood",
+        "marsh"
+      ],
+      "intent": "Wet fen-green hide with a visibly separate restrained amber core and deep peat ligatures.",
+      "method": "semantic",
+      "materials": {
+        "M03_WaterloggedOliveHide": {
+          "method": "semantic",
+          "neutral_color": "#537b46",
+          "warm_color": "#82734a",
+          "cool_color": "#3b6962",
+          "strength": 0.88,
+          "chroma_preservation": 0.6,
+          "highlight_preservation": 0.85,
+          "value_gain": 1.08
+        },
+        "M03_PaleEyes": {
+          "method": "semantic",
+          "neutral_color": "#c6b873",
+          "warm_color": "#d5aa60",
+          "cool_color": "#a7b59a",
+          "strength": 0.8,
+          "chroma_preservation": 0.7,
+          "highlight_preservation": 0.92,
+          "value_gain": 1.0
+        },
+        "M03_OpaqueAmberCore": {
+          "method": "semantic",
+          "neutral_color": "#bb792b",
+          "warm_color": "#d89539",
+          "cool_color": "#8a7742",
+          "strength": 0.67,
+          "chroma_preservation": 0.88,
+          "highlight_preservation": 0.9,
+          "value_gain": 1.04
+        },
+        "M03_PeatRootLigature": {
+          "method": "semantic",
+          "neutral_color": "#4e5031",
+          "warm_color": "#705032",
+          "cool_color": "#354b42",
+          "strength": 0.82,
+          "chroma_preservation": 0.65,
+          "highlight_preservation": 0.88,
+          "value_gain": 1.08
+        },
+        "M03_Recessed_mouth": {
+          "method": "semantic",
+          "neutral_color": "#271b1a",
+          "warm_color": "#4a2922",
+          "cool_color": "#252d2c",
+          "strength": 0.52,
+          "chroma_preservation": 0.8,
+          "highlight_preservation": 0.92,
+          "value_gain": 1.0
+        },
+        "M03_Uneven_worn_teeth": {
+          "method": "semantic",
+          "neutral_color": "#c1b28c",
+          "warm_color": "#d1ba89",
+          "cool_color": "#a2ad9e",
+          "strength": 0.5,
+          "chroma_preservation": 0.82,
+          "highlight_preservation": 0.95,
+          "value_gain": 1.0
+        }
+      }
+    },
+    "M04": {
+      "name": "Gravebound Knight",
+      "source": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+      "source_sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407",
+      "realms": [
+        "vargan_approach",
+        "undercroft",
+        "ruins",
+        "record_hall"
+      ],
+      "intent": "Cold blue iron and warmer rust stay distinct from dirty burial linen; armor keeps its authored metallic response.",
+      "method": "semantic",
+      "materials": {
+        "M04_PittedIron": {
+          "method": "semantic",
+          "neutral_color": "#4d6b83",
+          "warm_color": "#986441",
+          "cool_color": "#3a617e",
+          "strength": 0.76,
+          "chroma_preservation": 0.84,
+          "highlight_preservation": 0.94,
+          "value_gain": 1.03
+        },
+        "M04_FuneraryLinen": {
+          "method": "semantic",
+          "neutral_color": "#b5a783",
+          "warm_color": "#ba956d",
+          "cool_color": "#8c9b97",
+          "strength": 0.8,
+          "chroma_preservation": 0.65,
+          "highlight_preservation": 0.94,
+          "value_gain": 1.12
+        }
+      }
+    },
+    "M05": {
+      "name": "Bell Eater",
+      "source": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
+      "source_sha256": "246525821ccb16124b8455aad7968e953a5159d5390b5b6286d2630b6b9235c8",
+      "realms": [
+        "cemetery"
+      ],
+      "intent": "Clay-umber flesh, distinct aged bronze, cool patinated iron and dark worn harness; the bell remains legible without a whole-body glow.",
+      "method": "semantic",
+      "materials": {
+        "M05_ClaySkin": {
+          "method": "semantic",
+          "neutral_color": "#96725b",
+          "warm_color": "#ad6d53",
+          "cool_color": "#706b73",
+          "strength": 0.86,
+          "chroma_preservation": 0.62,
+          "highlight_preservation": 0.88,
+          "value_gain": 1.07
+        },
+        "M05_PaleEyes": {
+          "method": "semantic",
+          "neutral_color": "#c6b47c",
+          "warm_color": "#d7a65d",
+          "cool_color": "#acb6a0",
+          "strength": 0.76,
+          "chroma_preservation": 0.74,
+          "highlight_preservation": 0.92,
+          "value_gain": 1.0
+        },
+        "M05_Bronze": {
+          "method": "semantic",
+          "neutral_color": "#ad8344",
+          "warm_color": "#c4944c",
+          "cool_color": "#568777",
+          "strength": 0.78,
+          "chroma_preservation": 0.85,
+          "highlight_preservation": 0.94,
+          "value_gain": 1.12
+        },
+        "M05_Iron": {
+          "method": "semantic",
+          "neutral_color": "#4b6964",
+          "warm_color": "#7b6550",
+          "cool_color": "#3d6871",
+          "strength": 0.74,
+          "chroma_preservation": 0.78,
+          "highlight_preservation": 0.93,
+          "value_gain": 1.15
+        },
+        "M05_Harness": {
+          "method": "semantic",
+          "neutral_color": "#62452f",
+          "warm_color": "#805235",
+          "cool_color": "#434a42",
+          "strength": 0.78,
+          "chroma_preservation": 0.72,
+          "highlight_preservation": 0.9,
+          "value_gain": 1.15
+        }
+      }
+    },
+    "M06": {
+      "name": "Rootbound Colossus",
+      "source": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
+      "source_sha256": "3b2705f6310f6cefc3f0d95ddd1f819d153988f98f9f82e00e48d63c0c14cc6a",
+      "realms": [
+        "deep_wood"
+      ],
+      "intent": "Weathered bark carries forest-green lichen while exposed heartwood stays warm amber; preserve woody texture and heavy silhouette.",
+      "method": "semantic",
+      "materials": {
+        "M06_WeatheredBark": {
+          "method": "semantic",
+          "neutral_color": "#627b42",
+          "warm_color": "#936540",
+          "cool_color": "#476b59",
+          "strength": 0.79,
+          "chroma_preservation": 0.72,
+          "highlight_preservation": 0.91,
+          "value_gain": 1.13
+        },
+        "M06_OldHeartwood": {
+          "method": "semantic",
+          "neutral_color": "#b37835",
+          "warm_color": "#cd8436",
+          "cool_color": "#7c7847",
+          "strength": 0.75,
+          "chroma_preservation": 0.86,
+          "highlight_preservation": 0.93,
+          "value_gain": 1.1
+        }
+      }
+    },
+    "M07": {
+      "name": "Ashwing Carrion Drake",
+      "source": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+      "source_sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16",
+      "realms": [
+        "old_mill",
+        "marsh"
+      ],
+      "intent": "Soot-brown wing hide, copper warmth around authored throat regions and cooler charcoal shadows; retain all existing atlas details.",
+      "method": "atlas_regions",
+      "materials": {
+        "M07_RecoveryAtlas": {
+          "method": "atlas_regions",
+          "neutral_color": "#805e48",
+          "warm_color": "#b77c44",
+          "cool_color": "#536578",
+          "strength": 0.81,
+          "chroma_preservation": 0.81,
+          "highlight_preservation": 0.92,
+          "value_gain": 1.1
+        }
+      }
+    },
+    "M08": {
+      "name": "White Hart Avatar",
+      "source": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+      "source_sha256": "0c8611c7c520c26e516f548a67ad874986b0a0cf61d68fafbdcbea5602ea3cc8",
+      "realms": [
+        "hart_glade"
+      ],
+      "intent": "Keep warm ivory and bone as the dominant identity; strengthen the difference from dark brown antlers without dyeing pale highlights.",
+      "method": "atlas_regions",
+      "materials": {
+        "M08_RecoveryAtlas": {
+          "method": "atlas_regions",
+          "neutral_color": "#c7c1a3",
+          "warm_color": "#c8a779",
+          "cool_color": "#9bbab1",
+          "strength": 0.46,
+          "chroma_preservation": 0.9,
+          "highlight_preservation": 0.99,
+          "value_gain": 1.02
+        }
+      }
+    },
+    "M09": {
+      "name": "Silt Maw",
+      "source": "res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
+      "source_sha256": "760155b287ca70b541e5b81faf016e0116dda239744286afabe1a47a6ec0e29f",
+      "realms": [
+        "greyfen",
+        "old_mill",
+        "marsh"
+      ],
+      "intent": "Wet mineral-teal silt body with clay-warm mouth folds and pale abrasive edges, distinct from the dry forest bipeds.",
+      "method": "atlas_regions",
+      "materials": {
+        "M09_RecoveryAtlas": {
+          "method": "atlas_regions",
+          "neutral_color": "#53776d",
+          "warm_color": "#a77a58",
+          "cool_color": "#496d87",
+          "strength": 0.86,
+          "chroma_preservation": 0.7,
+          "highlight_preservation": 0.92,
+          "value_gain": 1.1
+        }
+      }
+    },
+    "M10": {
+      "name": "Millback",
+      "source": "res://assets_external/design_pack_v1/creatures/M10_Millback.glb",
+      "source_sha256": "bf6a8bfc0b64a2b1c730cb6ef6feaaae02f79b285b5582783ee197b64fb4ae26",
+      "realms": [
+        "greyfen",
+        "old_mill"
+      ],
+      "intent": "River-mineral blue shell and warmer ochre joints make a low aquatic armored species readable against mud.",
+      "method": "atlas_regions",
+      "materials": {
+        "M10_RecoveryAtlas": {
+          "method": "atlas_regions",
+          "neutral_color": "#56879a",
+          "warm_color": "#a6804f",
+          "cool_color": "#426989",
+          "strength": 0.89,
+          "chroma_preservation": 0.72,
+          "highlight_preservation": 0.94,
+          "value_gain": 1.1
+        }
+      }
+    },
+    "M11": {
+      "name": "Glassmoth",
+      "source": "res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
+      "source_sha256": "b72f8ce1864ee58f75460e2feccd40f4d67ce3ebdbc486448b9db0627674ae13",
+      "realms": [
+        "wychwood",
+        "record_hall"
+      ],
+      "intent": "Smoky pearl membranes with muted blue-green interference and ochre pattern islands; retain the authored bounded wing transparency.",
+      "method": "atlas_regions",
+      "materials": {
+        "M11_RecoveryAtlas": {
+          "method": "atlas_regions",
+          "neutral_color": "#a8bcb0",
+          "warm_color": "#b29b61",
+          "cool_color": "#7799b5",
+          "strength": 0.73,
+          "chroma_preservation": 0.77,
+          "highlight_preservation": 0.98,
+          "value_gain": 1.03
+        },
+        "M11_BoundedWingMembrane": {
+          "method": "atlas_regions",
+          "neutral_color": "#b1c5bb",
+          "warm_color": "#bda76c",
+          "cool_color": "#86a7c1",
+          "strength": 0.69,
+          "chroma_preservation": 0.82,
+          "highlight_preservation": 0.99,
+          "value_gain": 1.02
+        }
+      }
+    },
+    "M12": {
+      "name": "Knell Leech",
+      "source": "res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
+      "source_sha256": "b72eecaed1c4de3af286c7658023da5bf5d5c0c233f4b4ef9439a5ee67819cd0",
+      "realms": [
+        "cemetery",
+        "undercroft"
+      ],
+      "intent": "Plum-black wet skin and muted mauve ridges preserve a crypt-dweller identity without turning the body into a luminous effect.",
+      "method": "atlas_regions",
+      "materials": {
+        "M12_RecoveryAtlas": {
+          "method": "atlas_regions",
+          "neutral_color": "#74516c",
+          "warm_color": "#986268",
+          "cool_color": "#536c87",
+          "strength": 0.88,
+          "chroma_preservation": 0.72,
+          "highlight_preservation": 0.94,
+          "value_gain": 1.1
+        }
+      }
+    },
+    "M13": {
+      "name": "Hearthscale",
+      "source": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+      "source_sha256": "ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26",
+      "realms": [
+        "vargan_approach",
+        "old_mill",
+        "greyfen"
+      ],
+      "intent": "Kiln-clay orange and brown-gold throat warmth distinguish a warmth-seeking hearth species from grey stone; retain pale ash-dust patches.",
+      "method": "atlas_regions",
+      "materials": {
+        "M13_RecoveryAtlas": {
+          "method": "atlas_regions",
+          "neutral_color": "#a6743e",
+          "warm_color": "#ca8a3e",
+          "cool_color": "#687a68",
+          "strength": 0.82,
+          "chroma_preservation": 0.84,
+          "highlight_preservation": 0.96,
+          "value_gain": 1.06
+        }
+      }
+    },
+    "M14": {
+      "name": "Gallows Weaver",
+      "source": "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
+      "source_sha256": "1dc85c0b1adbebb6a85e6acc3bfb36a7bee6ad2a569f0fa300a54edf1d6d7ba9",
+      "realms": [
+        "wychwood",
+        "vargan_approach"
+      ],
+      "intent": "Chestnut-brown chitin, cool slate-dark bristles and pale silk patterning keep a web-building species distinct from reed and water creatures.",
+      "method": "atlas_regions",
+      "materials": {
+        "M14_RecoveryAtlas": {
+          "method": "atlas_regions",
+          "neutral_color": "#796044",
+          "warm_color": "#ad744c",
+          "cool_color": "#536d77",
+          "strength": 0.84,
+          "chroma_preservation": 0.74,
+          "highlight_preservation": 0.96,
+          "value_gain": 1.1
+        }
+      }
+    },
+    "M15": {
+      "name": "Reed Choir",
+      "source": "res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
+      "source_sha256": "b90ced2dd2b89de67dd6560c5abe7360673285779f9c5e07cf52e929b358d69d",
+      "realms": [
+        "greyfen",
+        "old_mill",
+        "marsh"
+      ],
+      "intent": "Reed-green back, warm copper-brown authored islands and pale throat highlights support a living inflated call sac without adding emissive light.",
+      "method": "atlas_regions",
+      "materials": {
+        "M15_RecoveryAtlas": {
+          "method": "atlas_regions",
+          "neutral_color": "#7d914c",
+          "warm_color": "#b38a4b",
+          "cool_color": "#568271",
+          "strength": 0.85,
+          "chroma_preservation": 0.82,
+          "highlight_preservation": 0.97,
+          "value_gain": 1.06
+        }
+      }
+    },
+    "M16": {
+      "name": "Inkblind",
+      "source": "res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
+      "source_sha256": "148780ab6f2b6605816c08e266edbecbd474efb2118ae30e63bae84b06b86cd4",
+      "realms": [
+        "record_hall",
+        "undercroft"
+      ],
+      "intent": "Ink-blue black carapace and warm paper-cream atlas islands separate a document-vault scavenger from generic brown arthropods.",
+      "method": "atlas_regions",
+      "materials": {
+        "M16_RecoveryAtlas": {
+          "method": "atlas_regions",
+          "neutral_color": "#536d86",
+          "warm_color": "#a28b60",
+          "cool_color": "#405c7a",
+          "strength": 0.85,
+          "chroma_preservation": 0.74,
+          "highlight_preservation": 0.98,
+          "value_gain": 1.09
+        }
+      }
+    },
+    "M17": {
+      "name": "Cairn Mother",
+      "source": "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
+      "source_sha256": "0f5ae2c7fe7aba403cef03c7abaa009f45dffca7e96c644466340378202de79e",
+      "realms": [
+        "hart_glade",
+        "greyfen"
+      ],
+      "intent": "Sage lichen and slate-blue stone with pale clay ridges communicate a slow cairn-dweller; keep stony highlights subdued.",
+      "method": "atlas_regions",
+      "materials": {
+        "M17_RecoveryAtlas": {
+          "method": "atlas_regions",
+          "neutral_color": "#819774",
+          "warm_color": "#ac9472",
+          "cool_color": "#637c89",
+          "strength": 0.8,
+          "chroma_preservation": 0.74,
+          "highlight_preservation": 0.97,
+          "value_gain": 1.06
+        }
+      }
+    },
+    "M18": {
+      "name": "Shroud Swimmer",
+      "source": "res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
+      "source_sha256": "8cca812834a3d08be3155e92925c8bf296007648ae964bd6cee669ef352bc9e2",
+      "realms": [
+        "old_mill",
+        "greyfen",
+        "marsh"
+      ],
+      "intent": "River-green and muted turquoise skin with warmer silt-speckle islands and pale fin highlights make water contact and movement legible.",
+      "method": "atlas_regions",
+      "materials": {
+        "M18_RecoveryAtlas": {
+          "method": "atlas_regions",
+          "neutral_color": "#568b83",
+          "warm_color": "#ad8c65",
+          "cool_color": "#547f9c",
+          "strength": 0.85,
+          "chroma_preservation": 0.76,
+          "highlight_preservation": 0.97,
+          "value_gain": 1.07
+        }
+      }
+    },
+    "M19": {
+      "name": "Wychwood Raider",
+      "source": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
+      "source_sha256": "4f73eec84f0c5cca3c1acf833572abde174b6f6bbea54579ad19a8553979383c",
+      "realms": [
+        "wychwood"
+      ],
+      "intent": "A warm olive-umber forager distinct from the cold green Stalker; beige caught cords remain visible against the hide.",
+      "method": "semantic",
+      "materials": {
+        "M19_OliveGreyHide": {
+          "method": "semantic",
+          "neutral_color": "#90804c",
+          "warm_color": "#a86742",
+          "cool_color": "#5c715e",
+          "strength": 0.89,
+          "chroma_preservation": 0.6,
+          "highlight_preservation": 0.87,
+          "value_gain": 1.1
+        },
+        "M19_PaleEyes": {
+          "method": "semantic",
+          "neutral_color": "#c5b56e",
+          "warm_color": "#d3a25c",
+          "cool_color": "#a2b59c",
+          "strength": 0.78,
+          "chroma_preservation": 0.72,
+          "highlight_preservation": 0.92,
+          "value_gain": 1.0
+        },
+        "M19_CaughtTokenCord": {
+          "method": "semantic",
+          "neutral_color": "#b19c6b",
+          "warm_color": "#bd8d59",
+          "cool_color": "#8b9c84",
+          "strength": 0.85,
+          "chroma_preservation": 0.62,
+          "highlight_preservation": 0.95,
+          "value_gain": 1.24
+        },
+        "M19_Recessed_mouth": {
+          "method": "semantic",
+          "neutral_color": "#2c1b1a",
+          "warm_color": "#4a2522",
+          "cool_color": "#272b2b",
+          "strength": 0.52,
+          "chroma_preservation": 0.8,
+          "highlight_preservation": 0.92,
+          "value_gain": 1.0
+        },
+        "M19_Uneven_worn_teeth": {
+          "method": "semantic",
+          "neutral_color": "#c3b38c",
+          "warm_color": "#d3bc8d",
+          "cool_color": "#a4ae9e",
+          "strength": 0.5,
+          "chroma_preservation": 0.82,
+          "highlight_preservation": 0.95,
+          "value_gain": 1.01
+        }
+      }
+    },
+    "M20": {
+      "name": "Wychwood Brute",
+      "source": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+      "source_sha256": "5dc0fe44ac381f0fef79ba065c8ab67e6137b550775823ff79b5ee02fbd9b74a",
+      "realms": [
+        "wychwood"
+      ],
+      "intent": "Deep forest-olive shoulders, earthen scar warmth and worn ivory tusks carry weight; preserve dark folds while separating it from grey ground.",
+      "method": "semantic",
+      "materials": {
+        "M20_CharcoalOliveHide": {
+          "method": "semantic",
+          "neutral_color": "#5a7549",
+          "warm_color": "#966747",
+          "cool_color": "#455f72",
+          "strength": 0.89,
+          "chroma_preservation": 0.58,
+          "highlight_preservation": 0.88,
+          "value_gain": 1.15
+        },
+        "M20_PaleEyes": {
+          "method": "semantic",
+          "neutral_color": "#c2a875",
+          "warm_color": "#cd8f54",
+          "cool_color": "#9cae96",
+          "strength": 0.77,
+          "chroma_preservation": 0.73,
+          "highlight_preservation": 0.93,
+          "value_gain": 1.0
+        },
+        "M20_WornTusk": {
+          "method": "semantic",
+          "neutral_color": "#d2ba8a",
+          "warm_color": "#dec28b",
+          "cool_color": "#a8b5a3",
+          "strength": 0.55,
+          "chroma_preservation": 0.84,
+          "highlight_preservation": 0.98,
+          "value_gain": 1.03
+        },
+        "M20_Recessed_mouth": {
+          "method": "semantic",
+          "neutral_color": "#2b1a19",
+          "warm_color": "#4b2923",
+          "cool_color": "#292d2d",
+          "strength": 0.5,
+          "chroma_preservation": 0.82,
+          "highlight_preservation": 0.94,
+          "value_gain": 1.0
+        },
+        "M20_Uneven_worn_teeth": {
+          "method": "semantic",
+          "neutral_color": "#c6b48a",
+          "warm_color": "#d3bb8a",
+          "cool_color": "#a5b19e",
+          "strength": 0.5,
+          "chroma_preservation": 0.84,
+          "highlight_preservation": 0.97,
+          "value_gain": 1.02
+        }
+      }
+    }
+  }
+}

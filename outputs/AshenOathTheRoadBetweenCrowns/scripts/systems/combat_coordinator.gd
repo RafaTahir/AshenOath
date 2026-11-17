@@ -438,9 +438,9 @@ func _on_enemy_windup_started(enemy) -> void:
 	if enemy != null and player != null:
 		audio.play_enemy_event(enemy.enemy_id, "windup", enemy.global_position, player.global_position)
 	if zone_root != null and enemy != null:
-		if bool(enemy.get("is_boss")):
-			CombatFeedback.boss_telegraph(zone_root, enemy.global_position, enemy.enemy_id)
-		else:
+		# Bosses retain their actor-owned full-windup footprint. A separate short
+		# world-axis pulse would disagree with its attack shape and commitment.
+		if not bool(enemy.get("is_boss")):
 			CombatFeedback.ground_ring(zone_root, enemy.global_position, Color(0.46, 0.05, 0.025), 0.62, 0.18)
 	if enemy != null and enemy.health_component != null:
 		hud.show_enemy(enemy.display_name, enemy.health_component.health, enemy.health_component.max_health)
@@ -810,12 +810,14 @@ func _on_boss_phase_changed(enemy: Node, phase: int) -> void:
 		world_vfx.pulse_interaction(enemy.global_position)
 		CombatFeedback.impact_burst(zone_root, enemy.global_position + Vector3.UP, true, Color(0.58, 0.88, 0.72))
 
-func _on_boss_special_attack(enemy: Node, attack_id: String, contact_position: Vector3, radius: float, damage: float, parried: bool) -> void:
+func _on_boss_special_attack(enemy: Node, attack_id: String, _contact_position: Vector3, radius: float, damage: float, parried: bool) -> void:
 	if enemy == null or not is_instance_valid(enemy) or not bool(enemy.get("is_boss")):
 		return
 	if zone_root != null:
 		var attack_direction: Vector3 = -enemy.global_transform.basis.z
-		CombatFeedback.boss_attack_release(zone_root, contact_position, attack_direction, attack_id, radius, parried)
+		# The area attack is centred on the actor, while contact_position remains
+		# the separate weapon/parry feedback point carried by the signal.
+		CombatFeedback.boss_attack_release(zone_root, enemy.global_position, attack_direction, attack_id, radius, parried)
 	var cue: String = str({
 		"bell_shockwave": "Bell shockwave",
 		"grave_slam": "Grave slam",

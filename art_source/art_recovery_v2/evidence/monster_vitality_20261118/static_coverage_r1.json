@@ -1,0 +1,5144 @@
+{
+  "acceptance": {
+    "runtime_binding_observed": false,
+    "source_byte_identity": true,
+    "static_profile_validation": true,
+    "user_accepted": false,
+    "visual_accepted": false
+  },
+  "counts": {
+    "external_texture_inputs_unique": 92,
+    "materials": 43,
+    "sources": 20
+  },
+  "coverage": {
+    "M01": {
+      "explicit_ecology_zone_references": [],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "ghoulkin"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "ghoulkin_creature"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "ghoulkin_skeleton"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "ghoul_gaunt_real"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "ghoulkin"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "ghoulkin_creature"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "ghoulkin_skeleton"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "ghoul_gaunt_real"
+        }
+      ],
+      "narrative_realms": [
+        "wychwood",
+        "cemetery",
+        "ruins",
+        "marsh"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 31,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin_skeleton",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 31,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 32,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin_creature",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 32,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 33,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 34,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 35,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 36,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 37,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 38,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin_creature",
+          "file": "scripts/asset_spawn_helper.gd",
+          "kind": "runtime_literal_reference",
+          "line": 984,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/audio_manager.gd",
+          "kind": "runtime_literal_reference",
+          "line": 810,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/character_face_driver.gd",
+          "kind": "runtime_literal_reference",
+          "line": 162,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/character_face_driver.gd",
+          "kind": "runtime_literal_reference",
+          "line": 226,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin_skeleton",
+          "file": "scripts/character_face_driver.gd",
+          "kind": "runtime_literal_reference",
+          "line": 226,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 16,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin_skeleton",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 17,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 213,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 114,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/character_presentation.gd",
+          "kind": "runtime_literal_reference",
+          "line": 403,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 110,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin_skeleton",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 111,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin_creature",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 139,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 24,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 171,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 274,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 316,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1041,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1050,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1123,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1125,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin_creature",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1125,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin_creature",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1136,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin_skeleton",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1140,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1158,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1166,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin_creature",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1207,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1901,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1929,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 306,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 309,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 842,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/systems/quest_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 103,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1152,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1156,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/zones/campaign_wilderness_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 189,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin_creature",
+          "file": "scripts/zones/castle_vargan_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 200,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoulkin",
+          "file": "scripts/zones/wychwood_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 519,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M02": {
+      "explicit_ecology_zone_references": [],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "wychwood_stalker"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "wychwood_stalker_creature"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "ghoul_stalker_real"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "wychwood_stalker"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "wychwood_stalker_creature"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "ghoul_stalker_real"
+        }
+      ],
+      "narrative_realms": [
+        "wychwood",
+        "record_hall"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 33,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker_creature",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 34,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/audio_manager.gd",
+          "kind": "runtime_literal_reference",
+          "line": 810,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/character_face_driver.gd",
+          "kind": "runtime_literal_reference",
+          "line": 163,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/character_face_driver.gd",
+          "kind": "runtime_literal_reference",
+          "line": 226,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 16,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 212,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 222,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 114,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 112,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker_creature",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 140,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoul_stalker_real",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 143,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 170,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 274,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 316,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 648,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1041,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1050,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1123,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1126,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker_creature",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1126,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1159,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1167,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker_creature",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1213,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1514,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1903,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1929,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/systems/character_silhouette.gd",
+          "kind": "runtime_literal_reference",
+          "line": 52,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 306,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 311,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 336,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1152,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/zones/castle_vargan_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 200,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_stalker",
+          "file": "scripts/zones/wychwood_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 519,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M03": {
+      "explicit_ecology_zone_references": [],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "bog_wretch"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "bog_wretch_creature"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "bog_wretch"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "bog_wretch_creature"
+        }
+      ],
+      "narrative_realms": [
+        "wychwood",
+        "marsh"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "bog_wretch_creature",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 39,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 39,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/character_face_driver.gd",
+          "kind": "runtime_literal_reference",
+          "line": 166,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 17,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 214,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 114,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 539,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 115,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch_creature",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 147,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/combat_manager.gd",
+          "kind": "runtime_literal_reference",
+          "line": 195,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 274,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 316,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 890,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1123,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch_creature",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1129,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1129,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch_creature",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1207,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1883,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1914,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/progression_manager.gd",
+          "kind": "runtime_literal_reference",
+          "line": 40,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/progression_manager.gd",
+          "kind": "runtime_literal_reference",
+          "line": 183,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/progression_manager.gd",
+          "kind": "runtime_literal_reference",
+          "line": 185,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/saga_encounters.gd",
+          "kind": "runtime_literal_reference",
+          "line": 9,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/saga_encounters.gd",
+          "kind": "runtime_literal_reference",
+          "line": 39,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/saga_encounters.gd",
+          "kind": "runtime_literal_reference",
+          "line": 41,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/story_activity_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 28,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 5,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 45,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 79,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 111,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/story_journal_model.gd",
+          "kind": "runtime_literal_reference",
+          "line": 563,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 39,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 282,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 328,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 466,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 496,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 605,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2676,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bog_wretch",
+          "file": "scripts/zones/campaign_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 99,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M04": {
+      "explicit_ecology_zone_references": [],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "gravebound_knight"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "gravebound_knight_creature"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "bandit"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "bandit_deserter"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "bandit_tracker"
+        },
+        {
+          "category": "characters",
+          "manifest": "curated_runtime_assets.json",
+          "role": "halvern"
+        },
+        {
+          "category": "characters",
+          "manifest": "curated_runtime_assets.json",
+          "role": "halvern_boss"
+        },
+        {
+          "category": "characters",
+          "manifest": "curated_runtime_assets.json",
+          "role": "returned_soldier"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "gravebound_knight"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "gravebound_knight_creature"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "bandit"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "bandit_deserter"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "bandit_tracker"
+        },
+        {
+          "category": "characters",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "halvern"
+        },
+        {
+          "category": "characters",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "halvern_boss"
+        },
+        {
+          "category": "characters",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "returned_soldier"
+        }
+      ],
+      "narrative_realms": [
+        "vargan_approach",
+        "undercroft",
+        "ruins",
+        "record_hall"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "bandit",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 30,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit_deserter",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 30,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight_creature",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 40,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 40,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 43,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 43,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit_tracker",
+          "file": "scripts/asset_spawn_helper.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1086,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit_deserter",
+          "file": "scripts/asset_spawn_helper.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1086,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/boss_encounter.gd",
+          "kind": "runtime_literal_reference",
+          "line": 66,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight",
+          "file": "scripts/character_face_driver.gd",
+          "kind": "runtime_literal_reference",
+          "line": 167,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/character_face_driver.gd",
+          "kind": "runtime_literal_reference",
+          "line": 171,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit_tracker",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 12,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 12,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit_deserter",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 12,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 17,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 18,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 214,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 216,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 114,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 550,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/character_presentation.gd",
+          "kind": "runtime_literal_reference",
+          "line": 391,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 60,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit_deserter",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 108,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit_tracker",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 109,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 116,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 138,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight_creature",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 151,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 173,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 173,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "returned_soldier",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 173,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 173,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/combat_feedback.gd",
+          "kind": "runtime_literal_reference",
+          "line": 416,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/combat_feedback.gd",
+          "kind": "runtime_literal_reference",
+          "line": 437,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/dialogue_manager.gd",
+          "kind": "runtime_literal_reference",
+          "line": 348,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "returned_soldier",
+          "file": "scripts/dialogue_manager.gd",
+          "kind": "runtime_literal_reference",
+          "line": 349,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 274,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 274,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 316,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 316,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 648,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 903,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1038,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1047,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1079,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1085,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1117,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1123,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1123,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight_creature",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1130,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1130,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1134,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight_creature",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1239,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1247,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1277,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1277,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1278,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit_tracker",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1279,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1279,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1525,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1529,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1537,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1544,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1594,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1899,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1909,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1922,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2107,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/greyfen_life_controller.gd",
+          "kind": "runtime_literal_reference",
+          "line": 213,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/greyfen_life_controller.gd",
+          "kind": "runtime_literal_reference",
+          "line": 213,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/greyfen_life_controller.gd",
+          "kind": "runtime_literal_reference",
+          "line": 219,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/greyfen_life_controller.gd",
+          "kind": "runtime_literal_reference",
+          "line": 219,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/saga_activities.gd",
+          "kind": "runtime_literal_reference",
+          "line": 391,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/saga_activities.gd",
+          "kind": "runtime_literal_reference",
+          "line": 808,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/saga_catalog.gd",
+          "kind": "runtime_literal_reference",
+          "line": 316,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight",
+          "file": "scripts/spectral_monster_presentation.gd",
+          "kind": "runtime_literal_reference",
+          "line": 18,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/story_activity_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 31,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/story_actor_presence.gd",
+          "kind": "runtime_literal_reference",
+          "line": 5,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/story_cast_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 23,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/story_cast_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 38,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/story_cast_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 39,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "returned_soldier",
+          "file": "scripts/story_cast_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 57,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 9,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 49,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 70,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 79,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 96,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 122,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 194,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 253,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 296,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "returned_soldier",
+          "file": "scripts/story_performance.gd",
+          "kind": "runtime_literal_reference",
+          "line": 85,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/story_route_catalog.gd",
+          "kind": "runtime_literal_reference",
+          "line": 101,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "returned_soldier",
+          "file": "scripts/story_route_catalog.gd",
+          "kind": "runtime_literal_reference",
+          "line": 137,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/story_scene_direction.gd",
+          "kind": "runtime_literal_reference",
+          "line": 65,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/story_scene_direction.gd",
+          "kind": "runtime_literal_reference",
+          "line": 149,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/story_world_scenes.gd",
+          "kind": "runtime_literal_reference",
+          "line": 67,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit",
+          "file": "scripts/systems/character_palette.gd",
+          "kind": "runtime_literal_reference",
+          "line": 43,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 288,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 342,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 347,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 348,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 354,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 481,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 567,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 771,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 803,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/systems/dialogue_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 230,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/systems/dialogue_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 236,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/systems/dialogue_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 237,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/systems/quest_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 185,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "returned_soldier",
+          "file": "scripts/systems/world_presentation_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 757,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/systems/world_presentation_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 767,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/systems/world_presentation_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 767,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "returned_soldier",
+          "file": "scripts/systems/world_presentation_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 783,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/systems/world_presentation_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 793,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/systems/world_presentation_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 793,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/systems/world_presentation_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 837,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1137,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2273,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "returned_soldier",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2308,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2318,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2318,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit_tracker",
+          "file": "scripts/zones/bandit_road_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 62,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit_deserter",
+          "file": "scripts/zones/bandit_road_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 62,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit",
+          "file": "scripts/zones/bandit_road_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 63,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/zones/campaign_finale_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 87,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/zones/campaign_finale_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 88,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern_boss",
+          "file": "scripts/zones/campaign_finale_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 90,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit",
+          "file": "scripts/zones/campaign_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 122,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "halvern",
+          "file": "scripts/zones/campaign_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 126,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight",
+          "file": "scripts/zones/campaign_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 127,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "returned_soldier",
+          "file": "scripts/zones/greyfen_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 645,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "returned_soldier",
+          "file": "scripts/zones/greyfen_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 647,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gravebound_knight",
+          "file": "scripts/zones/ruins_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 29,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bandit",
+          "file": "scripts/zones/wychwood_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 530,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M05": {
+      "explicit_ecology_zone_references": [],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "bell_eater"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "bell_eater_boss"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "bell_eater"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "bell_eater_boss"
+        }
+      ],
+      "narrative_realms": [
+        "cemetery"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "bell_eater",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 41,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater_boss",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 41,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater_boss",
+          "file": "scripts/asset_spawn_helper.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1074,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/audio_manager.gd",
+          "kind": "runtime_literal_reference",
+          "line": 810,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/character_face_driver.gd",
+          "kind": "runtime_literal_reference",
+          "line": 168,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 17,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 215,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 114,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 536,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 127,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater_boss",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 131,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/combat_feedback.gd",
+          "kind": "runtime_literal_reference",
+          "line": 413,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/combat_feedback.gd",
+          "kind": "runtime_literal_reference",
+          "line": 426,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/combat_feedback.gd",
+          "kind": "runtime_literal_reference",
+          "line": 427,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 587,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 646,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 887,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1038,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1047,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1076,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1082,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1123,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1131,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1131,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1207,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1281,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1525,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1527,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1534,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1540,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1578,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1584,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1889,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1920,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2028,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2088,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2118,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/story_activity_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 27,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 6,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 46,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 79,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 104,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 148,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 167,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 178,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 235,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 281,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 305,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/story_journal_model.gd",
+          "kind": "runtime_literal_reference",
+          "line": 559,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/systems/character_silhouette.gd",
+          "kind": "runtime_literal_reference",
+          "line": 52,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 263,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 603,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 612,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 627,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 630,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 634,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 649,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 797,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/systems/quest_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 118,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/systems/zone_lifecycle_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 92,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/systems/zone_lifecycle_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 94,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/systems/zone_lifecycle_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 99,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2674,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bell_eater",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2683,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M06": {
+      "explicit_ecology_zone_references": [],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "rootbound_colossus"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "rootbound_colossus_boss"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "rootbound_colossus"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "rootbound_colossus_boss"
+        }
+      ],
+      "narrative_realms": [
+        "deep_wood"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 42,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus_boss",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 42,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus_boss",
+          "file": "scripts/asset_spawn_helper.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1074,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/asset_spawn_helper.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1074,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/audio_manager.gd",
+          "kind": "runtime_literal_reference",
+          "line": 812,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/character_face_driver.gd",
+          "kind": "runtime_literal_reference",
+          "line": 169,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 18,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 215,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 114,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 542,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 134,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus_boss",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 135,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus_boss",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 196,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/combat_feedback.gd",
+          "kind": "runtime_literal_reference",
+          "line": 414,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/combat_feedback.gd",
+          "kind": "runtime_literal_reference",
+          "line": 426,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/combat_feedback.gd",
+          "kind": "runtime_literal_reference",
+          "line": 427,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/combat_manager.gd",
+          "kind": "runtime_literal_reference",
+          "line": 469,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 587,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 646,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 897,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1038,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1047,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1077,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1083,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1123,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1132,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1132,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1219,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1283,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1525,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1528,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1535,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1579,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1588,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1893,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1918,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2095,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2134,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2149,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2151,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/story_activity_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 29,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 7,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 47,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 65,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 79,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 114,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 181,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 242,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 289,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 314,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 321,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 396,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 272,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 613,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 668,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 799,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2684,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "rootbound_colossus",
+          "file": "scripts/zones/campaign_wilderness_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 127,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M07": {
+      "explicit_ecology_zone_references": [],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "ashwing"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "ashwing_creature"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "ashwing_boss"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "ashwing"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "ashwing_creature"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "ashwing_boss"
+        }
+      ],
+      "narrative_realms": [
+        "old_mill",
+        "marsh"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "ashwing",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 44,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing_creature",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 44,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing_boss",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 45,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 45,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing_creature",
+          "file": "scripts/asset_spawn_helper.gd",
+          "kind": "runtime_literal_reference",
+          "line": 978,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing_creature",
+          "file": "scripts/asset_spawn_helper.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1074,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing_boss",
+          "file": "scripts/asset_spawn_helper.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1074,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/character_face_driver.gd",
+          "kind": "runtime_literal_reference",
+          "line": 170,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 18,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 216,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 114,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 544,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 136,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing_boss",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 137,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing_creature",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 152,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing_boss",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 197,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/combat_feedback.gd",
+          "kind": "runtime_literal_reference",
+          "line": 415,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 900,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1038,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1047,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1078,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1084,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1123,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1133,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1133,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1225,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing_creature",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1225,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1286,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1536,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1580,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1590,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1896,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1920,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2102,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2121,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/story_activity_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 30,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/story_activity_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 540,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 8,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 48,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 67,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 79,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 119,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 169,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 176,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 212,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 249,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 291,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 400,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/story_journal_model.gd",
+          "kind": "runtime_literal_reference",
+          "line": 561,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/systems/character_silhouette.gd",
+          "kind": "runtime_literal_reference",
+          "line": 52,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 182,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 276,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 369,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 370,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 614,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 801,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2685,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ashwing",
+          "file": "scripts/zones/campaign_wilderness_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 193,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M08": {
+      "explicit_ecology_zone_references": [],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "white_hart"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "white_hart_avatar"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "white_hart_boss"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "white_hart"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "white_hart_avatar"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "white_hart_boss"
+        }
+      ],
+      "narrative_realms": [
+        "hart_glade"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "white_hart",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 46,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 46,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 47,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_boss",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 47,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/asset_spawn_helper.gd",
+          "kind": "runtime_literal_reference",
+          "line": 976,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_boss",
+          "file": "scripts/asset_spawn_helper.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1074,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/asset_spawn_helper.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1074,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/campaign_story_overlay.gd",
+          "kind": "runtime_literal_reference",
+          "line": 8,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/character_face_driver.gd",
+          "kind": "runtime_literal_reference",
+          "line": 172,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 18,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 217,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 114,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 552,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_boss",
+          "file": "scripts/character_presentation.gd",
+          "kind": "runtime_literal_reference",
+          "line": 21,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_boss",
+          "file": "scripts/character_presentation.gd",
+          "kind": "runtime_literal_reference",
+          "line": 29,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/character_presentation.gd",
+          "kind": "runtime_literal_reference",
+          "line": 404,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 119,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_boss",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 126,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_boss",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 173,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 173,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_boss",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 198,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/combat_feedback.gd",
+          "kind": "runtime_literal_reference",
+          "line": 417,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/covenant_resolution.gd",
+          "kind": "runtime_literal_reference",
+          "line": 45,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/covenant_resolution.gd",
+          "kind": "runtime_literal_reference",
+          "line": 60,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/dialogue_manager.gd",
+          "kind": "runtime_literal_reference",
+          "line": 364,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 906,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1038,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1047,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1072,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1073,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1123,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1135,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1135,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1171,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1179,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_boss",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1233,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1233,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1596,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1885,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1916,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2110,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2140,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/greyfen_life_controller.gd",
+          "kind": "runtime_literal_reference",
+          "line": 213,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/greyfen_life_controller.gd",
+          "kind": "runtime_literal_reference",
+          "line": 213,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/greyfen_life_controller.gd",
+          "kind": "runtime_literal_reference",
+          "line": 219,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/greyfen_life_controller.gd",
+          "kind": "runtime_literal_reference",
+          "line": 219,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/story_activity_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 32,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 10,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 49,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 79,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/story_encounter_director.gd",
+          "kind": "runtime_literal_reference",
+          "line": 125,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/story_journal_model.gd",
+          "kind": "runtime_literal_reference",
+          "line": 596,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/story_performance.gd",
+          "kind": "runtime_literal_reference",
+          "line": 86,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/story_route_catalog.gd",
+          "kind": "runtime_literal_reference",
+          "line": 110,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/story_route_catalog.gd",
+          "kind": "runtime_literal_reference",
+          "line": 111,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/story_scene_direction.gd",
+          "kind": "runtime_literal_reference",
+          "line": 67,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 294,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 346,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 618,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 780,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 795,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/systems/quest_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 204,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/systems/quest_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 209,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/systems/quest_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 210,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/systems/world_presentation_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 768,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/systems/world_presentation_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 768,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 863,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 929,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2319,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2319,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 2689,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/zones/campaign_finale_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 182,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart_avatar",
+          "file": "scripts/zones/campaign_finale_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 185,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/zones/campaign_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 137,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "white_hart",
+          "file": "scripts/zones/ruins_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 31,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M09": {
+      "explicit_ecology_zone_references": [
+        {
+          "kind": "authored_observation_sighting",
+          "name": "Silt Maw",
+          "role": "silt_maw",
+          "zone": "old_mill"
+        }
+      ],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "silt_maw"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "silt_maw"
+        }
+      ],
+      "narrative_realms": [
+        "greyfen",
+        "old_mill",
+        "marsh"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "silt_maw",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 19,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "silt_maw",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 80,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "silt_maw",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 419,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M10": {
+      "explicit_ecology_zone_references": [
+        {
+          "kind": "authored_observation_sighting",
+          "name": "Millback",
+          "role": "millback",
+          "zone": "old_mill"
+        }
+      ],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "millback"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "millback"
+        }
+      ],
+      "narrative_realms": [
+        "greyfen",
+        "old_mill"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "millback",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 19,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "millback",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 81,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "millback",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 419,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M11": {
+      "explicit_ecology_zone_references": [
+        {
+          "kind": "authored_observation_sighting",
+          "name": "Glassmoth",
+          "role": "glassmoth",
+          "zone": "wychwood"
+        }
+      ],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "glassmoth"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "glassmoth"
+        }
+      ],
+      "narrative_realms": [
+        "wychwood",
+        "record_hall"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "glassmoth",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 19,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "glassmoth",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 517,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "glassmoth",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 82,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "glassmoth",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 419,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M12": {
+      "explicit_ecology_zone_references": [
+        {
+          "kind": "authored_observation_sighting",
+          "name": "Knell Leech",
+          "role": "knell_leech",
+          "zone": "undercroft"
+        }
+      ],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "knell_leech"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "knell_leech"
+        }
+      ],
+      "narrative_realms": [
+        "cemetery",
+        "undercroft"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "knell_leech",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 19,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "knell_leech",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 83,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "knell_leech",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 419,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M13": {
+      "explicit_ecology_zone_references": [
+        {
+          "kind": "authored_observation_sighting",
+          "name": "Hearthscale",
+          "role": "hearthscale",
+          "zone": "burned_farmstead"
+        }
+      ],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "hearthscale"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "bracken"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "bracken_companion"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "hearthscale"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "bracken"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "bracken_companion"
+        }
+      ],
+      "narrative_realms": [
+        "vargan_approach",
+        "old_mill",
+        "greyfen"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "hearthscale",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 19,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "hearthscale",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 84,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bracken",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 173,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bracken_companion",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 173,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "hearthscale",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 173,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bracken",
+          "file": "scripts/companion_controller.gd",
+          "kind": "runtime_literal_reference",
+          "line": 3,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "hearthscale",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 417,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bracken",
+          "file": "scripts/greyfen_gathering.gd",
+          "kind": "runtime_literal_reference",
+          "line": 4,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bracken",
+          "file": "scripts/greyfen_gathering.gd",
+          "kind": "runtime_literal_reference",
+          "line": 69,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bracken",
+          "file": "scripts/greyfen_gathering.gd",
+          "kind": "runtime_literal_reference",
+          "line": 82,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bracken",
+          "file": "scripts/story_route_catalog.gd",
+          "kind": "runtime_literal_reference",
+          "line": 131,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bracken",
+          "file": "scripts/story_route_catalog.gd",
+          "kind": "runtime_literal_reference",
+          "line": 132,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bracken",
+          "file": "scripts/story_route_catalog.gd",
+          "kind": "runtime_literal_reference",
+          "line": 133,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bracken",
+          "file": "scripts/systems/interaction_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 12,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "bracken",
+          "file": "scripts/systems/interaction_service.gd",
+          "kind": "runtime_literal_reference",
+          "line": 60,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M14": {
+      "explicit_ecology_zone_references": [
+        {
+          "kind": "authored_observation_sighting",
+          "name": "Gallows Weaver",
+          "role": "gallows_weaver",
+          "zone": "deep_wood"
+        }
+      ],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "gallows_weaver"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "gallows_weaver"
+        }
+      ],
+      "narrative_realms": [
+        "wychwood",
+        "vargan_approach"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "gallows_weaver",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 19,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gallows_weaver",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 524,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gallows_weaver",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 85,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "gallows_weaver",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 419,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M15": {
+      "explicit_ecology_zone_references": [
+        {
+          "kind": "authored_observation_sighting",
+          "name": "Reed Choir",
+          "role": "reed_choir",
+          "zone": "greyfen"
+        }
+      ],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "reed_choir"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "reed_choir"
+        }
+      ],
+      "narrative_realms": [
+        "greyfen",
+        "old_mill",
+        "marsh"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "reed_choir",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 19,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "reed_choir",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 514,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "reed_choir",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 86,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M16": {
+      "explicit_ecology_zone_references": [
+        {
+          "kind": "authored_observation_sighting",
+          "name": "Inkblind",
+          "role": "inkblind",
+          "zone": "record_hall"
+        }
+      ],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "inkblind"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "inkblind"
+        }
+      ],
+      "narrative_realms": [
+        "record_hall",
+        "undercroft"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "inkblind",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 19,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "inkblind",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 530,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "inkblind",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 88,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "inkblind",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 419,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M17": {
+      "explicit_ecology_zone_references": [
+        {
+          "kind": "authored_observation_sighting",
+          "name": "Cairn Mother",
+          "role": "cairn_mother",
+          "zone": "hart_glade"
+        }
+      ],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "cairn_mother"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "cairn_mother"
+        }
+      ],
+      "narrative_realms": [
+        "hart_glade",
+        "greyfen"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "cairn_mother",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 19,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "cairn_mother",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 533,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "cairn_mother",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 89,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "cairn_mother",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 417,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M18": {
+      "explicit_ecology_zone_references": [
+        {
+          "kind": "authored_observation_sighting",
+          "name": "Shroud Swimmer",
+          "role": "shroud_swimmer",
+          "zone": "marsh_crossing"
+        }
+      ],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "shroud_swimmer"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "shroud_swimmer"
+        }
+      ],
+      "narrative_realms": [
+        "old_mill",
+        "greyfen",
+        "marsh"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "shroud_swimmer",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 19,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "shroud_swimmer",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 527,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "shroud_swimmer",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 92,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "shroud_swimmer",
+          "file": "scripts/everyday_life.gd",
+          "kind": "runtime_literal_reference",
+          "line": 594,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M19": {
+      "explicit_ecology_zone_references": [],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "wychwood_raider"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "wychwood_raider_creature"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "wychwood_raider"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "wychwood_raider_creature"
+        }
+      ],
+      "narrative_realms": [
+        "wychwood"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 35,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider_creature",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 36,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/audio_manager.gd",
+          "kind": "runtime_literal_reference",
+          "line": 810,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/character_face_driver.gd",
+          "kind": "runtime_literal_reference",
+          "line": 164,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/character_face_driver.gd",
+          "kind": "runtime_literal_reference",
+          "line": 226,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 16,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 212,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 114,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 113,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider_creature",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 141,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 170,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 274,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 316,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1041,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1050,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1123,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider_creature",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1127,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1127,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1160,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1168,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider_creature",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1213,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1516,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1905,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1929,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/systems/character_silhouette.gd",
+          "kind": "runtime_literal_reference",
+          "line": 52,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 306,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 313,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1152,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_raider",
+          "file": "scripts/zones/wychwood_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 519,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    },
+    "M20": {
+      "explicit_ecology_zone_references": [],
+      "live_aliases": [
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "wychwood_brute"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "wychwood_brute_creature"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "ghoul_brute_real"
+        },
+        {
+          "category": "enemies",
+          "manifest": "curated_runtime_assets.json",
+          "role": "orc_skull_real"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "wychwood_brute"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "wychwood_brute_creature"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "ghoul_brute_real"
+        },
+        {
+          "category": "enemies",
+          "manifest": "visual_upgrade_manifest.json",
+          "role": "orc_skull_real"
+        }
+      ],
+      "narrative_realms": [
+        "wychwood"
+      ],
+      "runtime_literal_references": [
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 37,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute_creature",
+          "file": "scripts/asset_database.gd",
+          "kind": "runtime_literal_reference",
+          "line": 38,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/audio_manager.gd",
+          "kind": "runtime_literal_reference",
+          "line": 810,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/character_face_driver.gd",
+          "kind": "runtime_literal_reference",
+          "line": 165,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/character_face_driver.gd",
+          "kind": "runtime_literal_reference",
+          "line": 226,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 16,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 213,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/character_identity_profile.gd",
+          "kind": "runtime_literal_reference",
+          "line": 220,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/character_life_modifier.gd",
+          "kind": "runtime_literal_reference",
+          "line": 114,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 114,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute_creature",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 142,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "ghoul_brute_real",
+          "file": "scripts/character_role_spec.gd",
+          "kind": "runtime_literal_reference",
+          "line": 146,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 171,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 274,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 316,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 587,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 646,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1039,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1048,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1123,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute_creature",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1128,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1128,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1161,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1169,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute_creature",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1213,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1515,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1907,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/enemy_ai.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1929,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/systems/character_silhouette.gd",
+          "kind": "runtime_literal_reference",
+          "line": 52,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 306,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/systems/combat_coordinator.gd",
+          "kind": "runtime_literal_reference",
+          "line": 315,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/zone_construction_host.gd",
+          "kind": "runtime_literal_reference",
+          "line": 1152,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        },
+        {
+          "alias": "wychwood_brute",
+          "file": "scripts/zones/wychwood_section.gd",
+          "kind": "runtime_literal_reference",
+          "line": 519,
+          "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."
+        }
+      ]
+    }
+  },
+  "feature_contract": {
+    "alpha_modes": [
+      "OPAQUE",
+      "MASK",
+      "BLEND"
+    ],
+    "material_extensions": "scalar neutral specular/IOR and scalar clearcoat; textures and other extensions rejected",
+    "orm_channels": {
+      "metallic": "b",
+      "occlusion": "r",
+      "roughness": "g"
+    },
+    "preserve": [
+      "raw GLB bytes",
+      "external texture bytes",
+      "normal scale",
+      "PBR factors",
+      "emission",
+      "vertex colors",
+      "alpha",
+      "culling"
+    ],
+    "texture_transforms": "rejected",
+    "uv_sets": [
+      0
+    ]
+  },
+  "immutable_baseline": {
+    "bytes": 109679,
+    "path": "D:\\Temp\\am\\art_source\\art_recovery_v2\\evidence\\monster_vitality_20261118\\retained_material_baseline.json",
+    "sha256": "a9cdb76abb24b127cbce3f7cb591aa5a573d8053931d9f1e7b39931c794bd93e"
+  },
+  "kind": "monster_material_static_coverage",
+  "passed": true,
+  "profile": {
+    "bytes": 25129,
+    "path": "D:\\Temp\\am\\outputs\\AshenOathTheRoadBetweenCrowns\\data\\monster_material_profiles.json",
+    "sha256": "c7056d3aad214afc71c6b11d1169fc5c469bbd757982861d6ca9dbbcc5ae7eb8"
+  },
+  "schema_version": 1,
+  "verifier": {
+    "bytes": 19938,
+    "path": "tools/verify_monster_material_profiles.py",
+    "sha256": "b3c8cc33d37ca5ef52b8f4ce9da7bf0bae554ad4cd4b07e93b1bb8702d2be80b"
+  }
+}

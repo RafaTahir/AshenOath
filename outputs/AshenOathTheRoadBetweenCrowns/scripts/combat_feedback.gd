@@ -1,5 +1,7 @@
 extends RefCounted
 
+const AttackShape = preload("res://scripts/enemy_attack_shape.gd")
+
 static var _mesh_cache: Dictionary = {}
 static var _material_cache: Dictionary = {}
 static var _impact_pools: Dictionary = {}
@@ -271,6 +273,60 @@ static func warning_marker(parent: Node3D, target: Node3D) -> MeshInstance3D:
 	target.add_child(marker)
 	return marker
 
+static func configure_boss_warning(marker: MeshInstance3D, attack_id: String, radius: float) -> void:
+	# EnemyAI owns visibility for the complete windup and every cancellation.
+	# As its child, the footprint follows the same early tracking/late commitment
+	# orientation as the authoritative hit query, without another update loop.
+	marker.mesh = _attack_footprint_mesh(attack_id, radius)
+	marker.position = Vector3(0.0, 0.055, 0.0)
+	marker.material_override = _attack_footprint_material(attack_id, true, false)
+	marker.set_meta("attack_id", attack_id)
+	marker.set_meta("attack_radius", radius)
+
+static func _attack_footprint_mesh(attack_id: String, radius: float) -> ArrayMesh:
+	var key := "attack_footprint:%s:%.6f" % [attack_id, radius]
+	var cached = _mesh_cache.get(key)
+	if cached is ArrayMesh:
+		return cached as ArrayMesh
+	var vertices := AttackShape.footprint_triangles(attack_id, radius)
+	var arrays := []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	var normals := PackedVector3Array()
+	normals.resize(vertices.size())
+	normals.fill(Vector3.UP)
+	arrays[Mesh.ARRAY_NORMAL] = normals
+	var mesh := ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	_mesh_cache[key] = mesh
+	return mesh
+
+static func _attack_footprint_material(attack_id: String, warning: bool, parried: bool) -> StandardMaterial3D:
+	var color: Color = {
+		"bell_shockwave": Color(0.92, 0.50, 0.22), "grave_slam": Color(0.70, 0.40, 0.24),
+		"ghoulkin_call": Color(0.64, 0.22, 0.16), "root_lanes": Color(0.38, 0.74, 0.28),
+		"ground_rupture": Color(0.52, 0.64, 0.26), "heart_stagger": Color(0.36, 0.92, 0.54),
+		"wing_blast": Color(0.94, 0.42, 0.18), "ash_breath": Color(0.72, 0.32, 0.20),
+		"swoop": Color(0.86, 0.52, 0.20), "parry_test": Color(0.72, 0.82, 1.0),
+		"counter_lunge": Color(0.64, 0.74, 0.96), "memory_echo": Color(0.46, 0.86, 0.72),
+		"antler_sweep": Color(0.66, 0.92, 0.78), "road_reopening": Color(0.80, 0.88, 0.68),
+	}.get(attack_id, Color(0.86, 0.34, 0.18)) as Color
+	var key := "attack_footprint:%s:%s:%s:%s" % [attack_id, warning, parried, reduce_flashes]
+	var cached = _material_cache.get(key)
+	if cached is StandardMaterial3D:
+		return cached as StandardMaterial3D
+	var material := StandardMaterial3D.new()
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.albedo_color = Color(color.r, color.g, color.b, 0.24 if warning else 0.36)
+	material.emission_enabled = not reduce_flashes
+	material.emission = color
+	material.emission_energy_multiplier = 0.20 if warning else (0.65 if parried else 0.38)
+	material.roughness = 1.0
+	_material_cache[key] = material
+	return material
+
 static func prewarm_enemy_feedback(parent: Node3D) -> void:
 	if parent == null or parent.has_meta("enemy_feedback_prewarmed"):
 		return
@@ -412,37 +468,17 @@ static func boss_attack_release(parent: Node3D, pos: Vector3, direction: Vector3
 	var root := Node3D.new()
 	root.name = "BossAttackRelease_%s" % attack_id
 	root.set_meta("visual_name", "BossAttackRelease")
-	root.position = parent.to_local(Vector3(pos.x, 0.06, pos.z))
+	root.position = parent.to_local(pos + Vector3(0.0, 0.06, 0.0))
 	parent.add_child(root)
-	var ring := MeshInstance3D.new()
-	var ring_mesh := TorusMesh.new()
-	ring_mesh.inner_radius = maxf(0.12, radius * 0.72)
-	ring_mesh.outer_radius = maxf(0.18, radius * 0.78)
-	ring_mesh.rings = 10
-	ring_mesh.ring_segments = 32
-	ring.mesh = ring_mesh
-	ring.rotation.x = PI * 0.5
-	ring.material_override = _emissive(color, 1.1 if not parried else 1.6)
-	root.add_child(ring)
-	if direction.length_squared() > 0.01 and attack_id in ["ash_breath", "wing_blast", "swoop", "counter_lunge", "antler_sweep"]:
-		var wedge := MeshInstance3D.new()
-		var wedge_mesh := PrismMesh.new()
-		wedge_mesh.size = Vector3(maxf(0.12, radius * 0.24), 0.035, radius * 0.82)
-		wedge.mesh = wedge_mesh
-		wedge.position = Vector3(0, 0.03, -radius * 0.36)
-		wedge.material_override = _emissive(color, 0.90)
-		root.add_child(wedge)
-		wedge.look_at(wedge.global_position + direction.normalized(), Vector3.UP)
-	if attack_id == "root_lanes":
-		for lane_index in range(3):
-			var lane := MeshInstance3D.new()
-			var lane_mesh := BoxMesh.new()
-			lane_mesh.size = Vector3(0.16, 0.045, radius * 1.45)
-			lane.mesh = lane_mesh
-			lane.position = Vector3((float(lane_index) - 1.0) * 1.35, 0.035, 0.0)
-			lane.material_override = _emissive(color, 0.82)
-			root.add_child(lane)
-	elif attack_id == "ground_rupture":
+	var flat_direction := Vector3(direction.x, 0.0, direction.z)
+	if flat_direction.length_squared() > 0.01:
+		root.look_at(root.global_position + flat_direction.normalized(), Vector3.UP)
+	var footprint := MeshInstance3D.new()
+	footprint.name = "AttackFootprint"
+	footprint.mesh = _attack_footprint_mesh(attack_id, radius)
+	footprint.material_override = _attack_footprint_material(attack_id, false, parried)
+	root.add_child(footprint)
+	if attack_id == "ground_rupture":
 		for ring_index in range(2):
 			var crack := MeshInstance3D.new()
 			var crack_mesh := BoxMesh.new()
@@ -465,7 +501,8 @@ static func boss_attack_release(parent: Node3D, pos: Vector3, direction: Vector3
 	if reduce_flashes:
 		tween.tween_interval(0.35)
 	else:
-		tween.tween_property(root, "scale", Vector3.ONE * (1.18 if parried else 1.45), 0.20)
+		# This marks the resolved footprint, not an expanding second damage wave.
+		tween.tween_interval(0.20)
 	tween.tween_callback(root.queue_free)
 
 static func _emissive(color: Color, energy: float) -> StandardMaterial3D:
