@@ -100,8 +100,15 @@ def exported_packs(export: Path) -> tuple[dict, dict, list[dict]]:
         for dependency in row.get("dependencies", []):
             visit(dependency)
         mounted.add(identity)
-        if row.get("embedded", False):
+        # The authoritative runtime graph uses status; the release manifest's
+        # compact pack summaries have a separate embedded boolean schema.
+        status = str(row.get("status", ""))
+        if status == "embedded_current_pck":
+            if row.get("url") != "" or row.get("embedded_artifact") != "index.pck" or row.get("bytes") != 0 or row.get("sha256") != "":
+                raise ValueError(f"embedded pack must belong exclusively to the root PCK: {identity}")
             return
+        if status.startswith("embedded"):
+            raise ValueError(f"unsupported embedded runtime status: {identity}: {status}")
         url = urlsplit(row.get("url", ""))
         if url.scheme or url.netloc or url.fragment:
             raise ValueError(f"nonlocal pack URL: {identity}")

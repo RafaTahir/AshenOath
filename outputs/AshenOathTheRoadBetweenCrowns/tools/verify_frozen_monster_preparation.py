@@ -20,15 +20,15 @@ class FrozenPreparationTests(unittest.TestCase):
         self.export.mkdir()
         self.output = self.root / "prepared"
         self.runtime = {"release_id":"fixture-release", "packs":{
-            "base":{"embedded":True, "dependencies":[]},
-            "shared":{"embedded":False, "dependencies":["base"], "url":"packs/shared.pck"},
-            "left":{"embedded":False, "dependencies":["shared"], "url":"packs/left.pck"},
-            "right":{"embedded":False, "dependencies":["shared"], "url":"packs/right.pck"},
-            "diamond":{"embedded":False, "dependencies":["left", "right"], "url":"packs/diamond.pck"}}}
+            "base":{"status":"embedded_current_pck", "url":"", "embedded_artifact":"index.pck", "bytes":0, "sha256":"", "dependencies":[]},
+            "shared":{"status":"streamed_web_candidate", "dependencies":["base"], "url":"packs/shared.pck"},
+            "left":{"status":"streamed_web_candidate", "dependencies":["shared"], "url":"packs/left.pck"},
+            "right":{"status":"streamed_web_candidate", "dependencies":["shared"], "url":"packs/right.pck"},
+            "diamond":{"status":"streamed_web_candidate", "dependencies":["left", "right"], "url":"packs/diamond.pck"}}}
         self.artifacts = []
         self.pack("index.pck", b"GDPC-root-fixture")
         for identity, row in self.runtime["packs"].items():
-            if row["embedded"]: continue
+            if row["status"].startswith("embedded"): continue
             record = self.pack(row["url"], b"GDPC-" + identity.encode())
             row.update(bytes=record["decoded_bytes"], sha256=record["decoded_sha256"])
         self.bind()
@@ -76,6 +76,35 @@ class FrozenPreparationTests(unittest.TestCase):
         ids = [row["id"] for row in receipt["packs"]]
         self.assertEqual(ids, ["root", "shared", "left", "right", "diamond"])
         self.assertEqual((self.output / "decoded/index.pck").read_bytes(), b"GDPC-root-fixture")
+
+    def test_authoritative_runtime_status_schema_needs_no_embedded_boolean(self):
+        self.assertNotIn("embedded", self.runtime["packs"]["base"])
+        self.runtime["packs"]["base"].update(candidate_artifact="base.pck", embedded_source_artifact="base.pck", embedded_source_kind="standalone_pack_candidate")
+        self.bind()
+        receipt = self.prepare()
+        self.assertEqual([row["id"] for row in receipt["packs"]], ["root", "shared", "left", "right", "diamond"])
+        self.assertFalse((self.output / "decoded/packs/base.pck").exists())
+
+    def test_empty_url_is_not_inferred_as_embedded(self):
+        self.runtime["packs"]["base"]["status"] = "streamed_web_candidate"
+        self.bind()
+        self.reject()
+
+    def test_unknown_embedded_status_rejected_even_with_pack_url(self):
+        self.runtime["packs"]["base"].update(status="embedded_unknown_future", url="packs/left.pck")
+        self.bind()
+        with self.assertRaisesRegex(ValueError, "unsupported embedded runtime status"):
+            self.prepare()
+        self.assertFalse(self.output.exists())
+
+    def test_embedded_status_cannot_hide_external_url_or_payload(self):
+        for field, value in (("url", "packs/hidden.pck"), ("embedded_artifact", "other.pck"), ("bytes", 123), ("sha256", "f" * 64)):
+            with self.subTest(field=field):
+                original = self.runtime["packs"]["base"][field]
+                self.runtime["packs"]["base"][field] = value
+                self.bind()
+                self.reject()
+                self.runtime["packs"]["base"][field] = original
 
     def test_existing_output_is_preserved(self):
         self.prepare()
