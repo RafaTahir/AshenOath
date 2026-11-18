@@ -84,7 +84,7 @@ func _draw_background(canvas: Control) -> void:
 			var kind: String = str(raw_shape.get("kind", "ground"))
 			var color: Color = _terrain_color(kind)
 			for polygon: PackedVector2Array in Geometry2D.intersect_polygons(projected, clip):
-				if polygon.size() < 3:
+				if polygon.size() < 3 or Geometry2D.triangulate_polygon(polygon).is_empty():
 					continue
 				canvas.draw_colored_polygon(polygon, color)
 				if kind in ["bridge", "obstacle"]:

@@ -74,7 +74,6 @@ static func _has_word(words: String, candidates: Array) -> bool:
 		if words.contains(" " + word + " "):
 			return true
 	return false
-
 const SPECS := {
 	# Preserve body length when the refined jaw adds depth below the old sole.
 	"silt_maw": {"height":0.65305743, "collision_height":0.52, "collision_radius":0.42, "lod":24.0, "required_sockets":[], "visual_forward_degrees":180.0},
@@ -105,6 +104,7 @@ const SPECS := {
 	# Focal road actors must survive the chase camera's offset and wide arrival
 	# sightline; the crowd cutoff otherwise leaves visible weapons without bodies.
 	"road_ranger_human": {"height": 1.75, "collision_height": 1.64, "collision_radius": 0.31, "lod": 32.0, "visual_forward_degrees": 180.0},
+	"bandit": {"height": 1.72},
 	"bandit_deserter": {"height": 1.75, "collision_height": 1.64, "collision_radius": 0.31, "lod": 32.0, "visual_forward_degrees": 180.0},
 	"bandit_tracker": {"height": 1.70, "collision_height": 1.60, "collision_radius": 0.31, "lod": 32.0, "visual_forward_degrees": 180.0},
 	"ghoulkin": {"height": 1.72, "collision_height": 1.65, "collision_radius": 0.34, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},

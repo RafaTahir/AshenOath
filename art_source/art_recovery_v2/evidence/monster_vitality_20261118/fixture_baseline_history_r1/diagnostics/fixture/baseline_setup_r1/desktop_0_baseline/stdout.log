@@ -1,0 +1,46 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+WARNING: Your video card drivers are known to have low quality OpenGL 3.3 support, switching to ANGLE.
+   at: DisplayServerWindows (platform/windows/display_server_windows.cpp:7423)
+OpenGL API OpenGL ES 3.0 (ANGLE 2.1.1 git hash: aaebda1c5a40) - Compatibility - Using Device: Google Inc. (Intel) - ANGLE (Intel, Intel(R) HD Graphics 620 (0x00005916) Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.101.2130)
+
+SCRIPT ERROR: Parse Error: Could not resolve class "res://scripts/hud/hud_root.gd".
+   at: GDScript::reload (res://scripts/hud.gd:1)
+   GDScript backtrace (most recent call first):
+       [0] _create_missing_services (res://scripts/runtime_service_registry.gd:71)
+       [1] create_services (res://scripts/runtime_service_registry.gd:34)
+       [2] _setup_runtime (res://scripts/systems/session_service.gd:308)
+       [3] start_session (res://scripts/systems/session_service.gd:35)
+       [4] _ready (res://scripts/game.gd:66)
+       [5] _run (D:/Temp/am/outputs/AshenOathTheRoadBetweenCrowns/tools/profile_monster_live_route.gd:64)
+ERROR: Failed to load script "res://scripts/hud.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2907)
+   GDScript backtrace (most recent call first):
+       [0] _create_missing_services (res://scripts/runtime_service_registry.gd:71)
+       [1] create_services (res://scripts/runtime_service_registry.gd:34)
+       [2] _setup_runtime (res://scripts/systems/session_service.gd:308)
+       [3] start_session (res://scripts/systems/session_service.gd:35)
+       [4] _ready (res://scripts/game.gd:66)
+       [5] _run (D:/Temp/am/outputs/AshenOathTheRoadBetweenCrowns/tools/profile_monster_live_route.gd:64)
+ERROR: Journey service hud (hud.gd) could not be loaded. Resource: res://scripts/hud.gd
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] _create_missing_services (res://scripts/runtime_service_registry.gd:75)
+       [1] create_services (res://scripts/runtime_service_registry.gd:34)
+       [2] _setup_runtime (res://scripts/systems/session_service.gd:308)
+       [3] start_session (res://scripts/systems/session_service.gd:35)
+       [4] _ready (res://scripts/game.gd:66)
+       [5] _run (D:/Temp/am/outputs/AshenOathTheRoadBetweenCrowns/tools/profile_monster_live_route.gd:64)
+SCRIPT ERROR: Invalid access to property or key 'hud' on a base object of type 'Dictionary'.
+   at: configure_menu (res://scripts/runtime_service_registry.gd:98)
+   GDScript backtrace (most recent call first):
+       [0] configure_menu (res://scripts/runtime_service_registry.gd:98)
+       [1] _setup_runtime (res://scripts/systems/session_service.gd:309)
+       [2] start_session (res://scripts/systems/session_service.gd:35)
+       [3] _ready (res://scripts/game.gd:66)
+       [4] _run (D:/Temp/am/outputs/AshenOathTheRoadBetweenCrowns/tools/profile_monster_live_route.gd:64)
+SCRIPT ERROR: Invalid call. Nonexistent function 'show_startup_loading' in base 'Nil'.
+   at: start_session (res://scripts/systems/session_service.gd:46)
+   GDScript backtrace (most recent call first):
+       [0] start_session (res://scripts/systems/session_service.gd:46)
+       [1] _ready (res://scripts/game.gd:66)
+       [2] _run (D:/Temp/am/outputs/AshenOathTheRoadBetweenCrowns/tools/profile_monster_live_route.gd:64)

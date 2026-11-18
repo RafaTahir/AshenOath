@@ -1,0 +1,3016 @@
+{
+	"authored_arena_anchor": [
+		0.0,
+		0.0,
+		-9.0
+	],
+	"campaign_kills_after": 0,
+	"campaign_kills_before": 0,
+	"captures": [
+		{
+			"case": "bog_wretch_stationary_approach_windup",
+			"error": 0,
+			"height": 720,
+			"path": "D:/Temp/AO_MonsterVitality_20261118/other_realms_touch_r20/mechanics/bog_wretch_stationary_approach_windup.png",
+			"width": 1280
+		},
+		{
+			"case": "bog_wretch_stationary_approach_resolved",
+			"error": 0,
+			"height": 720,
+			"path": "D:/Temp/AO_MonsterVitality_20261118/other_realms_touch_r20/mechanics/bog_wretch_stationary_approach_resolved.png",
+			"width": 1280
+		}
+	],
+	"cases": [
+		{
+			"attack_range": 1.8,
+			"case": "bog_wretch_stationary_approach",
+			"closest_contact": [
+				0.0715723782777786,
+				0.919182896614075,
+				-4.56262302398682
+			],
+			"completed_strike": true,
+			"contact_events": 1,
+			"contact_probe_distance": 0.135000512003899,
+			"health_lost": 18.0,
+			"initial_distance": 4.27412843704224,
+			"native_body_contact_observed": true,
+			"native_body_contact_required": true,
+			"passed": true,
+			"preferred_distance": 2.15,
+			"reached_windup": true,
+			"resolution": "body_contact",
+			"skeleton_trace": true,
+			"stationary_player_displacement": 0.0,
+			"trace_end": [
+				0.107898198068142,
+				0.848885118961334,
+				-4.41354560852051
+			],
+			"trace_start": [
+				-0.207625046372414,
+				1.45948672294617,
+				-5.70841979980469
+			],
+			"unguarded_body_contact": true
+		}
+	],
+	"failures": [],
+	"generic_npc_placement_preflight": [
+		{
+			"authored_exclusion_pass": true,
+			"bank": -1,
+			"generic_capsule_clear": true,
+			"generic_walkable": true,
+			"height_delta_pass": true,
+			"normal_y_pass": true,
+			"original_source_selector_excludes": "player RID only; exactly the palette selector's generic preflight",
+			"phase": "original_runtime_pool",
+			"projection_distance_pass": true,
+			"raw_collider": "/root/AshenOath/wychwood/RiverBridgeContinuousSurface",
+			"raw_normal": [
+				0.0,
+				1.0,
+				0.0
+			],
+			"raw_point": [
+				0.0,
+				0.0000000223517417907715,
+				-9.0
+			],
+			"raw_ray_hit": true,
+			"requested": [
+				0.0,
+				0.0,
+				-9.0
+			],
+			"river_pass": true,
+			"support": [
+				0.0,
+				0.0000000223517417907715,
+				-9.0
+			],
+			"support_finite": true,
+			"validated": [
+				0.0,
+				0.0000000223517417907715,
+				-9.0
+			]
+		},
+		{
+			"authored_exclusion_pass": true,
+			"bank": -1,
+			"generic_capsule_clear": true,
+			"generic_walkable": true,
+			"height_delta_pass": true,
+			"normal_y_pass": true,
+			"original_source_selector_excludes": "player RID only; exactly the palette selector's generic preflight",
+			"phase": "original_runtime_pool",
+			"projection_distance_pass": true,
+			"raw_collider": "/root/AshenOath/wychwood/RiverBridgeContinuousSurface",
+			"raw_normal": [
+				0.0,
+				1.0,
+				0.0
+			],
+			"raw_point": [
+				0.0,
+				0.0000000223517417907715,
+				-13.0
+			],
+			"raw_ray_hit": true,
+			"requested": [
+				0.0,
+				0.0,
+				-13.0
+			],
+			"river_pass": true,
+			"support": [
+				0.0,
+				0.0000000223517417907715,
+				-13.0
+			],
+			"support_finite": true,
+			"validated": [
+				0.0,
+				0.0000000223517417907715,
+				-13.0
+			]
+		},
+		{
+			"authored_exclusion_pass": true,
+			"bank": -1,
+			"generic_capsule_clear": true,
+			"generic_walkable": true,
+			"height_delta_pass": true,
+			"normal_y_pass": true,
+			"original_source_selector_excludes": "player RID only; exactly the palette selector's generic preflight",
+			"phase": "original_runtime_pool",
+			"projection_distance_pass": true,
+			"raw_collider": "/root/AshenOath/wychwood/@StaticBody3D@810",
+			"raw_normal": [
+				0.0,
+				1.0,
+				0.0
+			],
+			"raw_point": [
+				3.0,
+				0.000000044703483581543,
+				-12.0
+			],
+			"raw_ray_hit": true,
+			"requested": [
+				3.0,
+				0.0,
+				-12.0
+			],
+			"river_pass": true,
+			"support": [
+				3.0,
+				0.000000044703483581543,
+				-12.0
+			],
+			"support_finite": true,
+			"validated": [
+				3.0,
+				0.000000044703483581543,
+				-12.0
+			]
+		},
+		{
+			"authored_exclusion_pass": true,
+			"bank": -1,
+			"generic_capsule_clear": true,
+			"generic_walkable": true,
+			"height_delta_pass": true,
+			"normal_y_pass": true,
+			"original_source_selector_excludes": "player RID only; exactly the palette selector's generic preflight",
+			"phase": "original_runtime_pool",
+			"projection_distance_pass": true,
+			"raw_collider": "/root/AshenOath/wychwood/@StaticBody3D@807",
+			"raw_normal": [
+				0.0,
+				1.0,
+				0.0
+			],
+			"raw_point": [
+				-3.0,
+				0.000000044703483581543,
+				-12.0
+			],
+			"raw_ray_hit": true,
+			"requested": [
+				-3.0,
+				0.0,
+				-12.0
+			],
+			"river_pass": true,
+			"support": [
+				-3.0,
+				0.000000044703483581543,
+				-12.0
+			],
+			"support_finite": true,
+			"validated": [
+				-3.0,
+				0.000000044703483581543,
+				-12.0
+			]
+		},
+		{
+			"authored_exclusion_pass": true,
+			"bank": -1,
+			"generic_capsule_clear": true,
+			"generic_walkable": true,
+			"height_delta_pass": true,
+			"normal_y_pass": true,
+			"original_source_selector_excludes": "player RID only; exactly the palette selector's generic preflight",
+			"phase": "original_runtime_pool",
+			"projection_distance_pass": true,
+			"raw_collider": "/root/AshenOath/wychwood/RiverBridgeContinuousSurface",
+			"raw_normal": [
+				0.0,
+				1.0,
+				0.0
+			],
+			"raw_point": [
+				0.0,
+				0.0000000223517417907715,
+				-16.0
+			],
+			"raw_ray_hit": true,
+			"requested": [
+				0.0,
+				0.0,
+				-16.0
+			],
+			"river_pass": true,
+			"support": [
+				0.0,
+				0.0000000223517417907715,
+				-16.0
+			],
+			"support_finite": true,
+			"validated": [
+				0.0,
+				0.0000000223517417907715,
+				-16.0
+			]
+		},
+		{
+			"authored_exclusion_pass": true,
+			"bank": -1,
+			"generic_capsule_clear": true,
+			"generic_walkable": true,
+			"height_delta_pass": true,
+			"normal_y_pass": true,
+			"original_source_selector_excludes": "player RID only; exactly the palette selector's generic preflight",
+			"phase": "original_runtime_pool",
+			"projection_distance_pass": true,
+			"raw_collider": "/root/AshenOath/wychwood/@StaticBody3D@810",
+			"raw_normal": [
+				0.0,
+				1.0,
+				0.0
+			],
+			"raw_point": [
+				4.0,
+				0.000000044703483581543,
+				-9.0
+			],
+			"raw_ray_hit": true,
+			"requested": [
+				4.0,
+				0.0,
+				-9.0
+			],
+			"river_pass": true,
+			"support": [
+				4.0,
+				0.000000044703483581543,
+				-9.0
+			],
+			"support_finite": true,
+			"validated": [
+				4.0,
+				0.000000044703483581543,
+				-9.0
+			]
+		},
+		{
+			"authored_exclusion_pass": true,
+			"bank": -1,
+			"generic_capsule_clear": true,
+			"generic_walkable": true,
+			"height_delta_pass": true,
+			"normal_y_pass": true,
+			"original_source_selector_excludes": "player RID only; exactly the palette selector's generic preflight",
+			"phase": "original_runtime_pool",
+			"projection_distance_pass": true,
+			"raw_collider": "/root/AshenOath/wychwood/@StaticBody3D@807",
+			"raw_normal": [
+				0.0,
+				1.0,
+				0.0
+			],
+			"raw_point": [
+				-4.0,
+				0.000000044703483581543,
+				-9.0
+			],
+			"raw_ray_hit": true,
+			"requested": [
+				-4.0,
+				0.0,
+				-9.0
+			],
+			"river_pass": true,
+			"support": [
+				-4.0,
+				0.000000044703483581543,
+				-9.0
+			],
+			"support_finite": true,
+			"validated": [
+				-4.0,
+				0.000000044703483581543,
+				-9.0
+			]
+		},
+		{
+			"authored_exclusion_pass": true,
+			"bank": -1,
+			"generic_capsule_clear": true,
+			"generic_walkable": true,
+			"height_delta_pass": true,
+			"normal_y_pass": true,
+			"original_source_selector_excludes": "player RID only; exactly the palette selector's generic preflight",
+			"phase": "isolated_pool_after_deactivation",
+			"projection_distance_pass": true,
+			"raw_collider": "/root/AshenOath/wychwood/RiverBridgeContinuousSurface",
+			"raw_normal": [
+				0.0,
+				1.0,
+				0.0
+			],
+			"raw_point": [
+				0.0,
+				0.0000000223517417907715,
+				-9.0
+			],
+			"raw_ray_hit": true,
+			"requested": [
+				0.0,
+				0.0,
+				-9.0
+			],
+			"river_pass": true,
+			"support": [
+				0.0,
+				0.0000000223517417907715,
+				-9.0
+			],
+			"support_finite": true,
+			"validated": [
+				0.0,
+				0.0000000223517417907715,
+				-9.0
+			]
+		},
+		{
+			"authored_exclusion_pass": true,
+			"bank": -1,
+			"generic_capsule_clear": true,
+			"generic_walkable": true,
+			"height_delta_pass": true,
+			"normal_y_pass": true,
+			"original_source_selector_excludes": "player RID only; exactly the palette selector's generic preflight",
+			"phase": "isolated_pool_after_deactivation",
+			"projection_distance_pass": true,
+			"raw_collider": "/root/AshenOath/wychwood/RiverBridgeContinuousSurface",
+			"raw_normal": [
+				0.0,
+				1.0,
+				0.0
+			],
+			"raw_point": [
+				0.0,
+				0.0000000223517417907715,
+				-13.0
+			],
+			"raw_ray_hit": true,
+			"requested": [
+				0.0,
+				0.0,
+				-13.0
+			],
+			"river_pass": true,
+			"support": [
+				0.0,
+				0.0000000223517417907715,
+				-13.0
+			],
+			"support_finite": true,
+			"validated": [
+				0.0,
+				0.0000000223517417907715,
+				-13.0
+			]
+		},
+		{
+			"authored_exclusion_pass": true,
+			"bank": -1,
+			"generic_capsule_clear": true,
+			"generic_walkable": true,
+			"height_delta_pass": true,
+			"normal_y_pass": true,
+			"original_source_selector_excludes": "player RID only; exactly the palette selector's generic preflight",
+			"phase": "isolated_pool_after_deactivation",
+			"projection_distance_pass": true,
+			"raw_collider": "/root/AshenOath/wychwood/@StaticBody3D@810",
+			"raw_normal": [
+				0.0,
+				1.0,
+				0.0
+			],
+			"raw_point": [
+				3.0,
+				0.000000044703483581543,
+				-12.0
+			],
+			"raw_ray_hit": true,
+			"requested": [
+				3.0,
+				0.0,
+				-12.0
+			],
+			"river_pass": true,
+			"support": [
+				3.0,
+				0.000000044703483581543,
+				-12.0
+			],
+			"support_finite": true,
+			"validated": [
+				3.0,
+				0.000000044703483581543,
+				-12.0
+			]
+		},
+		{
+			"authored_exclusion_pass": true,
+			"bank": -1,
+			"generic_capsule_clear": true,
+			"generic_walkable": true,
+			"height_delta_pass": true,
+			"normal_y_pass": true,
+			"original_source_selector_excludes": "player RID only; exactly the palette selector's generic preflight",
+			"phase": "isolated_pool_after_deactivation",
+			"projection_distance_pass": true,
+			"raw_collider": "/root/AshenOath/wychwood/@StaticBody3D@807",
+			"raw_normal": [
+				0.0,
+				1.0,
+				0.0
+			],
+			"raw_point": [
+				-3.0,
+				0.000000044703483581543,
+				-12.0
+			],
+			"raw_ray_hit": true,
+			"requested": [
+				-3.0,
+				0.0,
+				-12.0
+			],
+			"river_pass": true,
+			"support": [
+				-3.0,
+				0.000000044703483581543,
+				-12.0
+			],
+			"support_finite": true,
+			"validated": [
+				-3.0,
+				0.000000044703483581543,
+				-12.0
+			]
+		},
+		{
+			"authored_exclusion_pass": true,
+			"bank": -1,
+			"generic_capsule_clear": true,
+			"generic_walkable": true,
+			"height_delta_pass": true,
+			"normal_y_pass": true,
+			"original_source_selector_excludes": "player RID only; exactly the palette selector's generic preflight",
+			"phase": "isolated_pool_after_deactivation",
+			"projection_distance_pass": true,
+			"raw_collider": "/root/AshenOath/wychwood/RiverBridgeContinuousSurface",
+			"raw_normal": [
+				0.0,
+				1.0,
+				0.0
+			],
+			"raw_point": [
+				0.0,
+				0.0000000223517417907715,
+				-16.0
+			],
+			"raw_ray_hit": true,
+			"requested": [
+				0.0,
+				0.0,
+				-16.0
+			],
+			"river_pass": true,
+			"support": [
+				0.0,
+				0.0000000223517417907715,
+				-16.0
+			],
+			"support_finite": true,
+			"validated": [
+				0.0,
+				0.0000000223517417907715,
+				-16.0
+			]
+		},
+		{
+			"authored_exclusion_pass": true,
+			"bank": -1,
+			"generic_capsule_clear": true,
+			"generic_walkable": true,
+			"height_delta_pass": true,
+			"normal_y_pass": true,
+			"original_source_selector_excludes": "player RID only; exactly the palette selector's generic preflight",
+			"phase": "isolated_pool_after_deactivation",
+			"projection_distance_pass": true,
+			"raw_collider": "/root/AshenOath/wychwood/@StaticBody3D@810",
+			"raw_normal": [
+				0.0,
+				1.0,
+				0.0
+			],
+			"raw_point": [
+				4.0,
+				0.000000044703483581543,
+				-9.0
+			],
+			"raw_ray_hit": true,
+			"requested": [
+				4.0,
+				0.0,
+				-9.0
+			],
+			"river_pass": true,
+			"support": [
+				4.0,
+				0.000000044703483581543,
+				-9.0
+			],
+			"support_finite": true,
+			"validated": [
+				4.0,
+				0.000000044703483581543,
+				-9.0
+			]
+		},
+		{
+			"authored_exclusion_pass": true,
+			"bank": -1,
+			"generic_capsule_clear": true,
+			"generic_walkable": true,
+			"height_delta_pass": true,
+			"normal_y_pass": true,
+			"original_source_selector_excludes": "player RID only; exactly the palette selector's generic preflight",
+			"phase": "isolated_pool_after_deactivation",
+			"projection_distance_pass": true,
+			"raw_collider": "/root/AshenOath/wychwood/@StaticBody3D@807",
+			"raw_normal": [
+				0.0,
+				1.0,
+				0.0
+			],
+			"raw_point": [
+				-4.0,
+				0.000000044703483581543,
+				-9.0
+			],
+			"raw_ray_hit": true,
+			"requested": [
+				-4.0,
+				0.0,
+				-9.0
+			],
+			"river_pass": true,
+			"support": [
+				-4.0,
+				0.000000044703483581543,
+				-9.0
+			],
+			"support_finite": true,
+			"validated": [
+				-4.0,
+				0.000000044703483581543,
+				-9.0
+			]
+		}
+	],
+	"hard_wall_cap_seconds": 120.0,
+	"health_refills": 0,
+	"injected_damage_calls": 0,
+	"input_actions": [],
+	"input_event_objects_sent": 0,
+	"input_method": "Stationary player observes ordinary incoming AI strike; no player action events are sent",
+	"kind": "bog_wretch_wychwood_actual_world",
+	"native_attack_profile": {
+		"calibration_enemy": "bog_wretch",
+		"calibration_role": "bog_wretch_creature",
+		"clip": "Attack",
+		"contact_fraction": 0.7,
+		"duration_seconds": 0.75,
+		"fallback_reason": "endpoint_minimum",
+		"id": "M03",
+		"method": "declared_recovery_boundary_fallback",
+		"policy": "native_attack_contact_v1",
+		"probe_bone": "hand_r",
+		"probe_offset": [
+			0.0,
+			0.0,
+			0.0
+		],
+		"requires_visual_acceptance": true,
+		"sample_count": 39.0,
+		"sample_window": [
+			0.280000001192093,
+			0.699999988079071
+		],
+		"sampling_hz": 120.0,
+		"source": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
+		"source_sha256": "bb44cc9312d528dc3d98002170956c3e0434acbed5dfc47f719b3db1a2ff0701"
+	},
+	"native_contact_observations": [
+		{
+			"actor": 516620820690,
+			"actor_position": [
+				0.0,
+				-0.068409226834774,
+				-6.02501010894775
+			],
+			"attack_line": true,
+			"closest_contact": [
+				0.0715723782777786,
+				0.919182896614075,
+				-4.56262302398682
+			],
+			"contact_probe_distance": 0.135000512003899,
+			"existing_contact_radius": 0.68,
+			"ms": 124534,
+			"native_melee_contact": true,
+			"native_skeleton_trace": true,
+			"parried": false,
+			"physics_frame": 319,
+			"player_chest": [
+				0.0,
+				1.0149998664856,
+				-4.5
+			],
+			"player_position": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"special_contact": true,
+			"special_id": "bog_reach",
+			"special_radius": 2.6,
+			"trace_end": [
+				0.107898198068142,
+				0.848885118961334,
+				-4.41354560852051
+			],
+			"trace_start": [
+				-0.207625046372414,
+				1.45948672294617,
+				-5.70841979980469
+			]
+		}
+	],
+	"objective_state_after": {
+		"active": {
+			"main_road_of_crows": {
+				"objectives": [
+					{
+						"done": false,
+						"id": "speak_anwen",
+						"text": "Hear Anwen's account of the missing travelers."
+					},
+					{
+						"done": false,
+						"group": "road_evidence",
+						"id": "bram",
+						"optional": true,
+						"optional_satisfied": false,
+						"required_count": 3.0,
+						"text": "Identify Bram by the cart ledger."
+					},
+					{
+						"done": false,
+						"group": "road_evidence",
+						"id": "sella",
+						"optional": true,
+						"optional_satisfied": false,
+						"required_count": 3.0,
+						"text": "Identify Sella by the red-thread feathers."
+					},
+					{
+						"done": false,
+						"group": "road_evidence",
+						"id": "oren",
+						"optional": true,
+						"optional_satisfied": false,
+						"required_count": 3.0,
+						"text": "Identify Oren by the child's shrine token."
+					},
+					{
+						"done": false,
+						"group": "road_evidence",
+						"id": "vargan_wire",
+						"optional": true,
+						"optional_satisfied": false,
+						"required_count": 3.0,
+						"text": "Recover the Vargan binding wire."
+					},
+					{
+						"done": false,
+						"group": "road_evidence",
+						"id": "drag_marks",
+						"optional": true,
+						"optional_satisfied": false,
+						"required_count": 3.0,
+						"text": "Read the deliberate drag marks."
+					},
+					{
+						"done": false,
+						"group": "road_evidence",
+						"id": "evidence_ready",
+						"required_count": 3.0,
+						"text": "Follow the north road into Wychwood and investigate the travelers' broken cart.",
+						"tracker_text": "Investigate the broken cart in Wychwood"
+					},
+					{
+						"done": false,
+						"id": "fight_ghoulkin",
+						"text": "Recover the travelers' belongings from the clearing."
+					},
+					{
+						"done": false,
+						"id": "return_village",
+						"text": "Return to Anwen or the village notice board. Decide who receives the evidence you found."
+					}
+				]
+			}
+		},
+		"completed": {
+
+		},
+		"completed_objectives": {
+
+		},
+		"unlocked": {
+			"main_road_of_crows": true,
+			"side_bitter_roots": true,
+			"side_black_dog": true,
+			"side_bracken_rescue": true,
+			"side_childs_charm": true,
+			"side_empty_grave": true,
+			"side_iron_remembers": true,
+			"side_millers_measure": true,
+			"side_rooks_map": true,
+			"side_soldiers_debt": true,
+			"side_three_candles": true,
+			"side_widows_bell": true
+		}
+	},
+	"objective_state_before": {
+		"active": {
+			"main_road_of_crows": {
+				"objectives": [
+					{
+						"done": false,
+						"id": "speak_anwen",
+						"text": "Hear Anwen's account of the missing travelers."
+					},
+					{
+						"done": false,
+						"group": "road_evidence",
+						"id": "bram",
+						"optional": true,
+						"optional_satisfied": false,
+						"required_count": 3.0,
+						"text": "Identify Bram by the cart ledger."
+					},
+					{
+						"done": false,
+						"group": "road_evidence",
+						"id": "sella",
+						"optional": true,
+						"optional_satisfied": false,
+						"required_count": 3.0,
+						"text": "Identify Sella by the red-thread feathers."
+					},
+					{
+						"done": false,
+						"group": "road_evidence",
+						"id": "oren",
+						"optional": true,
+						"optional_satisfied": false,
+						"required_count": 3.0,
+						"text": "Identify Oren by the child's shrine token."
+					},
+					{
+						"done": false,
+						"group": "road_evidence",
+						"id": "vargan_wire",
+						"optional": true,
+						"optional_satisfied": false,
+						"required_count": 3.0,
+						"text": "Recover the Vargan binding wire."
+					},
+					{
+						"done": false,
+						"group": "road_evidence",
+						"id": "drag_marks",
+						"optional": true,
+						"optional_satisfied": false,
+						"required_count": 3.0,
+						"text": "Read the deliberate drag marks."
+					},
+					{
+						"done": false,
+						"group": "road_evidence",
+						"id": "evidence_ready",
+						"required_count": 3.0,
+						"text": "Follow the north road into Wychwood and investigate the travelers' broken cart.",
+						"tracker_text": "Investigate the broken cart in Wychwood"
+					},
+					{
+						"done": false,
+						"id": "fight_ghoulkin",
+						"text": "Recover the travelers' belongings from the clearing."
+					},
+					{
+						"done": false,
+						"id": "return_village",
+						"text": "Return to Anwen or the village notice board. Decide who receives the evidence you found."
+					}
+				]
+			}
+		},
+		"completed": {
+
+		},
+		"completed_objectives": {
+
+		},
+		"unlocked": {
+			"main_road_of_crows": true,
+			"side_bitter_roots": true,
+			"side_black_dog": true,
+			"side_bracken_rescue": true,
+			"side_childs_charm": true,
+			"side_empty_grave": true,
+			"side_iron_remembers": true,
+			"side_millers_measure": true,
+			"side_rooks_map": true,
+			"side_soldiers_debt": true,
+			"side_three_candles": true,
+			"side_widows_bell": true
+		}
+	},
+	"original_pool_count": 5,
+	"original_pool_restored": true,
+	"owned_fixture_freed": true,
+	"passed": true,
+	"performance_note": "Diagnostic sampling and PNG readback invalidate performance benchmarking.",
+	"physical_device_coverage": false,
+	"player_health_after": 107.0,
+	"player_health_before": 125.0,
+	"preparation": {
+		"budget_clock": "monotonic_wall",
+		"budget_msec": 120000,
+		"deadline_msec": 206651,
+		"elapsed_msec": 14281,
+		"expected_epoch": 3,
+		"expected_transition_count": 2,
+		"failure_count_after": 0,
+		"failure_count_before": 0,
+		"final_activation": {
+			"node_count": 497,
+			"playable_ms": 14173.158,
+			"reused": false,
+			"state": "playable",
+			"support_ready": true,
+			"zone": "wychwood"
+		},
+		"final_transition_count": 2,
+		"final_world_transition": {
+			"active_zone_id": "wychwood",
+			"autosave_allowed": true,
+			"epoch": 3,
+			"failure": "",
+			"mounted_packs": {
+				"actor_c01": true,
+				"actor_c02": true,
+				"actor_c03": true,
+				"actor_c04": true,
+				"actor_c05": true,
+				"actor_c06": true,
+				"actor_c11": true,
+				"actor_c12": true,
+				"actor_m01": true,
+				"actor_m04": true,
+				"actor_m13": true,
+				"actor_m15": true,
+				"actor_p01": true,
+				"actor_shared": true,
+				"base": true,
+				"opening": true
+			},
+			"state": "ACTIVE_ZONE",
+			"target_zone_id": ""
+		},
+		"last_failure": {
+
+		},
+		"policy": "Coordinator/count ownership first; supported readiness wins at boundary; explicit failure before 120-second deadline; no runtime deadlines changed.",
+		"ready": true,
+		"resolution": "playable",
+		"started_msec": 86651
+	},
+	"quest_preawards": 0,
+	"samples": [
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "idle",
+			"can_see_player": false,
+			"cooldown": 0.0,
+			"distance_to_player": 4.50051975250244,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 114682,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999028071761,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0534001216292381,
+				-9.0
+			],
+			"stagger": 0.0,
+			"tick": 249,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 4.38744258880615,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 115745,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675785019993782,
+				-8.88666534423828
+			],
+			"stagger": 0.0,
+			"tick": 251,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 4.27412843704224,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 119370,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675787553191185,
+				-8.77333068847656
+			],
+			"stagger": 0.0,
+			"tick": 253,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 4.16081714630127,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 119422,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675802528858185,
+				-8.65999794006348
+			],
+			"stagger": 0.0,
+			"tick": 255,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 4.10416316986084,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 119472,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675799772143364,
+				-8.60333251953125
+			],
+			"stagger": 0.0,
+			"tick": 256,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 3.99085426330566,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 119512,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675781667232513,
+				-8.48999977111816
+			],
+			"stagger": 0.0,
+			"tick": 258,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 3.93419909477234,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 119548,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675754621624947,
+				-8.4333324432373
+			],
+			"stagger": 0.0,
+			"tick": 259,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 3.87754535675049,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 119583,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.067567951977253,
+				-8.37666606903076
+			],
+			"stagger": 0.0,
+			"tick": 260,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 3.8208920955658,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 119618,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675768107175827,
+				-8.31999969482422
+			],
+			"stagger": 0.0,
+			"tick": 261,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 3.76423931121826,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 119654,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675809681415558,
+				-8.26333332061768
+			],
+			"stagger": 0.0,
+			"tick": 262,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 3.70758581161499,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 119691,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675774365663528,
+				-8.20666599273682
+			],
+			"stagger": 0.0,
+			"tick": 263,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 3.6509325504303,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 119734,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675693675875664,
+				-8.14999866485596
+			],
+			"stagger": 0.0,
+			"tick": 264,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 3.59428000450134,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 119782,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675761178135872,
+				-8.0933313369751
+			],
+			"stagger": 0.0,
+			"tick": 265,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 3.48097705841064,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 119819,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675702840089798,
+				-7.9799976348877
+			],
+			"stagger": 0.0,
+			"tick": 267,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 3.42432713508606,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 119857,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675821006298065,
+				-7.92333126068115
+			],
+			"stagger": 0.0,
+			"tick": 268,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 3.36767745018005,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 119897,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675770714879036,
+				-7.86666488647461
+			],
+			"stagger": 0.0,
+			"tick": 269,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 3.31102824211121,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 119938,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675701275467873,
+				-7.80999851226807
+			],
+			"stagger": 0.0,
+			"tick": 270,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 3.19773244857788,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 119978,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675850510597229,
+				-7.69666576385498
+			],
+			"stagger": 0.0,
+			"tick": 272,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 3.14108443260193,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 120014,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675725489854813,
+				-7.63999891281128
+			],
+			"stagger": 0.0,
+			"tick": 273,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 3.08443760871887,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 120050,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675704032182693,
+				-7.58333206176758
+			],
+			"stagger": 0.0,
+			"tick": 274,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 3.02781271934509,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 120084,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0683499798178673,
+				-7.52666521072388
+			],
+			"stagger": 0.0,
+			"tick": 275,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 2.97116589546204,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 120118,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0682835429906845,
+				-7.46999835968018
+			],
+			"stagger": 0.0,
+			"tick": 276,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 2.91450071334839,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 120152,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675654634833336,
+				-7.41333103179932
+			],
+			"stagger": 0.0,
+			"tick": 277,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 2.8578577041626,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 120187,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.067567452788353,
+				-7.35666465759277
+			],
+			"stagger": 0.0,
+			"tick": 278,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 2.80121517181396,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 120224,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675781443715096,
+				-7.29999780654907
+			],
+			"stagger": 0.0,
+			"tick": 279,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 2.74459719657898,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 120255,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0683445408940315,
+				-7.24333143234253
+			],
+			"stagger": 0.0,
+			"tick": 280,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 2.68795561790466,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 121815,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0682824477553368,
+				-7.18666505813599
+			],
+			"stagger": 0.0,
+			"tick": 281,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 2.57465553283691,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 121885,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675677955150604,
+				-7.07333135604858
+			],
+			"stagger": 0.0,
+			"tick": 283,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 2.46138286590576,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 121946,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675656795501709,
+				-6.95999765396118
+			],
+			"stagger": 0.0,
+			"tick": 285,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 2.34811758995056,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 121994,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675787255167961,
+				-6.8466649055481
+			],
+			"stagger": 0.0,
+			"tick": 287,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 2.29148697853088,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 122043,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675758719444275,
+				-6.78999853134155
+			],
+			"stagger": 0.0,
+			"tick": 288,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 2.17823147773743,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 122098,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675763189792633,
+				-6.67666578292847
+			],
+			"stagger": 0.0,
+			"tick": 290,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 2.12160706520081,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 122154,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675752684473991,
+				-6.61999940872192
+			],
+			"stagger": 0.0,
+			"tick": 291,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 2.0083646774292,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 122195,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675805062055588,
+				-6.50666618347168
+			],
+			"stagger": 0.0,
+			"tick": 293,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 1.95174705982208,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 122230,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675782859325409,
+				-6.44999933242798
+			],
+			"stagger": 0.0,
+			"tick": 294,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 1.89513278007507,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 122266,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675756633281708,
+				-6.39333295822144
+			],
+			"stagger": 0.0,
+			"tick": 295,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 1.83852076530457,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 122304,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675603821873665,
+				-6.33666610717773
+			],
+			"stagger": 0.0,
+			"tick": 296,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 1.72531306743622,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 122342,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675773322582245,
+				-6.22333574295044
+			],
+			"stagger": 0.0,
+			"tick": 298,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 1.66872131824493,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 122378,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0675764381885529,
+				-6.16667699813843
+			],
+			"stagger": 0.0,
+			"tick": 299,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 1.6121643781662,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 122415,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0683047622442245,
+				-6.11001062393188
+			],
+			"stagger": 0.0,
+			"tick": 300,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "walk",
+			"can_see_player": true,
+			"cooldown": 0.0,
+			"distance_to_player": 1.55557405948639,
+			"input_context": "gameplay",
+			"marker_visible": false,
+			"ms": 122451,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.0682709291577339,
+				-6.05334377288818
+			],
+			"stagger": 0.0,
+			"tick": 301,
+			"token": false,
+			"windup": 0.0
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "attack",
+			"can_see_player": true,
+			"cooldown": 1.7,
+			"distance_to_player": 1.52728939056396,
+			"input_context": "gameplay",
+			"marker_visible": true,
+			"ms": 123990,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.068409226834774,
+				-6.02501010894775
+			],
+			"stagger": 0.0,
+			"tick": 302,
+			"token": true,
+			"windup": 0.6
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "attack",
+			"can_see_player": true,
+			"cooldown": 1.63333333333333,
+			"distance_to_player": 1.52728939056396,
+			"input_context": "gameplay",
+			"marker_visible": true,
+			"ms": 124028,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.068409226834774,
+				-6.02501010894775
+			],
+			"stagger": 0.0,
+			"tick": 304,
+			"token": true,
+			"windup": 0.533333333333333
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "attack",
+			"can_see_player": true,
+			"cooldown": 1.6,
+			"distance_to_player": 1.52728939056396,
+			"input_context": "gameplay",
+			"marker_visible": true,
+			"ms": 124066,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.068409226834774,
+				-6.02501010894775
+			],
+			"stagger": 0.0,
+			"tick": 305,
+			"token": true,
+			"windup": 0.5
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "attack",
+			"can_see_player": true,
+			"cooldown": 1.56666666666667,
+			"distance_to_player": 1.52728939056396,
+			"input_context": "gameplay",
+			"marker_visible": true,
+			"ms": 124102,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.068409226834774,
+				-6.02501010894775
+			],
+			"stagger": 0.0,
+			"tick": 306,
+			"token": true,
+			"windup": 0.466666666666666
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "attack",
+			"can_see_player": true,
+			"cooldown": 1.5,
+			"distance_to_player": 1.52728939056396,
+			"input_context": "gameplay",
+			"marker_visible": true,
+			"ms": 124141,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.068409226834774,
+				-6.02501010894775
+			],
+			"stagger": 0.0,
+			"tick": 308,
+			"token": true,
+			"windup": 0.4
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "attack",
+			"can_see_player": true,
+			"cooldown": 1.46666666666667,
+			"distance_to_player": 1.52728939056396,
+			"input_context": "gameplay",
+			"marker_visible": true,
+			"ms": 124179,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.068409226834774,
+				-6.02501010894775
+			],
+			"stagger": 0.0,
+			"tick": 309,
+			"token": true,
+			"windup": 0.366666666666666
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "attack",
+			"can_see_player": true,
+			"cooldown": 1.43333333333333,
+			"distance_to_player": 1.52728939056396,
+			"input_context": "gameplay",
+			"marker_visible": true,
+			"ms": 124217,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.068409226834774,
+				-6.02501010894775
+			],
+			"stagger": 0.0,
+			"tick": 310,
+			"token": true,
+			"windup": 0.333333333333333
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "attack",
+			"can_see_player": true,
+			"cooldown": 1.4,
+			"distance_to_player": 1.52728939056396,
+			"input_context": "gameplay",
+			"marker_visible": true,
+			"ms": 124261,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.068409226834774,
+				-6.02501010894775
+			],
+			"stagger": 0.0,
+			"tick": 311,
+			"token": true,
+			"windup": 0.3
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "attack",
+			"can_see_player": true,
+			"cooldown": 1.36666666666667,
+			"distance_to_player": 1.52728939056396,
+			"input_context": "gameplay",
+			"marker_visible": true,
+			"ms": 124307,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.068409226834774,
+				-6.02501010894775
+			],
+			"stagger": 0.0,
+			"tick": 312,
+			"token": true,
+			"windup": 0.266666666666666
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "attack",
+			"can_see_player": true,
+			"cooldown": 1.3,
+			"distance_to_player": 1.52728939056396,
+			"input_context": "gameplay",
+			"marker_visible": true,
+			"ms": 124345,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.068409226834774,
+				-6.02501010894775
+			],
+			"stagger": 0.0,
+			"tick": 314,
+			"token": true,
+			"windup": 0.2
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "attack",
+			"can_see_player": true,
+			"cooldown": 1.26666666666667,
+			"distance_to_player": 1.52728939056396,
+			"input_context": "gameplay",
+			"marker_visible": true,
+			"ms": 124381,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.068409226834774,
+				-6.02501010894775
+			],
+			"stagger": 0.0,
+			"tick": 315,
+			"token": true,
+			"windup": 0.166666666666666
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "attack",
+			"can_see_player": true,
+			"cooldown": 1.23333333333333,
+			"distance_to_player": 1.52728939056396,
+			"input_context": "gameplay",
+			"marker_visible": true,
+			"ms": 124416,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.068409226834774,
+				-6.02501010894775
+			],
+			"stagger": 0.0,
+			"tick": 316,
+			"token": true,
+			"windup": 0.133333333333333
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "attack",
+			"can_see_player": true,
+			"cooldown": 1.2,
+			"distance_to_player": 1.52728939056396,
+			"input_context": "gameplay",
+			"marker_visible": true,
+			"ms": 124451,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.068409226834774,
+				-6.02501010894775
+			],
+			"stagger": 0.0,
+			"tick": 317,
+			"token": true,
+			"windup": 0.0999999999999998
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "attack",
+			"can_see_player": true,
+			"cooldown": 1.16666666666667,
+			"distance_to_player": 1.52728939056396,
+			"input_context": "gameplay",
+			"marker_visible": true,
+			"ms": 124489,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.068409226834774,
+				-6.02501010894775
+			],
+			"stagger": 0.0,
+			"tick": 318,
+			"token": true,
+			"windup": 0.0666666666666665
+		},
+		{
+			"actor": "bog_wretch",
+			"actor_health": 95.0,
+			"animation": "attack",
+			"can_see_player": true,
+			"cooldown": 1.13333333333334,
+			"distance_to_player": 1.52728939056396,
+			"input_context": "gameplay",
+			"marker_visible": true,
+			"ms": 124523,
+			"phase": "bog_wretch_stationary_approach",
+			"player": [
+				0.0,
+				0.0149999018758535,
+				-4.5
+			],
+			"player_attack_time": 0.0,
+			"player_blade_ready": false,
+			"player_forward": [
+				0.0,
+				0.0,
+				-1.0
+			],
+			"player_health": 125.0,
+			"position": [
+				0.0,
+				-0.068409226834774,
+				-6.02501010894775
+			],
+			"stagger": 0.0,
+			"tick": 319,
+			"token": true,
+			"windup": 0.0333333333333332
+		}
+	],
+	"setup": "Diagnostic Wychwood entry; actual conditional EnemyAI via existing construction owner at Saga anchor, isolated original runtime pool, verified capsule/floor/nav corridor. Not quest-gate or campaign traversal acceptance.",
+	"setup_probes": [
+		{
+			"accepted": true,
+			"actor": "bog_wretch",
+			"actor_root": [
+				0.0,
+				-0.0534001216292381,
+				-9.0
+			],
+			"actor_sweep": {
+				"clear": true,
+				"initial_overlaps": [],
+				"motion_fraction": 1.0
+			},
+			"authored_actor_anchor": [
+				0.0,
+				0.0,
+				-9.0
+			],
+			"authored_segment_clear": true,
+			"candidate": [
+				0.0,
+				0.0,
+				-4.5
+			],
+			"collision_height": 1.51999998092651,
+			"collision_layer": 1,
+			"collision_radius": 0.379999995231628,
+			"goal_not_projected": true,
+			"leash_radius": 5.5,
+			"phase": "bog_wretch_stationary_approach",
+			"player_occupancy": {
+				"clear": true,
+				"initial_overlaps": [],
+				"motion_fraction": 1.0
+			},
+			"player_root": [
+				0.0,
+				0.0149999028071761,
+				-4.5
+			],
+			"player_within_authored_leash": true,
+			"raw_goal": [
+				0.0,
+				0.0149999028071761,
+				-5.98000001907349
+			],
+			"route_endpoint_matches": true,
+			"route_points": 2,
+			"validated_goal": [
+				0.0,
+				0.0149999028071761,
+				-5.98000001907349
+			]
+		},
+		{
+			"caller_excluded_goal": [
+				0.0,
+				0.0149999018758535,
+				-5.98000001907349
+			],
+			"kind": "actual_live_route",
+			"normal_validated_goal": [
+				0.0,
+				0.0149999018758535,
+				-5.98000001907349
+			],
+			"phase": "bog_wretch_stationary_approach",
+			"raw_goal": [
+				0.0,
+				0.0149999018758535,
+				-5.98000001907349
+			],
+			"route": [
+				[
+					0.0,
+					0.0,
+					-9.0
+				],
+				[
+					0.0,
+					0.0149999018758535,
+					-5.98000001907349
+				]
+			]
+		}
+	],
+	"spawn": {
+		"actual_owner_position": [
+			0.0,
+			0.0,
+			-9.0
+		],
+		"conditional_fixture": true,
+		"factory_pool_count_before_spawn": 0,
+		"leash_radius": 5.5,
+		"original_pool_living_count": 5,
+		"owner": "game._spawn_enemy -> ZoneActorSpawner; SagaEncounters.activate uses the same call",
+		"quest_gate_earned": false,
+		"requested_anchor": [
+			0.0,
+			0.0,
+			-9.0
+		],
+		"saga_activate_called": false
+	},
+	"viewport": [
+		960,
+		540
+	],
+	"viewport_contract": {
+		"logical_size": [
+			1280.0,
+			720.0
+		],
+		"logical_to_window_scale": [
+			0.75,
+			0.75
+		],
+		"physical_phone": false,
+		"policy": "production_internal_canvas_with_native_window_stretch",
+		"raw_render_size": [
+			1280,
+			720
+		],
+		"requested_window_client_size": [
+			960,
+			540
+		],
+		"valid": true,
+		"window_client_size": [
+			960.0,
+			540.0
+		]
+	},
+	"wait_budgets": [
+		{
+			"budget_clock": "physics_steps",
+			"budget_seconds": 12.0,
+			"elapsed_simulation_seconds": 1.63333333333333,
+			"elapsed_wall_seconds": 7.111,
+			"phase": "bog_wretch_stationary_approach",
+			"ready": true
+		},
+		{
+			"budget_clock": "physics_steps",
+			"budget_seconds": 2.0,
+			"elapsed_simulation_seconds": 0.6,
+			"elapsed_wall_seconds": 0.549,
+			"phase": "bog_wretch_stationary_approach",
+			"ready": true
+		}
+	],
+	"zone": "wychwood"
+}

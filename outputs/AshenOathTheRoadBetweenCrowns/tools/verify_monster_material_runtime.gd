@@ -2,6 +2,7 @@ extends SceneTree
 ## Source-isolated material ownership/PBR regression; no world or save access.
 const Palette = preload("res://scripts/views/monster_material_view.gd")
 const Bindings = preload("res://scripts/character_material_bindings.gd")
+const MaterialBudget = preload("res://scripts/views/character_material_budget_view.gd")
 var errors: Array[String] = []
 var rows: Array[Dictionary] = []
 
@@ -13,6 +14,7 @@ func _check(value: bool, message: String) -> void:
 		errors.append(message)
 
 func _run() -> void:
+	_verify_universal_budget()
 	var profiles: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(Palette.PROFILE_PATH)).assets
 	var known_materials: Dictionary = {}
 	for asset_id: String in profiles:
@@ -40,6 +42,13 @@ func _run() -> void:
 		for entry in originals:
 			var mesh := entry.mesh as MeshInstance3D
 			var native := entry.material as BaseMaterial3D
+			if float(profile.materials[native.resource_name].strength) == 0.0:
+				var retained := mesh.get_active_material(int(entry.surface))
+				_check(retained == native, asset_id + ": zero-strength surface preserves the complete native material")
+				_check(mesh.mesh == entry.geometry and mesh.skin == entry.skin and mesh.transform == entry.transform, asset_id + ": retained native surface geometry")
+				known_materials[asset_id + "/" + native.resource_name] = true
+				variants.append(retained)
+				continue
 			var material := mesh.get_active_material(int(entry.surface)) as ShaderMaterial
 			_check(material != null, asset_id + ": shader variant " + native.resource_name)
 			if material == null:
@@ -55,8 +64,8 @@ func _run() -> void:
 			_check(is_equal_approx(float(material.get_shader_parameter("authored_specular")), native.metallic_specular), asset_id + ": retained specular/IOR response")
 			_check(is_equal_approx(float(material.get_shader_parameter("authored_clearcoat")), native.clearcoat if native.clearcoat_enabled else 0.0), asset_id + ": retained wet shell clearcoat")
 			_check(is_equal_approx(float(material.get_shader_parameter("authored_clearcoat_roughness")), native.clearcoat_roughness), asset_id + ": retained clearcoat roughness")
-			var alpha := native.transparency == BaseMaterial3D.TRANSPARENCY_ALPHA
-			_check(material.shader == (Palette.TRANSLUCENT if alpha else (Palette.COATED if native.clearcoat_enabled else Palette.OPAQUE)), asset_id + ": native transparency/clearcoat pipeline")
+			var expected_shader: Shader = Palette.COATED if native.clearcoat_enabled else Palette.OPAQUE
+			_check(material.shader == expected_shader, asset_id + ": native transparency/clearcoat pipeline")
 			if native is StandardMaterial3D:
 				_check(material.get_shader_parameter("authored_roughness_map") == native.roughness_texture, asset_id + ": retained roughness map")
 				_check(material.get_shader_parameter("authored_metallic_map") == native.metallic_texture, asset_id + ": retained metallic map")
@@ -98,3 +107,25 @@ func _run() -> void:
 		file.store_string(JSON.stringify(result, "\t") + "\n")
 	print(JSON.stringify(result))
 	quit(0 if errors.is_empty() else 1)
+
+func _verify_universal_budget() -> void:
+	var native := StandardMaterial3D.new()
+	native.normal_enabled = true
+	native.normal_texture = GradientTexture2D.new()
+	native.albedo_texture = GradientTexture2D.new()
+	native.albedo_color = Color(0.7, 0.5, 0.3)
+	var geometry := CylinderMesh.new()
+	geometry.material = native
+	var mesh := MeshInstance3D.new()
+	mesh.mesh = geometry
+	mesh.skin = Skin.new()
+	var original_skin := mesh.skin
+	var bounds := geometry.get_aabb()
+	var changed := MaterialBudget.collapse_normals([mesh])
+	var replacement := mesh.mesh.surface_get_material(0) as StandardMaterial3D
+	_check(changed == [mesh], "retained Universal budget reports its changed mesh")
+	_check(replacement != native and not replacement.normal_enabled and replacement.normal_texture == null, "retained Universal budget removes only redundant normals")
+	_check(native.normal_enabled and native.normal_texture != null, "retained Universal source remains immutable")
+	_check(replacement.albedo_texture == native.albedo_texture and replacement.albedo_color == native.albedo_color, "retained Universal atlas/tint")
+	_check(mesh.skin == original_skin and mesh.mesh.get_aabb() == bounds, "retained Universal skin/geometry bounds")
+	mesh.free()

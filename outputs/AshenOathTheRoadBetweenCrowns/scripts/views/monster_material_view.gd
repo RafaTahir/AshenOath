@@ -2,7 +2,6 @@ extends RefCounted
 ## One immutable material variant per native surface. No process or extra pass.
 const PROFILE_PATH := "res://data/monster_material_profiles.json"
 const OPAQUE := preload("res://shaders/monster_pigment.gdshader")
-const TRANSLUCENT := preload("res://shaders/monster_pigment_translucent.gdshader")
 const COATED := preload("res://shaders/monster_pigment_clearcoat.gdshader")
 const PigmentMaterial := preload("res://scripts/views/monster_pigment_material.gd")
 static var _profiles: Dictionary = {}
@@ -24,8 +23,9 @@ static func prepare(root: Node3D, source: String) -> bool:
 			continue
 		for surface in mesh.mesh.get_surface_count():
 			var original: Material = mesh.get_active_material(surface)
-			if original is PigmentMaterial:
-				original = original.native_material
+			var pigment := original as PigmentMaterial
+			if pigment != null:
+				original = pigment.native_material
 			if not original is BaseMaterial3D:
 				push_error("Creature palette requires a native PBR surface: " + source)
 				return false
@@ -64,24 +64,25 @@ static func _load_profiles() -> void:
 	for raw: Dictionary in data.assets.values():
 		_profiles[str(raw.source)] = raw
 
-static func _variant(native: BaseMaterial3D, recipe: Dictionary, source: String) -> ShaderMaterial:
+static func _variant(native: BaseMaterial3D, recipe: Dictionary, source: String) -> Material:
+	# A zero-strength recipe keeps the complete native surface, including
+	# layered transparency/depth behavior that a color grade must not replace.
+	if float(recipe.strength) == 0.0:
+		return native
 	var key := var_to_str([native, source, recipe, _revision])
 	if _variants.has(key):
 		return _variants[key]
 	# The audited source contract is deliberately narrow. Do not silently lose
 	# new alpha/culling/UV/PBR features if future authoring changes the sources.
-	if native.cull_mode != BaseMaterial3D.CULL_DISABLED or native.transparency not in [BaseMaterial3D.TRANSPARENCY_DISABLED, BaseMaterial3D.TRANSPARENCY_ALPHA]:
-		push_error("Unsupported native creature surface mode: " + native.resource_name)
+	if native.cull_mode != BaseMaterial3D.CULL_DISABLED or native.transparency != BaseMaterial3D.TRANSPARENCY_DISABLED:
+		push_error("Unsupported native creature surface mode: %s (cull=%d, alpha=%d)" % [native.resource_name, native.cull_mode, native.transparency])
 		return null
 	if native.ao_enabled or native.emission_enabled or native.uv1_triplanar or native.clearcoat_texture != null:
 		push_error("Unsupported native creature PBR feature: " + native.resource_name)
 		return null
-	if native.clearcoat_enabled and native.transparency != BaseMaterial3D.TRANSPARENCY_DISABLED:
-		push_error("Unsupported combined clearcoat/transparency: " + native.resource_name)
-		return null
 	var material := PigmentMaterial.new()
 	material.resource_name = native.resource_name
-	material.shader = TRANSLUCENT if native.transparency == BaseMaterial3D.TRANSPARENCY_ALPHA else (COATED if native.clearcoat_enabled else OPAQUE)
+	material.shader = COATED if native.clearcoat_enabled else OPAQUE
 	material.render_priority = native.render_priority
 	material.native_material = native
 	material.source_path = source
@@ -126,4 +127,4 @@ static func _channel(index: int) -> Vector4:
 		BaseMaterial3D.TEXTURE_CHANNEL_GREEN: return Vector4(0, 1, 0, 0)
 		BaseMaterial3D.TEXTURE_CHANNEL_BLUE: return Vector4(0, 0, 1, 0)
 		BaseMaterial3D.TEXTURE_CHANNEL_ALPHA: return Vector4(0, 0, 0, 1)
-		_: return Vector4(0.2126, 0.7152, 0.0722, 0)
+		_: return Vector4(0.3333333, 0.3333333, 0.3333333, 0)

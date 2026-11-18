@@ -191,13 +191,13 @@ func bank_for(position: Vector3) -> int:
 		return 0
 	return -1 if position.z < river_center else 1
 
-func validate_position(position: Vector3, clearance: float = 0.8, preferred_bank: int = 0) -> Vector3:
+func validate_position(position: Vector3, clearance: float = 0.8, preferred_bank: int = 0, ignore_body: CollisionObject3D = null) -> Vector3:
 	var result := _clamp_to_bounds(position, clearance)
 	var requested_bank := preferred_bank if preferred_bank != 0 else bank_for(position)
 	if is_river_excluded(result, clearance):
 		result.z = river_center + float(requested_bank) * (RIVER_HALF_SPAN + clearance)
-	if _inside_entries(result, exclusions, clearance) or is_position_occupied(result, clearance * 0.52, 1.65):
-		return nearest_safe(result, requested_bank)
+	if _inside_entries(result, exclusions, clearance) or _is_position_occupied_with_ignore(result, clearance * 0.52, 1.65, ignore_body):
+		return nearest_safe(result, requested_bank, ignore_body)
 	result.y = maxf(result.y, 0.0)
 	return result
 
@@ -253,9 +253,9 @@ func validate_runtime_segment(start: Vector3, destination: Vector3, clearance: f
 	var fractions := get_world_3d().direct_space_state.cast_motion(query)
 	return fractions.size() == 2 and fractions[0] >= 1.0
 
-func build_route(start: Vector3, destination: Vector3, clearance: float = 0.9) -> Array[Vector3]:
-	var source := validate_position(start, clearance, bank_for(start))
-	var target := validate_position(destination, clearance, bank_for(destination))
+func build_route(start: Vector3, destination: Vector3, clearance: float = 0.9, ignore_body: CollisionObject3D = null) -> Array[Vector3]:
+	var source := validate_position(start, clearance, bank_for(start), ignore_body)
+	var target := validate_position(destination, clearance, bank_for(destination), ignore_body)
 	var key := [source, target, clearance, data_revision]
 	if _route_cache.has(key):
 		return _route_cache[key].duplicate()
@@ -308,7 +308,7 @@ func validate_path(points: Array, clearance: float = 0.9) -> Array:
 			result.append(segment[index])
 	return result
 
-func nearest_safe(position: Vector3, preferred_bank: int = 0) -> Vector3:
+func nearest_safe(position: Vector3, preferred_bank: int = 0, ignore_body: CollisionObject3D = null) -> Vector3:
 	var wanted_bank := preferred_bank if preferred_bank != 0 else bank_for(position)
 	# Keep a valid requested point stable. This function is also used when a
 	# zone is entered with an authored arrival, so falling through to a distant
@@ -322,7 +322,7 @@ func nearest_safe(position: Vector3, preferred_bank: int = 0) -> Vector3:
 	var low_channel_entry := river_center < 900.0 and absf(position.z - river_center) < RIVER_HALF_SPAN and position.y < 0.2
 	if wanted_bank != 0 and (is_river_excluded(requested, 0.8) or low_channel_entry):
 		requested.z = river_center + float(wanted_bank) * (RIVER_HALF_SPAN + 1.0)
-	if not _inside_entries(requested, exclusions, 0.6) and not is_position_occupied(requested, 0.42, 1.65):
+	if not _inside_entries(requested, exclusions, 0.6) and not _is_position_occupied_with_ignore(requested, 0.42, 1.65, ignore_body):
 		return requested
 	# Recovery must prefer authored road anchors. Searching around the failed
 	# coordinate can select a roof, yard, or prop when the failure occurred
@@ -336,7 +336,7 @@ func nearest_safe(position: Vector3, preferred_bank: int = 0) -> Vector3:
 			continue
 		if is_river_excluded(anchor, 0.8) or _inside_entries(anchor, exclusions, 0.6):
 			continue
-		if not is_position_occupied(anchor, 0.42, 1.65):
+		if not _is_position_occupied_with_ignore(anchor, 0.42, 1.65, ignore_body):
 			return anchor
 	var base := requested
 	if wanted_bank != 0 and river_center < 900.0:
@@ -351,7 +351,7 @@ func nearest_safe(position: Vector3, preferred_bank: int = 0) -> Vector3:
 			continue
 		if is_river_excluded(candidate, 0.8) or _inside_entries(candidate, exclusions, 0.6):
 			continue
-		if not is_position_occupied(candidate, 0.42, 1.65):
+		if not _is_position_occupied_with_ignore(candidate, 0.42, 1.65, ignore_body):
 			return candidate
 	if wanted_bank != 0 and not recovery_anchors.is_empty():
 		for anchor in recovery_anchors:

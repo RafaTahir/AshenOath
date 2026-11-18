@@ -1,0 +1,13 @@
+{
+	"actual_player_constructed": true,
+	"engine_errors": [],
+	"failures": [],
+	"gameplay_acceptance": false,
+	"headless": true,
+	"kind": "baseline_native_import_startup_closure",
+	"passed": true,
+	"performance_acceptance": false,
+	"project": "D:/Temp/AO_MonsterVitality_20261118/live_route_baseline_1c/outputs/AshenOathTheRoadBetweenCrowns/",
+	"rendered_acceptance": false,
+	"user_data_dir": "D:/Temp/AO_MonsterVitality_20261118/live_route_matrix_r3/headless_startup_profile/roaming/Godot/app_userdata/Ashen Oath- The Road Between Crowns"
+}

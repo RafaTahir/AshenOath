@@ -1,0 +1,7 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+ERROR: Invalid polygon data, triangulation failed.
+   at: canvas_item_add_polygon (servers/rendering/renderer_canvas_cull.cpp:1727)
+   GDScript backtrace (most recent call first):
+       [0] _draw_background (res://scripts/hud_navigation_dial.gd:89)
+       [1] _draw (res://scripts/hud_navigation_dial.gd:14)

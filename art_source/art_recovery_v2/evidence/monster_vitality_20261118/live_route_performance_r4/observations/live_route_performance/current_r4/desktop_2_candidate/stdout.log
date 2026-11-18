@@ -1,0 +1,46 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+WARNING: Your video card drivers are known to have low quality OpenGL 3.3 support, switching to ANGLE.
+   at: DisplayServerWindows (platform/windows/display_server_windows.cpp:7423)
+OpenGL API OpenGL ES 3.0 (ANGLE 2.1.1 git hash: aaebda1c5a40) - Compatibility - Using Device: Google Inc. (Intel) - ANGLE (Intel, Intel(R) HD Graphics 620 (0x00005916) Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.101.2130)
+
+AUDIO: music_state_main_menu
+LOADING: runtime ready total=2147ms environment=0ms services=2055ms
+LOADING: Greyfen prewarm begin
+LOADING: Greyfen prewarm build_begin
+LOADING: Greyfen prewarm build_complete ms=1413 ok=true
+LOADING: usable_menu_ready ms=57952
+LOADING: opening_world_render_ready
+LOADING: Greyfen prewarmed total=42349ms build=1413ms world=473ms player=620ms
+LOADING: new_game_handoff prewarmed=true cached_zones=1
+LOADING: new_game_stage=cache_clear elapsed=220.7
+LOADING: handoff_phase=hide_menu_begin
+LOADING: handoff_phase=hide_menu_end
+LOADING: handoff_phase=quest_begin
+LOADING: handoff_phase=quest_end
+LOADING: new_game_stage=state_ready elapsed=581.6
+LOADING: new_game_stage=zone_dispatch elapsed=584.7
+LOADING: handoff_phase=load_zone_begin
+LOADING: zone_begin id=greyfen prewarm=true cached=false
+LOADING: cached_zone_activated id=greyfen valid=true
+LOADING: zone_stage=cache_activated elapsed=901.5
+ZONE_COMPOSITION: id=greyfen reused=true visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=3604.3
+LOADING: zone_stage=visual_applied elapsed=3612.9
+AUDIO: music_state_greyfen_explore
+LOADING: zone_stage=runtime_finalized zone=greyfen navigation=false ms=2
+LOADING: zone_stage=budget_ready elapsed=3859.9
+LOADING: zone=greyfen playable_ms=3877.2
+LOADING: handoff_phase=load_zone_end
+LOADING: new_game_stage=ready elapsed=3985.7
+LOADING: new_game_stage=zone_return elapsed=3985.7
+LOADING: zone_begin id=wychwood prewarm=false cached=false
+ZONE_COMPOSITION: id=wychwood reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=2355.4
+LOADING: zone_stage=visual_applied elapsed=2361.0
+LOADING: zone_stage=runtime_finalized zone=wychwood navigation=true ms=1
+LOADING: zone_stage=budget_ready elapsed=2372.2
+AUDIO: music_state_wychwood_tension
+LOADING: zone=wychwood playable_ms=7979.4
+LIVE ROUTE: PASS segments=2 errors=0
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

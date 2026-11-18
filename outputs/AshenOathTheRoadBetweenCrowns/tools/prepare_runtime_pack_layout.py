@@ -193,7 +193,6 @@ def compile_layout(defer_environment=False, require_prepared_forest=False):
             "res://scripts/views/monster_pigment_material.gd",
             "res://scripts/views/character_material_budget_view.gd",
             "res://shaders/monster_pigment.gdshader",
-            "res://shaders/monster_pigment_translucent.gdshader",
             "res://shaders/monster_pigment_clearcoat.gdshader",
             "res://shaders/monster_pigment_common.gdshaderinc",
             "res://shaders/monster_pigment_surface.gdshaderinc",

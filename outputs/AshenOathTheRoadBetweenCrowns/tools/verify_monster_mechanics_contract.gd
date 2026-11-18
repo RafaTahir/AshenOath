@@ -35,7 +35,7 @@ class DriverStub extends RefCounted:
 class NavigationStub extends RefCounted:
 	var blocked := true
 	var validations := 0
-	func build_route(start: Vector3, finish: Vector3, _clearance: float) -> Array[Vector3]:
+	func build_route(start: Vector3, finish: Vector3, _clearance: float, _ignore_body: CollisionObject3D = null) -> Array[Vector3]:
 		var route: Array[Vector3] = [start, finish]
 		return route
 	func validate_segment(_start: Vector3, _finish: Vector3, _clearance: float) -> bool:
@@ -71,6 +71,8 @@ func _run() -> void:
 		gate["claims" if claim else "releases"] += 1
 		return true
 	var definitions: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/enemies.json"))
+	enemy.health_component = HealthStub.new()
+	enemy.perception_memory_time = 1.0
 	for identity: String in definitions:
 		var definition: Dictionary = definitions[identity]
 		enemy.attack_range = float(definition.get("attack_range", 1.5))
@@ -85,11 +87,39 @@ func _run() -> void:
 		enemy.attack_cooldown = 0.0
 		enemy.can_see_player = false
 		_check(is_equal_approx(enemy._engagement_target().distance_to(player.global_position), enemy.preferred_distance), identity + " searching retains spacing")
+		# Navigation and the attack decision must use the same ready ring. A
+		# native hand can still miss when a strike starts at the outer stat range.
+		enemy.position = Vector3(0, 0, enemy.attack_range * 0.93)
+		enemy.can_see_player = true
+		_check(enemy.enemy_navigation_view.choose_tactical_mode() == "pursue", identity + " outer reach approaches before windup")
+		enemy.attack_cooldown = 0.5
+		_check(enemy.enemy_navigation_view.choose_tactical_mode() == "attack", identity + " cooldown retains waiting gate")
+		enemy.attack_cooldown = 0.0
+		_check(enemy.enemy_navigation_view.choose_tactical_mode() == "pursue", identity + " expired cooldown restores close approach")
+		enemy.position.z = enemy.attack_range * 0.84
+		_check(enemy.enemy_navigation_view.choose_tactical_mode() == "attack", identity + " close ready actor can wind up")
+		enemy.pending_attack_time = 0.2
+		_check(enemy.enemy_navigation_view.choose_tactical_mode() == "windup", identity + " pending strike keeps decision priority")
+		enemy.pending_attack_time = 0.0
+	enemy.position = Vector3(0, 0, 6)
 	_check(gate.claims == 0 and gate.releases == 0, "approaching never reserves an attack token")
 	var navigation := NavigationStub.new()
 	enemy.spatial_service = navigation
 	enemy.navigation_agent = NavigationAgent3D.new()
 	enemy.add_child(enemy.navigation_agent)
+	enemy.approach_angle_degrees = 0.0
+	enemy.can_see_player = true
+	enemy.attack_cooldown = 0.0
+	for identity: String in definitions:
+		enemy.attack_range = float(definitions[identity].get("attack_range", 1.5))
+		enemy.preferred_distance = float(definitions[identity].get("preferred_distance", 2.15))
+		enemy.position = Vector3(0, 0, enemy.attack_range * 0.85 + 0.01)
+		var target: Vector3 = enemy._engagement_target()
+		_check(enemy.enemy_navigation_view.choose_tactical_mode() == "pursue", identity + " just outside commit ring keeps approaching")
+		_check(enemy._navigation_direction(target, true).length_squared() > 0.0, identity + " final route tolerance cannot stop outside commit ring")
+		enemy.position.z = enemy.attack_range * 0.85 - 0.01
+		_check(enemy.enemy_navigation_view.choose_tactical_mode() == "attack", identity + " inside commit ring can stop and strike")
+	enemy.position = Vector3(0, 0, 6)
 	_check(enemy._validated_step_direction(Vector3.FORWARD, Vector3(0, 0, -3), 0.1) == Vector3.ZERO, "blocked direct and rerouted steps remain blocked")
 	_check(navigation.validations == 2, "obstruction is checked for direct and rerouted steps")
 	navigation.blocked = false

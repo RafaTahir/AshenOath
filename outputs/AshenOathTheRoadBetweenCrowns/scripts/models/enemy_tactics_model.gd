@@ -32,9 +32,11 @@ var flank_sign: float = 1.0
 var heard_cue_cooldown: float = 0.0
 
 static func engagement_radius(preferred: float, reach: float, visible: bool,
-        cooldown: float, recovery: float) -> float:
+        cooldown: float, recovery: float, stopping_margin: float = 0.0) -> float:
 	# Preferred spacing is a waiting ring; ready melee must close inside reach.
-	return minf(preferred, reach * 0.85) if visible and cooldown <= 0.0 and recovery <= 0.0 else preferred
+	if visible and cooldown <= 0.0 and recovery <= 0.0:
+		return maxf(0.0, minf(preferred, reach * 0.85) - maxf(stopping_margin, 0.0))
+	return preferred
 
 static func phase_for_health(ratio: float) -> int:
 	return 3 if ratio <= 0.33 else (2 if ratio <= 0.66 else 1)
@@ -76,7 +78,8 @@ func choose_mode(player_position: Vector3, visible: bool, active: bool) -> Strin
 		return "ambient"
 	if recovery_time > 0.0:
 		return "recover"
-	if position.distance_to(player_position if visible else last_known) > attack_range or not visible:
+	var strike_radius := engagement_radius(attack_range, attack_range, visible, attack_cooldown, recovery_time)
+	if position.distance_to(player_position if visible else last_known) > strike_radius or not visible:
 		return "pursue"
 	return "attack" if active else "ambient"
 

@@ -31,9 +31,11 @@ func _add_beam_charge_visual() -> void:
 	_actor.beam_charge_visual.material_override = _actor._beam_material(Color(0.35, 0.88, 1.0, 0.92))
 	_actor.beam_charge_visual.visible = false
 	_actor.add_child(_actor.beam_charge_visual)
-	var skeleton: Variant = _actor._find_skeleton(_actor.visual_root)
-	_actor.beam_left_hand_glow = _actor._make_oathfire_hand("OathfireLeftHand", skeleton, ["LeftHand", "Hand.L", "Fist.L", "FistL", "lefthand", "leftwrist"], Vector3(-0.28, 1.22, -0.42))
-	_actor.beam_right_hand_glow = _actor._make_oathfire_hand("OathfireRightHand", skeleton, ["RightHand", "Hand.R", "Weapon.R", "WeaponR", "Fist.R", "FistR", "righthand", "rightwrist"], Vector3(0.28, 1.22, -0.42))
+	var skeleton: Skeleton3D = _actor._find_skeleton(_actor.visual_root)
+	var left_aliases: Array[String] = ["LeftHand", "Hand.L", "Fist.L", "FistL", "lefthand", "leftwrist"]
+	var right_aliases: Array[String] = ["RightHand", "Hand.R", "Weapon.R", "WeaponR", "Fist.R", "FistR", "righthand", "rightwrist"]
+	_actor.beam_left_hand_glow = _actor._make_oathfire_hand("OathfireLeftHand", skeleton, left_aliases, Vector3(-0.28, 1.22, -0.42))
+	_actor.beam_right_hand_glow = _actor._make_oathfire_hand("OathfireRightHand", skeleton, right_aliases, Vector3(0.28, 1.22, -0.42))
 	if skeleton != null:
 		_actor.beam_left_arm_ik = _actor._make_arm_pose_ik(skeleton, "OathfireLeftArmPose", &"upperarm_l", &"hand_l")
 		_actor.beam_right_arm_ik = _actor._make_arm_pose_ik(skeleton, "OathfireRightArmPose", &"upperarm_r", &"hand_r")

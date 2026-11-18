@@ -1,0 +1,1496 @@
+{
+  "kind": "monster_vitality_authoring_coverage",
+  "palette_revision": "monster_vitality_20261118",
+  "profile_sha256": "d020139688981ee0e027e5361718c88375fd46b17faa5dd43f8869a78f2e4af9",
+  "scope": "Twenty live design-pack creature sources; unused art-library files excluded",
+  "runtime_observation_scope": "All twenty species have developer-reviewed candidate source observations in constructed game levels, with matched native idle/action material comparisons. Separate live gameplay mechanics evidence includes R25. Frozen-export, matched frame-time, publication and user acceptance are not established by these source observations.",
+  "assets": [
+    {
+      "asset": "M01",
+      "name": "Ghoulkin",
+      "source": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+      "source_sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d",
+      "habitat_associations": [
+        "wychwood",
+        "cemetery",
+        "ruins",
+        "marsh"
+      ],
+      "intended_presentation": "Bruised peat and warm wound tones distinguish a scavenger from the living forest; worn teeth and pale amber eyes remain separate.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M01",
+        "graded_native_surfaces": [
+          "M01_PeatSkin",
+          "M01_PaleEyes",
+          "M01_Recessed_mouth",
+          "M01_Uneven_worn_teeth"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M01",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "wychwood_cohort_desktop_r13",
+              "original_full_run_status": "pass",
+              "primary_realm": "wychwood",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "wychwood_cohort_touch_r15",
+              "original_full_run_status": "fail",
+              "primary_realm": "wychwood",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M02",
+      "name": "Wychwood Stalker",
+      "source": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+      "source_sha256": "8ab34c35c3a1ffdcb0d3341bf007518076b5f6c67e731c0e5291aec11aa55a8a",
+      "habitat_associations": [
+        "wychwood",
+        "record_hall"
+      ],
+      "intended_presentation": "Slate-green low-chroma hide, moss-dark folds and cold scar tones; retain warmer climbing keratin and ivory atlas islands.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M02",
+        "graded_native_surfaces": [
+          "Wychwood_Stalker_Main"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M02",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "wychwood_cohort_desktop_r13",
+              "original_full_run_status": "pass",
+              "primary_realm": "wychwood",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "wychwood_cohort_touch_r15",
+              "original_full_run_status": "fail",
+              "primary_realm": "wychwood",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M03",
+      "name": "Bog Wretch",
+      "source": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
+      "source_sha256": "bb44cc9312d528dc3d98002170956c3e0434acbed5dfc47f719b3db1a2ff0701",
+      "habitat_associations": [
+        "wychwood",
+        "marsh"
+      ],
+      "intended_presentation": "Wet fen-green hide with a visibly separate restrained amber core and deep peat ligatures.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M03",
+        "graded_native_surfaces": [
+          "M03_WaterloggedOliveHide",
+          "M03_PaleEyes",
+          "M03_OpaqueAmberCore",
+          "M03_PeatRootLigature",
+          "M03_Recessed_mouth",
+          "M03_Uneven_worn_teeth"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M03",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "primary_gap_desktop_r19",
+              "original_full_run_status": "fail",
+              "primary_realm": "wychwood",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "other_realms_touch_r20",
+              "original_full_run_status": "pass",
+              "primary_realm": "wychwood",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M04",
+      "name": "Gravebound Knight",
+      "source": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+      "source_sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407",
+      "habitat_associations": [
+        "vargan_approach",
+        "undercroft",
+        "ruins",
+        "record_hall"
+      ],
+      "intended_presentation": "Cold blue iron and warmer rust stay distinct from dirty burial linen; armor keeps its authored metallic response.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M04",
+        "graded_native_surfaces": [
+          "M04_PittedIron",
+          "M04_FuneraryLinen"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M04",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "other_realms_desktop_r18",
+              "original_full_run_status": "fail",
+              "primary_realm": "ruins",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "other_realms_touch_r20",
+              "original_full_run_status": "pass",
+              "primary_realm": "ruins",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M05",
+      "name": "Bell Eater",
+      "source": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
+      "source_sha256": "246525821ccb16124b8455aad7968e953a5159d5390b5b6286d2630b6b9235c8",
+      "habitat_associations": [
+        "cemetery"
+      ],
+      "intended_presentation": "Clay-umber flesh, distinct aged bronze, cool patinated iron and dark worn harness; the bell remains legible without a whole-body glow.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M05",
+        "graded_native_surfaces": [
+          "M05_ClaySkin",
+          "M05_PaleEyes",
+          "M05_Bronze",
+          "M05_Iron",
+          "M05_Harness"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M05",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "primary_gap_desktop_r19",
+              "original_full_run_status": "fail",
+              "primary_realm": "greyfen",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "other_realms_touch_r20",
+              "original_full_run_status": "pass",
+              "primary_realm": "greyfen",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M06",
+      "name": "Rootbound Colossus",
+      "source": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
+      "source_sha256": "3b2705f6310f6cefc3f0d95ddd1f819d153988f98f9f82e00e48d63c0c14cc6a",
+      "habitat_associations": [
+        "deep_wood"
+      ],
+      "intended_presentation": "Weathered bark carries forest-green lichen while exposed heartwood stays warm amber; preserve woody texture and heavy silhouette.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M06",
+        "graded_native_surfaces": [
+          "M06_WeatheredBark",
+          "M06_OldHeartwood"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M06",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "primary_gap_desktop_r19",
+              "original_full_run_status": "fail",
+              "primary_realm": "deep_wood",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "other_realms_touch_r20",
+              "original_full_run_status": "pass",
+              "primary_realm": "deep_wood",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M07",
+      "name": "Ashwing Carrion Drake",
+      "source": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+      "source_sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16",
+      "habitat_associations": [
+        "old_mill",
+        "marsh"
+      ],
+      "intended_presentation": "Soot-brown wing hide, copper warmth around authored throat regions and cooler charcoal shadows; retain all existing atlas details.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M07",
+        "graded_native_surfaces": [
+          "M07_RecoveryAtlas"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M07",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "other_realms_desktop_r18",
+              "original_full_run_status": "fail",
+              "primary_realm": "old_mill",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "other_realms_touch_r20",
+              "original_full_run_status": "pass",
+              "primary_realm": "old_mill",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M08",
+      "name": "White Hart Avatar",
+      "source": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+      "source_sha256": "0c8611c7c520c26e516f548a67ad874986b0a0cf61d68fafbdcbea5602ea3cc8",
+      "habitat_associations": [
+        "hart_glade"
+      ],
+      "intended_presentation": "Keep warm ivory and bone as the dominant identity; strengthen the difference from dark brown antlers without dyeing pale highlights.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M08",
+        "graded_native_surfaces": [
+          "M08_RecoveryAtlas"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M08",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "other_realms_desktop_r18",
+              "original_full_run_status": "fail",
+              "primary_realm": "hart_glade",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "other_realms_touch_r20",
+              "original_full_run_status": "pass",
+              "primary_realm": "hart_glade",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M09",
+      "name": "Silt Maw",
+      "source": "res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
+      "source_sha256": "760155b287ca70b541e5b81faf016e0116dda239744286afabe1a47a6ec0e29f",
+      "habitat_associations": [
+        "greyfen",
+        "old_mill",
+        "marsh"
+      ],
+      "intended_presentation": "Wet mineral-teal silt body with clay-warm mouth folds and pale abrasive edges, distinct from the dry forest bipeds.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M09",
+        "graded_native_surfaces": [
+          "M09_RecoveryAtlas"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M09",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "other_realms_desktop_r18",
+              "original_full_run_status": "fail",
+              "primary_realm": "old_mill",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "other_realms_touch_r20",
+              "original_full_run_status": "pass",
+              "primary_realm": "old_mill",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M10",
+      "name": "Millback",
+      "source": "res://assets_external/design_pack_v1/creatures/M10_Millback.glb",
+      "source_sha256": "bf6a8bfc0b64a2b1c730cb6ef6feaaae02f79b285b5582783ee197b64fb4ae26",
+      "habitat_associations": [
+        "greyfen",
+        "old_mill"
+      ],
+      "intended_presentation": "River-mineral blue shell and warmer ochre joints make a low aquatic armored species readable against mud.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M10",
+        "graded_native_surfaces": [
+          "M10_RecoveryAtlas"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M10",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "other_realms_desktop_r18",
+              "original_full_run_status": "fail",
+              "primary_realm": "old_mill",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "other_realms_touch_r20",
+              "original_full_run_status": "pass",
+              "primary_realm": "old_mill",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M11",
+      "name": "Glassmoth",
+      "source": "res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
+      "source_sha256": "b72f8ce1864ee58f75460e2feccd40f4d67ce3ebdbc486448b9db0627674ae13",
+      "habitat_associations": [
+        "wychwood",
+        "record_hall"
+      ],
+      "intended_presentation": "Cool opal and mint pigment on the body; retain the authored cream wing pattern and complete native layered transparency with a zero-strength membrane recipe.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M11",
+        "graded_native_surfaces": [
+          "M11_RecoveryAtlas"
+        ],
+        "retained_native_surfaces": [
+          "M11_BoundedWingMembrane"
+        ],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M11",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "wychwood_cohort_desktop_r13",
+              "original_full_run_status": "pass",
+              "primary_realm": "wychwood",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "wychwood_cohort_touch_r15",
+              "original_full_run_status": "fail",
+              "primary_realm": "wychwood",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M12",
+      "name": "Knell Leech",
+      "source": "res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
+      "source_sha256": "b72eecaed1c4de3af286c7658023da5bf5d5c0c233f4b4ef9439a5ee67819cd0",
+      "habitat_associations": [
+        "cemetery",
+        "undercroft"
+      ],
+      "intended_presentation": "Plum-black wet skin and muted mauve ridges preserve a crypt-dweller identity without turning the body into a luminous effect.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M12",
+        "graded_native_surfaces": [
+          "M12_RecoveryAtlas"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M12",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "other_realms_desktop_r18",
+              "original_full_run_status": "fail",
+              "primary_realm": "undercroft",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "other_realms_touch_r20",
+              "original_full_run_status": "pass",
+              "primary_realm": "undercroft",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M13",
+      "name": "Hearthscale",
+      "source": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+      "source_sha256": "ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26",
+      "habitat_associations": [
+        "vargan_approach",
+        "old_mill",
+        "greyfen"
+      ],
+      "intended_presentation": "Kiln-clay orange and brown-gold throat warmth distinguish a warmth-seeking hearth species from grey stone; retain pale ash-dust patches.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M13",
+        "graded_native_surfaces": [
+          "M13_RecoveryAtlas"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M13",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "other_realms_desktop_r18",
+              "original_full_run_status": "fail",
+              "primary_realm": "burned_farmstead",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "other_realms_touch_r20",
+              "original_full_run_status": "pass",
+              "primary_realm": "burned_farmstead",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M14",
+      "name": "Gallows Weaver",
+      "source": "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
+      "source_sha256": "1dc85c0b1adbebb6a85e6acc3bfb36a7bee6ad2a569f0fa300a54edf1d6d7ba9",
+      "habitat_associations": [
+        "wychwood",
+        "vargan_approach"
+      ],
+      "intended_presentation": "Chestnut-brown chitin, cool slate-dark bristles and pale silk patterning keep a web-building species distinct from reed and water creatures.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M14",
+        "graded_native_surfaces": [
+          "M14_RecoveryAtlas"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M14",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "other_realms_desktop_r18",
+              "original_full_run_status": "fail",
+              "primary_realm": "deep_wood",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "other_realms_touch_r20",
+              "original_full_run_status": "pass",
+              "primary_realm": "deep_wood",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M15",
+      "name": "Reed Choir",
+      "source": "res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
+      "source_sha256": "b90ced2dd2b89de67dd6560c5abe7360673285779f9c5e07cf52e929b358d69d",
+      "habitat_associations": [
+        "greyfen",
+        "old_mill",
+        "marsh"
+      ],
+      "intended_presentation": "Reed-green back, warm copper-brown authored islands and pale throat highlights support a living inflated call sac without adding emissive light.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M15",
+        "graded_native_surfaces": [
+          "M15_RecoveryAtlas"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M15",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "other_realms_desktop_r18",
+              "original_full_run_status": "fail",
+              "primary_realm": "greyfen",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "other_realms_touch_r20",
+              "original_full_run_status": "pass",
+              "primary_realm": "greyfen",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M16",
+      "name": "Inkblind",
+      "source": "res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
+      "source_sha256": "148780ab6f2b6605816c08e266edbecbd474efb2118ae30e63bae84b06b86cd4",
+      "habitat_associations": [
+        "record_hall",
+        "undercroft"
+      ],
+      "intended_presentation": "Ink-blue black carapace and warm paper-cream atlas islands separate a document-vault scavenger from generic brown arthropods.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M16",
+        "graded_native_surfaces": [
+          "M16_RecoveryAtlas"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M16",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "other_realms_desktop_r18",
+              "original_full_run_status": "fail",
+              "primary_realm": "record_hall",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "other_realms_touch_r20",
+              "original_full_run_status": "pass",
+              "primary_realm": "record_hall",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M17",
+      "name": "Cairn Mother",
+      "source": "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
+      "source_sha256": "0f5ae2c7fe7aba403cef03c7abaa009f45dffca7e96c644466340378202de79e",
+      "habitat_associations": [
+        "hart_glade",
+        "greyfen"
+      ],
+      "intended_presentation": "Sage lichen and slate-blue stone with pale clay ridges communicate a slow cairn-dweller; keep stony highlights subdued.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M17",
+        "graded_native_surfaces": [
+          "M17_RecoveryAtlas"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M17",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "other_realms_desktop_r18",
+              "original_full_run_status": "fail",
+              "primary_realm": "hart_glade",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "other_realms_touch_r20",
+              "original_full_run_status": "pass",
+              "primary_realm": "hart_glade",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M18",
+      "name": "Shroud Swimmer",
+      "source": "res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
+      "source_sha256": "8cca812834a3d08be3155e92925c8bf296007648ae964bd6cee669ef352bc9e2",
+      "habitat_associations": [
+        "old_mill",
+        "greyfen",
+        "marsh"
+      ],
+      "intended_presentation": "River-green and muted turquoise skin with warmer silt-speckle islands and pale fin highlights make water contact and movement legible.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M18",
+        "graded_native_surfaces": [
+          "M18_RecoveryAtlas"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M18",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "primary_gap_desktop_r19",
+              "original_full_run_status": "fail",
+              "primary_realm": "marsh_crossing",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "other_realms_touch_r20",
+              "original_full_run_status": "pass",
+              "primary_realm": "marsh_crossing",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M19",
+      "name": "Wychwood Raider",
+      "source": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
+      "source_sha256": "4f73eec84f0c5cca3c1acf833572abde174b6f6bbea54579ad19a8553979383c",
+      "habitat_associations": [
+        "wychwood"
+      ],
+      "intended_presentation": "A warm olive-umber forager distinct from the cold green Stalker; beige caught cords remain visible against the hide.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M19",
+        "graded_native_surfaces": [
+          "M19_OliveGreyHide",
+          "M19_PaleEyes",
+          "M19_CaughtTokenCord",
+          "M19_Recessed_mouth",
+          "M19_Uneven_worn_teeth"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M19",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "wychwood_cohort_desktop_r13",
+              "original_full_run_status": "pass",
+              "primary_realm": "wychwood",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "wychwood_cohort_touch_r15",
+              "original_full_run_status": "fail",
+              "primary_realm": "wychwood",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    },
+    {
+      "asset": "M20",
+      "name": "Wychwood Brute",
+      "source": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+      "source_sha256": "5dc0fe44ac381f0fef79ba065c8ab67e6137b550775823ff79b5ee02fbd9b74a",
+      "habitat_associations": [
+        "wychwood"
+      ],
+      "intended_presentation": "Deep forest-olive shoulders, earthen scar warmth and worn ivory tusks carry weight; preserve dark folds while separating it from grey ground.",
+      "authored_change": {
+        "owner": "scripts/views/monster_material_view.gd",
+        "recipe": "data/monster_material_profiles.json:assets.M20",
+        "graded_native_surfaces": [
+          "M20_CharcoalOliveHide",
+          "M20_PaleEyes",
+          "M20_WornTusk",
+          "M20_Recessed_mouth",
+          "M20_Uneven_worn_teeth"
+        ],
+        "retained_native_surfaces": [],
+        "raw_geometry_skin_animation_texture_changes": false
+      },
+      "verification": {
+        "source_and_texture_identity": "passed_static_r3",
+        "engine_material_bindings": "passed",
+        "new_in_level_capture": {
+          "status": "developer_reviewed_candidate_source_segments",
+          "ledger_asset_id": "M20",
+          "archive_status": "verified_historical_source_archive",
+          "pose_scope": [
+            "native idle reference",
+            "native action reference"
+          ],
+          "source_segments": {
+            "desktop": {
+              "run": "wychwood_cohort_desktop_r13",
+              "original_full_run_status": "pass",
+              "primary_realm": "wychwood",
+              "independently_complete_asset_segment": true
+            },
+            "touch_window": {
+              "run": "wychwood_cohort_touch_r15",
+              "original_full_run_status": "fail",
+              "primary_realm": "wychwood",
+              "independently_complete_asset_segment": true
+            }
+          },
+          "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+          "source_archive": "source_observations_r2",
+          "source_archive_binding": "source_observations_r2/source_archive_binding.json"
+        },
+        "user_visual_acceptance": "pending"
+      },
+      "cost": {
+        "new_texture_files": 0,
+        "new_vertices": 0,
+        "new_per_actor_process_loops": 0,
+        "gpu_frame_time": {
+          "status": "not_isolated",
+          "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement.",
+          "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+          "representative_scope": "Shared Greyfen/Wychwood live routes in desktop and touch windows; not an isolated measurement of this asset.",
+          "zero_gpu_readings_mean": "unavailable; not zero rendering cost"
+        }
+      }
+    }
+  ],
+  "source_observation_provenance": {
+    "archive_status": "verified_historical_source_archive",
+    "mode": "source_authoring_preview",
+    "developer_candidate_review": "all_20_species_reviewed",
+    "profile_sha256": "d020139688981ee0e027e5361718c88375fd46b17faa5dd43f8869a78f2e4af9",
+    "desktop": {
+      "requested_native_window_size": [
+        1280,
+        720
+      ],
+      "internal_canvas_size": [
+        1280,
+        720
+      ],
+      "raw_render_png_size": [
+        1280,
+        720
+      ]
+    },
+    "touch_window": {
+      "native_window_size": [
+        960,
+        540
+      ],
+      "internal_canvas_size": [
+        1280,
+        720
+      ],
+      "raw_render_png_size": [
+        1280,
+        720
+      ],
+      "input_mapping": "production native window stretch; logical UI coordinates mapped to client coordinates at 0.75"
+    },
+    "physical_phone_coverage": false,
+    "weather_scope": {
+      "assets": [
+        "M02",
+        "M09",
+        "M11"
+      ],
+      "conditions": [
+        "night with clear weather",
+        "daytime rain"
+      ],
+      "runs": [
+        "weather_desktop_r22",
+        "weather_touch_r23"
+      ],
+      "coverage": "selected representatives in both windows; not all twenty assets in every weather"
+    },
+    "original_full_run_outcomes": {
+      "wychwood_cohort_desktop_r13": "pass",
+      "wychwood_cohort_touch_r15": "fail",
+      "other_realms_desktop_r18": "fail",
+      "primary_gap_desktop_r19": "fail",
+      "other_realms_touch_r20": "pass",
+      "weather_desktop_r22": "pass",
+      "weather_touch_r23": "pass",
+      "bog_visual_contact_r25": "pass",
+      "bog_visual_contact_r24": "fail"
+    },
+    "subsegment_semantics": "A complete per-asset source segment can belong to an overall failed run. Its material/pose evidence does not turn that full run into a pass; original failures and receipts remain preserved.",
+    "full_failed_runs_reclassified_as_pass": false,
+    "comparison_control": "Original means restored native source materials in the same captured level, pose, camera and lighting; it does not mean an older deployed release.",
+    "pose_scope": "Direct native clip seeks are presentation references, not played-input combat or ecology acceptance.",
+    "live_r25": {
+      "run": "bog_visual_contact_r25",
+      "full_run_status": "pass",
+      "full_source_observation_input_sha256": "adc9ce28cb9b9d67ae9ac8139267fcbb421a2d17ad0de03758329a092d47853b",
+      "evidence": "Separate live EnemyAI approach, required native body contact and recovery; controlled fixture setup, normal camera, no damage injection, health refill or quest preaward.",
+      "archived_mechanics_report": "source_observations_r2/observations/source_preview/r25/mechanics/report.json"
+    },
+    "m18_scope": "Authored habitat/submersion context is distinct from the explicitly labelled raised dry full-body floor-seat material fixture; no aquatic behavior acceptance is inferred.",
+    "user_visual_acceptance": "pending",
+    "gpu_frame_time": {
+      "status": "not_isolated",
+      "representative_wall_frame_evidence": "live_route_performance_r4/current_matrix_binding.json",
+      "qualitative_shared_pass_cost": "Pigment grading shares the existing graded material pass and existing textures; it adds no texture files, vertices or per-actor process loops. Retained native transparent/depth passes remain unchanged. This is a qualitative per-asset cost description, not an isolated GPU measurement."
+    },
+    "frozen_export_verified": false,
+    "publication_verification": "not_claimed_here",
+    "historical_capture_runtime_input_files": 518,
+    "historical_capture_runtime_input_sha256": "17a7255d81607a4ff11c8b3fc4e7c7e148475817de574c7c42fc884aa5f539ce",
+    "historical_capture_runtime_scope": "scripts, runtime data, shaders, scenes, original project settings and root JSON inputs; QA tool versions remain separately pinned per run",
+    "capture_vs_delivery_scope": "The 518 common leaf hashes describe historical source-capture inputs. They are not a claim that the final delivery runtime has no post-capture changes.",
+    "post_capture_hud_guard": {
+      "status": "only_expected_hud_text_delta_verified",
+      "reference_run": "bog_visual_contact_r25",
+      "historical_capture_input_sha256": "17a7255d81607a4ff11c8b3fc4e7c7e148475817de574c7c42fc884aa5f539ce",
+      "current_known_text_input_sha256": "f3890f2954b15d7adf8cbea65fd1842b7b2c9839470ab3187c2cecafb9dc9702",
+      "changed_file": {
+        "path": "scripts/hud_navigation_dial.gd",
+        "captured_sha256": "8f0b20f21f4b505016595bbef67cbc7355c87c615f5579e6963ad162e9a80aa4",
+        "current_sha256": "228f96e5a7e642c2d69a6a1c514b6d596c5b5cbbe0eaad59c8fe2862263cf270",
+        "status": "changed"
+      },
+      "unchanged_known_text_leaves": 517,
+      "unchanged_profile_sha256": "d020139688981ee0e027e5361718c88375fd46b17faa5dd43f8869a78f2e4af9",
+      "purpose": "Skip clipped minimap polygons with fewer than three vertices or no valid triangulation before draw. The valid polygon and outline drawing paths remain unchanged.",
+      "comparison_scope": "Only the fixed 518 historical small-text input leaves were read; no asset-directory scan, image read/hash, creature binary rehash, archive or engine operation.",
+      "protected_source_scope": "All recorded non-HUD text leaves, including creature data, material/shader owners, lighting and camera code, remain byte-identical if expected_hud_only_delta_confirmed is true. Protected binary-source integrity is delegated to the original source contracts and separate final-delivery verification.",
+      "historical_source_ledger_modified": false,
+      "delta_record": "historical_capture_hud_delta_r4.json"
+    },
+    "final_delivery_verification": {
+      "status": "separate_receipt; build_frozen_export_publication_and_user_acceptance_pending",
+      "provenance_handoff_record": "historical_capture_hud_delta_r4.json",
+      "required_binding": "The separate delivery receipt records source and representative native wall-frame evidence. Final built/exported bytes, frozen checks and deployment identity remain separate required stages.",
+      "historical_capture_equals_final_export_claim": false,
+      "frozen_export_pass_claim": false,
+      "publication_pass_claim": false,
+      "user_visual_acceptance": "pending",
+      "record": "delivery_verification.json",
+      "stage_summary": "DELIVERY_VERIFICATION.md",
+      "representative_native_wall_frame_performance": "passed_r4_all12_eight_metrics",
+      "isolated_asset_gpu_pass_claim": false,
+      "final_export_performance_verified": false
+    },
+    "archive_attempt_note": "The R1 helper failed during planning before archive-directory creation: it compared a semantic pose_sha256 declaration with PNG file-content sha256. source_observations_r1 never existed; no partial R1 directory was preserved or overwritten. The corrected source_observations_r2 historical source archive then succeeded; final-delivery verification remains separate.",
+    "coverage_ledger": "source_observations_r2/primary_presentation_coverage_ledger.json",
+    "source_archive": "source_observations_r2",
+    "source_archive_binding": "source_observations_r2/source_archive_binding.json",
+    "archive_summary": {
+      "root_confirmed_exit_code": 0,
+      "run_record_sets": 10,
+      "archive_total_bytes": 25851311,
+      "selected_exact_png_exemplars": 8,
+      "image_binding_scope": "Eight explicitly selected exact PNG exemplars are bound by source_archive_binding.json; consult the archive manifest for stored artifacts.",
+      "immutable_source_ledger_sha256": "2a37e9456a9c9667f703e1bf045af4fd318757b35d1c3e3a4757349bc6eeeaa4",
+      "archive_index_sha256": "a89692f0ecc0ca3fa8880b3132665e4603dea15ed6cc10fb000cd9bb64692f23",
+      "source_archive_verified": true,
+      "final_delivery_verified": false
+    }
+  },
+  "representative_route_performance": {
+    "status": "passed_representative_wall_frame_budget",
+    "evidence": "live_route_performance_r4/current_matrix_binding.json",
+    "comparison": "live_route_performance_r4/observations/live_route_performance/current_r4/comparison.json",
+    "matched_observations": 12,
+    "metrics_within_ten_percent": 8,
+    "metric_comparisons": 8,
+    "threshold_regression_percent": 10.0,
+    "maximum_observed_regression_percent": 6.302527192711316,
+    "maximum_case": {
+      "viewport": [
+        960,
+        540
+      ],
+      "zone": "greyfen",
+      "metric": "p50_ms",
+      "baseline": 67.941,
+      "candidate": 72.223,
+      "regression": 0.06302527192711316,
+      "within_ten_percent": true
+    },
+    "statistic": "median of three per-run p50 and p95 wall-frame times, per zone/viewport",
+    "scope": "matched native live-route source observation; adjusted prerequisite-only 1c baseline; synthetic touch, no physical phone or frozen-export acceptance",
+    "zones": [
+      "greyfen",
+      "wychwood"
+    ],
+    "desktop_native_window": [
+      1280,
+      720
+    ],
+    "touch_native_window": [
+      960,
+      540
+    ],
+    "production_internal_canvas_and_raw_render": [
+      1280,
+      720
+    ],
+    "baseline": {
+      "commit": "1cbea51bba11862c675741b27b39cda832484f7f",
+      "kind": "adjusted_prerequisite_only_source_baseline",
+      "shared_prerequisite_count": 8,
+      "shared_prerequisite_manifest": "live_route_performance_r4/observations/live_route_performance/current_r4/baseline_overlay.json",
+      "shared_prerequisite_paths": [
+        "scripts/views/player_character_view.gd",
+        "scripts/views/player_equipment_view.gd",
+        "scripts/character_role_spec.gd",
+        "scripts/companion_controller.gd",
+        "scripts/zone_residency_service.gd",
+        "scripts/views/living_cast_station_view.gd",
+        "scripts/everyday_life.gd",
+        "scripts/hud_navigation_dial.gd"
+      ],
+      "scope": "Adjusted source baseline: eight explicit shared prerequisites, including unchanged1c HUD triangulation defect; no candidate monster mechanics, palette, enemy data or story interventions copied. Generated import remaps/native embedded PNG extraction are separately proven."
+    },
+    "earlier_attempt_history": "fixture_baseline_history_r1/fixture_history_binding.json",
+    "historical_failed_attempts_used_as_current": false,
+    "isolated_asset_gpu_cost_measured": false,
+    "gpu_zero_means": "unavailable, not free rendering",
+    "physical_phone_coverage": false,
+    "frozen_export_acceptance": false,
+    "publication_verified": false,
+    "user_visual_acceptance": "pending"
+  }
+}

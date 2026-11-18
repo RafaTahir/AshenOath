@@ -75,7 +75,7 @@ func _release_retiring_resources(root: Node) -> void:
 	var geometry: Array[Node] = []
 	var slice := Time.get_ticks_usec()
 	while not pending.is_empty():
-		var node: Node = pending.pop_back()
+		var node: Variant = pending.pop_back() # A freed entry must be checked before any Node coercion.
 		if not is_instance_valid(node): continue
 		for child: Node in node.get_children(): pending.append(child)
 		if node is Skeleton3D and node.has_meta("character_motion_owner"):
@@ -90,7 +90,7 @@ func _release_retiring_resources(root: Node) -> void:
 			if not is_instance_valid(root): return
 			slice = Time.get_ticks_usec()
 	while not geometry.is_empty():
-		var node: Node = geometry.pop_back()
+		var node: Variant = geometry.pop_back()
 		if not is_instance_valid(node): continue
 		if node is CollisionShape3D:
 			node.disabled = true; node.shape = null

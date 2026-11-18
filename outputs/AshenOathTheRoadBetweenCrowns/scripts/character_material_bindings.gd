@@ -138,6 +138,6 @@ static func texture_for(material: Material) -> Texture2D:
 		return (material as BaseMaterial3D).albedo_texture
 	if material is ShaderMaterial:
 		var shader := (material as ShaderMaterial).shader
-		if shader != null and shader.resource_path in ["res://shaders/character_region_palette.gdshader", "res://shaders/spectral_veil.gdshader", "res://shaders/monster_pigment.gdshader", "res://shaders/monster_pigment_translucent.gdshader", "res://shaders/monster_pigment_clearcoat.gdshader"]:
+		if shader != null and shader.resource_path in ["res://shaders/character_region_palette.gdshader", "res://shaders/spectral_veil.gdshader", "res://shaders/monster_pigment.gdshader", "res://shaders/monster_pigment_clearcoat.gdshader"]:
 			return (material as ShaderMaterial).get_shader_parameter("authored_atlas") as Texture2D
 	return null

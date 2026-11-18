@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "kind": "approved_monster_source_observation_archive_binding",
+  "observation_mode": "source_authoring_preview",
+  "archive_writer_revision": "explicit_same_path_sha256_content_records_only",
+  "previous_archive_attempt": "r1 failed schema comparison; see private archive_attempt_r1_schema_failure.json; no prior archive is overwritten",
+  "source_ledger": {
+    "sha256": "2a37e9456a9c9667f703e1bf045af4fd318757b35d1c3e3a4757349bc6eeeaa4",
+    "file": "primary_presentation_coverage_ledger.json"
+  },
+  "archive_index": {
+    "sha256": "a89692f0ecc0ca3fa8880b3132665e4603dea15ed6cc10fb000cd9bb64692f23",
+    "file": "archive.json"
+  },
+  "selected_images": [
+    {
+      "run": "r13",
+      "file": "observations/source_preview/r13/M02_wychwood_day_idle_original.png",
+      "sha256": "0c1886ebb3033cdf546aa1e98a41ee43b18030abadf8a8794f30d96ec9f2c10e",
+      "bytes": 968440
+    },
+    {
+      "run": "r13",
+      "file": "observations/source_preview/r13/M02_wychwood_day_idle_candidate.png",
+      "sha256": "408106ca15a3c641786e17cc07383becd5310b76bc81c913c738a6271255ea8b",
+      "bytes": 967324
+    },
+    {
+      "run": "r19",
+      "file": "diagnostics/source_preview/r19/M03_wychwood_day_action_original.png",
+      "sha256": "aa36c404c612717a42a54575c4bdb0c7ae8a31498da1f9297a7a8340ba6b1efd",
+      "bytes": 844929
+    },
+    {
+      "run": "r19",
+      "file": "diagnostics/source_preview/r19/M03_wychwood_day_action_candidate.png",
+      "sha256": "8ea8edabe6e9a708b6359617b999bdb0bca6838343099bdbd3c8e178340fa224",
+      "bytes": 842184
+    },
+    {
+      "run": "r23",
+      "file": "observations/source_preview/r23/M11_wychwood_night_idle_original.png",
+      "sha256": "cb33bc09a6158d1268225c70995fdea4ea4501c9c458886f680e7e4307690edb",
+      "bytes": 1078238
+    },
+    {
+      "run": "r23",
+      "file": "observations/source_preview/r23/M11_wychwood_night_idle_candidate.png",
+      "sha256": "cc4b63089463c8df3c08fd353bbc1bf43773c96804895eacde557781c02b5593",
+      "bytes": 1077826
+    },
+    {
+      "run": "r22",
+      "file": "observations/source_preview/r22/M09_old_mill_rain_idle_original.png",
+      "sha256": "79a0a7b2a5ea93d240b4c5f2223d072f1990426955a7e27410147a34e9a8b685",
+      "bytes": 1080049
+    },
+    {
+      "run": "r22",
+      "file": "observations/source_preview/r22/M09_old_mill_rain_idle_candidate.png",
+      "sha256": "3f9feb4ca982edb13805fc2813eda209c0a67163897c88a05741d6594e24cdd4",
+      "bytes": 1079982
+    }
+  ],
+  "original_failed_runs": [
+    "r15",
+    "r18",
+    "r19"
+  ],
+  "full_failed_runs_reclassified_as_pass": false,
+  "asset_count": 20,
+  "common_runtime_inputs": {
+    "sha256": "17a7255d81607a4ff11c8b3fc4e7c7e148475817de574c7c42fc884aa5f539ce",
+    "files": 518
+  },
+  "profile_sha256": "d020139688981ee0e027e5361718c88375fd46b17faa5dd43f8869a78f2e4af9",
+  "selected_image_caption_policy": "Native-material control / pigment candidate; same logged pose and lighting. This is not a before/after deployed-release comparison.",
+  "r19_selected_segment": "M03 native action-pose color observation only; original overall run and failed mechanics remain failed. R25 independently records actual incoming AI body contact.",
+  "r25_mechanics_report": "observations/source_preview/r25/mechanics/report.json",
+  "touch_window_client_size": [
+    960,
+    540
+  ],
+  "production_internal_canvas_and_raw_png_size": [
+    1280,
+    720
+  ],
+  "physical_phone_coverage": false,
+  "source_render_review": "Parent reviewed all twenty primary color segments, selected weather and R25 contact; this is developer review.",
+  "frozen_export_verified": false,
+  "performance_acceptance": false,
+  "publication_verified": false,
+  "user_acceptance": "pending"
+}

@@ -83,10 +83,10 @@ func configure() -> void:
 			if ambient != null: ambient.process_mode = Node.PROCESS_MODE_DISABLED
 
 func life() -> Node:
-	for id: String in ["GreyfenLifeController", "RegionalLifeController"]:
-		var controller: Node = host.zone_root.get_node_or_null(id)
-		if controller != null: return controller
-	return null
+	var zone: Variant = host.zone_root if is_instance_valid(host) else null
+	if not is_instance_valid(zone): return null
+	var controller: Node = zone.get_node_or_null("GreyfenLifeController")
+	return controller if controller != null else zone.get_node_or_null("RegionalLifeController")
 
 func append_topics(actor: Node3D, dialogue: Dictionary) -> void:
 	var identity := Cast.canonical_identity(str(actor.get("interaction_id")))

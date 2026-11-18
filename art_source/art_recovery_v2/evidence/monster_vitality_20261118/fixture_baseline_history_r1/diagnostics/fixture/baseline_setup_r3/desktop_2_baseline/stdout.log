@@ -1,0 +1,51 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+WARNING: Your video card drivers are known to have low quality OpenGL 3.3 support, switching to ANGLE.
+   at: DisplayServerWindows (platform/windows/display_server_windows.cpp:7423)
+OpenGL API OpenGL ES 3.0 (ANGLE 2.1.1 git hash: aaebda1c5a40) - Compatibility - Using Device: Google Inc. (Intel) - ANGLE (Intel, Intel(R) HD Graphics 620 (0x00005916) Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.101.2130)
+
+AUDIO: music_state_main_menu
+LOADING: runtime ready total=1660ms environment=0ms services=1644ms
+LOADING: Greyfen prewarm begin
+LOADING: Greyfen prewarm build_begin
+LOADING: Greyfen prewarm build_complete ms=1240 ok=true
+LOADING: usable_menu_ready ms=87415
+LOADING: opening_world_render_ready
+LOADING: Greyfen prewarmed total=72836ms build=1240ms world=375ms player=552ms
+LOADING: new_game_handoff prewarmed=true cached_zones=1
+LOADING: new_game_stage=cache_clear elapsed=372.6
+LOADING: handoff_phase=hide_menu_begin
+LOADING: handoff_phase=hide_menu_end
+LOADING: handoff_phase=quest_begin
+LOADING: handoff_phase=quest_end
+LOADING: new_game_stage=state_ready elapsed=1261.9
+LOADING: new_game_stage=zone_dispatch elapsed=1265.0
+LOADING: handoff_phase=load_zone_begin
+LOADING: zone_begin id=greyfen prewarm=true cached=false
+LOADING: cached_zone_activated id=greyfen valid=true
+LOADING: zone_stage=cache_activated elapsed=1394.3
+ZONE_COMPOSITION: id=greyfen reused=true visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=2675.1
+LOADING: zone_stage=visual_applied elapsed=2683.8
+AUDIO: music_state_greyfen_explore
+LOADING: zone_stage=runtime_finalized zone=greyfen navigation=false ms=1
+LOADING: zone_stage=budget_ready elapsed=2904.4
+LOADING: zone=greyfen playable_ms=2921.3
+LOADING: handoff_phase=load_zone_end
+LOADING: new_game_stage=ready elapsed=2972.5
+LOADING: new_game_stage=zone_return elapsed=2972.5
+ERROR: Invalid polygon data, triangulation failed.
+   at: canvas_item_add_polygon (servers/rendering/renderer_canvas_cull.cpp:1727)
+   GDScript backtrace (most recent call first):
+       [0] _draw_background (res://scripts/hud_navigation_dial.gd:89)
+       [1] _draw (res://scripts/hud_navigation_dial.gd:14)
+LOADING: zone_begin id=wychwood prewarm=false cached=false
+ZONE_COMPOSITION: id=wychwood reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=2487.6
+LOADING: zone_stage=visual_applied elapsed=2493.9
+LOADING: zone_stage=runtime_finalized zone=wychwood navigation=true ms=3
+LOADING: zone_stage=budget_ready elapsed=2520.5
+AUDIO: music_state_wychwood_tension
+LOADING: zone=wychwood playable_ms=10384.8
+LIVE ROUTE: FAIL segments=2 errors=1
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

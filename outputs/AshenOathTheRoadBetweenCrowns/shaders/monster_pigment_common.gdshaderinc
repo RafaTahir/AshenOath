@@ -1,5 +1,5 @@
 // Pigment changes use the retained atlas; lighting and surface detail stay native.
-uniform sampler2D authored_atlas : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
+uniform sampler2D authored_atlas : source_color, filter_linear_mipmap, repeat_enable;
 uniform vec4 authored_tint : source_color = vec4(1.0);
 uniform bool vertex_color_enabled = false;
 uniform vec2 authored_uv_scale = vec2(1.0);
@@ -13,7 +13,7 @@ uniform float highlight_preservation : hint_range(0.0, 1.0) = 0.85;
 uniform float value_gain : hint_range(0.5, 1.5) = 1.0;
 uniform bool atlas_regions = false;
 uniform bool normal_enabled = false;
-uniform sampler2D authored_normal : hint_normal, filter_linear_mipmap_anisotropic, repeat_enable;
+uniform sampler2D authored_normal : hint_normal, filter_linear_mipmap, repeat_enable;
 uniform float authored_normal_scale = 1.0;
 uniform float authored_roughness = 1.0;
 uniform float authored_metallic = 0.0;
@@ -22,8 +22,8 @@ uniform float authored_clearcoat = 0.0;
 uniform float authored_clearcoat_roughness = 0.5;
 uniform bool roughness_textured = false;
 uniform bool metallic_textured = false;
-uniform sampler2D authored_roughness_map : hint_default_white, filter_linear_mipmap_anisotropic, repeat_enable;
-uniform sampler2D authored_metallic_map : hint_default_white, filter_linear_mipmap_anisotropic, repeat_enable;
+uniform sampler2D authored_roughness_map : hint_default_white, filter_linear_mipmap, repeat_enable;
+uniform sampler2D authored_metallic_map : hint_default_white, filter_linear_mipmap, repeat_enable;
 uniform vec4 roughness_channel = vec4(0.0, 1.0, 0.0, 0.0);
 uniform vec4 metallic_channel = vec4(0.0, 0.0, 1.0, 0.0);
 
@@ -48,6 +48,13 @@ vec3 monster_pigment(vec3 source) {
 	float shadow_mask = smoothstep(0.003, 0.025, luminance);
 	float highlight_mask = 1.0 - smoothstep(highlight_preservation, 1.0, peak);
 	float retained_chroma = atlas_regions ? 1.0 - smoothstep(0.65, 0.98, chroma) * 0.7 : 1.0;
+	// Warm, bright atlas islands carry ivory teeth and keratin. Keep their
+	// native color separation while low-value hide receives its full pigment.
+	// Compatibility grades sRGB samples; Forward+/Mobile grade linear samples.
+	// Express the same ivory range in the renderer's working color space.
+	float ivory_low = OUTPUT_IS_SRGB ? 0.381 : 0.12;
+	float ivory_high = OUTPUT_IS_SRGB ? 0.680 : 0.42;
+	float retained_warm_highlights = atlas_regions ? 1.0 - 0.85 * smoothstep(ivory_low, ivory_high, luminance) * warm_mask : 1.0;
 	return mix(source, clamp(colored, vec3(0.0), vec3(1.0)),
-		pigment_strength * shadow_mask * highlight_mask * retained_chroma);
+		pigment_strength * shadow_mask * highlight_mask * retained_chroma * retained_warm_highlights);
 }

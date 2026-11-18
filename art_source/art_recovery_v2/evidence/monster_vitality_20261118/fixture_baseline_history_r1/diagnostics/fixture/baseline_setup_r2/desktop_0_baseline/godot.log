@@ -1,0 +1,23 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+WARNING: Your video card drivers are known to have low quality OpenGL 3.3 support, switching to ANGLE.
+   at: DisplayServerWindows (platform/windows/display_server_windows.cpp:7423)
+OpenGL API OpenGL ES 3.0 (ANGLE 2.1.1 git hash: aaebda1c5a40) - Compatibility - Using Device: Google Inc. (Intel) - ANGLE (Intel, Intel(R) HD Graphics 620 (0x00005916) Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.101.2130)
+
+AUDIO: music_state_main_menu
+LOADING: runtime ready total=2298ms environment=0ms services=2181ms
+ERROR: Resource file not found: res://assets_external/design_pack_v1/C01_ash_staff_C01_StaffAshWood_authored_grain.png (expected type: Texture2D)
+   at: _load (core/io/resource_loader.cpp:351)
+ERROR: Resource file not found: res://assets_external/design_pack_v1/C01_ash_staff_C01_StaffAshWood_fine_normal.png (expected type: Texture2D)
+   at: _load (core/io/resource_loader.cpp:351)
+ERROR: Resource file not found: res://assets_external/design_pack_v1/C01_ash_staff_C01_StaffGrip_authored_grain.png (expected type: Texture2D)
+   at: _load (core/io/resource_loader.cpp:351)
+ERROR: Resource file not found: res://assets_external/design_pack_v1/C01_ash_staff_C01_StaffGrip_fine_normal.png (expected type: Texture2D)
+   at: _load (core/io/resource_loader.cpp:351)
+ERROR: Can't load dependency: 'res://assets_external/design_pack_v1/C01_ash_staff_C01_StaffAshWood_authored_grain.png'.
+   at: parse_variant (core/io/resource_format_binary.cpp:459)
+ERROR: Failed loading resource: res://.godot/imported/C01_ash_staff.glb-d718e9430c7fbc7589450b3a3b6522f1.scn.
+   at: _load (core/io/resource_loader.cpp:343)
+ERROR: Failed loading resource: res://assets_external/design_pack_v1/C01_ash_staff.glb.
+   at: _load (core/io/resource_loader.cpp:343)
+LOADING: Greyfen prewarm begin
+LOADING: opening_resource_failure materials= actors=res://assets_external/design_pack_v1/C01_ash_staff.glb: threaded load status 2

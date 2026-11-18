@@ -252,6 +252,7 @@ def validate_profiles(project, profiles, contracts, baseline):
                 aid + ": invalid narrative realm labels")
         require(isinstance(row.get("materials"), dict) and set(row["materials"]) == set(source["materials"]),
                 aid + ": exact authored material-name coverage differs")
+        graded_opaque = 0
         for name, material in row["materials"].items():
             require(set(material) == PIGMENT_KEYS and material.get("method") == row["method"],
                     aid + "/" + name + ": unsupported/missing pigment controls")
@@ -260,6 +261,13 @@ def validate_profiles(project, profiles, contracts, baseline):
                         aid + "/" + name + ": invalid sRGB color")
             for field, limits in PARAMETERS.items():
                 number(material[field], *limits, aid + "/" + name + "/" + field)
+            alpha_mode = source["materials"][name]["alpha_mode"]
+            if alpha_mode == "BLEND":
+                require(material["strength"] == 0.0,
+                        aid + "/" + name + ": blended layers require exact zero strength and the native material")
+            elif alpha_mode == "OPAQUE" and material["strength"] > 0.0:
+                graded_opaque += 1
+        require(graded_opaque > 0, aid + ": at least one opaque surface must receive positive pigment strength")
 
 
 def live_coverage(project, contracts, profiles):
@@ -301,7 +309,10 @@ def live_coverage(project, contracts, profiles):
                     "alias": token, "kind": "runtime_literal_reference",
                     "note": "Literal reference; does not itself establish spawn, arrival or observed gameplay."})
     return {aid: {"live_aliases": aliases[aid], "narrative_realms": profiles["assets"][aid]["realms"],
-                  "explicit_ecology_zone_references": ecology[aid], "runtime_literal_references": references[aid]}
+                  "explicit_ecology_zone_references": ecology[aid], "runtime_literal_references": references[aid],
+                  "material_delivery": {name: {"alpha_mode": original["alpha_mode"],
+                      "policy": "native_material_passthrough" if profiles["assets"][aid]["materials"][name]["strength"] == 0.0 else "opaque_pigment_variant"}
+                      for name, original in contracts[aid]["materials"].items()}}
             for aid in IDS}
 
 
@@ -336,15 +347,22 @@ def main():
         validate_profiles(project, profiles, contracts, baseline)
         coverage = live_coverage(project, contracts, profiles)
         count = sum(len(row["materials"]) for row in contracts.values())
+        deliveries = [row for asset in coverage.values() for row in asset["material_delivery"].values()]
         result = {"schema_version": 1, "kind": "monster_material_static_coverage", "passed": True,
             "profile": {"path": str(profile_path), **pin(profile_path)},
             "immutable_baseline": {"path": str(baseline_path), **pin(baseline_path)},
             "verifier": {"path": "tools/verify_monster_material_profiles.py", **pin(Path(__file__))},
             "counts": {"sources": len(contracts), "materials": count,
-                "external_texture_inputs_unique": len({path for row in contracts.values() for path in row["external_texture_inputs"]})},
+                "external_texture_inputs_unique": len({path for row in contracts.values() for path in row["external_texture_inputs"]}),
+                "opaque_pigment_variants": sum(row["policy"] == "opaque_pigment_variant" for row in deliveries),
+                "native_material_passthroughs": sum(row["policy"] == "native_material_passthrough" for row in deliveries),
+                "native_blended_layers": sum(row["alpha_mode"] == "BLEND" for row in deliveries)},
             "feature_contract": {"uv_sets": [0], "texture_transforms": "rejected",
                 "material_extensions": "scalar neutral specular/IOR and scalar clearcoat; textures and other extensions rejected",
                 "alpha_modes": ["OPAQUE", "BLEND"], "orm_channels": {"roughness": "g", "metallic": "b"},
+                "blended_layers": "exact zero strength; retain identical native Material rather than reconstructing alpha in a pigment shader",
+                "per_asset_coverage": "at least one OPAQUE surface with strictly positive pigment strength",
+                "zero_strength": "exact native material passthrough, including optional opaque details",
                 "emission": "not used by retained roster; nonzero factors and textures rejected",
                 "ambient_occlusion": "not used by retained roster; textures rejected",
                 "preserve": ["raw GLB bytes", "external texture bytes", "normal scale", "PBR factors", "scalar specular/IOR", "scalar clearcoat", "vertex colors", "alpha", "culling"]},

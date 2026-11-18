@@ -98,3 +98,6 @@ outputs/AshenOath_Web_Slim/
 !outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Orc_Atlas_Monsters.png.import
 .vercel
 .env*
+
+# Exact, bounded monster verification logs are reviewable release evidence.
+!art_source/art_recovery_v2/evidence/monster_vitality_20261118/**/*.log

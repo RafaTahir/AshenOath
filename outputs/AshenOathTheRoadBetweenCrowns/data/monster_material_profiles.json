@@ -394,7 +394,7 @@
         "wychwood",
         "record_hall"
       ],
-      "intent": "Smoky pearl membranes with muted blue-green interference and ochre pattern islands; retain the authored bounded wing transparency.",
+      "intent": "Cool opal and mint pigment on the body; retain the authored cream wing pattern and complete native layered transparency with a zero-strength membrane recipe.",
       "method": "atlas_regions",
       "materials": {
         "M11_RecoveryAtlas": {
@@ -412,7 +412,7 @@
           "neutral_color": "#b1c5bb",
           "warm_color": "#bda76c",
           "cool_color": "#86a7c1",
-          "strength": 0.69,
+          "strength": 0.0,
           "chroma_preservation": 0.82,
           "highlight_preservation": 0.99,
           "value_gain": 1.02

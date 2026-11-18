@@ -1,0 +1,31 @@
+{
+  "kind": "hud_and_adjusted_baseline_fixture_history",
+  "archive_index": "archive.json",
+  "hud_before": "diagnostics/fixture/hud_polygon/before2.json",
+  "hud_after": "diagnostics/fixture/hud_polygon/after.json",
+  "hud_fixture_source": "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_hud_navigation_polygons.gd (bind to final source commit; no duplicate source snapshot)",
+  "hud_runtime_fix_source": "outputs/AshenOathTheRoadBetweenCrowns/scripts/hud_navigation_dial.gd; exact before/after hashes and one-line diff are the eighth baseline_overlay.json entry",
+  "initial_hud_attempt": "before logs exist; no before.json was produced",
+  "hud_scope": "Three actual CanvasItem background draws; before2 reproduces triangulation errors, after retains ordinary circles and rejects only untriangulatable clipping output. Micro-timing is not a route or GPU benchmark.",
+  "r1": "Baseline failed HUD class resolution before generated import-remap closure was projected; no route report was produced.",
+  "r2": "Baseline failed the four missing staff texture dependencies; no route report was produced.",
+  "r3": {
+    "historical_completed_observations": 4,
+    "fifth_run": "desktop_2_baseline",
+    "fifth_status": "failed HUD polygon triangulation",
+    "pilot_is_performance_acceptance": false,
+    "matrix_performance_acceptance": false
+  },
+  "r4_setup": {
+    "base_commit": "1cbea51bba11862c675741b27b39cda832484f7f",
+    "shared_prerequisites": 8,
+    "metadata_only": true,
+    "performance_acceptance": false,
+    "scope": "Full eight reviewed diffs/source hashes; prior overlay/projection receipts preserved; imported cache remaps are generated only for equal genuine baseline sources; staff PNGs derive from baseline embedded bufferViews. No candidate source fallback."
+  },
+  "images_copied": 0,
+  "profiles_or_packs_copied": false,
+  "current_performance_acceptance": false,
+  "frozen_export_acceptance": false,
+  "user_acceptance": "pending"
+}

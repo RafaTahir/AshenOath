@@ -122,7 +122,7 @@ static func saved_travel(host: Node) -> Dictionary:
 				valid = false
 		if valid:
 			position = Vector3(float(coordinates[0]), float(coordinates[1]), float(coordinates[2]))
-	return {"command": "wait" if str(data.get("command", "follow")) == "wait" else "follow", "zone": host.save_manager._normalize_zone(str(data.get("zone", "greyfen"))), "position": position}
+	return {"command": "wait" if str(data.get("command", "follow")) == "wait" else "follow", "zone": preload("res://scripts/models/save_payload_fields.gd")._normalize_zone(str(data.get("zone", "greyfen"))), "position": position}
 
 static func capture(host: Node) -> void:
 	if not is_instance_valid(host.zone_root):

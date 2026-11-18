@@ -65,19 +65,20 @@ func _end_activity(entry: Dictionary) -> void:
 
 func _release_activity(entry: Dictionary, release_pose: bool = true) -> void:
 	entry.erase("carry_route_scope")
-	_life._clear_work_contact_effects(entry.node)
+	var actor: Node3D = entry.node if is_instance_valid(entry.node) else null
+	_life._clear_work_contact_effects(actor)
 	var was_active: Variant = bool(entry.get("activity_active", false))
 	var station: Variant = str(entry.get("station", ""))
-	if station != "" and _life.station_actor(station) == entry.node:
+	if station != "" and _life.station_actor(station) == actor:
 		_life.release_station(station)
 	entry.station = ""
 	entry.activity_active = false
 	if not release_pose:
-		_life._release_awake_seat(entry)
+		if is_instance_valid(entry.driver): _life._release_awake_seat(entry)
 		return
-	if was_active:
+	if was_active and is_instance_valid(actor) and is_instance_valid(entry.driver):
 		_life._set_activity_pose(entry, false)
-	if was_active and entry.driver != null and _life.supports(entry.driver, "clear_life_activity"):
+	if was_active and is_instance_valid(entry.driver) and _life.supports(entry.driver, "clear_life_activity"):
 		entry.driver.clear_life_activity()
 	if is_instance_valid(entry.driver) and _life.supports(entry.driver, "set_carried_activity"):
 		entry.driver.set_carried_activity("")

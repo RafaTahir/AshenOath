@@ -9,10 +9,11 @@ func _init(actor: CharacterBody3D) -> void:
 func _build_bow_visual() -> void:
 	if _actor.bow_visual != null:
 		return
-	var skeleton: Variant = _actor._find_skeleton(_actor.visual_root)
+	var skeleton: Skeleton3D = _actor._find_skeleton(_actor.visual_root)
 	var hand_parent: Node3D = _actor.visual_root
 	if skeleton != null:
-		var hand_index: Variant = _actor._find_bone_index(skeleton, ["LeftHand", "Hand.L", "Fist.L", "FistL", "hand_l", "lefthand"])
+		var hand_aliases: Array[String] = ["LeftHand", "Hand.L", "Fist.L", "FistL", "hand_l", "lefthand"]
+		var hand_index: Variant = _actor._find_bone_index(skeleton, hand_aliases)
 		if hand_index >= 0:
 			_actor.bow_attachment = BoneAttachment3D.new()
 			_actor.bow_attachment.name = "KaelBowHandSocket"
@@ -47,7 +48,8 @@ func _build_bow_visual() -> void:
 		push_error("Modeled bow source could not be loaded: %s" % _actor.MODELED_BOW_PATH)
 	var quiver_parent: Node3D = _actor.visual_root
 	if skeleton != null:
-		var back_index: Variant = _actor._find_bone_index(skeleton, ["spine_03", "spine_02", "Spine3", "Spine2", "Chest", "Torso", "Spine", "Body"])
+		var back_aliases: Array[String] = ["spine_03", "spine_02", "Spine3", "Spine2", "Chest", "Torso", "Spine", "Body"]
+		var back_index: Variant = _actor._find_bone_index(skeleton, back_aliases)
 		if back_index >= 0:
 			_actor.bow_quiver_attachment = BoneAttachment3D.new()
 			_actor.bow_quiver_attachment.name = "KaelQuiverBackSocket"
@@ -145,11 +147,12 @@ func _prepare_modeled_prop(root: Node3D, fallback_color: Color) -> void:
 				mesh_instance.set_surface_override_material(surface_index, fitted)
 
 func _build_sheathed_sword() -> void:
-	var skeleton: Variant = _actor._find_skeleton(_actor.visual_root)
+	var skeleton: Skeleton3D = _actor._find_skeleton(_actor.visual_root)
 	if skeleton == null:
 		push_error("Kael's back equipment requires his character skeleton")
 		return
-	var back_index: Variant = _actor._find_bone_index(skeleton, ["spine_03", "spine_02", "Spine3", "Spine2", "Chest", "Torso", "Spine", "Body"])
+	var back_aliases: Array[String] = ["spine_03", "spine_02", "Spine3", "Spine2", "Chest", "Torso", "Spine", "Body"]
+	var back_index: Variant = _actor._find_bone_index(skeleton, back_aliases)
 	if back_index < 0:
 		push_error("Kael's back equipment requires a validated spine bone")
 		return

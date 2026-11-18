@@ -1,0 +1,95 @@
+{
+  "command": [
+    "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+    "--path",
+    "D:\\Temp\\AO_MonsterVitality_20261118\\live_route_matrix_r3\\desktop_0_baseline\\isolated_project",
+    "--windowed",
+    "--audio-driver",
+    "Dummy",
+    "--rendering-method",
+    "gl_compatibility",
+    "--rendering-driver",
+    "opengl3",
+    "--script",
+    "D:\\Temp\\am\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\profile_monster_live_route.gd",
+    "--log-file",
+    "D:\\Temp\\AO_MonsterVitality_20261118\\live_route_matrix_r3\\desktop_0_baseline\\godot.log",
+    "--",
+    "--profile=AshenOathCapture/monster_route_ec635be7ca964d5599c6e5a76898ba91",
+    "--viewport=desktop",
+    "--output=D:\\Temp\\AO_MonsterVitality_20261118\\live_route_matrix_r3\\desktop_0_baseline\\report.json",
+    "--coordinates-helper=D:\\Temp\\am\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\qa_viewport_coordinates.gd"
+  ],
+  "project": "D:\\Temp\\AO_MonsterVitality_20261118\\live_route_baseline_1c\\outputs\\AshenOathTheRoadBetweenCrowns",
+  "isolated_project": "D:\\Temp\\AO_MonsterVitality_20261118\\live_route_matrix_r3\\desktop_0_baseline\\isolated_project",
+  "output": "D:\\Temp\\AO_MonsterVitality_20261118\\live_route_matrix_r3\\desktop_0_baseline",
+  "environment": {
+    "APPDATA": "D:\\Temp\\AO_MonsterVitality_20261118\\live_route_matrix_r3\\desktop_0_baseline\\profile\\roaming",
+    "LOCALAPPDATA": "D:\\Temp\\AO_MonsterVitality_20261118\\live_route_matrix_r3\\desktop_0_baseline\\profile\\local"
+  },
+  "profile": "AshenOathCapture/monster_route_ec635be7ca964d5599c6e5a76898ba91",
+  "expected_user_data_dir": "D:\\Temp\\AO_MonsterVitality_20261118\\live_route_matrix_r3\\desktop_0_baseline\\profile\\roaming\\AshenOathCapture\\monster_route_ec635be7ca964d5599c6e5a76898ba91",
+  "qa_script_sha256": "60018bc3b2052641f586496b5a7aec5d472c22ea6f5b5f02e63e13ccc4af6ebd",
+  "qa_coordinates_path": "D:\\Temp\\am\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\qa_viewport_coordinates.gd",
+  "qa_coordinates_sha256": "42409f0e3eac173bc5bed04be69523e36dac88955c1e624893540382506d19f9",
+  "qa_toolchain": [
+    {
+      "path": "D:\\Temp\\am\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\profile_monster_live_route.gd",
+      "sha256": "60018bc3b2052641f586496b5a7aec5d472c22ea6f5b5f02e63e13ccc4af6ebd"
+    },
+    {
+      "path": "D:\\Temp\\am\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\qa_viewport_coordinates.gd",
+      "sha256": "42409f0e3eac173bc5bed04be69523e36dac88955c1e624893540382506d19f9"
+    },
+    {
+      "path": "D:\\Temp\\am\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\run_monster_live_route.py",
+      "sha256": "925f00a25dd45c0dde2f071114968ff890d96590a4b1956f26f789256855d28b"
+    },
+    {
+      "path": "D:\\Temp\\am\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\compare_monster_live_route.py",
+      "sha256": "09f451127fb670664ed0f6067b2ce042858ccd61085f18058b989be60c9ad096"
+    },
+    {
+      "path": "D:\\Temp\\am\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\background_native_capture.py",
+      "sha256": "2ae3f7eb1840c78468e11254c27bb131b5f85c3f8a982bb6e1a9820a1f416c3c"
+    },
+    {
+      "path": "D:\\Temp\\am\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\run_living_cast_capture.py",
+      "sha256": "a1a3554537eb482d0c5671acf15ab43a204add8455d2548eb9838a2a8025fcb2"
+    },
+    {
+      "path": "D:\\Temp\\am\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\run_monster_vitality_capture.py",
+      "sha256": "da4f656f28bcc17af0b80d7e6c1ae474deb5f83f3c1520aa7da18ff49bf2f1ae"
+    },
+    {
+      "path": "D:\\Temp\\am\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\live_route_import_projection.py",
+      "sha256": "3304556b201019c431ccc62aaaa8b91422d6001586f4e346c2bfa1f98f0ce814"
+    }
+  ],
+  "godot_sha256": "63b3b2208819714c9677fbfdd8217c5b7dee8ecf5f383502e826bc9e2227ff5a",
+  "source_snapshot_sha256": "9ef08c28641f3c1f4cca75fe13a70b9957fef5fa6b15592f8367534a42698918",
+  "configuration_sha256": "a0d3f7c986db735bb1a853bd1ce0da7aaf55820ad2293659199f5fe7f5de478a",
+  "import_projection_file": "D:\\Temp\\AO_MonsterVitality_20261118\\live_route_matrix_r3\\baseline_import_projection.json",
+  "import_projection_sha256": "c795155945cc82b55bcabbc465ca139cbf9094eda929f84ff7a8f7fa1bf03708",
+  "prepared_identity_file": "D:\\Temp\\AO_MonsterVitality_20261118\\live_route_matrix_r3\\prepared_monster_identity.json",
+  "prepared_identity_sha256": "58940ffbcda4c2f1f328bc46c3f1c8a229ad1835cad1fed661bd75d504ba6dbb",
+  "started_utc": "2026-11-17T23:41:41.915427+00:00",
+  "owned_pid": 16500,
+  "private_desktop": {
+    "mode": "background-rendered",
+    "desktop": "AshenOathCapture_38c960a333684fb2be9ea737826afc82",
+    "input_desktop_before": "Default",
+    "input_desktop_after_launch": "Default",
+    "desktop_switch_requested": false,
+    "binding": "STARTUPINFO.lpDesktop",
+    "input_desktop_after_exit": "Default"
+  },
+  "exit_code": 0,
+  "evidence_files": {
+    "report.json": "e15198f4271508757bcaee69851d009bd2133c18af05853ef87de2825bd8209d",
+    "stdout.log": "4c00eb8907b999fde9f3828cb0ca5e96df534cba1f3f7f38b1ff61b28178f81a",
+    "godot.log": "a10b9761b4b9eabd0b43bcdb3eddbd48ffba4c447c52ce787cf519f02e440cc7"
+  },
+  "status": "pass",
+  "finished_utc": "2026-11-17T23:47:55.945871+00:00"
+}

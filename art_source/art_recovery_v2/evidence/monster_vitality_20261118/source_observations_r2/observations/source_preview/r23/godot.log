@@ -1,0 +1,59 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+WARNING: Your video card drivers are known to have low quality OpenGL 3.3 support, switching to ANGLE.
+   at: DisplayServerWindows (platform/windows/display_server_windows.cpp:7423)
+OpenGL API OpenGL ES 3.0 (ANGLE 2.1.1 git hash: aaebda1c5a40) - Compatibility - Using Device: Google Inc. (Intel) - ANGLE (Intel, Intel(R) HD Graphics 620 (0x00005916) Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.101.2130)
+
+AUDIO: music_state_main_menu
+LOADING: runtime ready total=2224ms environment=0ms services=2208ms
+LOADING: Greyfen prewarm begin
+LOADING: Greyfen prewarm build_begin
+LOADING: Greyfen prewarm build_complete ms=1124 ok=true
+LOADING: usable_menu_ready ms=58422
+LOADING: opening_world_render_ready
+LOADING: Greyfen prewarmed total=45540ms build=1124ms world=268ms player=500ms
+LOADING: new_game_handoff prewarmed=true cached_zones=1
+LOADING: new_game_stage=cache_clear elapsed=26.9
+LOADING: handoff_phase=hide_menu_begin
+LOADING: handoff_phase=hide_menu_end
+LOADING: handoff_phase=quest_begin
+LOADING: handoff_phase=quest_end
+LOADING: new_game_stage=state_ready elapsed=75.2
+LOADING: new_game_stage=zone_dispatch elapsed=78.6
+LOADING: handoff_phase=load_zone_begin
+LOADING: zone_begin id=greyfen prewarm=true cached=false
+LOADING: cached_zone_activated id=greyfen valid=true
+LOADING: zone_stage=cache_activated elapsed=120.5
+ZONE_COMPOSITION: id=greyfen reused=true visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=777.2
+LOADING: zone_stage=visual_applied elapsed=786.6
+AUDIO: music_state_greyfen_explore
+LOADING: zone_stage=runtime_finalized zone=greyfen navigation=false ms=1
+LOADING: zone_stage=budget_ready elapsed=878.8
+LOADING: zone=greyfen playable_ms=893.1
+LOADING: handoff_phase=load_zone_end
+LOADING: new_game_stage=ready elapsed=940.5
+LOADING: new_game_stage=zone_return elapsed=940.5
+LOADING: zone_begin id=wychwood prewarm=false cached=false
+ZONE_COMPOSITION: id=wychwood reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=2720.1
+LOADING: zone_stage=visual_applied elapsed=2726.6
+LOADING: zone_stage=runtime_finalized zone=wychwood navigation=true ms=3
+LOADING: zone_stage=budget_ready elapsed=2793.4
+AUDIO: music_state_wychwood_tension
+LOADING: zone=wychwood playable_ms=9456.1
+AUDIO: music_state_ghoulkin_combat
+AUDIO: music_state_wychwood_tension
+MONSTER MATERIAL LEVEL CAPTURED: M02 / wychwood / night
+MONSTER MATERIAL LEVEL CAPTURED: M11 / wychwood / night
+MONSTER MATERIAL LEVEL CAPTURED: M02 / wychwood / rain
+MONSTER MATERIAL LEVEL CAPTURED: M11 / wychwood / rain
+LOADING: zone_begin id=old_mill prewarm=false cached=false
+ZONE_COMPOSITION: id=old_mill reused=false visible=true position=(0.0, 0.0, 0.0)
+LOADING: zone_stage=systems_synced elapsed=19737.2
+LOADING: zone_stage=visual_applied elapsed=19936.7
+LOADING: zone_stage=runtime_finalized zone=old_mill navigation=true ms=0
+LOADING: zone_stage=budget_ready elapsed=20203.9
+LOADING: zone=old_mill playable_ms=22935.5
+AUDIO: music_state_ash_mill
+MONSTER MATERIAL LEVEL CAPTURED: M09 / old_mill / night
+MONSTER MATERIAL LEVEL CAPTURED: M09 / old_mill / rain

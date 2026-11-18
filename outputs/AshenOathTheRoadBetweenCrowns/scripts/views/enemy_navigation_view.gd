@@ -1,5 +1,8 @@
 extends RefCounted
 ## enemy navigation view: scene-only responsibilities.
+const FINAL_ROUTE_STOP_SQUARED := 0.002
+# Reach the decision ring before the route's existing ~0.045 m stop tolerance.
+const READY_APPROACH_MARGIN := 0.05
 
 var _actor: CharacterBody3D
 
@@ -39,7 +42,7 @@ func _navigation_direction(target: Vector3, force_refresh: bool = false) -> Vect
 		return Vector3.ZERO
 	var target_changed: Variant = _actor.navigation_target == Vector3.INF or _actor.navigation_target.distance_squared_to(target) > 1.56
 	if force_refresh or target_changed or _actor.navigation_refresh_time <= 0.0 or _actor.navigation_route.is_empty():
-		_actor.navigation_route = _actor.spatial_service.build_route(_actor.global_position, target, 0.62)
+		_actor.navigation_route = _actor.spatial_service.build_route(_actor.global_position, target, 0.62, _actor)
 		_actor.navigation_route_index = 1 if _actor.navigation_route.size() > 1 else 0
 		_actor.navigation_target = target
 		_actor.navigation_refresh_time = 0.35
@@ -51,10 +54,10 @@ func _navigation_direction(target: Vector3, force_refresh: bool = false) -> Vect
 		route_target = _actor.navigation_route[_actor.navigation_route_index]
 	var direction: Variant = route_target - _actor.global_position
 	direction.y = 0.0
-	if direction.length_squared() < 0.002:
+	if direction.length_squared() < FINAL_ROUTE_STOP_SQUARED:
 		direction = route_target - _actor.global_position
 		direction.y = 0.0
-	return direction.normalized() if direction.length_squared() > 0.002 else Vector3.ZERO
+	return direction.normalized() if direction.length_squared() > FINAL_ROUTE_STOP_SQUARED else Vector3.ZERO
 
 func _validated_step_direction(direction: Vector3, target: Vector3, step_distance: float) -> Vector3:
 	var candidate: Variant = direction
@@ -137,7 +140,7 @@ func _engagement_target(target_position: Vector3 = Vector3.INF) -> Vector3:
 		side = -1.0 if _actor.encounter_slot % 2 == 0 else 1.0
 	var angle: Variant = deg_to_rad(_actor.approach_angle_degrees * side)
 	var desired: Vector3 = radial.normalized().rotated(Vector3.UP, angle)
-	var radius: float = _actor.tactics.engagement_radius(_actor.preferred_distance, _actor.attack_range, _actor.can_see_player, _actor.attack_cooldown, _actor.attack_recovery_time)
+	var radius: float = _actor.tactics.engagement_radius(_actor.preferred_distance, _actor.attack_range, _actor.can_see_player, _actor.attack_cooldown, _actor.attack_recovery_time, READY_APPROACH_MARGIN)
 	return focus + desired * radius
 
 func _update_perception(delta: float, player_distance: float) -> void:
@@ -199,6 +202,7 @@ func choose_tactical_mode() -> String:
 	model.boss = _actor.is_boss
 	model.leash_radius = _actor.leash_radius
 	model.attack_range = _actor.attack_range
+	model.attack_cooldown = _actor.attack_cooldown
 	model.pending_attack_time = _actor.pending_attack_time
 	model.stagger_time = _actor.stagger_time
 	model.memory_time = _actor.perception_memory_time
