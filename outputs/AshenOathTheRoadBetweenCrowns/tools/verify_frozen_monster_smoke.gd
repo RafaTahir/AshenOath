@@ -46,7 +46,13 @@ func _initialize() -> void:
 	_check(profile_root.length() > 4 and OS.get_user_data_dir().replace("\\", "/").begins_with(profile_root), "OS profile was not isolated before process launch")
 	_check(not OS.has_feature("web"), "This receipt describes native frozen-export QA only")
 	_check(DisplayServer.get_name().to_lower() != "headless", "A graphical renderer is required")
-	_check(OS.get_environment("ASHENOATH_CAPTURE_DESKTOP").begins_with("AshenOathCapture_"), "Owned private Windows desktop is required")
+	if not OS.get_environment("ASHENOATH_CAPTURE_DESKTOP").begins_with("AshenOathCapture_"):
+		_fail("Owned private Windows desktop is required")
+		_finish()
+		return
+	# --main-pack restores packed window settings rather than source-capture
+	# configuration. Apply the owned window flag before checking its actual state.
+	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_NO_FOCUS, true)
 	_check(DisplayServer.window_get_flag(DisplayServer.WINDOW_FLAG_NO_FOCUS), "Unfocusable native window is required")
 	_check(FileAccess.get_sha256("res://data/monster_material_profiles.json") == str(preparation.expected_profile_sha256), "Frozen base pack profile differs from the final candidate")
 	var pack_root := str(options.get("pack-root", ""))
@@ -196,7 +202,7 @@ func _input_smoke() -> void:
 	await _steps(30)
 
 func _gameplay_input(action: String, pressed: bool) -> void:
-	var input_record := {"action":action, "pressed":pressed, "path":"touch InputEvent" if touch else "hardware InputEvent", "coordinates":_coordinate_contract()}
+	var input_record := {"action":action, "pressed":pressed, "path":"synthetic InputEventScreenTouch through normal InputRouter" if touch else "synthetic InputEventKey/MouseButton through normal InputRouter", "coordinates":_coordinate_contract()}
 	if touch:
 		var control: Node = game.mobile_touch
 		var point: Vector2 = control._layout.move_center if action == "move_left" else control.action_centers.get(action, Vector2(-1, -1))
@@ -287,7 +293,13 @@ func _enemy(identity: String) -> Node3D:
 	return null
 
 func _capture_monsters() -> void:
-	# Explicit inspection camera only; actors stay in their authored level places.
+	# Controlled inspection only: freeze owners before activation, retain authored
+	# positions, then restore every activation/visibility/process flag explicitly.
+	var game_mode: int = game.process_mode
+	var daylight_mode: int = game.day_night.process_mode
+	game.process_mode = Node.PROCESS_MODE_DISABLED
+	game.day_night.process_mode = Node.PROCESS_MODE_DISABLED
+	var inspections: Array[Dictionary] = []
 	var camera := Camera3D.new()
 	camera.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	camera.fov = 55
@@ -295,14 +307,40 @@ func _capture_monsters() -> void:
 	for id: String in ROLES:
 		var actor := _enemy(str(ROLES[id]))
 		if actor == null: continue
+		var original_active: bool = actor.encounter_active
+		var original_visible: bool = actor.visible
+		var actor_mode: int = actor.process_mode
+		actor.process_mode = Node.PROCESS_MODE_DISABLED
+		actor.set_encounter_active(true)
+		actor.visible = true
 		var target: Vector3 = actor.global_position + Vector3.UP * (1.4 if id == "M20" else 0.9)
 		camera.global_position = target + actor.global_basis.z.normalized() * (4.5 if id == "M20" else 3.0) + Vector3.UP * 0.3
 		camera.look_at(target)
 		camera.make_current()
 		await _steps(3)
+		var visible_mesh := false
+		for mesh: MeshInstance3D in actor.find_children("*", "MeshInstance3D", true, false):
+			visible_mesh = visible_mesh or (mesh.mesh != null and mesh.is_visible_in_tree())
+		var projected: Vector2 = camera.unproject_position(target)
+		var on_screen: bool = projected.is_finite() and root.get_visible_rect().has_point(projected) and camera.is_position_in_frustum(target)
+		_check(actor.is_visible_in_tree() and visible_mesh and on_screen, "Inspection subject is not visibly framed: " + id)
 		await _capture(id + "_inspection_camera")
+		actor.set_encounter_active(original_active)
+		actor.visible = original_visible
+		actor.process_mode = actor_mode
+		inspections.append({"id":id, "fixture":"temporary encounter activation with frozen owners; no earned progression",
+			"original_active":original_active, "original_visible":original_visible, "original_process_mode":actor_mode,
+			"visible_mesh_observed":visible_mesh, "projected_center":[projected.x, projected.y], "center_on_screen":on_screen,
+			"restored_active":bool(actor.encounter_active), "restored_visible":bool(actor.visible), "restored_process_mode":int(actor.process_mode)})
+		_check(bool(actor.encounter_active) == original_active and bool(actor.visible) == original_visible and int(actor.process_mode) == actor_mode, "Inspection flags failed restoration: " + id)
 	game.camera_rig.camera.make_current()
 	camera.queue_free()
+	game.day_night.process_mode = daylight_mode
+	game.process_mode = game_mode
+	report["inspection_fixtures"] = inspections
+	report["inspection_owner_restoration"] = {"original_game_process_mode":game_mode, "restored_game_process_mode":int(game.process_mode),
+		"original_day_night_process_mode":daylight_mode, "restored_day_night_process_mode":int(game.day_night.process_mode),
+		"health_or_progression_awards":false}
 
 func _capture(label: String) -> void:
 	await RenderingServer.frame_post_draw
