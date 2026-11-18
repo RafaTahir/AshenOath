@@ -314,7 +314,40 @@ func _capture_monsters() -> void:
 		actor.set_encounter_active(true)
 		actor.visible = true
 		var target: Vector3 = actor.global_position + Vector3.UP * (1.4 if id == "M20" else 0.9)
-		camera.global_position = target + actor.global_basis.z.normalized() * (4.5 if id == "M20" else 3.0) + Vector3.UP * 0.3
+		var forward: Vector3 = -actor.global_basis.z.normalized()
+		var right: Vector3 = actor.global_basis.x.normalized()
+		var distance := 4.5 if id == "M20" else 3.0
+		var excluded: Array[RID] = []
+		var actor_body := actor as CollisionObject3D
+		var player_body := game.player as CollisionObject3D
+		if actor_body != null: excluded.append(actor_body.get_rid())
+		if player_body != null: excluded.append(player_body.get_rid())
+		var points: Array[Vector3] = [target, target + Vector3.UP * 0.5, target - Vector3.UP * 0.5, target + right * 0.4, target - right * 0.4]
+		var ray_samples: Array[Dictionary] = []
+		var clear_angle := false
+		var chosen_angle := 0.0
+		for angle: float in [0.0, 35.0, -35.0, 55.0, -55.0, 15.0, -15.0, 75.0, -75.0]:
+			camera.global_position = target + forward.rotated(Vector3.UP, deg_to_rad(angle)) * distance + Vector3.UP * 0.3
+			var rays: Array[Dictionary] = []
+			var all_clear := true
+			for point: Vector3 in points:
+				var query := PhysicsRayQueryParameters3D.create(camera.global_position, point, 1, excluded)
+				query.hit_from_inside = true
+				var hit: Dictionary = actor.get_world_3d().direct_space_state.intersect_ray(query)
+				var ray := {"target":[point.x, point.y, point.z], "clear":hit.is_empty()}
+				if not hit.is_empty():
+					all_clear = false
+					var collider := hit.get("collider") as Node
+					var hit_position: Vector3 = hit.get("position", Vector3.ZERO)
+					ray["hit_collider"] = str(collider.get_path()) if is_instance_valid(collider) else str(hit.get("collider_id", ""))
+					ray["hit_position"] = [hit_position.x, hit_position.y, hit_position.z]
+				rays.append(ray)
+			ray_samples.append({"angle_degrees":angle, "camera_position":[camera.global_position.x, camera.global_position.y, camera.global_position.z], "all_five_clear":all_clear, "rays":rays})
+			if all_clear:
+				clear_angle = true
+				chosen_angle = angle
+				break
+		_check(clear_angle, "No unobstructed front inspection angle: " + id)
 		camera.look_at(target)
 		camera.make_current()
 		await _steps(3)
@@ -330,6 +363,8 @@ func _capture_monsters() -> void:
 		actor.process_mode = actor_mode
 		inspections.append({"id":id, "fixture":"temporary encounter activation with frozen owners; no earned progression",
 			"original_active":original_active, "original_visible":original_visible, "original_process_mode":actor_mode,
+			"camera_forward_policy":"negative actor global basis z; front then restrained three-quarter angles; no props/actors/lights changed",
+			"selected_angle_degrees":chosen_angle if clear_angle else null, "world_collision_mask":1, "camera_ray_samples":ray_samples,
 			"visible_mesh_observed":visible_mesh, "projected_center":[projected.x, projected.y], "center_on_screen":on_screen,
 			"restored_active":bool(actor.encounter_active), "restored_visible":bool(actor.visible), "restored_process_mode":int(actor.process_mode)})
 		_check(bool(actor.encounter_active) == original_active and bool(actor.visible) == original_visible and int(actor.process_mode) == actor_mode, "Inspection flags failed restoration: " + id)
