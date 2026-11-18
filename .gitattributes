@@ -206,6 +206,7 @@ outputs/AshenOathTheRoadBetweenCrowns/scripts/views/monster_material_view.gd -te
 outputs/AshenOathTheRoadBetweenCrowns/scripts/views/monster_pigment_material.gd -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/scripts/views/character_material_budget_view.gd -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/scripts/models/enemy_attack_shape_model.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/scripts/views/combat_attack_footprint_view.gd -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/shaders/monster_pigment* -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/tools/verify_monster_material_profiles.py -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/tools/verify_monster_material_runtime.gd -text whitespace=cr-at-eol
