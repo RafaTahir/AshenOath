@@ -1,58 +1,58 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-11-16T19:19:04.0105973Z",
-  "build_id": "refactor-20261117-r2",
-  "generated_from_commit": "c00b28444c02369ecc9a6a4a0066d099ede0d695",
+  "generated_at_utc": "2026-11-18T01:41:42.4929706Z",
+  "build_id": "monster-vitality-20261118-86f8425afa9f-r1",
+  "generated_from_commit": "86f8425afa9f7c9cb5256946f0c0dd8461cdf85d",
   "source_dirty": true,
-  "artifact_directory": "D:\\Temp\\AO_R5\\.release-gate\\refactor-release-20261117-r2\\runtime-packs",
+  "artifact_directory": "D:\\Temp\\am\\.release-gate\\monster-vitality-20261118-86f8425afa9f-r1\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 268435456,
   "deployment_policy_id": "vercel-git-256mib-v1",
-  "total_bytes": 170907404,
+  "total_bytes": 170945252,
   "packs": [
     {
       "id": "base",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 5859200,
-      "sha256": "36f3d1e69b9a07099c3c8fc3a610b0be69b6652fe526cd0f65b68ed853b40b86",
+      "bytes": 5897048,
+      "sha256": "cdd88e2b49cf4e9e1a60d54a6f2d6b4d8963ef69c07b0a6a1ba1adabd3797d0d",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 45221564,
-      "sha256": "0637751a7ebfdf8d5bedb130f532cdc3415bc19e55c02f837edd4040212b5d08",
+      "sha256": "af187fa7dddc179e6664adc7ab13eb589f730908670d106af26f8b2b4c4562b9",
       "status": "candidate_external",
       "log": "logs/pack-opening.stdout.log"
     },
     {
       "id": "campaign",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 7449336,
-      "sha256": "30007367c6da72b3ba6b4a8147150f69521e15f37b2d2c831f2361000c826f47",
+      "sha256": "d2628e9a03eaaa66570769575ca00d78cd9151b9d86d93330ef69f3ed21d5486",
       "status": "candidate_external",
       "log": "logs/pack-campaign.stdout.log"
     },
     {
       "id": "characters",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 56528,
-      "sha256": "8a4918e651ceced84fd3bc6c465f8e5268835a4d713ca4c8cf80378b802a4a19",
+      "sha256": "0fa263f8293ed115d8725af2fc5fafd56e029512eda84cbf8ae91c6fd14da4c5",
       "status": "candidate_external",
       "log": "logs/pack-characters.stdout.log"
     },
     {
       "id": "monsters",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 148220,
@@ -62,7 +62,7 @@
     },
     {
       "id": "audio",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 21158476,
@@ -72,17 +72,17 @@
     },
     {
       "id": "adjacent",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
       "bytes": 3030648,
-      "sha256": "1b811441087c77f6e66992bb38220f759c58e48ed8c01ada400615e13e0dabb8",
+      "sha256": "a670d9530a77c69027c70bcb6f336007cc500fae4bf374c49e9379fe7dc0c12a",
       "status": "candidate_external",
       "log": "logs/pack-adjacent.stdout.log"
     },
     {
       "id": "quality_materials",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7172164,
@@ -92,7 +92,7 @@
     },
     {
       "id": "actor_c01",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_c01",
       "artifact": "actor_c01.pck",
       "bytes": 4824064,
@@ -102,7 +102,7 @@
     },
     {
       "id": "actor_c02",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_c02",
       "artifact": "actor_c02.pck",
       "bytes": 2046144,
@@ -112,7 +112,7 @@
     },
     {
       "id": "actor_c03",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_c03",
       "artifact": "actor_c03.pck",
       "bytes": 1945824,
@@ -122,7 +122,7 @@
     },
     {
       "id": "actor_c04",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_c04",
       "artifact": "actor_c04.pck",
       "bytes": 1967664,
@@ -132,7 +132,7 @@
     },
     {
       "id": "actor_c05",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_c05",
       "artifact": "actor_c05.pck",
       "bytes": 3213716,
@@ -142,7 +142,7 @@
     },
     {
       "id": "actor_c06",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_c06",
       "artifact": "actor_c06.pck",
       "bytes": 2166344,
@@ -152,7 +152,7 @@
     },
     {
       "id": "actor_c07",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_c07",
       "artifact": "actor_c07.pck",
       "bytes": 2426516,
@@ -162,7 +162,7 @@
     },
     {
       "id": "actor_c08",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_c08",
       "artifact": "actor_c08.pck",
       "bytes": 2128784,
@@ -172,7 +172,7 @@
     },
     {
       "id": "actor_c09",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_c09",
       "artifact": "actor_c09.pck",
       "bytes": 2037804,
@@ -182,7 +182,7 @@
     },
     {
       "id": "actor_c10",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_c10",
       "artifact": "actor_c10.pck",
       "bytes": 2221784,
@@ -192,7 +192,7 @@
     },
     {
       "id": "actor_c11",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_c11",
       "artifact": "actor_c11.pck",
       "bytes": 1983164,
@@ -202,7 +202,7 @@
     },
     {
       "id": "actor_c12",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_c12",
       "artifact": "actor_c12.pck",
       "bytes": 1931920,
@@ -212,7 +212,7 @@
     },
     {
       "id": "actor_m01",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m01",
       "artifact": "actor_m01.pck",
       "bytes": 859716,
@@ -222,7 +222,7 @@
     },
     {
       "id": "actor_m02",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m02",
       "artifact": "actor_m02.pck",
       "bytes": 3799268,
@@ -232,7 +232,7 @@
     },
     {
       "id": "actor_m03",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m03",
       "artifact": "actor_m03.pck",
       "bytes": 1002860,
@@ -242,7 +242,7 @@
     },
     {
       "id": "actor_m04",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m04",
       "artifact": "actor_m04.pck",
       "bytes": 1002152,
@@ -252,7 +252,7 @@
     },
     {
       "id": "actor_m05",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m05",
       "artifact": "actor_m05.pck",
       "bytes": 1100400,
@@ -262,7 +262,7 @@
     },
     {
       "id": "actor_m06",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m06",
       "artifact": "actor_m06.pck",
       "bytes": 2104008,
@@ -272,7 +272,7 @@
     },
     {
       "id": "actor_m07",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m07",
       "artifact": "actor_m07.pck",
       "bytes": 1655028,
@@ -282,7 +282,7 @@
     },
     {
       "id": "actor_m08",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m08",
       "artifact": "actor_m08.pck",
       "bytes": 1233108,
@@ -292,7 +292,7 @@
     },
     {
       "id": "actor_m09",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m09",
       "artifact": "actor_m09.pck",
       "bytes": 1026372,
@@ -302,7 +302,7 @@
     },
     {
       "id": "actor_m10",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m10",
       "artifact": "actor_m10.pck",
       "bytes": 945236,
@@ -312,7 +312,7 @@
     },
     {
       "id": "actor_m11",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m11",
       "artifact": "actor_m11.pck",
       "bytes": 1105844,
@@ -322,7 +322,7 @@
     },
     {
       "id": "actor_m12",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m12",
       "artifact": "actor_m12.pck",
       "bytes": 964900,
@@ -332,17 +332,17 @@
     },
     {
       "id": "actor_m13",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m13",
       "artifact": "actor_m13.pck",
       "bytes": 2044500,
-      "sha256": "cef1d5396ca6f3efd29d75ab8f602b81cd96c1b6309c646fc1b7ac79933e6470",
+      "sha256": "3c324153bd04838b72363ae1fe17f4550d51f234ed37899344e69d71bf35cce4",
       "status": "candidate_external",
       "log": "logs/pack-actor_m13.stdout.log"
     },
     {
       "id": "actor_m14",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m14",
       "artifact": "actor_m14.pck",
       "bytes": 1140452,
@@ -352,7 +352,7 @@
     },
     {
       "id": "actor_m15",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m15",
       "artifact": "actor_m15.pck",
       "bytes": 3984432,
@@ -362,7 +362,7 @@
     },
     {
       "id": "actor_m16",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m16",
       "artifact": "actor_m16.pck",
       "bytes": 1108996,
@@ -372,7 +372,7 @@
     },
     {
       "id": "actor_m17",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m17",
       "artifact": "actor_m17.pck",
       "bytes": 1491732,
@@ -382,7 +382,7 @@
     },
     {
       "id": "actor_m18",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m18",
       "artifact": "actor_m18.pck",
       "bytes": 1229860,
@@ -392,7 +392,7 @@
     },
     {
       "id": "actor_m19",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m19",
       "artifact": "actor_m19.pck",
       "bytes": 875848,
@@ -402,7 +402,7 @@
     },
     {
       "id": "actor_m20",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_m20",
       "artifact": "actor_m20.pck",
       "bytes": 895032,
@@ -412,7 +412,7 @@
     },
     {
       "id": "actor_p01",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_p01",
       "artifact": "actor_p01.pck",
       "bytes": 2331968,
@@ -422,7 +422,7 @@
     },
     {
       "id": "actor_shared",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack actor_shared",
       "artifact": "actor_shared.pck",
       "bytes": 5928656,
@@ -432,17 +432,17 @@
     },
     {
       "id": "leisure",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack Leisure",
       "artifact": "leisure.pck",
       "bytes": 210356,
-      "sha256": "f877fc9ec2a93fc873ab27abe160bde678d102f6d64995bacc95c0aa6c5251bc",
+      "sha256": "818c789308be80fceca47c55b808de42277738218a0cb83e70d60a2115fd87cb",
       "status": "candidate_external",
       "log": "logs/pack-leisure.stdout.log"
     },
     {
       "id": "community",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack community",
       "artifact": "community.pck",
       "bytes": 252320,
@@ -452,7 +452,7 @@
     },
     {
       "id": "community_voice",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack community_voice",
       "artifact": "community_voice.pck",
       "bytes": 5078892,
@@ -462,7 +462,7 @@
     },
     {
       "id": "living_cast_voice",
-      "version": "refactor-20261117-r2",
+      "version": "monster-vitality-20261118-86f8425afa9f-r1",
       "preset": "Runtime Pack living_cast_voice",
       "artifact": "living_cast_voice.pck",
       "bytes": 8545604,
@@ -473,11 +473,11 @@
   ],
   "errors": [],
   "selected_web_export": {
-    "build_id": "refactor-20261117-r2",
-    "artifact_directory": "D:\\Temp\\AO_R5\\.release-gate\\refactor-release-20261117-r2\\export",
-    "generated_from_commit": "c00b28444c02369ecc9a6a4a0066d099ede0d695",
-    "artifacts_total_bytes": 173728186,
-    "root_pck_sha256": "2f04360e78bb705b37fc9bfbfb4be5c992e1f0afeb87189f41efffc82c12d2a9",
+    "build_id": "monster-vitality-20261118-86f8425afa9f-r1",
+    "artifact_directory": "D:\\Temp\\am\\.release-gate\\monster-vitality-20261118-86f8425afa9f-r1\\export",
+    "generated_from_commit": "86f8425afa9f7c9cb5256946f0c0dd8461cdf85d",
+    "artifacts_total_bytes": 173745721,
+    "root_pck_sha256": "092ab74ed5371c6ebb75cf6bb724669c98e160d9e46d8f78b03d0dd50bb7ccf7",
     "note": "Selected export uses gzip transport; native pack records describe decoded build artifacts."
   }
 }

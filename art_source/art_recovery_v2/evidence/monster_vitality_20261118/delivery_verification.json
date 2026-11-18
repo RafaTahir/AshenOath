@@ -171,25 +171,111 @@
     "verification": "Explicit indexed report/log files re-read and SHA256/byte counts verified; full comparison recomputed; no PNG or raw asset files opened."
   },
   "build": {
-    "status": "pending",
-    "maintained_builder": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_story_release.ps1",
-    "mode": "CharacterAssetsOnly",
-    "source_commit": null,
-    "build_id": null,
-    "exact_export_hashes_closure_and_limits_verified": false
+    "status": "passed",
+    "maintained_builder": true,
+    "strict_export_and_dependency_checks": "passed",
+    "build_id": "monster-vitality-20261118-86f8425afa9f-r1",
+    "export_root": "D:/Temp/am/.release-gate/monster-vitality-20261118-86f8425afa9f-r1/export",
+    "file_count": 54,
+    "output_bytes": 173773698,
+    "baseline_output_bytes": 173756142,
+    "net_growth_bytes": 17556,
+    "source_producer_commit": "86f8425afa9f7c9cb5256946f0c0dd8461cdf85d",
+    "release_manifest": "D:/Temp/am/.release-gate/monster-vitality-20261118-86f8425afa9f-r1/export/release_manifest.json",
+    "release_manifest_sha256": "804f04288a4e3ba9b0c076fc358f752294fd99069fd60ef5104bde2e12cd10a0",
+    "post_web_export_report": "D:/Temp/am/.release-gate/monster-vitality-20261118-86f8425afa9f-r1/logs/post-web-export.json",
+    "post_runtime_packs_report": "D:/Temp/am/.release-gate/monster-vitality-20261118-86f8425afa9f-r1/logs/post-runtime-packs.json",
+    "builder_log": "D:/Temp/AO_MonsterVitality_20261118/build_candidate_r1.stdout.log",
+    "proof_scope": "Exact candidate export and strict build checks; publication and deployed identity are separate."
   },
   "frozen_export": {
-    "status": "pending",
-    "source_fallback_allowed": false,
-    "native_desktop_touch_input_acceptance": false,
-    "browser_acceptance": false
+    "status": "passed",
+    "native_desktop_touch_input_acceptance": "passed",
+    "native_r3": {
+      "status": "passed_functional",
+      "runner": "D:/Temp/AO_MonsterVitality_20261118/frozen_export_r3/runner.json",
+      "desktop_report": "D:/Temp/AO_MonsterVitality_20261118/frozen_export_r3/desktop/smoke.json",
+      "touch_report": "D:/Temp/AO_MonsterVitality_20261118/frozen_export_r3/touch/smoke.json",
+      "engine_error_count": 0,
+      "pigment_bindings": 15,
+      "wychwood_targets": 4,
+      "source_fallback": false,
+      "inspection_flags_restored": true,
+      "visual_status": "partial: M02 rear view and M20 tree occlusion were not accepted as complete material presentation evidence",
+      "earned_route_acceptance": false
+    },
+    "native_r4": {
+      "status": "passed",
+      "runner": "export_verification_r4/native_runner.json",
+      "desktop": "export_verification_r4/native_desktop.json",
+      "touch": "export_verification_r4/native_touch.json",
+      "binding": "export_verification_r4/binding.json",
+      "source_fallback": false,
+      "developer_desktop_inspection_review": [
+        "M01",
+        "M02",
+        "M19",
+        "M20"
+      ],
+      "user_visual_acceptance": "pending"
+    },
+    "browser_acceptance": "passed",
+    "browser_r1": {
+      "status": "passed",
+      "report": "D:/Temp/AO_MonsterVitality_20261118/browser_export_r1.json",
+      "viewports": [
+        [
+          1280,
+          720
+        ],
+        [
+          960,
+          540
+        ]
+      ],
+      "flows": [
+        "New Game",
+        "movement",
+        "Quick Save",
+        "Continue"
+      ],
+      "runtime_errors": [],
+      "browser_context": "incognito",
+      "observation_mode": "production_read_only",
+      "archived_report": "export_verification_r4/browser.json"
+    },
+    "native_window_client_sizes": [
+      [
+        1280,
+        720
+      ],
+      [
+        960,
+        540
+      ]
+    ],
+    "production_internal_canvas": [
+      1280,
+      720
+    ],
+    "physical_phone_coverage": false,
+    "evidence_archive_status": "Exact named reports/logs and one reviewed native PNG copied and hash-verified."
   },
   "publication": {
-    "status": "pending",
+    "status": "ready_for_git_push",
     "configured_workflow": "existing Git-triggered Vercel workflow",
     "development_branch": "codex/art-recovery-anwen",
     "production_branch": "main",
     "exact_deployed_release_identity_verified": false
   },
-  "user_acceptance": "pending"
+  "user_acceptance": "pending",
+  "committed_code_provenance": {
+    "status": "passed",
+    "binding": "committed_code_binding.json",
+    "matched_bounded_runtime_inputs": 526,
+    "producer_source_commit": "86f8425afa9f7c9cb5256946f0c0dd8461cdf85d",
+    "checkout_attribute_commit": "d40a63095b03e0636cb4c09c5154873cf742dff7",
+    "source_head_at_delivery_preparation": "e2efbf4",
+    "post_producer_scope": "QA-only changes; executable/source blobs unchanged by the checkout-attribute followup. Final publication identity remains separately verified."
+  }
 }

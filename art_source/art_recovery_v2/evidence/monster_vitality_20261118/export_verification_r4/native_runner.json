@@ -1,0 +1,138 @@
+{
+  "kind": "native_frozen_export_monster_smoke",
+  "build_id": "monster-vitality-20261118-86f8425afa9f-r1",
+  "passed": true,
+  "godot_executable": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+  "godot_sha256": "63b3b2208819714c9677fbfdd8217c5b7dee8ecf5f383502e826bc9e2227ff5a",
+  "runs": [
+    {
+      "viewport": "desktop",
+      "exit_code": 0,
+      "timed_out": false,
+      "requested_window_size": [
+        1280,
+        720
+      ],
+      "production_internal_render_size": [
+        1280,
+        720
+      ],
+      "actual_window_size": [
+        1280,
+        720
+      ],
+      "coordinate_errors": [],
+      "desktop": {
+        "mode": "background-rendered",
+        "desktop": "AshenOathCapture_1a930b4c9f7d4fc0ac50163d763643b7",
+        "input_desktop_before": "Default",
+        "input_desktop_after_launch": "Default",
+        "desktop_switch_requested": false,
+        "binding": "STARTUPINFO.lpDesktop",
+        "input_desktop_after_exit": "Default"
+      },
+      "engine_errors_in_log": false,
+      "report_sha256": "da23626f83291596d2b47ffa1aaea27dca7ef4f1d0aea3bed3fb03d927ce339d",
+      "frames": [
+        {
+          "file": "greyfen_gameplay.png",
+          "bytes": 1022045,
+          "sha256": "ade9ba0c5b179f2aa8b0ca33bcbb5d2f25339b2af2f2d54f49ef1c0c43e6dde1"
+        },
+        {
+          "file": "wychwood_gameplay.png",
+          "bytes": 953217,
+          "sha256": "fd85d2daaf1b8480fb7ab3449eb2f20c622c931633f844bb06d81da38a83d93e"
+        },
+        {
+          "file": "M01_inspection_camera.png",
+          "bytes": 926034,
+          "sha256": "1162980b07e718fa04582e9f63a8124c05ee92587e2b33abc76b6847dff731e8"
+        },
+        {
+          "file": "M02_inspection_camera.png",
+          "bytes": 1018585,
+          "sha256": "5c0cb928168fdd9d347855f84a37db4a502599e52d722dcec2b5ed232f6ce72b"
+        },
+        {
+          "file": "M19_inspection_camera.png",
+          "bytes": 955965,
+          "sha256": "ca24f4675b59ac039c294098d6fb608855b6d0c04da3f2e06e30870cc67dce20"
+        },
+        {
+          "file": "M20_inspection_camera.png",
+          "bytes": 947441,
+          "sha256": "eed96296c4e694684029e6defe9c64c4272e7293668670b9288d549db3c2bf0d"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "viewport": "touch",
+      "exit_code": 0,
+      "timed_out": false,
+      "requested_window_size": [
+        960,
+        540
+      ],
+      "production_internal_render_size": [
+        1280,
+        720
+      ],
+      "actual_window_size": [
+        960,
+        540
+      ],
+      "coordinate_errors": [],
+      "desktop": {
+        "mode": "background-rendered",
+        "desktop": "AshenOathCapture_c59705150b1740178cf4ba7c38bc33e1",
+        "input_desktop_before": "Default",
+        "input_desktop_after_launch": "Default",
+        "desktop_switch_requested": false,
+        "binding": "STARTUPINFO.lpDesktop",
+        "input_desktop_after_exit": "Default"
+      },
+      "engine_errors_in_log": false,
+      "report_sha256": "1423eb2d4f81a0043f3fb0ba0583a02a7d9d10a68b81d9abd109256be72c5bc3",
+      "frames": [
+        {
+          "file": "greyfen_gameplay.png",
+          "bytes": 992906,
+          "sha256": "2a2ac83404d6779ba2b066efcde16ac40f69c29d42487adf2af43a3e5d06ff92"
+        },
+        {
+          "file": "wychwood_gameplay.png",
+          "bytes": 851899,
+          "sha256": "e1246e5f7274e70b7b2824d53f54ee77c511c6769a9f88768a3f5708f9aff1bf"
+        },
+        {
+          "file": "M01_inspection_camera.png",
+          "bytes": 893747,
+          "sha256": "8dc4fc7d1d0150e13e6c66bececbc16eafd9ea734a5724f8b9169e2d1debb265"
+        },
+        {
+          "file": "M02_inspection_camera.png",
+          "bytes": 991449,
+          "sha256": "6f8a7ab878aca6ca687e1186a4545ff49aae82bb208eb5b0fb9b76ec0114e27a"
+        },
+        {
+          "file": "M19_inspection_camera.png",
+          "bytes": 931652,
+          "sha256": "6aad87b688fd0906137c1b88efc0b4c412be5e094c3c351e595ce3d06cb0ad55"
+        },
+        {
+          "file": "M20_inspection_camera.png",
+          "bytes": 911948,
+          "sha256": "b49959b5a45b28ba92e6beb28578d0009e6dfcdf0f1c182c19b1472d9b4be356"
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "source_fallback": false,
+  "browser_acceptance": false,
+  "visual_acceptance": false,
+  "physical_phone": false,
+  "user_acceptance": false
+}
