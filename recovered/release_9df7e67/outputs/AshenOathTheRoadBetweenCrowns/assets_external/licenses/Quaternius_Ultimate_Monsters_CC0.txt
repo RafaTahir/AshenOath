@@ -1,0 +1,5 @@
+Quaternius Ultimate Monsters
+Source: https://quaternius.com/packs/ultimatemonsters.html
+License: CC0 1.0 Universal (Public Domain Dedication)
+
+Selected embedded glTF file: Orc Skull.

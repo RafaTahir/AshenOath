@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[node name="WychwoodGameplayLayer" type="Node3D"]
+
+[node name="GreyfenArrivalAnchor" type="Marker3D" parent="."]
+position = Vector3(0, 0, 42)
+
+[node name="ClueRouteAnchor" type="Marker3D" parent="."]
+position = Vector3(0, 0, 16)
+
+[node name="CombatClearingAnchor" type="Marker3D" parent="."]
+position = Vector3(0, 0, -25)
+
+[node name="ReturnGateAnchor" type="Marker3D" parent="."]
+position = Vector3(0, 0, 42)

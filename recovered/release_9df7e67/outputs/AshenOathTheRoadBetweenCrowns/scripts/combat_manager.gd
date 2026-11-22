@@ -1,0 +1,262 @@
+extends Node
+
+signal enemy_hit(name: String, amount: float)
+signal impact(position: Vector3, heavy: bool)
+signal enemy_killed(name: String)
+signal message(text: String)
+signal contact_resolved(result: Dictionary)
+signal contact_missed(result: Dictionary)
+
+var _blade_owner_id := 0
+var _blade_attack_id := -1
+var _blade_hit_ids: Dictionary = {}
+
+func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dictionary, active_oil: String) -> Dictionary:
+	if not is_instance_valid(player) or not player.has_method("is_blade_ready") or not player.is_blade_ready():
+		return {"hit": false, "reason": "blade_not_ready"}
+	var attack_id := int(contact.get("attack_id", -1))
+	var owner_id := player.get_instance_id()
+	if owner_id != _blade_owner_id:
+		_blade_owner_id = owner_id
+		_blade_attack_id = -1
+		_blade_hit_ids.clear()
+	if attack_id < 0 or attack_id < _blade_attack_id or float(contact.get("damage", 0.0)) <= 0.0:
+		return {"hit": false, "reason": "expired_contact"}
+	if attack_id != _blade_attack_id:
+		_blade_attack_id = attack_id
+		_blade_hit_ids.clear()
+	var blade_id := EquipmentLoadout.normalized_blade_id(str(player.get_selected_blade_id()))
+	if str(contact.get("blade_id", blade_id)) != blade_id:
+		return {"hit": false, "reason": "stale_blade"}
+	var blade_base: Vector3 = contact.get("base", Vector3.ZERO)
+	var blade_tip: Vector3 = contact.get("tip", blade_base)
+	var previous_base: Vector3 = contact.get("previous_base", blade_base)
+	var previous_tip: Vector3 = contact.get("previous_tip", blade_tip)
+	var reach := float(contact.get("reach", 2.0))
+	var heavy := bool(contact.get("heavy", false))
+	var damage := float(contact.get("damage", 0.0))
+	var contact_phase := float(contact.get("contact_phase", 0.0))
+	var sweep_length := maxf(previous_tip.distance_to(blade_tip), previous_base.distance_to(blade_base))
+	var blade_direction := (blade_tip - blade_base).normalized() if blade_tip.distance_to(blade_base) > 0.001 else Vector3.ZERO
+	var candidates: Array = []
+	for enemy in enemies:
+		if not is_instance_valid(enemy) or enemy.dead or _blade_hit_ids.has(enemy.get_instance_id()) or bool(enemy.get_meta("story_surrender_protected", false)) or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
+			continue
+		var target: Vector3 = enemy.global_position + Vector3(0, 0.9, 0)
+		if target.distance_to(player.global_position + Vector3(0, 0.9, 0)) > reach + 0.85:
+			continue
+		var closest := blade_tip
+		var contact_distance := INF
+		for height in [0.35, 0.72, 1.08, 1.42]:
+			var body_point: Vector3 = enemy.global_position + Vector3(0, height, 0)
+			var candidate := _closest_sweep_point(body_point, previous_base, previous_tip, blade_base, blade_tip)
+			var candidate_distance: float = body_point.distance_to(candidate)
+			if candidate_distance < contact_distance:
+				contact_distance = candidate_distance
+				closest = candidate
+		if contact_distance <= (0.78 if heavy else 0.66) and _has_contact_line(player, enemy, closest):
+			candidates.append({"enemy": enemy, "point": closest, "contact_distance": contact_distance, "score": contact_distance + player.global_position.distance_to(target) * 0.08})
+	candidates.sort_custom(func(a, b): return float(a.score) < float(b.score))
+	if candidates.is_empty():
+		var miss := {
+			"hit": false,
+			"point": blade_tip,
+			"contact_point": blade_tip,
+			"blade_base": blade_base,
+			"blade_tip": blade_tip,
+			"previous_base": previous_base,
+			"previous_tip": previous_tip,
+			"heavy": heavy,
+			"damage": damage,
+			"attack_id": str(contact.get("attack_id", "")),
+			"source_tag": active_oil,
+			"contact_distance": INF,
+			"blade_contact_distance": INF,
+			"contact_phase": contact_phase,
+			"sweep_length": sweep_length,
+			"blade_direction": blade_direction,
+		}
+		if bool(contact.get("final_sample", true)) and _blade_hit_ids.is_empty():
+			contact_missed.emit(miss)
+		return miss
+	var resolved: Dictionary = candidates[0]
+	var struck_enemy: Node = resolved.enemy
+	var source_tag := ""
+	if active_oil == "moon_oil":
+		source_tag = "spirit"
+	elif active_oil == "rot_oil":
+		source_tag = "undead"
+	var affinity := EquipmentLoadout.blade_damage_multiplier(blade_id, str(struck_enemy.get("tag")))
+	damage *= affinity
+	# Reserve before damage: death/phase signals can re-enter the resolver.
+	_blade_hit_ids[struck_enemy.get_instance_id()] = true
+	struck_enemy.apply_damage(damage, source_tag)
+	enemy_hit.emit(struck_enemy.display_name, damage)
+	var hit_result := {
+		"hit": true,
+		"enemy": struck_enemy,
+		"point": resolved.point,
+		"contact_point": resolved.point,
+		"blade_base": blade_base,
+		"blade_tip": blade_tip,
+		"previous_base": previous_base,
+		"previous_tip": previous_tip,
+		"heavy": heavy,
+		"damage": damage,
+		"attack_id": str(contact.get("attack_id", "")),
+		"source_tag": source_tag,
+		"blade_id": blade_id,
+		"affinity_multiplier": affinity,
+		"contact_distance": float(resolved.get("contact_distance", INF)),
+		"blade_contact_distance": float(resolved.get("contact_distance", INF)),
+		"contact_phase": contact_phase,
+		"sweep_length": sweep_length,
+		"blade_direction": blade_direction,
+	}
+	contact_resolved.emit(hit_result)
+	return hit_result
+
+func _closest_sweep_point(point: Vector3, previous_base: Vector3, previous_tip: Vector3, blade_base: Vector3, blade_tip: Vector3) -> Vector3:
+	var segments := [
+		[previous_base, previous_tip], [blade_base, blade_tip],
+		[previous_base, blade_base], [previous_tip, blade_tip],
+		[previous_base, blade_tip], [previous_tip, blade_base]
+	]
+	var closest := blade_tip
+	var best_distance := INF
+	for segment in segments:
+		var candidate := _closest_point_on_segment(point, segment[0], segment[1])
+		var distance := point.distance_squared_to(candidate)
+		if distance < best_distance:
+			best_distance = distance
+			closest = candidate
+	return closest
+
+func _closest_point_on_segment(point: Vector3, start: Vector3, finish: Vector3) -> Vector3:
+	var segment := finish - start
+	var length_squared := segment.length_squared()
+	if length_squared <= 0.000001:
+		return start
+	return start + segment * clamp((point - start).dot(segment) / length_squared, 0.0, 1.0)
+
+func _has_contact_line(player: Node3D, enemy: Node3D, contact_point: Vector3) -> bool:
+	var origin := player.global_position + Vector3(0, 1.0, 0)
+	var query := PhysicsRayQueryParameters3D.create(origin, contact_point, 1)
+	query.exclude = [player.get_rid()]
+	query.collide_with_areas = false
+	var hit: Dictionary = player.get_world_3d().direct_space_state.intersect_ray(query)
+	return hit.is_empty() or hit.get("collider") == enemy
+
+func throw_bomb(player: Node3D, enemies: Array, damage: float) -> bool:
+	var hit = false
+	for enemy in enemies:
+		if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
+			continue
+		if enemy.global_position.distance_to(player.global_position) <= 6.0:
+			enemy.apply_damage(damage, "ash_bomb")
+			impact.emit(enemy.global_position + Vector3(0, 1.0, 0), true)
+			hit = true
+	if hit:
+		message.emit("Ash Bomb bursts hot and white.")
+	else:
+		message.emit("The bomb scatters ash across empty ground.")
+	return hit
+
+func place_trap(player: Node3D, enemies: Array) -> bool:
+	for enemy in enemies:
+		if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
+			continue
+		if enemy.global_position.distance_to(player.global_position) <= 4.0:
+			enemy.slow(4.0)
+			message.emit("%s is caught in the iron trap." % enemy.display_name)
+			return true
+	message.emit("Trap set, but nothing steps into it.")
+	return false
+
+func resolve_energy_beam(player: Node3D, enemies: Array, direction: Vector3, endpoint: Vector3, width: float, damage: float) -> Array:
+	var origin: Vector3 = player.global_position + Vector3(0, 1.05, 0)
+	return resolve_oathfire_cast(enemies, {
+		"origin": origin,
+		"direction": direction,
+		"endpoint": endpoint,
+		"width": width,
+		"damage": damage
+	})
+
+func resolve_oathfire_cast(enemies: Array, cast: Dictionary) -> Array:
+	var hits: Array = []
+	var origin: Vector3 = cast.get("origin", Vector3.ZERO)
+	var endpoint: Vector3 = cast.get("endpoint", origin)
+	var direction: Vector3 = cast.get("direction", endpoint - origin)
+	var width: float = float(cast.get("width", 1.2))
+	var damage: float = float(cast.get("damage", 35.0))
+	var beam_length: float = origin.distance_to(endpoint)
+	var forward: Vector3 = direction.normalized()
+	if beam_length <= 0.05 or forward.length_squared() < 0.5:
+		return hits
+	for enemy in enemies:
+		if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
+			continue
+		var body := _body_segment(enemy)
+		var points := Geometry3D.get_closest_points_between_segments(origin, endpoint, body.start, body.end)
+		var target: Vector3 = points[1]
+		var offset: Vector3 = target - origin
+		var along = offset.dot(forward)
+		if along <= 0.0 or along > beam_length:
+			continue
+		var nearest = origin + forward * along
+		if target.distance_to(nearest) > width + float(body.radius):
+			continue
+		enemy.apply_damage(damage, "oathfire")
+		enemy_hit.emit(enemy.display_name, damage)
+		impact.emit(target, true)
+		hits.append(enemy)
+	message.emit("Oathfire tears through %d foe%s." % [hits.size(), "" if hits.size() == 1 else "s"] if not hits.is_empty() else "Oathfire burns into the mist.")
+	return hits
+
+func resolve_arrow_shot(enemies: Array, cast: Dictionary) -> Dictionary:
+	var origin: Vector3 = cast.get("origin", Vector3.ZERO)
+	var endpoint: Vector3 = cast.get("endpoint", origin)
+	var direction: Vector3 = cast.get("direction", endpoint - origin)
+	var width := float(cast.get("width", 0.34))
+	var damage := float(cast.get("damage", 28.0))
+	var forward := direction.normalized()
+	var length := origin.distance_to(endpoint)
+	var best_enemy: Node = null
+	var best_along := INF
+	var best_point := endpoint
+	if length <= 0.05 or forward.length_squared() < 0.5:
+		return {"hit": false, "endpoint": endpoint, "enemy": null, "point": endpoint}
+	for enemy in enemies:
+		if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
+			continue
+		var body := _body_segment(enemy)
+		var points := Geometry3D.get_closest_points_between_segments(origin, endpoint, body.start, body.end)
+		var target: Vector3 = points[1]
+		var offset := target - origin
+		var along := offset.dot(forward)
+		if along <= 0.0 or along > length or along >= best_along:
+			continue
+		var nearest := origin + forward * along
+		if target.distance_to(nearest) > width + float(body.radius):
+			continue
+		best_enemy = enemy
+		best_along = along
+		best_point = target
+	if best_enemy == null:
+		message.emit("The arrow disappears into the dark.")
+		return {"hit": false, "endpoint": endpoint, "enemy": null, "point": endpoint}
+	best_enemy.apply_damage(damage, str(cast.get("source_tag", "arrow")))
+	enemy_hit.emit(best_enemy.display_name, damage)
+	impact.emit(best_point, false)
+	return {"hit": true, "endpoint": endpoint, "enemy": best_enemy, "point": best_point, "damage": damage}
+
+func _body_segment(enemy: Node3D) -> Dictionary:
+	for raw in enemy.get_children():
+		if raw is CollisionShape3D and raw.shape is CapsuleShape3D:
+			var capsule: CapsuleShape3D = raw.shape
+			var extent := maxf(0.0, capsule.height * 0.5 - capsule.radius)
+			var scale: Vector3 = raw.global_basis.get_scale()
+			return {"start": raw.global_transform * Vector3(0, -extent, 0), "end": raw.global_transform * Vector3(0, extent, 0), "radius": capsule.radius * maxf(absf(scale.x), absf(scale.z))}
+	var point := enemy.global_position + Vector3.UP * 0.92
+	return {"start": point, "end": point, "radius": 0.0}

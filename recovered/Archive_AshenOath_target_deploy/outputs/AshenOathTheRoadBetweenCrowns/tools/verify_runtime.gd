@@ -1,0 +1,417 @@
+extends SceneTree
+
+const AssetDatabase = preload("res://scripts/asset_database.gd")
+const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
+
+func _initialize() -> void:
+	var timeout := Timer.new()
+	timeout.name = "RuntimeVerifierTimeout"
+	timeout.wait_time = 45.0
+	timeout.one_shot = true
+	timeout.autostart = true
+	timeout.timeout.connect(func(): _fail("Runtime verifier exceeded its 45 second deadline"))
+	root.add_child(timeout)
+	_assert(_release_shape_is_web_only(), "Release shape is not web-only")
+	_assert(_visual_roles_are_imported(), "One or more major visual roles are not imported ResourceLoader assets")
+	var scene = load("res://scenes/main.tscn")
+	if scene == null:
+		_fail("main scene failed to load")
+		return
+	var game = scene.instantiate()
+	root.add_child(game)
+	await process_frame
+	game.settings.set_quality_preset("balanced")
+	_assert(ProjectSettings.get_setting("display/window/size/viewport_width", 0) == 1280, "Gameplay viewport width is not 1280")
+	_assert(ProjectSettings.get_setting("display/window/size/viewport_height", 0) == 720, "Gameplay viewport height is not 720")
+	game.hud.show_main_menu()
+	await process_frame
+	_assert(_menu_has_actions(game.hud, ["New Game", "Continue", "Controls", "Settings", "Credits", "Return to Launch Screen"]), "Main menu actions are incomplete")
+	game.hud.show_settings_menu("main")
+	await process_frame
+	_assert(await _menu_has_setting_values(game.hud, game.settings.settings), "Settings menu does not expose current values")
+	game.call("_new_game")
+	await _wait_for_zone_ready(game, "greyfen")
+	_assert(str(game.settings.settings.get("quality_preset", "")) in ["potato", "balanced", "quality"], "Visual preset is invalid")
+	_assert(is_equal_approx(float(game.settings.settings.get("resolution_scale", 0.0)), 1.0), "Balanced gameplay is not native 720p")
+	_assert(int(game.settings.settings.get("target_fps", 0)) == 30, "Balanced target is not 30 FPS")
+	_assert(game.settings.has_method("get_performance_snapshot"), "Performance sampler API is missing")
+	_assert(game.settings.settings.has("subtitle_scale") and game.settings.settings.has("camera_shake") and game.settings.settings.has("reduced_motion"), "Accessibility settings are missing")
+	game.hud.show_inventory(game.inventory, game.quests, game.story_state)
+	_assert(game.hud.inventory_text.text.contains("BESTIARY") and game.hud.inventory_text.text.contains("CONSEQUENCES"), "Inventory journal lacks Bestiary or Consequences")
+	game.hud.inventory_layer.visible = false
+	_assert(str(game.current_zone_id) == "greyfen", "Greyfen did not load as the new-game zone")
+	_assert(game.quests.is_active("main_road_of_crows"), "Main contract did not start for the vertical slice")
+	_assert(game.quests.quest_defs["main_road_of_crows"]["objectives"].size() >= 8, "Road of Crows evidence objectives are missing")
+	_assert(str(game.quests.quest_defs["main_road_of_crows"]["objectives"][-1]["text"]).contains("report"), "Road of Crows return/report objective is not narrative-forward")
+	_assert(game.audio.has_method("play_voice"), "AudioManager is missing voice playback hook")
+	_assert(game.audio.has_method("set_music_state"), "AudioManager is missing dynamic music state hook")
+	game.audio.play_voice("missing_voice_should_not_crash")
+	game.audio.set_music_state("greyfen_explore")
+	_assert(str(game.audio.music_state) == "greyfen_explore", "Greyfen music state did not activate")
+	_assert(_has_child_named(game.hud, "QuestTrackerObjective"), "Quest tracker HUD objective is missing")
+	_assert(_has_child_named(game.hud, "EquipmentQuickRead"), "Equipment quick-read HUD is missing")
+	_assert(_has_child_named(game.hud, "ContextualCombatHint"), "Contextual guidance hint HUD is missing")
+	_assert(str(game.hud.tracker_label.text).contains("SPEAK") or str(game.hud.tracker_label.text).contains("Speak"), "First objective HUD text is not readable")
+	_assert(_has_child_named(game, "SkyGradientDome"), "VisualDirector sky dome is missing")
+	_assert(_has_child_named(game, "SunDisc"), "VisualDirector sun disc is missing")
+	_assert(_has_child_named(game, "CloudLayer"), "VisualDirector cloud layer is missing")
+	_assert(_has_child_named(game.zone_root, "GreyfenSpawnComposition"), "Greyfen spawn composition marker is missing")
+	_assert(_has_child_named(game.zone_root, "GreyfenFirstImpressionDressing"), "Greyfen first-impression dressing marker is missing")
+	_assert(not _has_child_named(game.zone_root, "QualityGreyfenVisualOverhaul"), "Quality-only Greyfen clutter leaked into Balanced mode")
+	_assert(_has_child_named(game.zone_root, "GreyfenPathEdgeComposition"), "Greyfen path edge composition marker is missing")
+	_assert(_has_child_named(game.zone_root, "RoadOfCrowsGreyfenStoryBeats"), "Greyfen Road of Crows environmental story beats are missing")
+	_assert(_count_name_prefix(game.zone_root, "AuthoredDetailBatch") >= 3, "Greyfen authored detail batches are missing")
+	_assert(_has_child_named(game.zone_root, "PavedRoad"), "Greyfen paved road material anchor is missing")
+	_assert(_has_child_named(game.zone_root, "BalancedPavedRoadDetail"), "Balanced Greyfen road surface detail is missing")
+	_assert(_grass_state_is_valid(game), "Greyfen batched grass is missing outside performance mode")
+	_assert(_count_name_prefix(game.zone_root, "DressedVillageHouse") >= 4, "Greyfen does not have enough dressed village houses")
+	var rut_count = _count_name_prefix(game.zone_root, "AuthoredDetailBatch")
+	var lantern_count = _count_name_contains(game.zone_root, "LanternGlow")
+	_assert(rut_count >= 3, "Greyfen authored road/detail batches are missing; found %d; sample=%s" % [rut_count, _debug_names(game.zone_root)])
+	_assert(lantern_count >= 4, "Greyfen lantern rhythm is missing; found %d; sample=%s" % [lantern_count, _debug_names(game.zone_root)])
+	_assert(_count_name_prefix(game.zone_root, "Greyfen") >= 4, "Greyfen terrain layering is missing")
+	_assert(not _has_player_placeholder(game), "Player is still using a placeholder visual")
+	var sister = _find_child_named(game.zone_root, "sister_anwen")
+	_assert(sister != null, "Sister Anwen is missing from Greyfen")
+	_assert(str(game.dialogue.dialogues["sister_anwen"]["greeting"]).contains("road notice"), "Sister Anwen first dialogue lost its grounded contract opening")
+	var anwen_opening := " ".join(PackedStringArray(game.dialogue.dialogues["sister_anwen"]["lines"]))
+	_assert(anwen_opening.contains("Bram") and anwen_opening.contains("Sella") and anwen_opening.contains("Oren"), "Sister Anwen no longer names the Road of Crows victims")
+	_assert(game.dialogue.dialogues["sister_anwen"].get("variants", []).size() >= 4, "Sister Anwen report and cemetery variants are missing")
+	_assert(game.dialogue.dialogues["sister_anwen"].has("voice"), "Sister Anwen dialogue is missing voice metadata")
+	_assert(game.audio.has_voice("voice_sister_anwen_greeting_01"), "Sister Anwen generated voice clip is unavailable")
+	_assert(str(game.dialogue.dialogues["rook"]["lines"][1]).contains("black feathers"), "Greyfen micro-story black-feather rumor is missing")
+	_assert(_count_name_contains(game.player, "CharacterContactShadow") >= 1, "Player contact shadow is missing")
+	var player_animation_driver: Node = game.player.find_child("CharacterAnimationDriver", true, false)
+	_assert(player_animation_driver != null and player_animation_driver.is_valid(), "Player visible skeleton/animation driver is missing")
+	_assert(InputMap.has_action("jump"), "Player jump input is missing")
+	_assert(game.player.has_method("_update_ground_adaptation"), "Player procedural ground adaptation is missing")
+	_assert(float(game.player.floor_snap_length) >= 0.25, "Player floor snapping is not configured")
+	_assert(_count_name_contains(sister, "CharacterContactShadow") >= 1, "Sister Anwen contact shadow is missing")
+	var sister_animation_driver: Node = sister.find_child("CharacterAnimationDriver", true, false)
+	_assert(sister_animation_driver != null and sister_animation_driver.is_valid(), "Sister Anwen visible skeleton/animation driver is missing")
+	_assert(await _activate_focused_interaction(game, sister), "Sister Anwen could not be activated through normal focus and E input")
+	await _settle_frames(1)
+	_assert(paused, "Dialogue did not pause the game")
+	_assert(Input.mouse_mode == Input.MOUSE_MODE_VISIBLE, "Dialogue did not release the mouse pointer")
+	_assert(game.player.global_position.distance_to((sister as Node3D).global_position) >= 1.0, "Dialogue staging placed the player too close to Sister Anwen")
+	paused = false
+	game.hud.hide_menus()
+	await _settle_frames(1)
+	if DisplayServer.get_name().to_lower() != "headless":
+		_assert(Input.mouse_mode == Input.MOUSE_MODE_CAPTURED, "Gameplay did not recapture the mouse after closing dialogue")
+	_assert(_has_child_named(game.zone_root, "gate_vargan_approach"), "Playable Castle Vargan gate is missing")
+	var castle_gate = _find_child_named(game.zone_root, "gate_vargan_approach")
+	if castle_gate == null:
+		_fail("Castle Vargan gate lookup failed after presence assertion")
+		return
+	_assert(await _activate_focused_interaction(game, castle_gate), "Castle Vargan gate could not be activated through normal focus and E input")
+	await _settle_frames(1)
+	_assert(str(game.current_zone_id) == "vargan_approach", "Castle Vargan gate did not open from New Game")
+	_assert(game.quests.is_active("main_blood_under_stone"), "Castle arrival did not start Blood Under Stone")
+
+	game.call("_load_zone", "wychwood", Vector3(0, 1, 13))
+	await _settle_frames(3)
+	_assert(_has_child_named(game.zone_root, "BalancedWychwoodRoadDetail"), "Balanced Wychwood road surface detail is missing")
+	_assert(str(game.current_zone_id) == "wychwood", "Wychwood did not load")
+	_assert(str(game.audio.music_state) in ["wychwood_tension", "ghoulkin_combat"], "Wychwood music state did not activate")
+	_assert(_has_child_named(game.zone_root, "WychwoodCorridorComposition"), "Wychwood corridor composition marker is missing")
+	_assert(_has_child_named(game.zone_root, "WychwoodPathEdgeComposition"), "Wychwood path edge composition marker is missing")
+	_assert(_has_child_named(game.zone_root, "FirstCombatReadabilityDressing"), "First combat readability dressing marker is missing")
+	_assert(not _has_child_named(game.zone_root, "QualityWychwoodVisualOverhaul"), "Quality-only Wychwood clutter leaked into Balanced mode")
+	_assert(_has_child_named(game.zone_root, "RoadOfCrowsWychwoodStoryBeats"), "Wychwood Road of Crows environmental story beats are missing")
+	_assert(_has_child_named(game.zone_root, "RoadOfCrowsWychwoodStoryBeats"), "Wychwood environmental story layer is missing")
+	var wychwood_tracker_text := str(game.hud.tracker_label.text).to_lower()
+	_assert(not wychwood_tracker_text.contains("speak with sister anwen") and not wychwood_tracker_text.contains("at the shrine"), "Wychwood retained the Greyfen Anwen objective")
+	_assert(wychwood_tracker_text.contains("wychwood") or wychwood_tracker_text.contains("road"), "Wychwood tracker does not describe the active route")
+	_assert(_count_name_prefix(game.zone_root, "AuthoredDetailBatch") >= 1, "Wychwood authored evidence batch is missing")
+	_assert(_has_child_named(game.zone_root, "MudRoad"), "Wychwood mud road material anchor is missing")
+	_assert(_grass_state_is_valid(game), "Wychwood batched grass is missing outside performance mode")
+	_assert(_count_name_prefix(game.zone_root, "TerrainPatchBatch") >= 1, "Wychwood terrain batches are missing")
+	_assert(game.active_enemies.size() == 5, "Wychwood pack should contain exactly five enemies")
+	_assert(_living_enemy_count(game, "ghoulkin") >= 2, "Ghoulkin encounter is incomplete")
+	for enemy_id in ["wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
+		_assert(_living_enemy_count(game, enemy_id) == 1, "%s reinforcement is missing" % enemy_id)
+	for enemy in game.active_enemies:
+		var rendered_height := _rendered_height(enemy)
+		_assert(rendered_height >= 1.35 and rendered_height <= 2.25, "%s rendered body height %.2f is not protagonist-comparable" % [enemy.enemy_id, rendered_height])
+	_assert(game.player.has_signal("beam_requested"), "Player Oathfire Beam signal is missing")
+	_assert(_has_child_named(game.player, "OathfireChargeSphere"), "Oathfire charge visual is missing")
+	_assert(game.combat.has_method("resolve_energy_beam"), "Oathfire beam combat resolver is missing")
+	var legacy_state = {"ghoulkin_kills": 2}
+	game.load_world_state(legacy_state)
+	_assert(int(game.wychwood_pack_kills) == 2, "Legacy Ghoulkin kill count did not migrate")
+	game.wychwood_pack_kills = 0
+	var tracks = _find_child_named(game.zone_root, "tracks")
+	_assert(tracks != null, "Road of Crows tracks clue is missing")
+	var corpse = _find_child_named(game.zone_root, "corpse")
+	var feathers = _find_child_named(game.zone_root, "black_feathers")
+	_assert(corpse != null and str(corpse.prompt).contains("Bram"), "Bram's cart-ledger clue prompt is missing")
+	_assert(feathers != null and str(feathers.prompt).contains("Sella"), "Sella's red-thread clue prompt is missing")
+	for clue_id in ["tracks", "corpse", "black_feathers"]:
+		var route_clue = _find_child_named(game.zone_root, clue_id)
+		_assert(route_clue != null, "Route clue disappeared before normal interaction: %s" % clue_id)
+		if route_clue != null:
+			_assert(await _activate_focused_interaction(game, route_clue), "Route clue could not be activated through normal focus: %s" % clue_id)
+		await _settle_frames(1)
+	_assert(game.quests.is_objective_done("main_road_of_crows", "drag_marks"), "Tracks did not register the drag-mark evidence")
+	_assert(game.quests.is_objective_done("main_road_of_crows", "bram"), "Cart ledger did not identify Bram")
+	_assert(game.quests.is_objective_done("main_road_of_crows", "sella"), "Red-thread feathers did not identify Sella")
+	_assert(not game.quests.is_objective_done("main_road_of_crows", "vargan_wire"), "Three-clue route falsely recovered Vargan wire")
+	_assert(game.quests.is_objective_done("main_road_of_crows", "evidence_ready"), "Three-clue evidence threshold did not resolve")
+	await _settle_frames(1)
+	_assert(not game.quests.is_objective_done("main_road_of_crows", "return_village"), "Tracks completed return/report before Ghoulkin victory")
+	if game.active_enemies.size() > 0:
+		game.audio.set_music_state("ghoulkin_combat")
+		_assert(str(game.audio.music_state) == "ghoulkin_combat", "Ghoulkin combat music state did not activate")
+		_assert(_count_name_contains(game.active_enemies[0], "CharacterContactShadow") >= 1, "Enemy contact shadow is missing")
+		var enemy_animation_driver: Node = game.active_enemies[0].find_child("CharacterAnimationDriver", true, false)
+		_assert(enemy_animation_driver != null and enemy_animation_driver.is_valid(), "Ghoulkin visible skeleton/animation driver is missing")
+		game.active_enemies[0].windup_time = 0.30
+		game.active_enemies[0].call("_show_windup_marker")
+		game.call("_on_enemy_windup_started", game.active_enemies[0])
+		await _settle_frames(1)
+		_assert(_count_name_contains(game.active_enemies[0], "EnemyWindupWarning") >= 1, "Enemy windup warning marker is missing")
+		_assert(game.hud.enemy_bar.visible, "Enemy health HUD did not appear during first combat")
+		_assert(game.hud.hint_label.visible, "Block/parry contextual hint did not appear during first combat")
+	if game.active_enemies.size() == 5:
+		for enemy_index in range(4):
+			game.call("_on_enemy_died", game.active_enemies[enemy_index])
+		_assert(not game.quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"), "Wychwood fight completed before all five enemies died")
+		game.call("_on_enemy_died", game.active_enemies[4])
+		await _settle_frames(1)
+		_assert(game.quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"), "Five-enemy victory did not complete fight objective")
+		_assert(game.quests.is_active("main_road_of_crows"), "Road of Crows completed before return/report")
+		_assert(str(game.hud.tracker_label.text).contains("report") and str(game.hud.tracker_label.text).contains("Greyfen"), "Return/report objective is not visible after victory")
+		_assert(str(game.audio.music_state) == "return_report", "Victory did not move audio toward return/report music state")
+		_assert(_has_child_named(game.zone_root, "RoadCrowsPostVictoryBootTracks"), "Post-victory human boot-track clue is missing")
+	_assert(not _has_placeholder_major_visuals(game), "Major characters or enemies are still using placeholder visuals")
+
+	game.call("_load_zone", "greyfen", Vector3(0, 1, 7))
+	await _settle_frames(2)
+	var report_sister = _find_child_named(game.zone_root, "sister_anwen")
+	_assert(report_sister != null, "Sister Anwen report target is missing")
+	_assert(await _activate_focused_interaction(game, report_sister), "Report to Sister Anwen could not be activated through normal focus and E input")
+	await _settle_frames(1)
+	_assert(game.quests.is_completed("main_road_of_crows"), "Reporting to Sister Anwen did not complete Road of Crows")
+	paused = false
+	game.hud.hide_menus()
+	game.player.global_position = Vector3(0, -20, 0)
+	await _settle_frames(3)
+	_assert(game.player.global_position.y > -5, "Fall recovery failed")
+	_assert(FileAccess.file_exists("res://visual_upgrade_manifest.json"), "Visual upgrade manifest is missing")
+	_assert(FileAccess.file_exists("res://MISSING_VISUAL_ASSETS.md"), "Missing visual asset report is missing")
+
+	print("RUNTIME VERIFIER: PASS")
+	if game.has_method("prepare_resource_shutdown"):
+		game.prepare_resource_shutdown()
+	await _settle_frames(game.ZONE_RETIRE_FRAMES + 4)
+	game.free()
+	await _settle_frames(8)
+	quit()
+
+func _settle_frames(count: int) -> void:
+	for i in range(count):
+		await process_frame
+
+func _activate_focused_interaction(game: Node, area: Node3D) -> bool:
+	if game == null or area == null or game.player == null:
+		return false
+	var to_area: Vector3 = area.global_position - game.player.global_position
+	to_area.y = 0.0
+	if to_area.length_squared() <= 0.01:
+		to_area = Vector3.FORWARD
+	var requested := area.global_position - to_area.normalized() * 1.8
+	requested.y = 0.95
+	var safe_position: Vector3 = Vector3(game.spatial_service.validate_position(requested, 0.72, game.spatial_service.bank_for(requested)))
+	var start_position: Vector3 = game.player.global_position
+	for step in range(1, 15):
+		game.player.global_position = start_position.lerp(safe_position, float(step) / 14.0)
+		game.player.velocity = Vector3.ZERO
+		await physics_frame
+		await process_frame
+	var toward_area: Vector3 = area.global_position - game.player.global_position
+	toward_area.y = 0.0
+	if game.camera_rig != null and toward_area.length_squared() > 0.01:
+		game.camera_rig.yaw = atan2(-toward_area.normalized().x, -toward_area.normalized().z)
+	for _frame in range(5):
+		await physics_frame
+		await process_frame
+		var focus_camera := game.get_viewport().get_camera_3d()
+		if focus_camera != null:
+			focus_camera.look_at(area.global_position + Vector3.UP * 0.75, Vector3.UP)
+		game.call("_update_interaction_focus")
+	if area not in game.interaction_candidates:
+		return false
+	if game.active_interactable != area:
+		return false
+	if not bool(game.call("_interaction_target_valid", area)):
+		return false
+	var event := InputEventAction.new()
+	event.action = "interact"
+	event.pressed = true
+	game.call("_unhandled_input", event)
+	return true
+
+func _wait_for_zone_ready(game: Node, zone_id: String) -> void:
+	for _index in range(90):
+		if game.game_started and game.current_zone_id == zone_id and not game.zone_transition_pending and game.player != null:
+			return
+		await process_frame
+	_fail("Timed out waiting for %s to become playable" % zone_id)
+
+func _menu_has_actions(hud: Node, expected: Array[String]) -> bool:
+	var labels: Array[String] = []
+	for node in hud.menu_layer.find_children("*", "Control", true, false):
+		if node is Button or node is Label:
+			labels.append(str(node.text))
+	for action in expected:
+		if action not in labels:
+			return false
+	return true
+
+func _menu_has_setting_values(hud: Node, settings: Dictionary) -> bool:
+	var required := [
+		"VisualPreset%s" % str(settings.get("quality_preset", "balanced")).capitalize(),
+		"3D ResolutionNative720p",
+		"MasterVolume%d%%" % int(round(float(settings.get("master_volume", 0.85)) * 100.0)),
+	]
+	required[1] = required[1].replace(" ", "")
+	for page in range(3):
+		hud.show_settings_menu("main", page)
+		await process_frame
+		var labels: Array[String] = []
+		for node in hud.menu_layer.find_children("*", "Control", true, false):
+			if node is Button or node is Label:
+				labels.append(str(node.text).replace(" ", ""))
+		for text in labels:
+			if required[0] != "" and text.contains(required[0]):
+				required[0] = ""
+			if required[1] != "" and text.contains(required[1]):
+				required[1] = ""
+			if required[2] != "" and text.contains(required[2]):
+				required[2] = ""
+	return required.all(func(text: String): return text == "")
+
+func _rendered_height(root_node: Node3D) -> float:
+	var lowest := INF
+	var highest := -INF
+	for mesh in root_node.find_children("*", "MeshInstance3D", true, false):
+		if mesh.mesh == null or str(mesh.name).to_lower().contains("shadow"):
+			continue
+		var relative: Transform3D = root_node.global_transform.affine_inverse() * mesh.global_transform
+		var bounds: AABB = relative * mesh.mesh.get_aabb()
+		lowest = minf(lowest, bounds.position.y)
+		highest = maxf(highest, bounds.end.y)
+	return highest - lowest if lowest < INF else 0.0
+
+func _assert(condition: bool, message: String) -> void:
+	if not condition:
+		_fail(message)
+
+func _fail(message: String) -> void:
+	push_error(message)
+	quit(1)
+
+func _debug_names(root_node: Node, limit: int = 40) -> String:
+	var names: Array[String] = []
+	_collect_names(root_node, names, limit)
+	return ", ".join(names)
+
+func _collect_names(root_node: Node, names: Array[String], limit: int) -> void:
+	if root_node == null or names.size() >= limit:
+		return
+	names.append(root_node.name)
+	for child in root_node.get_children():
+		_collect_names(child, names, limit)
+
+func _release_shape_is_web_only() -> bool:
+	var presets = FileAccess.get_file_as_string("res://export_presets.cfg")
+	if presets.contains("Windows Low Spec") or presets.contains("Windows Desktop") or presets.contains("AshenOath_Windows"):
+		return false
+	if FileAccess.file_exists("res://Export_Windows_Build.bat"):
+		return false
+	var project_root = ProjectSettings.globalize_path("res://")
+	for folder_name in ["Probe_Web", "work_web_export_probe"]:
+		if DirAccess.dir_exists_absolute(project_root.path_join(folder_name)):
+			return false
+	var outputs_root = project_root.path_join("..").simplify_path()
+	if DirAccess.dir_exists_absolute(outputs_root.path_join("AshenOath_Windows")):
+		return false
+	return true
+
+func _has_child_named(root_node: Node, node_name: String) -> bool:
+	return _find_child_named(root_node, node_name) != null
+
+func _grass_state_is_valid(game) -> bool:
+	var potato = game.settings != null and bool(game.settings.settings.get("potato_mode", false))
+	return potato or _has_child_named(game.zone_root, "GrassBatch")
+
+func _count_name_prefix(root_node: Node, prefix: String) -> int:
+	if root_node == null:
+		return 0
+	var count = 1 if root_node.name.begins_with(prefix) else 0
+	for child in root_node.get_children():
+		count += _count_name_prefix(child, prefix)
+	return count
+
+func _count_name_contains(root_node: Node, needle: String) -> int:
+	if root_node == null:
+		return 0
+	var visual_name = str(root_node.get_meta("visual_name", ""))
+	var count = 1 if root_node.name.contains(needle) or visual_name.contains(needle) else 0
+	for child in root_node.get_children():
+		count += _count_name_contains(child, needle)
+	return count
+
+func _find_child_named(root_node: Node, node_name: String) -> Node:
+	if root_node == null:
+		return null
+	if root_node.name == node_name:
+		return root_node
+	for child in root_node.get_children():
+		var found = _find_child_named(child, node_name)
+		if found != null:
+			return found
+	return null
+
+func _living_enemy_count(game, enemy_id: String) -> int:
+	var count = 0
+	for enemy in game.active_enemies:
+		if enemy != null and not enemy.dead and enemy.enemy_id == enemy_id:
+			count += 1
+	return count
+
+func _has_placeholder_major_visuals(game) -> bool:
+	var names = ["player_human_placeholder", "player_kael_placeholder", "sister_anwen_human_placeholder", "sister_anwen_placeholder", "mira_human_placeholder", "mira_herbalist_placeholder", "rook_human_placeholder", "rook_smuggler_placeholder", "villager_human_placeholder", "ghoulkin_placeholder", "bog_wretch_placeholder"]
+	for placeholder_name in names:
+		if _find_child_named(game, placeholder_name) != null:
+			return true
+	return false
+
+func _has_player_placeholder(game) -> bool:
+	if game.player == null:
+		return true
+	return _find_child_named(game.player, "player_human_placeholder") != null or _find_child_named(game.player, "player_kael_placeholder") != null
+
+func _visual_roles_are_imported() -> bool:
+	var database = AssetDatabase.new()
+	root.add_child(database)
+	database.reload()
+	var helper = AssetSpawnHelper.new()
+	root.add_child(helper)
+	helper.setup(database)
+	var roles = ["player_human", "sister_anwen_human", "mira_human", "rook_human", "villager_human"]
+	for role_name in roles:
+		var entry = database.get_visual_asset_for_role(role_name)
+		var path = str(entry.get("path", ""))
+		if path == "" or not ResourceLoader.exists(path):
+			push_error("Visual role %s is not an imported ResourceLoader asset: %s" % [role_name, path])
+			return false
+		var node = helper.spawn_visual_role(role_name, "characters")
+		if node == null or node.name.ends_with("_placeholder"):
+			push_error("Visual role %s did not instantiate a real node" % role_name)
+			return false
+		node.free()
+	helper.free()
+	database.free()
+	return true

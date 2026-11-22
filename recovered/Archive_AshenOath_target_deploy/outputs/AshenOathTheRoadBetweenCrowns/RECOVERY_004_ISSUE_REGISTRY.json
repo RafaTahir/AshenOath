@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "registry_id": "ashen-oath-recovery-004",
+  "project": "Ashen Oath",
+  "last_reviewed_at": "2026-08-11",
+  "source": "Ashen Oath Complete Recovery and Improvement Plan",
+  "status_values": ["verified", "in_progress", "functional_but_incomplete", "visually_rejected", "open", "blocked", "deferred"],
+  "release_policy": {
+    "production_qa_surface": "feature-gated disposable Web QA preset only",
+    "visual_approval_required": true,
+    "ordinary_ticket_deploy": false,
+    "milestone_deploy": true,
+    "production_url": "https://ashenoath.vercel.app/"
+  },
+  "audit_totals": {
+    "confirmed_findings": 194,
+    "release_integrity": 15,
+    "traversal_collision_zones": 22,
+    "characters_npcs": 25,
+    "monsters_combat": 23,
+    "world_art": 29,
+    "sky_lighting_river": 16,
+    "ui_dialogue_interaction": 20,
+    "story_quests_save": 14,
+    "audio_feel": 10,
+    "architecture_performance": 20
+  },
+  "categories": [
+    {"id": "release_integrity", "severity": "blocker", "reproduction": "Run the authoritative release runner and inspect warnings, approvals, browser logs, and source/artifact identity.", "owner": "QA/release", "test": "tools/run_release_gate.ps1, verify_security_001.py, verify_screenshot_qa_003.py", "screenshot": "Development_Gallery/qa_003_approval_manifest.json", "status": "in_progress"},
+    {"id": "traversal_collision_zones", "severity": "high", "reproduction": "Traverse all gates, bridges, campaign arrivals, and return corridors with a player-sized body.", "owner": "World/navigation", "test": "verify_gate_transitions.gd, verify_river_swimming.gd, verify_navigation_001.gd", "screenshot": "Development_Gallery/screenshots/*river* and *vargan*", "status": "functional_but_incomplete"},
+    {"id": "characters_npcs", "severity": "high", "reproduction": "Inspect route-visible actors at gameplay and dialogue distance and compare rendered height, grounding, face, and equipment.", "owner": "Character/animation", "test": "verify_character_real_001.gd, verify_char_001.gd, verify_motion_quality.gd", "screenshot": "Development_Gallery/screenshots/CHAR_001_* and QA-003 portraits", "status": "visually_rejected"},
+    {"id": "monsters_combat", "severity": "high", "reproduction": "Run the five-enemy encounter and capture idle, windup, contact, parry, Oathfire, stagger, and death.", "owner": "Combat/AI/VFX", "test": "verify_combat_001.gd, verify_oath_001.gd, verify_ai_002.gd", "screenshot": "Development_Gallery/screenshots/10_combat_clearing* and combat sequence views", "status": "functional_but_incomplete"},
+    {"id": "world_presentation", "severity": "high", "reproduction": "Review identical-camera Greyfen, Wychwood, Castle, Record Hall, river, and Hart Glade captures.", "owner": "World/art/lighting", "test": "verify_visible_quality.gd, verify_world_001.gd, verify_visual_003.gd", "screenshot": "Development_Gallery/qa_003_approval_manifest.json", "status": "visually_rejected"},
+    {"id": "ui_story_input", "severity": "medium", "reproduction": "Switch between menu, dialogue, journal, settings, interaction, and pause using mouse and keyboard.", "owner": "UI/input/story", "test": "verify_ui_001.gd, verify_input_001.gd, runtime regression suite", "screenshot": "menu, dialogue, prompt, and tracker captures", "status": "in_progress"},
+    {"id": "audio", "severity": "medium", "reproduction": "Play the opening route, combat, river, forge, shrine, and dialogue with audio unlocked and muted.", "owner": "Audio", "test": "verify_audio_runtime.gd, verify_audio_001.gd", "screenshot": "not applicable; retain browser/audio logs", "status": "functional_but_incomplete"},
+    {"id": "architecture_performance", "severity": "blocker", "reproduction": "Run graphical Compatibility profiling zone by zone and inspect teardown/resource logs.", "owner": "Engine/performance", "test": "verify_perf_001.gd, verify_zone_budgets.gd, packed startup", "screenshot": "performance evidence in .release-gate/", "status": "in_progress"}
+  ],
+  "tickets": [
+    {"id": "SECURITY-001", "status": "verified"}, {"id": "QA-005", "status": "in_progress"}, {"id": "QA-006", "status": "blocked"}, {"id": "PROD-003", "status": "in_progress"}, {"id": "ENGINE-004", "status": "open"}, {"id": "ENGINE-005", "status": "open"}, {"id": "INPUT-002", "status": "in_progress"}, {"id": "SAVE-003", "status": "open"},
+    {"id": "QUEST-007", "status": "open"}, {"id": "UI-003", "status": "open"}, {"id": "WORLD-007", "status": "visually_rejected"}, {"id": "WORLD-008", "status": "visually_rejected"}, {"id": "MAT-002", "status": "open"}, {"id": "CHAR-003", "status": "visually_rejected"}, {"id": "ANIM-002", "status": "functional_but_incomplete"}, {"id": "COMBAT-004", "status": "functional_but_incomplete"}, {"id": "SKY-002", "status": "functional_but_incomplete"}, {"id": "AUDIO-004", "status": "functional_but_incomplete"}, {"id": "PERF-004", "status": "open"},
+    {"id": "WORLD-009", "status": "open"}, {"id": "WORLD-010", "status": "open"}, {"id": "WORLD-011", "status": "open"}, {"id": "CHAR-004", "status": "open"}, {"id": "NARR-004", "status": "functional_but_incomplete"}, {"id": "AUDIO-005", "status": "open"}, {"id": "PERF-005", "status": "open"}, {"id": "ACCESS-002", "status": "open"}, {"id": "QA-007", "status": "open"}, {"id": "QA-008", "status": "open"}, {"id": "WEB-003", "status": "open"}, {"id": "RELEASE-002", "status": "deferred"}
+  ]
+}

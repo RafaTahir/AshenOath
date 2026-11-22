@@ -1,0 +1,220 @@
+{
+  "notice_board": {
+    "name": "Greyfen Notice Board",
+    "greeting": "A rain-stiff contract hangs beneath a rusted nail. A prayer charm has been pressed into the wood beside it.",
+    "lines": [
+      "Missing: Bram Kett, Sella Vey, and Oren Vey. Their cart returned empty from the old road.",
+      "Black feathers were found in the blood. Sister Anwen keeps the names and pays for proof."
+    ],
+    "actions": [{"label": "Accept Road of Crows", "type": "start_quest", "quest": "main_road_of_crows"}]
+  },
+  "sister_anwen": {
+    "name": "Sister Anwen",
+    "greeting": "You came about the road notice.",
+    "lines": [
+      "Bram drove. Sella walked beside him. Oren was her son. He was twelve.",
+      "If you find black feathers tied in red thread, leave them intact. The thread came from this shrine.",
+      "Kael: You knew that before the contract was posted.",
+      "Sister Anwen: Yes. Bring me what the road left, and I will tell you why."
+    ],
+    "variants": [
+      {
+        "priority": 30,
+        "conditions": {"bell_gate_met": true},
+        "greeting": "The bell rope was cut last winter. It still rang three times after your report.",
+        "lines": [
+          "Sister Anwen: Once means burial. Twice means a name restored.",
+          "Kael: And three?",
+          "Sister Anwen: I do not know. That is the first clean answer I have given you. Check the disturbed graves."
+        ],
+        "actions": []
+      },
+      {
+        "priority": 20,
+        "conditions": {"evidence_report": "private"},
+        "greeting": "Anwen knows Oren's token before Kael opens his hand.",
+        "lines": [
+          "Kael: You know it.",
+          "Anwen: I know the carving.",
+          "Kael: That is not what I said.",
+          "Anwen: No. Oren was not the first child given that token."
+        ],
+        "actions": []
+      },
+      {
+        "priority": 20,
+        "conditions": {"evidence_report": "public"},
+        "greeting": "The token is already pinned beneath the contract. Anwen does not look at it.",
+        "lines": [
+          "Anwen: You gave Greyfen the truth before giving it time to choose courage.",
+          "Kael: Courage chosen after warning is only obedience.",
+          "Anwen: Then we will learn what fear chooses."
+        ],
+        "actions": []
+      },
+      {
+        "priority": 20,
+        "conditions": {"evidence_report": "retained"},
+        "greeting": "Anwen watches Kael's closed hand.",
+        "lines": [
+          "Anwen: You found something.",
+          "Kael: I found reasons to keep looking.",
+          "Anwen: Keep them close. Greyfen has practiced taking things from the dead."
+        ],
+        "actions": []
+      }
+    ],
+    "voice": [
+      "voice_sister_anwen_greeting_01",
+      "voice_sister_anwen_road_warning_01",
+      "voice_sister_anwen_wychwood_warning_01"
+    ],
+    "actions": [{"label": "I will inspect the corpse.", "type": "complete_objective", "quest": "main_road_of_crows", "objective": "speak_anwen"}]
+  },
+  "mira": {
+    "name": "Mira Fen",
+    "greeting": "Keep the door open. People trust medicine less when the healer whispers.",
+    "lines": [
+      "I can dress a wound and tell you what poisoned it.",
+      "I cannot make Greyfen honest about either."
+    ],
+    "variants": [
+      {
+        "priority": 40,
+        "conditions": {"bog_core_fate": "preserved"},
+        "greeting": "The core is quieter in grave cloth. Not silent.",
+        "lines": [
+          "Mira: I asked it for a name. It gave me the smell of wet wheat.",
+          "Kael: That was not permission to keep asking.",
+          "Mira: No. It was a reason."
+        ],
+        "actions": []
+      },
+      {
+        "priority": 35,
+        "conditions": {"teeth_supplies_taken": true},
+        "greeting": "The roots turned when I said Oren's name. Not toward me. Toward the old stones.",
+        "lines": [
+          "Mira: I tested names on plants grown in grave soil. I told myself medicine made the knowing useful.",
+          "Kael: Useful is not clean.",
+          "Mira: No. Read the chapel register. Then speak Oren's name where the road turns wet."
+        ],
+        "actions": [
+          {"label": "I will read the chapel register.", "type": "complete_objective", "quest": "main_teeth_in_rain", "objective": "speak_mira", "sets_flags": {"mira_teeth_briefed": true}}
+        ]
+      },
+      {
+        "priority": 30,
+        "conditions": {"teeth_in_rain_available": true},
+        "greeting": "The roots turned when I said Oren's name. Not toward me. Toward the old stones.",
+        "lines": [
+          "Mira: I tested names on plants grown in grave soil. I told myself medicine made the knowing useful.",
+          "Kael: Useful is not clean.",
+          "Mira: No. Read the chapel register. Take Moon Oil if you want the thing beneath those stones to show what it remembers."
+        ],
+        "actions": [
+          {"label": "I will read the chapel register.", "type": "complete_objective", "quest": "main_teeth_in_rain", "objective": "speak_mira", "sets_flags": {"mira_teeth_briefed": true}},
+          {"label": "Give me what Moon Oil needs.", "type": "give_ingredients", "items": {"mooncap": 1}, "sets_flags": {"teeth_supplies_taken": true}}
+        ]
+      }
+    ],
+    "actions": [
+      {"label": "Start Bitter Roots", "type": "start_quest", "quest": "side_bitter_roots"},
+      {"label": "I found the roots.", "type": "complete_objective", "quest": "side_bitter_roots", "objective": "collect_roots"},
+      {"label": "Keep the truth between us.", "type": "story_choice", "quest": "side_bitter_roots", "objective": "mira_choice", "sets_flags": {"mira_truth": "kept"}, "result": "Mira keeps working, but no longer meets your eyes."},
+      {"label": "Greyfen deserves the truth.", "type": "story_choice", "quest": "side_bitter_roots", "objective": "mira_choice", "sets_flags": {"mira_truth": "confessed"}, "adjusts_values": {"greyfen_fear": 1}, "result": "Mira agrees to name what feeds the roots."}
+    ]
+  },
+  "edric": {
+    "name": "Lord Edric Vargan",
+    "greeting": "My family paid for Greyfen's walls. Remember that before you spit at my boots.",
+    "lines": [
+      "Yes, the signet is Vargan work. No, I did not spill that blood.",
+      "The ruins still keep our records. If guilt has a shape, you will find it under stone."
+    ],
+    "actions": [
+      {"label": "Start Blood Under Stone", "type": "start_quest", "quest": "main_blood_under_stone"},
+      {"label": "I have reached your walls.", "type": "complete_objective", "quest": "main_blood_under_stone", "objective": "reach_castle"}
+    ]
+  },
+  "rook": {
+    "name": "Rook",
+    "greeting": "You want the old road? Watch the crows, not the mud.",
+    "lines": [
+      "It bends twice where it should run straight. I checked. Then I decided I preferred being alive.",
+      "A boy found black feathers under his pillow after the second death. His mother burned the whole bed."
+    ],
+    "actions": [{"label": "Ask what he carried.", "type": "give_ingredients", "conditions": {"rook_supplies_taken": false}, "items": {"ash_salt": 1, "sparkstone": 1}, "sets_flags": {"rook_supplies_taken": true}}]
+  },
+  "widow_elna": {
+    "name": "Widow Elna",
+    "greeting": "The bell rings at dusk. My Harl is dead, but he still calls.",
+    "lines": [
+      "Find why the cemetery bell rings. Bring me cruelty or kindness, but bring me an answer."
+    ],
+    "actions": [
+      {"label": "Accept A Widow's Bell", "type": "start_quest", "quest": "side_widows_bell"},
+      {"label": "I found Harl's bell.", "type": "complete_objective", "quest": "side_widows_bell", "objective": "find_bell"},
+      {"label": "He was calling for a witness.", "type": "story_choice", "quest": "side_widows_bell", "objective": "widow_choice", "sets_flags": {"widow_truth": "told"}, "adjusts_values": {"anwen_trust": 1}, "result": "Elna rings the bell once, then cuts its cord."},
+      {"label": "The wind caught an old cord.", "type": "story_choice", "quest": "side_widows_bell", "objective": "widow_choice", "sets_flags": {"widow_truth": "comforted"}, "result": "Elna nods. She knows a kindness when she hears one."}
+    ]
+  },
+  "blacksmith_tor": {
+    "name": "Blacksmith Tor",
+    "greeting": "Let me see the blade. No, keep hold of it. I trust the steel.",
+    "lines": [
+      "If you mean to trap whatever is out there, take scrap. Better the iron snaps than your leg.",
+      "I heard the cemetery bell last night. The rope has been cut since winter."
+    ],
+    "actions": [
+      {"label": "Take scrap iron.", "type": "give_ingredients", "conditions": {"tor_scrap_taken": false}, "items": {"scrap_iron": 2}, "sets_flags": {"tor_scrap_taken": true}},
+      {"label": "Accept Iron Remembers.", "type": "start_quest", "quest": "side_iron_remembers"},
+      {"label": "I recovered iron from the chapel.", "type": "complete_objective", "quest": "side_iron_remembers", "objective": "recover_iron"},
+      {"label": "Forge the victims' names into a memorial.", "type": "story_choice", "quest": "side_iron_remembers", "objective": "tor_choice", "sets_flags": {"iron_fate": "memorial"}, "adjusts_values": {"anwen_trust": 1}, "result": "Tor stamps each recovered name into warm iron."},
+      {"label": "Forge it into a weapon.", "type": "story_choice", "quest": "side_iron_remembers", "objective": "tor_choice", "sets_flags": {"iron_fate": "weapon"}, "adjusts_values": {"hart_debt": 1}, "result": "Tor folds the witness into an edge."}
+    ]
+  },
+  "farmer_toma": {
+    "name": "Farmer Toma",
+    "greeting": "It took three sheep and one child screaming before anyone believed me.",
+    "lines": [
+      "Nobody speaks near the shrine after dusk. Not since Anwen washed blood from the altar stones.",
+      "They say a black dog is killing stock. I say no dog opens a latch and leaves boot prints.",
+      "Find what hunts the fold. Bring proof, not village gossip."
+    ],
+    "actions": [
+      {"label": "Accept The Black Dog Contract", "type": "start_quest", "quest": "side_black_dog"},
+      {"label": "I followed the sheepfold tracks.", "type": "complete_objective", "quest": "side_black_dog", "objective": "find_dog"},
+      {"label": "The guardian protected the children.", "type": "story_choice", "quest": "side_black_dog", "objective": "dog_choice", "sets_flags": {"black_dog_fate": "spared"}, "adjusts_values": {"anwen_trust": 1}, "result": "Toma looks toward the fold and lowers his knife."},
+      {"label": "Tell them it fled.", "type": "story_choice", "quest": "side_black_dog", "objective": "dog_choice", "sets_flags": {"black_dog_fate": "hidden"}, "result": "Greyfen accepts the easier story."}
+    ]
+  },
+  "returned_soldier": {
+    "name": "The Returned Soldier",
+    "greeting": "The grave is empty because I climbed out before they finished my name.",
+    "lines": [
+      "I remember the road. I do not remember whether the man who walked it deserves to keep breathing."
+    ],
+    "actions": [
+      {"label": "Your name belongs among the witnesses.", "type": "story_choice", "quest": "side_empty_grave", "objective": "walker_choice", "sets_flags": {"returned_soldier_fate": "named"}, "adjusts_values": {"anwen_trust": 1}, "result": "He gives Kael his name and agrees to stand before Greyfen."},
+      {"label": "Keep the name. Leave the grave empty.", "type": "story_choice", "quest": "side_empty_grave", "objective": "walker_choice", "sets_flags": {"returned_soldier_fate": "anonymous"}, "result": "He leaves before dawn, owing Greyfen nothing."}
+    ]
+  },
+  "white_hart": {
+    "name": "The White Hart",
+    "greeting": "You walk on promises buried under your kind's roads.",
+    "lines": [
+      "Kill me, and the village breathes while the wood turns to ash.",
+      "Free me, and truth will have teeth.",
+      "Bind me, and you inherit the old sin.",
+      "Expose them, and let human hands answer human crimes."
+    ],
+    "actions": [
+      {"label": "Start The Hart Remembers", "type": "start_quest", "quest": "main_hart_remembers"},
+      {"label": "Kill the White Hart", "type": "ending", "ending": "kill"},
+      {"label": "Free the White Hart", "type": "ending", "ending": "free"},
+      {"label": "Bind the White Hart Again", "type": "ending", "ending": "bind"},
+      {"label": "Expose House Vargan", "type": "ending", "ending": "expose"}
+    ]
+  }
+}

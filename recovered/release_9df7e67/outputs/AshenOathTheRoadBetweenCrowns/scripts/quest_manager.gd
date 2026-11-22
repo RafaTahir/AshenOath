@@ -1,0 +1,478 @@
+extends Node
+
+signal changed
+signal message(text: String)
+signal quest_completed(id: String)
+
+var _change_depth := 0
+var _change_pending := false
+var _completed_pending: Array[String] = []
+var _choice_depth := 0
+var evidence_history: Dictionary = {}
+var quest_defs = {}
+var active = {}
+var completed = {}
+const STARTING_UNLOCKS = {
+	"side_bracken_rescue": true,
+	"main_road_of_crows": true, "side_widows_bell": true, "side_iron_remembers": true,
+	"side_bitter_roots": true, "side_black_dog": true, "side_empty_grave": true,
+	"side_childs_charm": true, "side_soldiers_debt": true, "side_millers_measure": true,
+	"side_rooks_map": true, "side_three_candles": true
+}
+var unlocked = STARTING_UNLOCKS.duplicate()
+var world_flags = {}
+var tracked_quest_id := ""
+var tracked_quest_is_manual := false
+var tracker_context_zone := ""
+const IMPLEMENTED_SIDE_QUESTS := {
+	"side_bracken_rescue": true,
+	"side_widows_bell": true,
+	"side_iron_remembers": true,
+	"side_bitter_roots": true,
+	"side_black_dog": true,
+	"side_empty_grave": true,
+	"side_childs_charm": true,
+	"side_three_candles": true,
+	"side_rooks_map": true,
+	"side_millers_measure": true,
+	"side_soldiers_debt": true,
+}
+
+func load_quests(path: String) -> void:
+	var parsed = _read_json(path)
+	if typeof(parsed) == TYPE_DICTIONARY:
+		quest_defs = parsed
+
+func start_quest(id: String) -> bool:
+	if not quest_defs.has(id):
+		return false
+	if not is_runtime_content_ready(id):
+		message.emit("That request is still being prepared.")
+		return false
+	if completed.has(id) or active.has(id):
+		return false
+	if not bool(unlocked.get(id, false)):
+		message.emit("That path is not open yet.")
+		return false
+	var objectives: Array = []
+	for objective in quest_defs[id].get("objectives", []):
+		var runtime_objective: Dictionary = objective.duplicate(true)
+		runtime_objective["done"] = false
+		objectives.append(runtime_objective)
+	active[id] = {"objectives": objectives}
+	if not tracked_quest_is_manual and (tracked_quest_id == "" or str(quest_defs[id].get("type", "")) == "main"):
+		tracked_quest_id = id
+	message.emit("Quest started: %s" % quest_defs[id].get("title", id))
+	_emit_changed()
+	return true
+
+func complete_objective(quest_id: String, objective_id: String) -> bool:
+	if is_choice_objective(quest_id, objective_id) and _choice_depth == 0:
+		return false
+	if not active.has(quest_id):
+		return false
+	var objectives: Array = active[quest_id]["objectives"]
+	for objective in objectives:
+		if objective["id"] == objective_id:
+			if bool(objective.get("done", false)):
+				return false
+			objective["done"] = true
+			if str(objective.get("completion_flag", "")) != "":
+				world_flags[str(objective["completion_flag"])] = true
+			message.emit("Objective complete: %s" % objective["text"])
+			_update_evidence_groups(quest_id)
+			_try_complete_quest(quest_id)
+			_emit_changed()
+			return true
+	return false
+
+func complete_evidence(quest_id: String, evidence_id: String) -> bool:
+	if is_choice_objective(quest_id, evidence_id):
+		return false
+	evidence_history["%s:%s" % [quest_id, evidence_id]] = true
+	return complete_objective(quest_id, evidence_id)
+
+func complete_choice(quest_id: String, objective_id: String) -> bool:
+	_choice_depth += 1
+	var completed_now := complete_objective(quest_id, objective_id)
+	_choice_depth -= 1
+	return completed_now
+
+func is_choice_objective(quest_id: String, objective_id: String) -> bool:
+	if objective_id.ends_with("_choice") or objective_id in ["final_choice", "return_village"]:
+		return true
+	for objective in quest_defs.get(quest_id, {}).get("objectives", []):
+		if str(objective.get("id", "")) == objective_id:
+			return str(objective.get("kind", "")) == "choice"
+	return false
+
+func begin_change() -> void:
+	_change_depth += 1
+
+func end_change() -> void:
+	_change_depth = maxi(0, _change_depth - 1)
+	if _change_depth > 0:
+		return
+	var completed_now: Array[String] = _completed_pending.duplicate()
+	_completed_pending.clear()
+	for id in completed_now:
+		quest_completed.emit(id)
+	if _change_pending:
+		_change_pending = false
+		changed.emit()
+
+func _emit_changed() -> void:
+	if _change_depth > 0:
+		_change_pending = true
+	else:
+		changed.emit()
+
+func _emit_completed(id: String) -> void:
+	if _change_depth > 0:
+		if id not in _completed_pending:
+			_completed_pending.append(id)
+	else:
+		quest_completed.emit(id)
+
+func _update_evidence_groups(quest_id: String) -> void:
+	if not active.has(quest_id): return
+	var objectives: Array = active[quest_id]["objectives"]
+	var groups: Dictionary = {}
+	for objective in objectives:
+		var group := str(objective.get("group", ""))
+		if group == "": continue
+		if not groups.has(group): groups[group] = {"done": 0, "required": int(objective.get("required_count", 1))}
+		if bool(objective.get("done", false)): groups[group]["done"] += 1
+	for objective in objectives:
+		var group := str(objective.get("group", ""))
+		if group == "" or not groups.has(group): continue
+		if bool(objective.get("optional", false)):
+			objective["optional_satisfied"] = int(groups[group]["done"]) >= int(groups[group]["required"])
+		elif int(objective.get("required_count", 0)) > 0 and int(groups[group]["done"]) >= int(objective["required_count"]):
+			objective["done"] = true
+
+func is_objective_done(quest_id: String, objective_id: String) -> bool:
+	# Completed quests no longer have an active objective array. Preserve the
+	# completed truth so story-choice guards, HUD fallbacks, and save reloads do
+	# not treat a finished objective as available again.
+	if completed.has(quest_id):
+		return true
+	if not active.has(quest_id):
+		return false
+	for objective in active[quest_id]["objectives"]:
+		if objective["id"] == objective_id:
+			return bool(objective.get("done", false))
+	return completed.has(quest_id)
+
+func is_active(id: String) -> bool:
+	return active.has(id)
+
+func is_completed(id: String) -> bool:
+	return completed.has(id)
+
+func is_unlocked(id: String) -> bool:
+	return bool(unlocked.get(id, false))
+
+func is_runtime_content_ready(id: String) -> bool:
+	if not id.begins_with("side_"):
+		return true
+	return bool(IMPLEMENTED_SIDE_QUESTS.get(id, false))
+
+func get_tracker_text() -> String:
+	if active.is_empty():
+		return "No active quest\nFind a contract or speak to villagers."
+	if tracker_context_zone != "" and tracked_quest_id == "":
+		return "No objective in this area\nFollow the road or review the journal."
+	var ordered_ids: Array = []
+	if tracked_quest_id != "" and active.has(tracked_quest_id):
+		ordered_ids.append(tracked_quest_id)
+	for id in active.keys():
+		if id not in ordered_ids:
+			ordered_ids.append(id)
+	for id in ordered_ids:
+		if not quest_defs.has(id) or typeof(active.get(id, {})) != TYPE_DICTIONARY:
+			continue
+		var title = str(quest_defs[id].get("title", id))
+		for objective in active[id]["objectives"]:
+			if bool(objective.get("done", false)):
+				continue
+			if bool(objective.get("optional", false)) and bool(objective.get("optional_satisfied", false)):
+				continue
+			var group := str(objective.get("group", ""))
+			if group != "":
+				var progress := _group_progress(id, group)
+				var summary := _group_summary_objective(id, group)
+				if not summary.is_empty() and int(progress.done) < int(progress.required):
+					return "%s\n- %s (%d/%d)" % [
+						title,
+						str(summary.get("tracker_text", summary.get("text", "Investigate"))),
+						int(progress.done),
+						int(progress.required),
+					]
+				if bool(objective.get("optional", false)):
+					continue
+			return "%s\n- %s" % [title, objective["text"]]
+	return "All tracked objectives complete."
+
+func _group_progress(quest_id: String, group_id: String) -> Dictionary:
+	var done := 0
+	var required := 1
+	if not active.has(quest_id):
+		return {"done": done, "required": required}
+	for objective in active[quest_id]["objectives"]:
+		if str(objective.get("group", "")) != group_id:
+			continue
+		required = maxi(required, int(objective.get("required_count", 1)))
+		if bool(objective.get("optional", false)) and bool(objective.get("done", false)):
+			done += 1
+	return {"done": done, "required": required}
+
+func _group_summary_objective(quest_id: String, group_id: String) -> Dictionary:
+	if not active.has(quest_id):
+		return {}
+	for objective in active[quest_id]["objectives"]:
+		if str(objective.get("group", "")) == group_id and not bool(objective.get("optional", false)):
+			return objective
+	return {}
+
+func set_tracked_quest(id: String) -> bool:
+	if id.strip_edges() == "":
+		clear_tracked_quest()
+		return true
+	if not active.has(id):
+		return false
+	tracked_quest_id = id
+	tracked_quest_is_manual = true
+	_emit_changed()
+	return true
+
+func clear_tracked_quest() -> void:
+	var had_state := tracked_quest_id != "" or tracked_quest_is_manual
+	tracked_quest_id = ""
+	tracked_quest_is_manual = false
+	if had_state:
+		_emit_changed()
+
+func get_tracked_quest() -> String:
+	return tracked_quest_id if active.has(tracked_quest_id) else ""
+
+func get_active_objective_id(quest_id: String) -> String:
+	if not active.has(quest_id):
+		return ""
+	var grouped_candidates: Array[String] = []
+	var optional_candidates: Array[String] = []
+	for objective in active[quest_id].get("objectives", []):
+		if bool(objective.get("done", false)):
+			continue
+		var group := str(objective.get("group", ""))
+		if group != "":
+			var progress := _group_progress(quest_id, group)
+			if int(progress.get("done", 0)) >= int(progress.get("required", 1)):
+				continue
+			if bool(objective.get("optional", false)):
+				grouped_candidates.append(str(objective.get("id", "")))
+				continue
+			return str(objective.get("id", ""))
+		if bool(objective.get("optional", false)):
+			optional_candidates.append(str(objective.get("id", "")))
+			continue
+		return str(objective.get("id", ""))
+	if not grouped_candidates.is_empty():
+		return grouped_candidates[0]
+	if not optional_candidates.is_empty():
+		return optional_candidates[0]
+	return ""
+
+func set_tracked_quest_for_zone(zone_id: String) -> void:
+	tracker_context_zone = zone_id
+	if tracked_quest_is_manual and active.has(tracked_quest_id):
+		_emit_changed()
+		return
+	tracked_quest_is_manual = false
+	var preferences := {
+		"greyfen":["main_bell_beneath_greyfen","main_road_of_crows","main_teeth_in_rain","main_names_they_burned"],
+		"wychwood":["main_road_of_crows","main_teeth_in_rain"],
+		"deep_wood":["main_teeth_in_rain","main_names_they_burned"],
+		"old_mill":["main_ash_at_the_mill"],
+		"burned_farmstead":["main_names_they_burned"],
+		"marsh_crossing":["main_names_they_burned"],
+		"bandit_road":["main_soldier_without_banner"],
+		"vargan_approach":["main_blood_under_stone"],
+		"vargan_court":["main_blood_under_stone"],
+		"record_hall":["main_blood_under_stone"],
+		"undercroft":["main_last_witness"],
+		"assembly":["main_crowns_without_mercy"],
+		"hart_glade":["main_hart_remembers"]
+	}
+	for id in preferences.get(zone_id, []):
+		if active.has(id):
+			tracked_quest_id = id
+			_emit_changed()
+			return
+	tracked_quest_id = ""
+	_emit_changed()
+
+func get_journal_text() -> String:
+	var text = "ACTIVE QUESTS\n"
+	for id in active.keys():
+		if not quest_defs.has(id):
+			continue
+		text += "\n%s\n" % quest_defs[id].get("title", id)
+		for objective in active[id]["objectives"]:
+			text += "%s %s\n" % ["[x]" if bool(objective.get("done", false)) else "[ ]", objective["text"]]
+	text += "\nCOMPLETED\n"
+	for id in completed.keys():
+		if quest_defs.has(id):
+			text += "- %s\n" % quest_defs[id].get("title", id)
+	return text
+
+func _try_complete_quest(id: String) -> void:
+	for objective in active[id]["objectives"]:
+		if not bool(objective.get("done", false)) and not bool(objective.get("optional", false)):
+			return
+	completed[id] = true
+	active.erase(id)
+	if tracked_quest_id == id:
+		tracked_quest_id = ""
+		tracked_quest_is_manual = false
+	for next_id in quest_defs[id].get("unlocks", []):
+		unlocked[next_id] = true
+	message.emit("Quest complete: %s" % quest_defs[id].get("title", id))
+	if str(quest_defs[id].get("type", "")) == "main":
+		for next_id in quest_defs[id].get("unlocks", []):
+			start_quest(str(next_id))
+	# Completion listeners may checkpoint synchronously. Publish only after the
+	# next main objective is active so that checkpoint is resumable.
+	_emit_completed(id)
+
+func save_state() -> Dictionary:
+	return {
+		"active": active.duplicate(true),
+		"evidence_history": evidence_history.duplicate(true),
+		"completed": completed.duplicate(true),
+		"unlocked": unlocked.duplicate(true),
+		"world_flags": world_flags.duplicate(true),
+		"tracked_quest_id": tracked_quest_id,
+		"tracked_quest_is_manual": tracked_quest_is_manual,
+		"tracker_context_zone": tracker_context_zone
+	}
+
+func load_state(state: Dictionary) -> void:
+	_change_depth = 0
+	_change_pending = false
+	_choice_depth = 0
+	_completed_pending.clear()
+	var recorded_evidence: Variant = state.get("evidence_history", {})
+	evidence_history = recorded_evidence.duplicate(true) if recorded_evidence is Dictionary else {}
+	active = _sanitize_active(state.get("active", {}))
+	completed = _sanitize_id_map(state.get("completed", {}), true)
+	for id in completed:
+		active.erase(id)
+	var loaded_unlocked := _sanitize_id_map(state.get("unlocked", {}), false)
+	unlocked = STARTING_UNLOCKS.duplicate()
+	for id in loaded_unlocked:
+		unlocked[id] = loaded_unlocked[id]
+	var loaded_flags: Variant = state.get("world_flags", {})
+	world_flags = loaded_flags.duplicate(true) if typeof(loaded_flags) == TYPE_DICTIONARY else {}
+	tracked_quest_id = str(state.get("tracked_quest_id", ""))
+	tracked_quest_is_manual = _saved_true(state.get("tracked_quest_is_manual", false))
+	tracker_context_zone = str(state.get("tracker_context_zone", "")).strip_edges().to_lower()
+	if not active.has(tracked_quest_id):
+		tracked_quest_id = _first_main_active()
+		tracked_quest_is_manual = false
+	_migrate_teeth_in_rain()
+	_emit_changed()
+
+func _sanitize_id_map(raw: Variant, completed_map: bool) -> Dictionary:
+	if typeof(raw) != TYPE_DICTIONARY:
+		return {}
+	var result: Dictionary = {}
+	for raw_id in raw:
+		var id := str(raw_id)
+		if not quest_defs.has(id):
+			continue
+		var value: Variant = raw[raw_id]
+		if completed_map:
+			if _saved_true(value):
+				result[id] = true
+		elif typeof(value) == TYPE_BOOL:
+			result[id] = value
+	return result
+
+func _sanitize_active(raw: Variant) -> Dictionary:
+	if typeof(raw) != TYPE_DICTIONARY:
+		return {}
+	var result: Dictionary = {}
+	for raw_id in raw:
+		var id := str(raw_id)
+		if not quest_defs.has(id) or typeof(raw[raw_id]) != TYPE_DICTIONARY:
+			continue
+		var saved_entry: Dictionary = raw[raw_id]
+		var saved_objectives: Dictionary = {}
+		if typeof(saved_entry.get("objectives", [])) == TYPE_ARRAY:
+			for raw_objective in saved_entry.objectives:
+				if typeof(raw_objective) == TYPE_DICTIONARY:
+					saved_objectives[str(raw_objective.get("id", ""))] = raw_objective
+		var objectives: Array = []
+		var legacy_chapel_missing := id == "main_teeth_in_rain" and not saved_objectives.has("read_chapel_names")
+		var legacy_chapel_progress := false
+		if legacy_chapel_missing:
+			for progress_id in ["name_the_dead", "fight_bog_wretch", "bog_core_choice"]:
+				if _saved_true(saved_objectives.get(progress_id, {}).get("done", false)):
+					legacy_chapel_progress = true
+					break
+		for definition in quest_defs[id].get("objectives", []):
+			var runtime_objective: Dictionary = definition.duplicate(true)
+			var definition_id := str(definition.get("id", ""))
+			var saved_objective: Dictionary = saved_objectives.get(definition_id, {})
+			runtime_objective["done"] = _saved_true(saved_objective.get("done", false))
+			if legacy_chapel_missing and definition_id == "read_chapel_names":
+				# The objective was added after older saves were written. Preserve
+				# already-earned later progress without inventing a new choice.
+				runtime_objective["done"] = legacy_chapel_progress
+			if saved_objective.has("optional_satisfied"):
+				runtime_objective["optional_satisfied"] = _saved_true(saved_objective.optional_satisfied)
+			objectives.append(runtime_objective)
+		result[id] = {"objectives": objectives}
+	return result
+
+func _first_main_active() -> String:
+	for id in active:
+		if quest_defs.has(id) and str(quest_defs[id].get("type", "")) == "main":
+			return str(id)
+	return str(active.keys()[0]) if not active.is_empty() else ""
+
+func _saved_true(value: Variant) -> bool:
+	return typeof(value) == TYPE_BOOL and value == true
+
+func _migrate_teeth_in_rain() -> void:
+	if not active.has("main_teeth_in_rain") or not quest_defs.has("main_teeth_in_rain"):
+		return
+	var objectives: Array = active["main_teeth_in_rain"].get("objectives", [])
+	for existing in objectives:
+		if str(existing.get("id", "")) == "read_chapel_names":
+			return
+	var migrated: Dictionary = {}
+	for definition in quest_defs["main_teeth_in_rain"].get("objectives", []):
+		if str(definition.get("id", "")) == "read_chapel_names":
+			migrated = definition.duplicate(true)
+			break
+	if migrated.is_empty():
+		return
+	var later_progress := false
+	for existing in objectives:
+		if str(existing.get("id", "")) in ["name_the_dead", "fight_bog_wretch", "bog_core_choice"] and bool(existing.get("done", false)):
+			later_progress = true
+			break
+	migrated["done"] = later_progress
+	var insert_at := mini(1, objectives.size())
+	objectives.insert(insert_at, migrated)
+	active["main_teeth_in_rain"]["objectives"] = objectives
+
+func _read_json(path: String):
+	if not FileAccess.file_exists(path):
+		push_warning("Missing JSON: %s" % path)
+		return {}
+	var file = FileAccess.open(path, FileAccess.READ)
+	var parsed = JSON.parse_string(file.get_as_text())
+	return parsed if parsed != null else {}

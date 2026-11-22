@@ -1,0 +1,12 @@
+{
+  "ticket": "SIDE-001",
+  "quests": {
+    "side_widows_bell": {"world_step": "grave_bell", "resolver": "widow_elna", "outcomes": ["told", "comforted"]},
+    "side_iron_remembers": {"world_step": "massacre_iron", "resolver": "blacksmith_tor", "outcomes": ["memorial", "weapon"]},
+    "side_bitter_roots": {"world_step": "bitter_roots", "resolver": "mira", "outcomes": ["kept", "confessed"]},
+    "side_black_dog": {"world_step": "sheepfold", "resolver": "farmer_toma", "outcomes": ["spared", "hidden"]},
+    "side_empty_grave": {"world_step": "empty_grave_tracks", "resolver": "returned_soldier", "outcomes": ["named", "anonymous"]}
+  },
+  "shortcut_removed": "village_stories",
+  "requirements": ["world interaction", "explicit choice", "persistent flag", "visible consequence"]
+}

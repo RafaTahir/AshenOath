@@ -1,0 +1,26 @@
+{
+  "ticket": "QUEST-004",
+  "quest": "main_blood_under_stone",
+  "evidence_group": {
+    "id": "castle_evidence",
+    "available": 5,
+    "required": 3,
+    "order_independent": true
+  },
+  "ledger_choices": [
+    "vargan_ledger_taken_openly",
+    "vargan_ledger_hidden",
+    "vargan_ledger_left_copied"
+  ],
+  "edric_stances": [
+    "cooperate",
+    "exposed",
+    "compelled"
+  ],
+  "handoff": "main_last_witness",
+  "rules": [
+    "The Record Hall haunting begins only after a ledger choice.",
+    "Defeating the haunting reveals Edric but does not silently complete the quest.",
+    "Edric's explicit stance completes the final objective and unlocks the undercroft quest."
+  ]
+}

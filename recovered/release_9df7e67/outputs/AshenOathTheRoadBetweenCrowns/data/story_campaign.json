@@ -1,0 +1,615 @@
+{
+  "version": 2,
+  "title": "Ashen Oath: The Road Between Crowns",
+  "premise": "Stay with the living when their safety depends on a lie about the dead.",
+  "chapters": [
+    {
+      "quest_id": "main_road_of_crows",
+      "title": "Road of Crows",
+      "question": "Why were the travelers carrying erased names?",
+      "summary": "Bram, Sella, and Oren carried recovered tokens from recent road repairs. Their belongings drew Ghoulkin; a living hand tried to erase the aftermath.",
+      "stakes": "Bring an honest account back to people who loved them. Decide who can safeguard the evidence."
+    },
+    {
+      "quest_id": "main_bell_beneath_greyfen",
+      "title": "Bell Beneath Greyfen",
+      "question": "What did the shrine keep hidden?",
+      "summary": "Disturbed graves and the sealed chapel expose burial rites that separated names from memory. Anwen admits the danger she contained by hiding the account.",
+      "stakes": "Release, redirect, or temporarily contain memory without pretending silence is a cure."
+    },
+    {
+      "quest_id": "main_teeth_in_rain",
+      "title": "Teeth in the Rain",
+      "question": "Why is the binding failing now?",
+      "summary": "Oren restored a name under the paint of an older token. The hidden road could not keep that memory disordered. Failed containment drew creatures and Vargan's recovery patrol.",
+      "stakes": "Protect the living while deciding what happens to an intimate memory fragment."
+    },
+    {
+      "quest_id": "main_names_they_burned",
+      "title": "The Names They Burned",
+      "question": "Who may share a family's story?",
+      "summary": "The register joins the tokens to a promise of sanctuary. Rook protects family addresses while Edric announces grain conditional on a renewed covenant.",
+      "stakes": "Make wrongdoing known without turning vulnerable families into targets."
+    },
+    {
+      "quest_id": "main_ash_at_the_mill",
+      "title": "Ash at the Mill",
+      "question": "What does restitution cost people who need food now?",
+      "summary": "Greyfen ground refugee ash into its fields. The mill still supplies households that did not choose its founding crime. Copies of the ledger survive every operational choice.",
+      "stakes": "Choose closure, supervised supply, or clean repair and restitution."
+    },
+    {
+      "quest_id": "main_soldier_without_banner",
+      "title": "A Soldier Without a Banner",
+      "question": "Can testimony establish responsibility without purchasing absolution?",
+      "summary": "Senn admits closing the war road after Halvern refused. His present raids make historical injury a continuing excuse.",
+      "stakes": "Preserve the account while deciding custody, exile, or execution."
+    },
+    {
+      "quest_id": "main_blood_under_stone",
+      "title": "Blood Under Stone",
+      "question": "What makes Edric's emergency plan another concealment?",
+      "summary": "The command ledger proves sanctuary and closure. Edric admits six years of suppression and proposes ration-backed assent to hide the road again.",
+      "stakes": "Challenge his power, seek voluntary cooperation, or compel evidence without calling it consent."
+    },
+    {
+      "quest_id": "main_last_witness",
+      "title": "The Last Witness",
+      "question": "What could obedience have refused?",
+      "summary": "Halvern holds a bounded memory of the sanctuary order, refusal, and execution. Kael admits that he abandoned a different escort and never went back.",
+      "stakes": "Keep guaranteed command proof and accept responsibility for the people still on the road."
+    },
+    {
+      "quest_id": "main_crowns_without_mercy",
+      "title": "Crowns Without Mercy",
+      "question": "Can people speak freely while protection depends on agreement?",
+      "summary": "At the assembly the grain list is separated from assent. The unstable renewal is stopped, and records are distinguished from voluntary promises.",
+      "stakes": "Aid and safe departure must remain available to households that refuse."
+    },
+    {
+      "quest_id": "main_hart_remembers",
+      "title": "The Hart Remembers",
+      "question": "What work begins when the Hart's burden ends?",
+      "summary": "The complete witness remembers the gate, hidden road, and soldiers as distinct decisions. Kael can preserve an account; he cannot promise for Greyfen.",
+      "stakes": "Choose public witness, private release, voluntary stewardship, or destruction with understood costs."
+    }
+  ],
+  "evidence": [
+    {
+      "id": "bram",
+      "title": "Bram stayed with the cart",
+      "text": "Bram's marked tool and the repair traces place him at the damaged axle. He did not simply abandon the wagon.",
+      "kind": "observed",
+      "source": "Cart tool and ledger",
+      "zone": "wychwood",
+      "gate": {
+        "quest": "main_road_of_crows",
+        "objective": "bram"
+      }
+    },
+    {
+      "id": "sella",
+      "title": "The shrine thread",
+      "text": "Sella's feathers carry thread Anwen identifies as hers. The shrine attempted containment before the attack.",
+      "kind": "observed",
+      "source": "Red-thread feathers",
+      "zone": "wychwood",
+      "gate": {
+        "quest": "main_road_of_crows",
+        "objective": "sella"
+      }
+    },
+    {
+      "id": "oren",
+      "title": "Paint over an older name",
+      "text": "Oren's painted crow covers an older name token. Its scratch marks follow restoration rather than random damage.",
+      "kind": "observed",
+      "source": "Child's token",
+      "zone": "wychwood",
+      "gate": {
+        "quest": "main_road_of_crows",
+        "objective": "oren"
+      }
+    },
+    {
+      "id": "vargan_wire",
+      "title": "A second containment",
+      "text": "Vargan binding wire is wrapped around the token. It links the aftermath to a recovery patrol, not proof that Edric ordered the original attack.",
+      "kind": "observed",
+      "source": "Binding wire",
+      "zone": "wychwood",
+      "gate": {
+        "quest": "main_road_of_crows",
+        "objective": "vargan_wire"
+      }
+    },
+    {
+      "id": "drag_marks",
+      "title": "Belongings before food",
+      "text": "Drag marks leave food sacks and follow identity-bearing objects. The creatures gathered testimony.",
+      "kind": "inference",
+      "source": "Clearing approach",
+      "zone": "wychwood",
+      "gate": {
+        "quest": "main_road_of_crows",
+        "objective": "drag_marks"
+      }
+    },
+    {
+      "id": "grave_harl",
+      "title": "Harl's road mud",
+      "text": "Road mud lies inside Harl's disturbed grave. The bell carries a gate memory rather than an intact returned husband.",
+      "kind": "observed",
+      "source": "Harl's grave",
+      "zone": "cemetery",
+      "gate": {
+        "quest": "main_bell_beneath_greyfen",
+        "objective": "grave_harl"
+      }
+    },
+    {
+      "id": "grave_child",
+      "title": "Thread under the earth",
+      "text": "The unnamed grave has shrine thread tied from within. Burial rites were keeping memory disordered.",
+      "kind": "observed",
+      "source": "Child's grave",
+      "zone": "cemetery",
+      "gate": {
+        "quest": "main_bell_beneath_greyfen",
+        "objective": "grave_child"
+      }
+    },
+    {
+      "id": "grave_soldier",
+      "title": "A Vargan buckle",
+      "text": "The empty soldier's grave holds Vargan work. A limited watch fragment can carry a fact without becoming a consenting living witness.",
+      "kind": "observed",
+      "source": "Empty soldier's grave",
+      "zone": "cemetery",
+      "gate": {
+        "quest": "main_bell_beneath_greyfen",
+        "objective": "grave_soldier"
+      }
+    },
+    {
+      "id": "crisis_cause",
+      "title": "Why this road failed now",
+      "text": "Recent repairs uncovered tokens. A restored name strained concealment, failed shrine containment left memory loose, and Vargan tried to reclaim the objects.",
+      "kind": "testimony",
+      "source": "Anwen, Mira, and the restored token",
+      "zone": "wychwood",
+      "gate": {
+        "flag": "crisis_cause_known",
+        "value": true
+      }
+    },
+    {
+      "id": "renewal_order",
+      "title": "Grain beside assent",
+      "text": "Edric's current order places grain allotments beside household assent. A ration condition cannot create a freely witnessed oath.",
+      "kind": "observed",
+      "source": "Renewal proclamation",
+      "zone": "greyfen",
+      "gate": {
+        "flag": "renewal_announced",
+        "value": true
+      }
+    },
+    {
+      "id": "mill_accounts",
+      "title": "Useful ash and stolen weight",
+      "text": "The mill's weights match the missing refugee wagons. Its channels still support innocent households; the account survives decisions about continued operation.",
+      "kind": "observed",
+      "source": "Mill measure and ledger",
+      "zone": "old_mill",
+      "gate": {
+        "quest": "main_ash_at_the_mill",
+        "objective": "inspect_millstones"
+      }
+    },
+    {
+      "id": "senn_account",
+      "title": "The officer who closed the road",
+      "text": "Senn says he closed the military retreat after Halvern refused. The admission establishes his role without excusing present raids.",
+      "kind": "testimony",
+      "source": "Senn's signed account",
+      "zone": "bandit_road",
+      "gate": {
+        "flag": "senn_account_recovered",
+        "value": true
+      }
+    },
+    {
+      "id": "command_proof",
+      "title": "Sanctuary followed by closure",
+      "text": "The command and register establish sanctuary promised under a Vargan seal, Greyfen's closed gate, shrine concealment, and the military order.",
+      "kind": "observed",
+      "source": "Copied command ledger and bounded refusal",
+      "zone": "castle_vargan",
+      "gate": {
+        "flag": "command_proof_recovered",
+        "value": true
+      }
+    },
+    {
+      "id": "kael_confession",
+      "title": "A different road",
+      "text": "Kael admits obeying a retreat that abandoned civilians he had promised to escort. He left his failure out of the report and never went back.",
+      "kind": "testimony",
+      "source": "Kael's own account",
+      "zone": "undercroft",
+      "gate": {
+        "flag": "kael_confessed",
+        "value": true
+      }
+    },
+    {
+      "id": "renewal_stopped",
+      "title": "Help without a signature",
+      "text": "The ration condition is removed at the assembly. Household refusal no longer forfeits food or a safe way out.",
+      "kind": "observed",
+      "source": "Assembly grain list",
+      "zone": "greyfen",
+      "gate": {
+        "flag": "renewal_stopped",
+        "value": true
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "id": "miller_record",
+      "title": "Miller's Ledger",
+      "flag": "mill_operation",
+      "outcomes": [
+        {
+          "value": "closed",
+          "label": "Close the tainted channels. Preserve the ledger and ration reserves.",
+          "cost": "The ledger is kept. The mill closes while relief grain is divided; workers lose shifts and the village must carry sacks from the reserve.",
+          "result": "The ledger is kept. The mill closes while relief grain is divided; workers lose shifts and the village must carry sacks from the reserve."
+        },
+        {
+          "value": "supervised",
+          "label": "Keep supervised milling. Replace the contaminated working copy.",
+          "cost": "The ruined working sheet is burned after a signed copy is kept. Supervised milling supplies flour while separate clean channels are prepared.",
+          "result": "The ruined working sheet is burned after a signed copy is kept. Supervised milling supplies flour while separate clean channels are prepared."
+        },
+        {
+          "value": "restitution",
+          "label": "Post the accounts. Begin clean repairs and pay for restitution.",
+          "cost": "The accounts are copied publicly. Workers begin replacing the channels; the first clean flour goes to affected households.",
+          "result": "The accounts are copied publicly. Workers begin replacing the channels; the first clean flour goes to affected households."
+        }
+      ]
+    },
+    {
+      "id": "names_decision",
+      "title": "The Refugee Register",
+      "flag": "names_policy",
+      "outcomes": [
+        {
+          "value": "published",
+          "label": "Publish the recovered names and order. Remove family addresses.",
+          "cost": "The dead are named publicly and Edric's order is challenged. Family addresses stay off the board; fear and solidarity both follow.",
+          "result": "The dead are named publicly and Edric's order is challenged. Family addresses stay off the board; fear and solidarity both follow."
+        },
+        {
+          "value": "withheld",
+          "label": "Keep protected copies until the assembly. Tell each affected household.",
+          "cost": "Anwen and Rook keep separate copies. Affected households are warned privately before the assembly; the delay leaves the public order unchallenged for now.",
+          "result": "Anwen and Rook keep separate copies. Affected households are warned privately before the assembly; the delay leaves the public order unchallenged for now."
+        }
+      ]
+    },
+    {
+      "id": "edric_campaign",
+      "title": "Lord Edric Vargan",
+      "flag": "edric_stance",
+      "outcomes": [
+        {
+          "value": "cooperate",
+          "label": "Protect his hearing, not his title. Ask him to stop the renewal.",
+          "cost": "Edric voluntarily agrees to testify and release the grain without household signatures. His title and accounts pass to the public hearing.",
+          "result": "Edric voluntarily agrees to testify and release the grain without household signatures. His title and accounts pass to the public hearing."
+        },
+        {
+          "value": "exposed",
+          "label": "Make the ledger public. Remove his power to require signatures.",
+          "cost": "The ledger is exposed and the seal challenged. Edric refuses a personal oath; the proof is sufficient without pretending he agrees.",
+          "result": "The ledger is exposed and the seal challenged. Edric refuses a personal oath; the proof is sufficient without pretending he agrees."
+        },
+        {
+          "value": "compelled",
+          "label": "Compel his admission. Use the ledger as evidence, not his oath.",
+          "cost": "Edric admits his concealment under pressure. His words establish facts; the new covenant must use someone else's freely given responsibility.",
+          "result": "Edric admits his concealment under pressure. His words establish facts; the new covenant must use someone else's freely given responsibility."
+        }
+      ]
+    },
+    {
+      "id": "crow_shrine_choice",
+      "title": "The Crow Shrine",
+      "flag": "crow_shrine_state",
+      "outcomes": [
+        {
+          "value": "cleansed",
+          "label": "Clean the rite. Accept the danger shifting to the wood.",
+          "cost": "The chapel quiets. Anwen records that the debt was redirected, not erased, and goes to name the graves.",
+          "result": "The chapel quiets. Anwen records that the debt was redirected, not erased, and goes to name the graves."
+        },
+        {
+          "value": "disturbed",
+          "label": "Open the memory. Keep the gathered names intact.",
+          "cost": "The erased names surface at the shrine. The village hears the bell; the recovered fragments are kept intact.",
+          "result": "The erased names surface at the shrine. The village hears the bell; the recovered fragments are kept intact."
+        },
+        {
+          "value": "bound",
+          "label": "Hold the seal for now. Mark its limits in the record.",
+          "cost": "The seal holds temporarily. Kael marks its weakness instead of calling the silence a cure.",
+          "result": "The seal holds temporarily. Kael marks its weakness instead of calling the silence a cure."
+        }
+      ]
+    },
+    {
+      "id": "bog_core_choice",
+      "title": "The Bog Wretch's Memory",
+      "flag": "bog_core_fate",
+      "outcomes": [
+        {
+          "value": "destroyed",
+          "label": "Destroy the memory core",
+          "cost": "The vessel collapses; its memory disperses into the wet ground. Mira keeps ordinary medicine available and prepares the refined oil.",
+          "result": "The vessel collapses; its memory disperses into the wet ground. Mira keeps ordinary medicine available and prepares the refined oil."
+        },
+        {
+          "value": "preserved",
+          "label": "Preserve it for study",
+          "cost": "Mira wraps the fragment and limits her study to what is already exposed. The future treatment must respect family consent.",
+          "result": "Mira wraps the fragment and limits her study to what is already exposed. The future treatment must respect family consent."
+        },
+        {
+          "value": "returned",
+          "label": "Return it to Oren's grave",
+          "cost": "The fragment is settled beneath Oren's named marker. Its dangerous shape ends without opening its intimate memory to the village.",
+          "result": "The fragment is settled beneath Oren's named marker. Its dangerous shape ends without opening its intimate memory to the village."
+        }
+      ]
+    },
+    {
+      "id": "captain_senn",
+      "title": "Captain Senn",
+      "flag": "senn_fate",
+      "outcomes": [
+        {
+          "value": "testimony",
+          "label": "Accept surrender under custody. Ask for freely given testimony.",
+          "cost": "Senn lays down his sword and signs his own account. Custody remains; his oath to speak is voluntary.",
+          "result": "Senn lays down his sword and signs his own account. Custody remains; his oath to speak is voluntary."
+        },
+        {
+          "value": "exile",
+          "label": "Take the written account. Disarm the camp and permit exile.",
+          "cost": "Senn leaves the confession and stolen supplies. He goes without offering a living oath.",
+          "result": "Senn leaves the confession and stolen supplies. He goes without offering a living oath."
+        },
+        {
+          "value": "punished",
+          "label": "Execute Senn for the road killings. Keep the documented account.",
+          "cost": "Senn dies. The camp's signed account survives; no dead man is counted as a consenting living witness.",
+          "result": "Senn dies. The camp's signed account survives; no dead man is counted as a consenting living witness."
+        }
+      ]
+    },
+    {
+      "id": "assembly_choice",
+      "title": "Greyfen Assembly",
+      "flag": "confession_method",
+      "outcomes": [
+        {
+          "value": "witnesses",
+          "label": "Release the grain. Invite only those who choose to speak.",
+          "cost": "The ration condition is struck out. Willing witnesses speak; anyone who refuses can receive food and leave. Kael keeps the remaining record.",
+          "result": "The ration condition is struck out. Willing witnesses speak; anyone who refuses can receive food and leave. Kael keeps the remaining record."
+        },
+        {
+          "value": "kael",
+          "label": "Break the ration condition. Carry the account yourself.",
+          "cost": "Kael removes the renewal seal and reads the copied account. No household is pledged by being present. He accepts the work of preserving what he read.",
+          "result": "Kael removes the renewal seal and reads the copied account. No household is pledged by being present. He accepts the work of preserving what he read."
+        },
+        {
+          "value": "edric",
+          "label": "Break the condition and make Edric answer from the ledger.",
+          "cost": "The coercive renewal is stopped. Edric's compelled admission is entered as evidence; it is not counted as consent to the replacement covenant.",
+          "result": "The coercive renewal is stopped. Edric's compelled admission is entered as evidence; it is not counted as consent to the replacement covenant."
+        }
+      ]
+    },
+    {
+      "id": "mira",
+      "title": "Mira Fen",
+      "flag": "mira_truth",
+      "outcomes": [
+        {
+          "value": "kept",
+          "label": "Keep treating quietly until there is an alternative.",
+          "cost": "Mira keeps the ash bed open. The fever falls, but families cannot choose a treatment whose origin remains hidden.",
+          "result": "Mira keeps the ash bed open. The fever falls, but families cannot choose a treatment whose origin remains hidden."
+        },
+        {
+          "value": "confessed",
+          "label": "Explain the source. Offer each family another treatment.",
+          "cost": "Mira labels the ash draught and sets clean-root doses beside it. The treatment is slower for those who refuse, and care continues. Mira freely agrees to explain her own actions at the assembly.",
+          "result": "Mira labels the ash draught and sets clean-root doses beside it. The treatment is slower for those who refuse, and care continues. Mira freely agrees to explain her own actions at the assembly."
+        },
+        {
+          "value": "destroyed",
+          "label": "Close the ash bed. Use clean roots and accept the delay.",
+          "cost": "Mira closes the old bed and prepares clean roots. Toma stays through the slower treatment; nobody calls the extra waiting harmless. Mira freely agrees to explain her own actions at the assembly.",
+          "result": "Mira closes the old bed and prepares clean roots. Toma stays through the slower treatment; nobody calls the extra waiting harmless. Mira freely agrees to explain her own actions at the assembly."
+        }
+      ]
+    },
+    {
+      "id": "blacksmith_tor",
+      "title": "Blacksmith Tor",
+      "flag": "iron_fate",
+      "outcomes": [
+        {
+          "value": "memorial",
+          "label": "Replace the useful iron gradually. Make named memorial work.",
+          "cost": "Tor begins replacement before dismantling working objects. Memorial nails carry the recovered names; his forge remains open.",
+          "result": "Tor begins replacement before dismantling working objects. Memorial nails carry the recovered names; his forge remains open."
+        },
+        {
+          "value": "tools",
+          "label": "Keep the tools in use. Disclose their source and fund replacement.",
+          "cost": "Tor leaves the marks visible and posts the source above his prices. The useful stock stays in working hands.",
+          "result": "Tor leaves the marks visible and posts the source above his prices. The useful stock stays in working hands."
+        },
+        {
+          "value": "surrendered",
+          "label": "Surrender the marked stock. Let the families decide its use.",
+          "cost": "Tor hands over the stock and his account. He keeps the forge running on ordinary scrap while the disputed iron stays intact.",
+          "result": "Tor hands over the stock and his account. He keeps the forge running on ordinary scrap while the disputed iron stays intact."
+        }
+      ]
+    },
+    {
+      "id": "rook",
+      "title": "Rook",
+      "flag": "rook_disclosure",
+      "outcomes": [
+        {
+          "value": "protected",
+          "label": "Copy the route. Keep the families' homes private.",
+          "cost": "Rook marks a usable road without family addresses. He agrees to speak to the route under protection.",
+          "result": "Rook marks a usable road without family addresses. He agrees to speak to the route under protection."
+        },
+        {
+          "value": "erased",
+          "label": "Destroy the map. Keep the route between us.",
+          "cost": "The paper burns. The road remains in Rook's memory, but no stranger can follow a copy now.",
+          "result": "The paper burns. The road remains in Rook's memory, but no stranger can follow a copy now."
+        },
+        {
+          "value": "public",
+          "label": "Publish the marked map so everyone can challenge Vargan.",
+          "cost": "The route becomes public evidence. Rook takes his bedding from the window; he did not consent to exposing his family.",
+          "result": "The route becomes public evidence. Rook takes his bedding from the window; he did not consent to exposing his family."
+        }
+      ]
+    },
+    {
+      "id": "widow_elna",
+      "title": "Widow Elna",
+      "flag": "widow_truth",
+      "outcomes": [
+        {
+          "value": "told",
+          "label": "Give Elna the whole account, and let her decide to speak.",
+          "cost": "Elna names his kindness and the people he shut outside. She chooses to give the assembly what she knows.",
+          "result": "Elna names his kindness and the people he shut outside. She chooses to give the assembly what she knows."
+        },
+        {
+          "value": "comforted",
+          "label": "Offer the gentler account. Leave the evidence with her.",
+          "cost": "Elna receives the bell and the written record. She declines a public account; the act itself stays documented.",
+          "result": "Elna receives the bell and the written record. She declines a public account; the act itself stays documented."
+        },
+        {
+          "value": "private",
+          "label": "Tell her everything privately. Keep her grief out of the square.",
+          "cost": "Elna accepts Harl's record for the family. His act remains evidence; her grief is not pledged to the assembly.",
+          "result": "Elna accepts Harl's record for the family. His act remains evidence; her grief is not pledged to the assembly."
+        }
+      ]
+    },
+    {
+      "id": "farmer_toma",
+      "title": "Farmer Toma",
+      "flag": "guardian_plan",
+      "outcomes": [
+        {
+          "value": "relocated",
+          "label": "Move its protection path beyond the farms. Warn the neighbors.",
+          "cost": "Toma marks the outer boundary and moves the feeding place. The guardian survives beyond the fields; its danger is acknowledged.",
+          "result": "Toma marks the outer boundary and moves the feeding place. The guardian survives beyond the fields; its danger is acknowledged."
+        },
+        {
+          "value": "supervised",
+          "label": "Keep it at the fold under a disclosed village watch.",
+          "cost": "Toma tells the neighbors and organizes a watch. Protection remains, but the village can withdraw its agreement.",
+          "result": "Toma tells the neighbors and organizes a watch. Protection remains, but the village can withdraw its agreement."
+        },
+        {
+          "value": "killed",
+          "label": "End the dangerous guardian. Record why it protected her.",
+          "cost": "The protection fragment is put to rest. Toma names the people it saved and the livestock his secrecy cost.",
+          "result": "The protection fragment is put to rest. Toma names the people it saved and the livestock his secrecy cost."
+        }
+      ]
+    }
+  ],
+  "endings": [
+    {
+      "id": "expose",
+      "title": "Witness",
+      "intention": "Make the account public and remain responsible for keeping it.",
+      "benefit": "The dead receive public recognition; the Hart leaves judgment to living people.",
+      "cost": "Greyfen loses shelter for old privileges. Restitution and safe trade take labor; without allies Kael must remain to preserve the record.",
+      "minimum": "Kael plus guaranteed main-path proof.",
+      "procedure": "Publicly present the account. Voluntary witnesses share the work; records do not consent."
+    },
+    {
+      "id": "free",
+      "title": "Mercy",
+      "intention": "Release the Hart while safeguarding intimate memories and vulnerable family identities.",
+      "benefit": "The Hart's captivity ends without forcing private grief into every household.",
+      "cost": "A smaller circle must preserve complete copies. Public acknowledgment is partial, and future neglect can leave grievances unresolved.",
+      "minimum": "Kael plus guaranteed main-path proof.",
+      "procedure": "The Hart accepts a safeguarded account and an uncoerced keeper. Proven institutional wrongdoing stays on record."
+    },
+    {
+      "id": "bind",
+      "title": "Duty",
+      "intention": "Freely carry the unresolved binding without pledging anyone else.",
+      "benefit": "Greyfen gains immediate stability and time for repairs; the record survives openly.",
+      "cost": "Kael's freedom and rest become limited. He carries continuing memory while restitution remains unfinished.",
+      "minimum": "Kael plus guaranteed main-path proof.",
+      "procedure": "Defend a containment rite and accept stewardship voluntarily. Support shares practical work, never another person's consent."
+    },
+    {
+      "id": "kill",
+      "title": "Ash",
+      "intention": "Destroy the supernatural witness while preserving recovered human proof.",
+      "benefit": "The Hart's immediate pressure ends; people can rebuild without its demand.",
+      "cost": "The complete account is lost forever. Dispersed memory harms land and future harvests; copies cannot recover every missing name.",
+      "minimum": "Kael plus guaranteed main-path proof.",
+      "procedure": "Fight the Hart Avatar. Destruction is force, not a consensual replacement oath; human accountability may continue."
+    }
+  ],
+  "consent_rules": [
+    "A document establishes facts and cannot promise for its owner.",
+    "Protected voluntary testimony remains voluntary only while food and safe departure do not depend on assent.",
+    "Compelled admissions may support the record, never a magical covenant.",
+    "Kael can pledge his own future work; he cannot bind Greyfen by being its hunter."
+  ],
+  "optional_stories": {
+    "deep": [
+      "side_bitter_roots",
+      "side_black_dog",
+      "side_iron_remembers",
+      "side_rooks_map",
+      "side_soldiers_debt",
+      "side_widows_bell"
+    ],
+    "interludes": [
+      "side_empty_grave",
+      "side_childs_charm",
+      "side_millers_measure",
+      "side_three_candles"
+    ]
+  }
+}

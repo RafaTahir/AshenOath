@@ -1,0 +1,11 @@
+Restore chins damaged by neck fitting in eleven cast assets
+
+Restore the donor-derived mandible geometry, refit existing beard surfaces and
+retain editable Blender successors. Limit future neck fitting to the lower neck.
+Preserve rig, skin, material, texture and animation data; bind the rebuilt actor
+scenes to exact retained life libraries through a narrowly verified successor.
+
+The single authorized game diagnostic reproduced the published Kael/Tor defect
+with facial controls disabled. Source admission, scene compilation and staged
+byte/size checks passed. Post-repair rendering and gameplay remain unobserved;
+Anwen's separate head was not conclusively framed during the diagnostic.

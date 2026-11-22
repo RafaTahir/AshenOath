@@ -1,0 +1,5 @@
+config_version=5
+[application]
+config/name="Ashen Oath UI Resource Import"
+[rendering]
+renderer/rendering_method="gl_compatibility"

@@ -1,0 +1,12 @@
+{
+  "ticket": "QUEST-006",
+  "required_cards": ["covenant", "greyfen", "anwen", "vargan"],
+  "conditional_cards": ["road", "village_stories"],
+  "inputs": [
+    "final_covenant", "names_policy", "anwen_trust", "greyfen_fear",
+    "crow_shrine_state", "edric_stance", "halvern_fate", "senn_fate",
+    "mill_fate", "widow_truth", "iron_fate", "mira_truth",
+    "black_dog_fate", "returned_soldier_fate"
+  ],
+  "saved_output": "epilogue_cards"
+}

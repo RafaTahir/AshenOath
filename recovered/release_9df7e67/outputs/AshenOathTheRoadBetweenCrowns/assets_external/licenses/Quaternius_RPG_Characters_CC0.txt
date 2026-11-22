@@ -1,0 +1,5 @@
+Quaternius RPG Character Pack
+Source: https://quaternius.com/packs/rpgcharacters.html
+License: CC0 1.0 Universal (Public Domain Dedication)
+
+Selected embedded glTF files: Warrior, Cleric, Monk, Rogue.

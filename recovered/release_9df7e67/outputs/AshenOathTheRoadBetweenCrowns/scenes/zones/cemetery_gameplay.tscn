@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[node name="CemeteryGameplayLayer" type="Node3D"]
+
+[node name="GateArrivalAnchor" type="Marker3D" parent="."]
+position = Vector3(0, 0, 28)
+
+[node name="BellAnchor" type="Marker3D" parent="."]
+position = Vector3(0, 0, 4)
+
+[node name="ChapelAnchor" type="Marker3D" parent="."]
+position = Vector3(0, 0, -18)
+
+[node name="OssuaryAnchor" type="Marker3D" parent="."]
+position = Vector3(0, 0, -28)

@@ -1,0 +1,34 @@
+{
+  "outputDirectory": "web",
+  "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/(index.html|index.pck|index.js|index.wasm|index.audio.worklet.js|index.audio.position.worklet.js)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/index.png",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/favicon.ico",
+      "destination": "/index.png"
+    },
+    {
+      "source": "/",
+      "destination": "/index.html"
+    }
+  ]
+}

@@ -1,0 +1,326 @@
+{
+  "schema_version": 1,
+  "kind": "frozen_final_web_candidate",
+  "status": "pass",
+  "source_export": "D:\\Projects\\AshenOath\\.release-gate\\combined-loading-cast-20261111-ba93115-r6\\export",
+  "release_manifest_sha256": "17b10ccc7515b282d82c1a8a48f2eb5ac48e908a8acb04c437d195a0b75581b7",
+  "candidate_closure": {
+    "schema_version": 1,
+    "kind": "verified_native_candidate_closure",
+    "build_id": "combined-loading-cast-20261111-ba93115-r6",
+    "source_commit": "ba9311574bdebb2285d0669e63df09180081111e",
+    "release_manifest": "D:\\Temp\\AO_FaceDiag_b4\\native\\release_manifest.json",
+    "root": {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\index.pck",
+      "bytes": 13434232,
+      "sha256": "39fb81f43f9b61ab9b924863179e60a24efed2d20b641cf5d83428f47430a95e"
+    },
+    "runtime_manifest_sha256": "a8847151c7ad8b0b83a0a6ac2e2c516c273a476a530aa0c8d6007bdddba75944",
+    "packs": [
+      {
+        "id": "opening",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\opening.pck",
+        "bytes": 45208748,
+        "sha256": "7a39c531b991452e17e6d4e24a862cdd11f02d6b51cbab2f467cf2a639e8565b"
+      },
+      {
+        "id": "campaign",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\campaign.pck",
+        "bytes": 7449336,
+        "sha256": "b7a9b57d46d5c753e57f8d5d922e28a3d2677317d8cf3ebdbaca0d3d0cea04a1"
+      },
+      {
+        "id": "characters",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\characters.pck",
+        "bytes": 56528,
+        "sha256": "c2c395f906f353e548a27893e9b5f2d15833506605225da4e75f7c077a55b7f2"
+      },
+      {
+        "id": "monsters",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\monsters.pck",
+        "bytes": 148220,
+        "sha256": "7c350ab6bafd1c1636f26d51f0eb7ef430f4c77d7913e1ddbfe83f15051959af"
+      },
+      {
+        "id": "audio",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\audio.pck",
+        "bytes": 21158476,
+        "sha256": "cabac82d97fe96dc446c01553d2b0e27247783994a962039743c2c44e739a092"
+      },
+      {
+        "id": "quality_materials",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\quality_materials.pck",
+        "bytes": 7172164,
+        "sha256": "ba6883162cab55716e6a49545a62b7a48a1c1dac1d562e28f0ccc3316c377b62"
+      },
+      {
+        "id": "adjacent",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\adjacent.pck",
+        "bytes": 3030648,
+        "sha256": "8d4afde46da9beef63142f1a811cf31454c82fb52b5af9dbd991f96ac3c11a58"
+      },
+      {
+        "id": "actor_shared",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_shared.pck",
+        "bytes": 5928656,
+        "sha256": "a2405a7994c16405aa1417d8be2fc2527494840ed5a74ba5607c3be2af3222e0"
+      },
+      {
+        "id": "actor_c01",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c01.pck",
+        "bytes": 4824064,
+        "sha256": "dc21b4207b57828f9a7c481b36f38609dba9db24324cfeea7cdb38c0a178011b"
+      },
+      {
+        "id": "actor_c02",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c02.pck",
+        "bytes": 2047088,
+        "sha256": "5064e16e74c59ea75ada966f8264e50d213ab1c62fdfcffdc101376a520d247d"
+      },
+      {
+        "id": "actor_c03",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c03.pck",
+        "bytes": 1947232,
+        "sha256": "4bcab46806dbd47f32e03bba4115363e8601abc54b19316aa0abbba3fc4af2d8"
+      },
+      {
+        "id": "actor_c04",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c04.pck",
+        "bytes": 1967760,
+        "sha256": "ad9586df588f55d4c1afe0c6c2e8a4ef121bb6889b6eb596bb921feb0bce934a"
+      },
+      {
+        "id": "actor_c05",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c05.pck",
+        "bytes": 3213716,
+        "sha256": "546dbb90587815a1577a2449b16ea70816f9c1c2de60a1f418ff9ed67c0f12d6"
+      },
+      {
+        "id": "actor_c06",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c06.pck",
+        "bytes": 2166296,
+        "sha256": "2047f9d6365aa57bf2d5ad3578b575f1a18aa97206331e5eea2397269ce9af09"
+      },
+      {
+        "id": "actor_c07",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c07.pck",
+        "bytes": 2429060,
+        "sha256": "91d102d8e145dec0f7c213f656ec0b7dc35db63683f934d2a1bb178d91966a48"
+      },
+      {
+        "id": "actor_c08",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c08.pck",
+        "bytes": 2128480,
+        "sha256": "608dc3aa897c3b65344b5dfde84b062f91e748ece367b8c0d94b09c38e390a41"
+      },
+      {
+        "id": "actor_c09",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c09.pck",
+        "bytes": 2037836,
+        "sha256": "044f4f543e867ae66ac443bc554ba6a47acec7ab4fdcde8e354ab5348a72cefd"
+      },
+      {
+        "id": "actor_c10",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c10.pck",
+        "bytes": 2220792,
+        "sha256": "a347438453a6aec3f6eba7d4d2acf25cda70faa5bbc2644fa53aebb4e3ae11c8"
+      },
+      {
+        "id": "actor_c11",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c11.pck",
+        "bytes": 1983052,
+        "sha256": "fc83b5bb4dfe92a40b7112dcd5861f1926a79a90d6a245a166be2a61a5be7369"
+      },
+      {
+        "id": "actor_c12",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c12.pck",
+        "bytes": 1932096,
+        "sha256": "89c8c709656d9eb60c72c4252f8e090038959c4247e4891b27c638febec60f36"
+      },
+      {
+        "id": "actor_m01",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m01.pck",
+        "bytes": 859716,
+        "sha256": "364638e2521c189e492b0108c2898cb73e80b5f0d5bc9f4da7d0961c2cacdcca"
+      },
+      {
+        "id": "actor_m02",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m02.pck",
+        "bytes": 3799268,
+        "sha256": "a6742e53b54abd91cefc2c26deb3ec7c219fe035115831210957888a15b7d7b0"
+      },
+      {
+        "id": "actor_m03",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m03.pck",
+        "bytes": 1002860,
+        "sha256": "98ce1cc5fe1e0cf1a09bbdf7cc0d79ea98e618f0381753c620b88551ef1194f9"
+      },
+      {
+        "id": "actor_m04",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m04.pck",
+        "bytes": 1002152,
+        "sha256": "999b5a4cabd87d0f38165b0cc956b3ee3bf21ab15e11bcd26ec13d1ba900b219"
+      },
+      {
+        "id": "actor_m05",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m05.pck",
+        "bytes": 1100400,
+        "sha256": "6365ccf2fb6f3806ca14b517a2cdeb4209caab729935cc8ebb4b8be232581193"
+      },
+      {
+        "id": "actor_m06",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m06.pck",
+        "bytes": 2104008,
+        "sha256": "8bee7215d497a4d88144b7edbcccf16a3ea01674b0cb3798d50ac45102cec445"
+      },
+      {
+        "id": "actor_m07",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m07.pck",
+        "bytes": 1655028,
+        "sha256": "32644acbc0301db17c880ee89c7d48b6bab7b5f91a193cadcb230588efb215eb"
+      },
+      {
+        "id": "actor_m08",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m08.pck",
+        "bytes": 1233108,
+        "sha256": "fce69699a92e89921121b00e0f89056d1959777298771595bbc0f6af55e7e1a0"
+      },
+      {
+        "id": "actor_m09",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m09.pck",
+        "bytes": 1026372,
+        "sha256": "dfee97d47ff20c0ccf989c22e4df282b8809539f40478e75473ed552317f9900"
+      },
+      {
+        "id": "actor_m10",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m10.pck",
+        "bytes": 945236,
+        "sha256": "d567930b6faea80227bcc600bad099f9e61e7ff13c02368f597d52d92da70f2e"
+      },
+      {
+        "id": "actor_m11",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m11.pck",
+        "bytes": 1105844,
+        "sha256": "2e5fc7a72132ebba9ac90802b6d0f3de1a5d2efcb1928ec0d810765127bef30e"
+      },
+      {
+        "id": "actor_m12",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m12.pck",
+        "bytes": 964900,
+        "sha256": "83f474554d55e1998d9a8c131c4beba35ec41b12e4f9db6b012cf8b0701ed368"
+      },
+      {
+        "id": "actor_m13",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m13.pck",
+        "bytes": 2044500,
+        "sha256": "6207da945230e0c2bbb2cc969ca95ecb941080b0326299532401192ac0d05f7a"
+      },
+      {
+        "id": "actor_m14",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m14.pck",
+        "bytes": 1140452,
+        "sha256": "a9c3cbffb18f75f59ff95f9b64601ebba8eb0681ad2635aea3b3a95ac4225d3c"
+      },
+      {
+        "id": "actor_m15",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m15.pck",
+        "bytes": 3984432,
+        "sha256": "0757aada4663d83cec71f966a1a7ca3bd19413e2970c6d1d5848d8c543e53907"
+      },
+      {
+        "id": "actor_m16",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m16.pck",
+        "bytes": 1108996,
+        "sha256": "6673c0da7dfaf0e5b6d6067986aee0043c59ebfe2dcc70f1c15ea723dd747f78"
+      },
+      {
+        "id": "actor_m17",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m17.pck",
+        "bytes": 1491732,
+        "sha256": "db34e65834f6067692b3da3da0d244640d8ba79946cb54f433de392c4ce39c78"
+      },
+      {
+        "id": "actor_m18",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m18.pck",
+        "bytes": 1229860,
+        "sha256": "1958d43ec13dc30cf34305fb8aa68ea00545680a42118aee0cf745073f6e4384"
+      },
+      {
+        "id": "actor_m19",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m19.pck",
+        "bytes": 875848,
+        "sha256": "e10429617b742321eaed5b384dc3dd58a6115a0fccb7b86f9da797f39a7bf3e3"
+      },
+      {
+        "id": "actor_m20",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m20.pck",
+        "bytes": 895032,
+        "sha256": "a1dc5bced7cdda2e07c9cb1cf2496e6188a41c884e2f2c077084d2e7fe9df1f5"
+      },
+      {
+        "id": "actor_p01",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_p01.pck",
+        "bytes": 2331712,
+        "sha256": "9530abba16b50ba207c9270a0fc5d5ce1f0d684d8ffff9d8c4fcb83ed59c9afb"
+      },
+      {
+        "id": "leisure",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\leisure.pck",
+        "bytes": 210356,
+        "sha256": "94583c7e1a8065690d93a49f0ac015477cb9621777b2e4f70c5ad123e76ba5d1"
+      },
+      {
+        "id": "community",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\community.pck",
+        "bytes": 252320,
+        "sha256": "f5fe15b42ac127336ccc7780b6c8452668530c506afa30b417c28f65f2b2a425"
+      },
+      {
+        "id": "community_voice",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\community_voice.pck",
+        "bytes": 5078892,
+        "sha256": "3b33f6de5f39007a5a900ee9cd4cf8c7c3749af94bdc2d8393f59dc74b45403b"
+      },
+      {
+        "id": "living_cast_voice",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\living_cast_voice.pck",
+        "bytes": 8545604,
+        "sha256": "6e1eb5a58610dfd63996772fe7458d984b582494ba5a43f224447176aad8c072"
+      }
+    ],
+    "class_cache_sha256": "8afdbc355b2a3020a7245285121774b65209e744e111e00fea9bc95afe6933f0",
+    "known_required_resources": [
+      "scenes/main.tscn",
+      "scripts/campaign_revision.gd",
+      "scripts/ending_catalog.gd",
+      "scripts/community_campaign.gd",
+      "scripts/community_activity.gd",
+      "scripts/community_ending.gd",
+      "scripts/community_presentation.gd",
+      "scripts/zones/community_section.gd",
+      "data/runtime_story_campaign.json",
+      "data/community_campaign.json",
+      "data/community_cast_life.json",
+      "data/community_story_overlay.json",
+      "world_sector_manifest.json",
+      "assets_external/environment/village/Cemetery_chapel_Authored.res",
+      "assets_external/environment/village/Cemetery_bell_frame_Authored.res",
+      "assets_external/environment/village/Cemetery_bell_Authored.res",
+      "assets_external/environment/village/Cemetery_grave_rows_Authored.res",
+      "assets_external/environment/village/Cemetery_boundary_Authored.res",
+      "assets_external/environment/village/Cemetery_grave_earth_Authored.res",
+      "assets_external/environment/village/Cemetery_memory_window_Authored.res",
+      "assets_external/environment/forest/HartAftermath_concord_Authored.res",
+      "assets_external/environment/forest/HartAftermath_open_road_Authored.res"
+    ],
+    "resource_count": 3602,
+    "resource_instantiation_validated": false,
+    "unlisted_pack_policy": "ignored; never mounted",
+    "deferred_loading_tested": false,
+    "community_resource_owners_verified": 498
+  },
+  "class_cache": "D:\\Temp\\AO_FaceDiag_b4\\native\\global_script_class_cache.cfg",
+  "engine_started": false,
+  "source_export_modified": false,
+  "gameplay_acceptance": false
+}

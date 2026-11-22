@@ -1,0 +1,187 @@
+extends SceneTree
+
+const CharacterRoleContract = preload("res://scripts/character_role_contract.gd")
+const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
+const OPENING_ASSEMBLY_MANIFEST := "res://assets_external/characters_universal/runtime/OPENING_CHARACTER_ASSEMBLY_MANIFEST.json"
+
+var failures: Array[String] = []
+var game: Node = null
+
+func _initialize() -> void:
+	var packed := ResourceLoader.load("res://scenes/main.tscn") as PackedScene
+	_check(packed != null, "main scene failed to load")
+	if packed == null:
+		_finish()
+		return
+	game = packed.instantiate()
+	root.add_child(game)
+	await process_frame
+	game.call("_new_game")
+	await _frames(8)
+	var anwen := game.find_child("sister_anwen", true, false)
+	_check(anwen != null, "Sister Anwen interaction did not instantiate")
+	if anwen == null:
+		_finish()
+		return
+	var visual := anwen.find_child("sister_anwen_human", true, false)
+	_check(visual != null, "Anwen visual role is missing")
+	if visual == null:
+		_finish()
+		return
+	var driver := anwen.find_child("CharacterAnimationDriver", true, false)
+	_check(driver != null and driver.has_method("is_valid") and driver.is_valid(), "Anwen has no valid fused animation driver")
+	if driver != null:
+		_check(driver.get("animation_players").size() == 1, "Anwen must use one consolidated animation rig")
+		_check(driver.get_animation_player().has_animation("Idle_Talking") or driver.get_animation_player().has_animation("Idle"), "Neutral dialogue idle is not attached to Anwen")
+	var composite := _find_composite(visual)
+	_check(composite != null and int(composite.get_meta("character_rig_layer_count", 0)) == 1, "Anwen rig layers were not consolidated")
+	var base_path := str(visual.get_meta("character_base_path", "")).to_lower()
+	var hair_path := str(visual.get_meta("character_hair_path", "")).to_lower()
+	var recipe: Dictionary = visual.get_meta("character_variant_recipe", {})
+	var assembly_sources := _opening_assembly_sources("anwen")
+	_check(base_path.ends_with("/anwen_a_set_atlas.gltf"), "Anwen did not resolve the prebaked A-set assembly")
+	_check(hair_path == "baked:hair_buns.gltf", "Anwen hair is not owned by the prebaked buns assembly")
+	_check(assembly_sources.has("Female_Peasant.gltf"), "Anwen assembly has no female peasant outfit source")
+	_check(assembly_sources.has("Female_Head.gltf"), "Anwen assembly has no female native head source")
+	_check(assembly_sources.has("Hair_Buns.gltf"), "Anwen assembly has no buns hair source")
+	_check(str(recipe.get("body_family", "")) == "universal_female", "Anwen recipe is not the female Universal family")
+	_check(_has_mesh_named(visual, "anwen_combined"), "Anwen has no consolidated female facial/body mesh")
+	_check(not _has_mesh_named(visual, "superhero_male"), "Anwen resolved a male facial/body mesh")
+	var skeleton := _find_skeleton(visual)
+	_check(skeleton != null, "Anwen lacks Skeleton3D")
+	if skeleton != null:
+		_check(_find_bone_alias(skeleton, CharacterRoleSpec.equipment_sockets("sister_anwen_human").get("head", [])) >= 0, "Anwen has no native head bone")
+		_check(_find_bone_alias(skeleton, CharacterRoleSpec.equipment_sockets("sister_anwen_human").get("weapon", [])) >= 0, "Anwen lacks a right-hand equipment bone")
+	_check(_has_visible_skinned_mesh(visual), "Anwen has no visible skinned mesh")
+	_check(not _has_proxy_anatomy(visual), "Anwen still has forbidden proxy anatomy")
+	var role_report: Dictionary = CharacterRoleContract.inspect(visual, "sister_anwen_human")
+	_check(bool(role_report.get("grounded", false)), "Anwen rendered feet are not grounded")
+	_check(absf(float(role_report.get("rendered_height", 0.0)) - CharacterRoleSpec.target_height("sister_anwen_human")) <= CharacterRoleSpec.height_tolerance("sister_anwen_human"), "Anwen rendered height is outside the role range")
+
+	# Approach behavior is part of Anwen's visible contract: put Kael inside
+	# her attention radius and prove the +Z-facing wrapper turns toward him.
+	var player := game.get("player") as Node3D
+	if player != null:
+		player.global_position = anwen.global_position + Vector3(0, 0, 3.0)
+		await _frames(18)
+		var to_player: Vector3 = player.global_position - anwen.global_position
+		to_player.y = 0.0
+		var rendered_forward: Vector3 = visual.global_basis.z.normalized()
+		_check(to_player.length() > 0.1 and rendered_forward.dot(to_player.normalized()) > 0.72, "Anwen turns away from Kael during approach")
+	await _finish()
+
+func _find_skeleton(node: Node) -> Skeleton3D:
+	if node is Skeleton3D:
+		return node as Skeleton3D
+	for child in node.get_children():
+		var found := _find_skeleton(child)
+		if found != null:
+			return found
+	return null
+
+func _find_composite(node: Node) -> Node:
+	if bool(node.get_meta("character_composite", false)):
+		return node
+	for child in node.get_children():
+		var found := _find_composite(child)
+		if found != null:
+			return found
+	return null
+
+func _has_visible_skinned_mesh(node: Node) -> bool:
+	for mesh in node.find_children("*", "MeshInstance3D", true, false):
+		if mesh.mesh != null and mesh.visible and mesh.skin != null:
+			return true
+	return false
+
+func _has_mesh_named(node: Node, token: String) -> bool:
+	var wanted := token.to_lower()
+	for mesh in node.find_children("*", "MeshInstance3D", true, false):
+		if str(mesh.name).to_lower().contains(wanted):
+			return true
+	return false
+
+func _opening_assembly_sources(role: String) -> Array:
+	if not FileAccess.file_exists(OPENING_ASSEMBLY_MANIFEST):
+		return []
+	var file := FileAccess.open(OPENING_ASSEMBLY_MANIFEST, FileAccess.READ)
+	if file == null:
+		return []
+	var parsed = JSON.parse_string(file.get_as_text())
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return []
+	var roles: Dictionary = parsed.get("roles", {})
+	var entry: Dictionary = roles.get(role, {})
+	return entry.get("sources", []) as Array
+
+func _find_bone_alias(skeleton: Skeleton3D, aliases: Array) -> int:
+	for index in range(skeleton.get_bone_count()):
+		var normalized := str(skeleton.get_bone_name(index)).to_lower().replace("_", "").replace(".", "")
+		for alias in aliases:
+			var wanted := str(alias).to_lower().replace("_", "").replace(".", "")
+			if normalized == wanted or normalized.ends_with(wanted):
+				return index
+	return -1
+
+func _has_proxy_anatomy(node: Node) -> bool:
+	for child in node.find_children("*", "", true, false):
+		var lowered := str(child.name).to_lower().replace("_", "")
+		for token in ["faceplane", "eyelef", "eyeright", "fakeneck", "proxy", "hunchedback", "motionarm", "motionleg"]:
+			if lowered.contains(token):
+				return true
+	return false
+
+func _rendered_bounds(root_node: Node3D) -> AABB:
+	var has_bounds := false
+	var combined := AABB()
+	for mesh in root_node.find_children("*", "MeshInstance3D", true, false):
+		if mesh.mesh == null or not mesh.visible or _belongs_to_equipment(mesh):
+			continue
+		var local: AABB = mesh.get_aabb()
+		var global: AABB = AABB(mesh.global_transform * local.position, local.size)
+		var corners := [
+			Vector3(global.position.x, global.position.y, global.position.z),
+			Vector3(global.end.x, global.position.y, global.position.z),
+			Vector3(global.position.x, global.end.y, global.position.z),
+			Vector3(global.position.x, global.position.y, global.end.z),
+			Vector3(global.end.x, global.end.y, global.end.z)
+		]
+		for corner in corners:
+			if not has_bounds:
+				combined = AABB(corner, Vector3.ZERO)
+				has_bounds = true
+			else:
+				combined = combined.expand(corner)
+	return combined
+
+func _belongs_to_equipment(node: Node) -> bool:
+	var current: Node = node
+	while current != null:
+		var lowered := str(current.name).to_lower()
+		if lowered.contains("equipment") or lowered.contains("staffsocket"):
+			return true
+		current = current.get_parent()
+	return false
+
+func _check(condition: bool, message: String) -> void:
+	if not condition:
+		failures.append(message)
+		push_error(message)
+
+func _frames(count: int) -> void:
+	for _index in range(count):
+		await process_frame
+
+func _finish() -> void:
+	if is_instance_valid(game):
+		if game.has_method("finalize_resource_shutdown"):
+			game.finalize_resource_shutdown()
+		game.queue_free()
+		await _frames(12)
+	if failures.is_empty():
+		print("CHAR-007 VERIFIER: PASS - Anwen uses the fused female body and holds player-facing approach")
+	else:
+		print("CHAR-007 VERIFIER: FAIL (%d)" % failures.size())
+		for failure in failures:
+			print("- %s" % failure)
+	quit(0 if failures.is_empty() else 1)

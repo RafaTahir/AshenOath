@@ -1,0 +1,600 @@
+param(
+    [string[]]$Profiles = @(),
+    [string[]]$ChangedViews = @(),
+    [string[]]$ChangedFiles = @(),
+    [string]$BaseRef = "HEAD",
+    [int]$TimeoutSeconds = 180,
+    [switch]$DryRun,
+    [switch]$NoCache,
+    [switch]$ForceWeb
+)
+
+$ErrorActionPreference = "Stop"
+$Project = Split-Path -Parent $PSScriptRoot
+$RepoRoot = Resolve-Path (Join-Path $Project "..\..")
+$GodotCandidates = [System.Collections.Generic.List[string]]::new()
+if ($env:GODOT_BIN) { $GodotCandidates.Add($env:GODOT_BIN) }
+$GodotCandidates.Add((Join-Path $RepoRoot "tools\godot\Godot_v4.6.3-stable_win64_console.exe"))
+$GodotCandidates.Add("C:\Users\User\Downloads\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe")
+$Godot = $GodotCandidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+if ([string]::IsNullOrWhiteSpace($Godot)) {
+	$Godot = Get-ChildItem -LiteralPath $env:USERPROFILE -Recurse -Filter "Godot_v4.6.3-stable_win64_console.exe" -File -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
+}
+$Python = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
+$Node = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe"
+if (!(Test-Path -LiteralPath $Node)) { throw "Bundled Node runtime missing: $Node" }
+$ProfilesPath = Join-Path $PSScriptRoot "gate_profiles.json"
+$Logs = Join-Path $Project ".release-gate\ticket"
+$CacheDirectory = Join-Path $Project ".verification-cache"
+$CachePath = Join-Path $CacheDirectory "ticket-gates.json"
+$Web = Join-Path (Split-Path -Parent $Project) "AshenOath_Web"
+$QAWeb = Join-Path (Split-Path -Parent $Project) ".release-gate\AshenOath_QA"
+$InvocationFileHashes = @{}
+
+if (!(Test-Path -LiteralPath $ProfilesPath)) { throw "Gate profiles missing: $ProfilesPath" }
+$Configuration = Get-Content -LiteralPath $ProfilesPath -Raw | ConvertFrom-Json
+
+function Normalize-Path([string]$Path) {
+    return $Path.Replace("\", "/").TrimStart("./")
+}
+
+function Get-ChangedFiles {
+    if ($ChangedFiles.Count -gt 0) {
+        return @($ChangedFiles | ForEach-Object { Normalize-Path $_ } | Sort-Object -Unique)
+    }
+    $tracked = @(git -C $RepoRoot diff --name-only $BaseRef --)
+    $untracked = @(git -C $RepoRoot ls-files --others --exclude-standard)
+    return @(($tracked + $untracked) | Where-Object { $_ } | ForEach-Object {
+        Normalize-Path $_
+    } | Sort-Object -Unique)
+}
+
+function Matches-Pattern([string]$Path, [string]$Pattern) {
+    return (Normalize-Path $Path) -like (Normalize-Path $Pattern)
+}
+
+function Add-Unique([System.Collections.Generic.List[string]]$List, [string]$Value) {
+    if (-not $List.Contains($Value)) { $List.Add($Value) }
+}
+
+function Get-CachedFileHash([string]$Path) {
+    $resolved = (Resolve-Path -LiteralPath $Path).Path
+    if (-not $InvocationFileHashes.ContainsKey($resolved)) {
+        $stream = [IO.File]::OpenRead($resolved)
+        $sha = [Security.Cryptography.SHA256]::Create()
+        try {
+            $InvocationFileHashes[$resolved] = ([BitConverter]::ToString($sha.ComputeHash($stream))).Replace("-", "")
+        } finally {
+            $stream.Dispose()
+            $sha.Dispose()
+        }
+    }
+    return [string]$InvocationFileHashes[$resolved]
+}
+
+function Get-GateHash([string]$Gate, [string[]]$Files) {
+    $builder = [Text.StringBuilder]::new()
+    [void]$builder.AppendLine($Gate)
+    foreach ($relative in ($Files | Sort-Object -Unique)) {
+        $absolute = Join-Path $RepoRoot $relative
+        [void]$builder.AppendLine($relative)
+        if (Test-Path -LiteralPath $absolute -PathType Leaf) {
+            [void]$builder.AppendLine((Get-CachedFileHash $absolute))
+        } else {
+            [void]$builder.AppendLine("missing")
+        }
+    }
+    $gateScript = Join-Path $PSScriptRoot "$Gate.gd"
+    if (Test-Path -LiteralPath $gateScript) {
+        [void]$builder.AppendLine((Get-CachedFileHash $gateScript))
+    }
+    # Cache validity depends on the runner and profile mapping as well as the gate inputs.
+    if (-not [string]::IsNullOrWhiteSpace($script:PSCommandPath) -and (Test-Path -LiteralPath $script:PSCommandPath -PathType Leaf)) {
+        [void]$builder.AppendLine("ticket_gate_runner")
+        [void]$builder.AppendLine((Get-CachedFileHash $script:PSCommandPath))
+    }
+    if (Test-Path -LiteralPath $script:ProfilesPath -PathType Leaf) {
+        [void]$builder.AppendLine("gate_profiles")
+        [void]$builder.AppendLine((Get-CachedFileHash $script:ProfilesPath))
+    }
+    $bytes = [Text.Encoding]::UTF8.GetBytes($builder.ToString())
+    $sha = [Security.Cryptography.SHA256]::Create()
+    try { return ([BitConverter]::ToString($sha.ComputeHash($bytes))).Replace("-", "") }
+    finally { $sha.Dispose() }
+}
+
+function Get-GateInputs([string]$Gate, [string[]]$Files) {
+    $selected = [System.Collections.Generic.List[string]]::new()
+    $scriptNames = @(
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/$Gate.gd",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/$Gate.py",
+        "outputs/AshenOathTheRoadBetweenCrowns/tools/$Gate.mjs"
+    )
+    foreach ($file in $Files) {
+        $normalized = Normalize-Path $file
+        if ($scriptNames -contains $normalized) {
+            Add-Unique $selected $normalized
+            continue
+        }
+        if ($Gate -in @("content_integrity", "runtime_smoke", "verify_web_001", "web_export", "verify_web_export", "verify_web_browser", "verify_mobile_browser", "verify_qa_002_browser", "packed_startup")) {
+            if ($normalized -like "outputs/AshenOathTheRoadBetweenCrowns/scripts/*" -or
+                $normalized -like "outputs/AshenOathTheRoadBetweenCrowns/data/*" -or
+                $normalized -like "outputs/AshenOathTheRoadBetweenCrowns/scenes/*" -or
+                $normalized -like "outputs/AshenOathTheRoadBetweenCrowns/assets_external/*" -or
+                $normalized -in @(
+                    "outputs/AshenOathTheRoadBetweenCrowns/project.godot",
+                    "outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg",
+                    "vercel.json"
+                )) {
+                Add-Unique $selected $normalized
+            }
+            continue
+        }
+        foreach ($property in $Configuration.profiles.PSObject.Properties) {
+            if ($property.Value.gates -contains $Gate) {
+                foreach ($pattern in $property.Value.patterns) {
+                    if (Matches-Pattern $normalized $pattern) {
+                        Add-Unique $selected $normalized
+                        break
+                    }
+                }
+            }
+        }
+        if ($Gate.StartsWith("capture_")) {
+            foreach ($property in $Configuration.profiles.PSObject.Properties) {
+                foreach ($pattern in $property.Value.patterns) {
+                    if (Matches-Pattern $normalized $pattern) {
+                        Add-Unique $selected $normalized
+                        break
+                    }
+                }
+            }
+        }
+    }
+    return @($selected)
+}
+
+function Read-Cache {
+    if ($NoCache -or !(Test-Path -LiteralPath $CachePath)) { return @{} }
+    $object = Get-Content -LiteralPath $CachePath -Raw | ConvertFrom-Json
+    $result = @{}
+    foreach ($property in $object.PSObject.Properties) { $result[$property.Name] = $property.Value }
+    return $result
+}
+
+function Write-Cache([hashtable]$Cache) {
+    New-Item -ItemType Directory -Force -Path $CacheDirectory | Out-Null
+    $Cache | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $CachePath -Encoding utf8
+}
+
+function Prepare-QAWebArtifact([hashtable]$Cache, [string[]]$Inputs) {
+    # The browser route harness requires the disposable QA preset because the
+    # production export deliberately excludes its read-only telemetry adapter.
+    # Keep the QA artifact outside tracked Web output and copy only the already
+    # verified runtime packs beside it.
+    New-Item -ItemType Directory -Force -Path $QAWeb | Out-Null
+    Invoke-Compact "qa_web_export" $Godot @(
+        "--headless", "--path", $Project, "--export-release", "Web QA Browser"
+    ) $Inputs $Cache
+    $qaIndex = Join-Path $QAWeb "index.html"
+    if (!(Test-Path -LiteralPath $qaIndex)) {
+        throw "Web QA export did not produce $qaIndex"
+    }
+    $packSource = Join-Path $Project ".release-gate\runtime-packs"
+    $packDestination = Join-Path $QAWeb "packs"
+    New-Item -ItemType Directory -Force -Path $packDestination | Out-Null
+    foreach ($packName in @("opening", "quality_materials", "campaign", "characters", "monsters", "audio")) {
+        $source = Join-Path $packSource "$packName.pck"
+        if (!(Test-Path -LiteralPath $source)) {
+            throw "Verified runtime pack is missing for QA browser export: $source"
+        }
+        Copy-Item -LiteralPath $source -Destination (Join-Path $packDestination "$packName.pck") -Force
+    }
+    # Artifact bytes can change independently of cached source inputs.
+    Invoke-Compact "qa_web_completeness" $Python @(
+        (Join-Path $Project "tools\verify_web_export.py"), $QAWeb,
+        "--runtime-manifest", (Join-Path $Project "runtime_pack_manifest.json")
+    ) $Inputs @{}
+}
+
+function Invoke-Compact(
+    [string]$Name,
+    [string]$Executable,
+    [string[]]$Arguments,
+    [string[]]$Inputs,
+    [hashtable]$Cache,
+    [switch]$Transient
+) {
+    $isCapture = $Name.StartsWith("capture_") -and $Executable -match "Godot"
+    if ($isCapture) {
+        $Inputs = @($Inputs) + @(
+            "outputs/AshenOathTheRoadBetweenCrowns/tools/visual_evidence.py",
+            "outputs/AshenOathTheRoadBetweenCrowns/tools/capture_visual_provenance.py"
+        )
+    }
+    $hash = Get-GateHash $Name $Inputs
+    $cacheLog = Join-Path $Logs "$Name.log"
+    if (-not $Transient -and -not $NoCache -and $Cache.ContainsKey($Name) -and $Cache[$Name].hash -eq $hash -and $Cache[$Name].status -eq "pass" -and (Test-Path -LiteralPath $cacheLog -PathType Leaf)) {
+        Write-Host ("TICKET GATE {0}: CACHED PASS" -f $Name)
+        return
+    }
+    New-Item -ItemType Directory -Force -Path $Logs | Out-Null
+    $captureSession = Join-Path $Logs "$Name.capture-session.json"
+    if ($isCapture) {
+        Invoke-Compact "$Name.provenance_begin" $Python @(
+            (Join-Path $Project "tools\capture_visual_provenance.py"),
+            "begin", $Project, "--session", $captureSession, "--gate", $Name
+        ) @() $Cache -Transient
+    }
+    $log = Join-Path $Logs "$Name.log"
+    $engineLogPath = "$log.godot.log"
+    $stderrLogPath = "$log.stderr.log"
+    Set-Content -LiteralPath $log -Value "" -Encoding utf8
+    Set-Content -LiteralPath $stderrLogPath -Value "" -Encoding utf8
+    if (Test-Path -LiteralPath $engineLogPath) {
+        Set-Content -LiteralPath $engineLogPath -Value "" -Encoding utf8
+    }
+    $timer = [Diagnostics.Stopwatch]::StartNew()
+    $timedOut = $false
+    $previousPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    try {
+        $invocationArguments = @($Arguments)
+        if ($Executable -match "Godot.*console") {
+            # Godot can crash before script execution when its default user log
+            # path is unavailable. Give every gate an isolated deterministic log.
+            # Keep it separate from PowerShell's redirected summary stream.
+            $invocationArguments = @("--log-file", "$log.godot.log") + $invocationArguments
+        }
+        if ($Executable -match "Godot.*console") {
+            # Console Godot already propagates the verifier exit code reliably.
+            # Invoke it directly so wrapper process state cannot turn a clean
+            # verifier result into a false ticket failure.
+            & $Executable @invocationArguments 1> $log 2> $stderrLogPath
+            $exitCode = $LASTEXITCODE
+        } elseif ($Executable -match "Godot") {
+            # The Windows Godot release executable is a GUI-subsystem process,
+            # so '&' can return before the verifier has finished. Start-Process
+            # with a bounded wait keeps ticket gates truthful on both executable
+            # forms and prevents one hung verifier from blocking the workflow.
+            $argumentLine = ($invocationArguments | ForEach-Object {
+                $value = [string]$_
+                if ($value -match '[\s"]') {
+                    '"' + $value.Replace('"', '\"') + '"'
+                } else {
+                    $value
+                }
+            }) -join ' '
+            $process = Start-Process -FilePath $Executable -ArgumentList $argumentLine -PassThru `
+                -RedirectStandardOutput $log -RedirectStandardError $stderrLogPath
+            if (-not $process.WaitForExit($TimeoutSeconds * 1000)) {
+                $timedOut = $true
+                Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
+                $process.WaitForExit(5000)
+                $exitCode = 124
+            } else {
+                $exitCode = $process.ExitCode
+            }
+        } else {
+            & $Executable @invocationArguments *> $log
+            $exitCode = $LASTEXITCODE
+        }
+    } finally {
+        $ErrorActionPreference = $previousPreference
+    }
+    $timer.Stop()
+	$lines = @(Get-Content -LiteralPath $log -ErrorAction SilentlyContinue)
+	$stderrLines = @()
+	if (Test-Path -LiteralPath $stderrLogPath) {
+		$stderrLines = @(Get-Content -LiteralPath $stderrLogPath -ErrorAction SilentlyContinue)
+	}
+	$engineLines = @()
+	if (Test-Path -LiteralPath $engineLogPath) {
+		$engineLines = @(Get-Content -LiteralPath $engineLogPath -ErrorAction SilentlyContinue)
+	}
+	$diagnosticLines = @($lines + $stderrLines + $engineLines)
+	$parseFailure = $diagnosticLines | Where-Object { $_ -match "SCRIPT ERROR|Parse Error|Compile Error|Cannot open resource pack|Cannot open resource|Failed to load|Resource not found" } | Select-Object -First 1
+	$verifierFailure = $diagnosticLines | Where-Object { $_ -match "VERIFIER:\s*FAIL|ASSERTION FAILED|Assertion failed" } | Select-Object -First 1
+	$runtimeFailure = $diagnosticLines | Where-Object { $_ -match '^\s*ERROR:' -and $_ -notmatch '^\s*\+\s+CategoryInfo|FullyQualifiedErrorId.*NativeCommandError' } | Select-Object -First 1
+	# A shutdown marker does not excuse leaked resources or null materials.
+	# No generic teardown signature is approved for downgrade.
+	$resourcePattern = 'Parameter "material" is null|RID allocations .* leaked at exit|Pages in use exist at exit|resources still in use at exit|Buffer with GL ID .* leaked|shaders of type .* never freed|ObjectDB instances leaked at exit|Leaked instance dependency|did not call instance_notify_deleted|Orphan .* at exit|Condition .* is true'
+	$fatalResource = $null
+	for ($index = 0; $index -lt $diagnosticLines.Count; $index++) {
+		if ($diagnosticLines[$index] -match $resourcePattern) {
+			$fatalResource = $diagnosticLines[$index]
+			break
+		}
+	}
+	if ($timedOut) {
+		Write-Host ("TICKET GATE {0}: FAIL (timed out after {1}s)" -f $Name, $TimeoutSeconds) -ForegroundColor Red
+		Get-Content -LiteralPath $log -Tail 40
+		throw "$Name timed out after $TimeoutSeconds seconds. Full log: $log"
+	}
+	if ($exitCode -ne 0 -or $parseFailure -or $verifierFailure -or $runtimeFailure -or $fatalResource) {
+		Write-Host ("TICKET GATE {0}: FAIL" -f $Name) -ForegroundColor Red
+		Get-Content -LiteralPath $log -Tail 40
+		if (Test-Path -LiteralPath $engineLogPath) {
+			Get-Content -LiteralPath $engineLogPath -Tail 40
+		}
+		if ($fatalResource) { throw "$Name emitted a renderer/resource failure: $fatalResource. Full log: $log" }
+		if ($runtimeFailure) { throw "$Name emitted a runtime error: $runtimeFailure. Full log: $log" }
+		throw "$Name failed. Full log: $log"
+    }
+    if ($isCapture) {
+        Invoke-Compact "$Name.provenance_finish" $Python @(
+            (Join-Path $Project "tools\capture_visual_provenance.py"),
+            "finish", $Project, "--session", $captureSession
+        ) @() $Cache -Transient
+    }
+    if (-not $Transient) {
+        $Cache[$Name] = @{
+            hash = $hash
+            status = "pass"
+            finished_at = (Get-Date).ToUniversalTime().ToString("o")
+            seconds = [math]::Round($timer.Elapsed.TotalSeconds, 2)
+        }
+        Write-Cache $Cache
+    }
+    Write-Host ("TICKET GATE {0}: PASS ({1:n1}s)" -f $Name, $timer.Elapsed.TotalSeconds)
+}
+
+$files = @(Get-ChangedFiles)
+$selectedProfiles = [System.Collections.Generic.List[string]]::new()
+foreach ($profile in $Profiles) {
+    if (-not $Configuration.profiles.PSObject.Properties.Name.Contains($profile)) {
+        throw "Unknown gate profile: $profile"
+    }
+    Add-Unique $selectedProfiles $profile
+}
+if ($selectedProfiles.Count -eq 0) {
+    foreach ($property in $Configuration.profiles.PSObject.Properties) {
+        $profileName = $property.Name
+        foreach ($pattern in $property.Value.patterns) {
+            if ($files | Where-Object { Matches-Pattern $_ $pattern }) {
+                Add-Unique $selectedProfiles $profileName
+                break
+            }
+        }
+    }
+}
+if ($ForceWeb) { Add-Unique $selectedProfiles "web" }
+
+$gates = [System.Collections.Generic.List[string]]::new()
+Add-Unique $gates "content_integrity"
+Add-Unique $gates "runtime_smoke"
+foreach ($profile in $selectedProfiles) {
+    foreach ($gate in $Configuration.profiles.$profile.gates) { Add-Unique $gates $gate }
+}
+
+$captureGates = [System.Collections.Generic.List[string]]::new()
+foreach ($view in $ChangedViews) {
+    if (-not $Configuration.views.PSObject.Properties.Name.Contains($view)) {
+        throw "Unknown changed view: $view"
+    }
+    Add-Unique $captureGates $Configuration.views.$view
+}
+
+Write-Host "TICKET GATE FILES: $($files.Count)"
+Write-Host "TICKET GATE PROFILES: $(if ($selectedProfiles.Count) { $selectedProfiles -join ', ' } else { 'core' })"
+Write-Host "TICKET GATES: $($gates -join ', ')"
+Write-Host "TICKET CAPTURES: $(if ($captureGates.Count) { $captureGates -join ', ' } else { 'none' })"
+if ($DryRun) { exit 0 }
+
+if (!(Test-Path -LiteralPath $Godot)) { throw "Godot 4.6.3 not found: $Godot" }
+if (!(Test-Path -LiteralPath $Python)) { throw "Bundled Python not found: $Python" }
+$cache = Read-Cache
+
+# Selection uses changed paths; cache identity must include unchanged dependencies.
+$repositoryInputs = @(git -C $RepoRoot ls-files --cached --others --exclude-standard)
+if ($LASTEXITCODE -ne 0) { throw "Cannot enumerate verification dependencies." }
+$dependencyFiles = @(($repositoryInputs + $files) | Sort-Object -Unique)
+
+foreach ($gate in $gates) {
+    $gateInputs = @(Get-GateInputs $gate $dependencyFiles)
+    if ($gate -eq "content_integrity") {
+        Invoke-Compact $gate $Python @(
+            (Join-Path $PSScriptRoot "verify_content_integrity.py"),
+            $Project,
+            "--json-report",
+            (Join-Path $Logs "content_integrity.json")
+        ) $gateInputs $cache
+	} elseif ($gate -eq "verify_pack_http") {
+		Invoke-Compact $gate $Python @(
+			(Join-Path $PSScriptRoot "verify_pack_http.py"),
+			"--godot", $Godot, "--project", $Project,
+			"--report", (Join-Path $Logs "pack_http.json")
+		) $gateInputs $cache
+	} elseif ($gate -eq "runtime_smoke") {
+		Invoke-Compact $gate $Godot @("--headless", "--path", $Project, "--script", "tools/verify_runtime_smoke.gd") $gateInputs $cache
+	} elseif ($gate -in @("verify_perf_001", "verify_perf_002", "verify_perf_003", "verify_opening_qa_001", "verify_qa_012", "verify_detail_batch_publication", "verify_material_override_render", "verify_opening_fast_click", "verify_world_013")) {
+        $script = Join-Path $PSScriptRoot "$gate.gd"
+        Invoke-Compact $gate $Godot @(
+            "--path", $Project,
+            "--rendering-method", "gl_compatibility",
+            "--script", $script
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_prod_002") {
+        Invoke-Compact $gate $Python @(
+            (Join-Path $PSScriptRoot "verify_prod_002.py"),
+            "--registry", (Join-Path $Project "PROD_002_ISSUE_REGISTRY.json"),
+            "--dashboard", (Join-Path $Project "PROD_002_MILESTONE_DASHBOARD.md")
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_asset_acceptance") {
+        Invoke-Compact $gate $Python @(
+            (Join-Path $PSScriptRoot "verify_asset_acceptance.py"),
+            $Project,
+            "--json-report",
+            (Join-Path $Logs "asset_acceptance.json")
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_pipe_003") {
+        Invoke-Compact $gate $Python @(
+            (Join-Path $PSScriptRoot "verify_pipe_003.py")
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_runtime_packs") {
+        Invoke-Compact $gate $Python @(
+            (Join-Path $PSScriptRoot "verify_runtime_packs.py"),
+            $Project,
+            "--json-report",
+            (Join-Path $Logs "runtime_packs.json")
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_pack_candidates") {
+        Invoke-Compact $gate $Python @(
+            (Join-Path $PSScriptRoot "verify_pack_candidates.py"),
+            (Join-Path $Project "runtime_pack_candidates.json")
+        ) $gateInputs $cache
+	} elseif ($gate -eq "verify_load_qa_001") {
+		Invoke-Compact $gate $Python @(
+			(Join-Path $PSScriptRoot "verify_load_qa_001.py"),
+			$Project
+		) $gateInputs $cache
+	} elseif ($gate -in @("verify_boot_003", "verify_loadgame_002", "verify_load_qa_002")) {
+		$loadQaArguments = @(
+			(Join-Path $PSScriptRoot "$gate.py"),
+			$Project
+		)
+		if ($gate -eq "verify_load_qa_002") {
+			$loadQaArguments += @(
+				"--candidate-dir",
+				(Join-Path $Project ".release-gate\runtime-packs")
+			)
+		}
+		Invoke-Compact $gate $Python $loadQaArguments $gateInputs $cache
+	} elseif ($gate -eq "verify_runtime_required_components") {
+		Invoke-Compact $gate $Python @(
+			(Join-Path $PSScriptRoot "verify_runtime_required_components.py"),
+			$Project,
+			"--json-report",
+			(Join-Path $Logs "runtime_required_components.json")
+		) $gateInputs $cache
+	} elseif ($gate -eq "verify_runtime_asset_policy") {
+		Invoke-Compact $gate $Godot @(
+			"--headless", "--path", $Project,
+			"--rendering-method", "gl_compatibility",
+			"--audio-driver", "Dummy",
+			"--script", (Join-Path $PSScriptRoot "verify_runtime_asset_policy.gd")
+		) $gateInputs $cache
+	} elseif ($gate -eq "verify_engine_006") {
+		Invoke-Compact $gate $Python @(
+			(Join-Path $PSScriptRoot "verify_engine_006.py"),
+			$Project
+		) $gateInputs $cache
+	} elseif ($gate -eq "verify_asset_005") {
+		Invoke-Compact $gate $Python @(
+			(Join-Path $PSScriptRoot "verify_asset_005.py")
+		) $gateInputs $cache
+	} elseif ($gate -eq "verify_bow_shop_001") {
+		Invoke-Compact $gate $Python @(
+			(Join-Path $PSScriptRoot "verify_bow_shop_001.py"), $Project
+		) $gateInputs $cache
+	} elseif ($gate -eq "verify_qa_soul_001") {
+        Invoke-Compact $gate $Python @(
+            (Join-Path $PSScriptRoot "verify_qa_soul_001.py"), $Project
+        ) $gateInputs $cache
+	} elseif ($gate -eq "verify_qa_013") {
+        Invoke-Compact $gate $Python @(
+            (Join-Path $PSScriptRoot "verify_qa_013.py"), $Project
+        ) $gateInputs $cache
+	} elseif ($gate -in @("verify_world_grid_001", "verify_seam_001", "verify_seam_002", "verify_nav_002", "verify_save_004", "verify_interior_001")) {
+		Invoke-Compact $gate $Python @(
+			(Join-Path $PSScriptRoot "$gate.py"), $Project
+		) $gateInputs $cache
+	} elseif ($gate -eq "verify_web_001") {
+        Invoke-Compact $gate $Python @(
+            (Join-Path $PSScriptRoot "verify_web_001.py"), $Project, $RepoRoot
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_web_002") {
+        Invoke-Compact $gate $Python @(
+            (Join-Path $PSScriptRoot "verify_web_002.py"), $Project
+        ) $gateInputs $cache
+    } elseif ($gate -eq "web_export") {
+        Invoke-Compact "web_export" (Join-Path $Project "Export_Web_Build.bat") @() $gateInputs $cache
+        Invoke-Compact "verify_web_export" $Python @(
+            (Join-Path $PSScriptRoot "verify_web_export.py"), $Web,
+            "--json-report", (Join-Path $Logs "web_export.json")
+        ) $gateInputs $cache
+		Invoke-Compact "packed_startup" $Godot @(
+			"--headless", "--path", $Project,
+			"--main-pack", (Join-Path $Web "index.pck"),
+			"--script", "tools/verify_packed_startup.gd"
+		) $gateInputs $cache
+    } elseif ($gate -eq "verify_web_browser") {
+		Invoke-Compact $gate $Node @(
+            (Join-Path $PSScriptRoot "verify_web_browser.mjs"),
+            "--export", $Web,
+            "--report", (Join-Path $Logs "web_browser.json")
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_qa_002_browser") {
+		Prepare-QAWebArtifact $cache $files
+		Invoke-Compact $gate $Node @(
+            (Join-Path $PSScriptRoot "verify_qa_002_browser.mjs"),
+			"--export", $QAWeb,
+            "--browser", "chrome",
+            "--report", (Join-Path $Logs "qa_002_browser.json")
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_opening_qa_001_browser") {
+		Invoke-Compact $gate $Node @(
+            (Join-Path $PSScriptRoot "verify_qa_002_browser.mjs"),
+            "--export", $Web,
+            "--browser", "all",
+            "--opening-only", "true",
+            "--report", (Join-Path $Logs "opening_qa_001_browser.json")
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_web_002_browser") {
+		Invoke-Compact $gate $Node @(
+            (Join-Path $PSScriptRoot "verify_qa_002_browser.mjs"),
+            "--export", $Web,
+            "--browser", "all",
+            "--renderer", "hardware",
+            "--full-campaign", "true",
+			"--enforce-performance", "true",
+			"--production-observer", "true",
+            "--report", (Join-Path $Logs "web_002_browser.json")
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_web_002_mobile") {
+		Invoke-Compact $gate $Node @(
+            (Join-Path $PSScriptRoot "verify_qa_002_browser.mjs"),
+            "--export", $Web,
+            "--browser", "chromium",
+            "--renderer", "hardware",
+            "--full-campaign", "true",
+			"--production-observer", "true",
+            "--mobile", "true",
+            "--report", (Join-Path $Logs "web_002_mobile.json")
+        ) $gateInputs $cache
+    } elseif ($gate -eq "verify_mobile_browser") {
+		Invoke-Compact $gate $Node @(
+            (Join-Path $PSScriptRoot "verify_web_browser.mjs"),
+            "--export", $Web,
+            "--report", (Join-Path $Logs "mobile_browser.json"),
+            "--mobile", "true"
+        ) $gateInputs $cache
+    } elseif ($gate -in @("verify_paused_player_real_input", "verify_access_context_real_input")) {
+        Invoke-Compact $gate $Godot @(
+            "--path", $Project, "--rendering-method", "gl_compatibility",
+            "--script", (Join-Path $PSScriptRoot "$gate.gd")
+        ) $gateInputs $cache
+    } else {
+        $script = Join-Path $PSScriptRoot "$gate.gd"
+        if (!(Test-Path -LiteralPath $script)) { throw "Verifier missing: $script" }
+        Invoke-Compact $gate $Godot @("--headless", "--path", $Project, "--script", $script) $gateInputs $cache
+    }
+}
+
+foreach ($capture in $captureGates) {
+    $script = Join-Path $PSScriptRoot "$capture.gd"
+    if (!(Test-Path -LiteralPath $script)) { throw "Capture helper missing: $script" }
+    $captureInputs = @(Get-GateInputs $capture $dependencyFiles)
+    $captureArguments = @(
+        "--path", $Project, "--rendering-method", "gl_compatibility", "--script", $script
+    )
+    if ($capture -eq "capture_slice_screenshots" -and $ChangedViews -contains "combat") {
+        $captureArguments += @("--", "--combat-only")
+    }
+	if ($capture -eq "capture_slice_screenshots" -and $ChangedViews -contains "targeting") {
+		$captureArguments += @("--", "--target-only")
+	}
+    Invoke-Compact $capture $Godot $captureArguments $captureInputs $cache
+}
+
+Write-Host "TICKET GATE: PASS"

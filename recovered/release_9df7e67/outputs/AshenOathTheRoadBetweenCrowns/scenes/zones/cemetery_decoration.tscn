@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[node name="CemeteryDecorationLayer" type="Node3D"]
+
+[node name="GraveRowsComposition" type="Node3D" parent="."]
+
+[node name="RuinedChapelComposition" type="Node3D" parent="."]
+
+[node name="CrowShrineComposition" type="Node3D" parent="."]

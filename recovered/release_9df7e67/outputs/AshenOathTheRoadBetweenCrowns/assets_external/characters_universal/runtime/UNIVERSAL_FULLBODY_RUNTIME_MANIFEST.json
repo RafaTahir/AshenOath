@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "pipeline": "Universal full-body 1K runtime conversion",
+  "license": "CC0 1.0",
+  "source_pack": "Quaternius Universal Base Characters",
+  "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+  "variants": {
+    "male": {
+      "source": "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf",
+      "source_sha256": "e7fcea214ecf8855afbf910b50de6f9c7d1decfb71ca28bad8a4481452dafeb4",
+      "source_bin_sha256": "459003f9745853ae562a85506a2b94dd56515c1f37728f9fa3d2ce1a3e4cd92f",
+      "runtime": "res://assets_external/characters_universal/runtime/Universal_Male_FullBody_1K.gltf",
+      "runtime_bin": "res://assets_external/characters_universal/runtime/Universal_Male_FullBody_1K.bin",
+      "runtime_sha256": "9e75f74b3e505f03fae0c4ec9344a1ef620bbbba4790043bfe67285abf46cf6e",
+      "runtime_bin_sha256": "459003f9745853ae562a85506a2b94dd56515c1f37728f9fa3d2ce1a3e4cd92f",
+      "maps": [
+        "../T_Hair_1_Normal_1K.png",
+        "../T_Hair_1_BaseColor_1K.png",
+        "../T_Eye_Normal.png",
+        "../T_Eye_Brown.png",
+        "../T_Superhero_Male_Normal_1K.png",
+        "../T_Superhero_Male_Dark_1K.png",
+        "../T_Superhero_Male_Roughness_1K.png"
+      ],
+      "root_motion": false
+    },
+    "female": {
+      "source": "res://assets_external/characters_universal/Superhero_Female_FullBody.gltf",
+      "source_sha256": "adedf28000a0716f689b009a70314506fc62f827498f77ba852acb5610f3f3f4",
+      "source_bin_sha256": "3a8220a485b33d05d879115a50697728b45a151781106033afb8b8c243fca208",
+      "runtime": "res://assets_external/characters_universal/runtime/Universal_Female_FullBody_1K.gltf",
+      "runtime_bin": "res://assets_external/characters_universal/runtime/Universal_Female_FullBody_1K.bin",
+      "runtime_sha256": "c4be4f121b11db9eb44447fd0b569e1be12dca17db3ce685fe6544751c6b3f89",
+      "runtime_bin_sha256": "3a8220a485b33d05d879115a50697728b45a151781106033afb8b8c243fca208",
+      "maps": [
+        "../T_Hair_2_Normal_1K.png",
+        "../T_Hair_2_BaseColor_1K.png",
+        "../T_Eye_Normal.png",
+        "../T_Eye_Brown.png",
+        "../T_Superhero_Female_Normal_1K.png",
+        "../T_Superhero_Female_Dark_BaseColor_1K.png",
+        "../T_Superhero_Female_Roughness_1K.png"
+      ],
+      "root_motion": false
+    }
+  }
+}

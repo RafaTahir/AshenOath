@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[node name="GreyfenDecorationLayer" type="Node3D"]
+
+[node name="VillageStreetComposition" type="Node3D" parent="."]
+
+[node name="ShrineQuarterComposition" type="Node3D" parent="."]
+
+[node name="CemeteryRoadComposition" type="Node3D" parent="."]

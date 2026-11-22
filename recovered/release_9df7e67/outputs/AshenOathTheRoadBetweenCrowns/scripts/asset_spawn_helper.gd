@@ -1,0 +1,1175 @@
+extends Node
+
+const AssetDatabase = preload("res://scripts/asset_database.gd")
+const CharacterVisualContract = preload("res://scripts/character_visual_contract.gd")
+const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
+const CharacterRoleContract = preload("res://scripts/character_role_contract.gd")
+const CharacterAnimationFusion = preload("res://scripts/character_animation_fusion.gd")
+
+var database
+var mesh_cache: Dictionary = {}
+var material_cache: Dictionary = {}
+var resource_cache: Dictionary = {}
+var repaired_mesh_cache: Dictionary = {}
+var pending_role_resources: Dictionary = {}
+var prepared_animation_libraries: Dictionary = {}
+var runtime_role_diagnostics: Dictionary = {}
+var _reported_blocked_roles: Dictionary = {}
+var resource_prewarm_error := ""
+
+func begin_resource_attempt() -> void:
+	resource_prewarm_error = ""
+	for path in pending_role_resources.keys():
+		var status := ResourceLoader.load_threaded_get_status(path)
+		if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			pending_role_resources[path] = Time.get_ticks_msec()
+		else:
+			if status == ResourceLoader.THREAD_LOAD_LOADED:
+				var resource := ResourceLoader.load_threaded_get(path)
+				if resource != null:
+					resource_cache[path] = resource
+			pending_role_resources.erase(path)
+
+func request_role_resources(role_names: Array) -> Error:
+	_ensure_database()
+	var paths: Array[String] = []
+	for role in role_names:
+		var entry: Dictionary = database.get_asset_for_role(str(role))
+		var path := str(entry.get("path", ""))
+		paths.append(path)
+	return request_resource_paths(paths)
+
+func request_resource_paths(paths: Array) -> Error:
+	for raw_path in paths:
+		var path := str(raw_path)
+		if path.is_empty() or not ResourceLoader.exists(path):
+			resource_prewarm_error = path + ": resource not found"
+			return ERR_FILE_NOT_FOUND
+		if resource_cache.has(path) or pending_role_resources.has(path):
+			continue
+		var error := ResourceLoader.load_threaded_request(path)
+		if error != OK:
+			resource_prewarm_error = "%s: %s" % [path, error_string(error)]
+			return error
+		pending_role_resources[path] = Time.get_ticks_msec()
+	return OK
+
+func is_resource_cached(path: String) -> bool:
+	return resource_cache.has(path)
+
+func poll_role_resources(timeout_msec: int = 20000) -> Error:
+	for path in pending_role_resources.keys():
+		var status := ResourceLoader.load_threaded_get_status(path)
+		if status == ResourceLoader.THREAD_LOAD_LOADED:
+			var resource := ResourceLoader.load_threaded_get(path)
+			pending_role_resources.erase(path)
+			if resource == null:
+				resource_prewarm_error = path + ": decoded resource is null"
+				return ERR_CANT_OPEN
+			resource_cache[path] = resource
+		elif status != ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			pending_role_resources.erase(path)
+			resource_prewarm_error = "%s: threaded load status %d" % [path, status]
+			return ERR_CANT_OPEN
+		elif Time.get_ticks_msec() - int(pending_role_resources[path]) > timeout_msec:
+			resource_prewarm_error = path + ": resource request timed out"
+			return ERR_TIMEOUT
+	return OK if pending_role_resources.is_empty() else ERR_BUSY
+
+func clear_runtime_caches() -> void:
+	# Cache ownership ends with the host game. Clear references after the
+	# owning scene roots have been retired so imported resources can release
+	# without detaching live meshes from the renderer.
+	# ResourceLoader has no cancellation API. Shutdown must consume outstanding
+	# requests; normal construction only polls completed requests without waiting.
+	for path in pending_role_resources:
+		ResourceLoader.load_threaded_get(path)
+	pending_role_resources.clear()
+	mesh_cache.clear()
+	material_cache.clear()
+	resource_cache.clear()
+	repaired_mesh_cache.clear()
+	prepared_animation_libraries.clear()
+
+func clear_runtime_diagnostics() -> void:
+	runtime_role_diagnostics.clear()
+	_reported_blocked_roles.clear()
+
+func get_runtime_diagnostics() -> Dictionary:
+	return runtime_role_diagnostics.duplicate(true)
+
+func _ready() -> void:
+	if database == null:
+		database = AssetDatabase.new()
+		add_child(database)
+
+func setup(asset_database) -> void:
+	database = asset_database
+	if database != null and database.has_method("reload"):
+		database.reload()
+
+func spawn_for_role(role_name: String, fallback_category: String = "props") -> Node3D:
+	_ensure_database()
+	var entry: Dictionary = database.get_asset_for_role(role_name)
+	return _spawn_from_entry(entry, role_name, fallback_category)
+
+func spawn_visual_role(role_name: String, fallback_category: String = "props", variant_seed: String = "") -> Node3D:
+	_ensure_database()
+	if not database.has_method("get_visual_asset_for_role"):
+		return null
+	var entry: Dictionary = database.get_visual_asset_for_role(role_name)
+	return _spawn_from_entry(entry, role_name, fallback_category, variant_seed)
+
+func has_visual_role(role_name: String) -> bool:
+	_ensure_database()
+	if not database.has_method("has_visual_asset_for_role"):
+		return false
+	return database.has_visual_asset_for_role(role_name)
+
+func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: String, variant_seed: String = "") -> Node3D:
+	var path: String = str(entry.get("path", ""))
+	var runtime_policy: Dictionary = entry.get("runtime_policy", {}) if typeof(entry.get("runtime_policy", {})) == TYPE_DICTIONARY else {}
+	var diagnostic_fallback := fallback_category in ["characters", "enemies"] and bool(runtime_policy.get("release_blocked", false))
+	if diagnostic_fallback:
+		_record_runtime_role_use(role_name, fallback_category, path, runtime_policy)
+	if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
+		var profile_started := Time.get_ticks_usec()
+		var resource = _load_cached_resource(path)
+		var loaded_usec := Time.get_ticks_usec()
+		var spawned: Node3D = _instantiate_obj(path) if _is_forest_tree(path) else _instantiate_resource(resource)
+		if spawned != null:
+			var instantiated_usec := Time.get_ticks_usec()
+			spawned = _compose_player_body(spawned, path, role_name, variant_seed)
+			var composed_usec := Time.get_ticks_usec()
+			spawned.name = role_name
+			_apply_runtime_policy_metadata(spawned, role_name, runtime_policy, path)
+			_prepare_spawned_asset(spawned,path,role_name,fallback_category)
+			if OS.get_environment("ASHEN_PROFILE_GREYFEN_ACTORS") == "1" and fallback_category == "characters":
+				print("CHARACTER_ASSET_PROFILE role=%s load_ms=%.2f instantiate_ms=%.2f compose_ms=%.2f prepare_ms=%.2f" % [
+					role_name,
+					float(loaded_usec - profile_started) / 1000.0,
+					float(instantiated_usec - loaded_usec) / 1000.0,
+					float(composed_usec - instantiated_usec) / 1000.0,
+					float(Time.get_ticks_usec() - composed_usec) / 1000.0,
+				])
+			return spawned
+		var fallback: Node3D = _instantiate_source_file(path)
+		if fallback != null:
+			fallback = _compose_player_body(fallback, path, role_name, variant_seed)
+			fallback.name = role_name
+			_apply_runtime_policy_metadata(fallback, role_name, runtime_policy, path)
+			_prepare_spawned_asset(fallback,path,role_name,fallback_category)
+			return fallback
+	if fallback_category in ["characters", "enemies"]:
+		# A missing role visual is a release failure, not a reason to disguise the
+		# problem with a capsule and sphere. Gameplay callers can keep their
+		# collision actor alive while QA reports the missing rendered role.
+		_record_runtime_role_failure(role_name, fallback_category, path, runtime_policy, "missing_path")
+		push_error("Required runtime visual missing for role '%s' (path: '%s')" % [role_name, path])
+		return null
+	push_warning("Using primitive placeholder for asset role: %s" % role_name)
+	return _placeholder(role_name, fallback_category)
+
+func _apply_runtime_policy_metadata(root: Node3D, role_name: String, policy: Dictionary, selected_path: String = "") -> void:
+	if root == null:
+		return
+	var is_required_fallback := bool(policy.get("required", false)) and bool(policy.get("release_blocked", false))
+	root.set_meta("runtime_role", role_name)
+	root.set_meta("runtime_role_policy", policy.duplicate(true))
+	root.set_meta("runtime_release_blocked", bool(policy.get("release_blocked", false)))
+	root.set_meta("runtime_visual_approved", bool(policy.get("approved", false)))
+	root.set_meta("runtime_asset_path", selected_path)
+	root.set_meta("runtime_fallback_used", is_required_fallback)
+	root.set_meta("runtime_role_state", "diagnostic_fallback" if is_required_fallback else ("approved" if bool(policy.get("approved", false)) else "optional"))
+
+func _record_runtime_role_use(role_name: String, category: String, path: String, policy: Dictionary) -> void:
+	var key := "%s:%s" % [category, role_name.to_lower()]
+	var record: Dictionary = runtime_role_diagnostics.get(key, {})
+	record["role"] = role_name
+	record["category"] = category
+	record["path"] = path
+	record["status"] = str(policy.get("status", "blocked"))
+	record["approved"] = bool(policy.get("approved", false))
+	record["fallback_mode"] = str(policy.get("fallback_mode", "diagnostic_only"))
+	record["reason"] = str(policy.get("reason", ""))
+	record["spawn_count"] = int(record.get("spawn_count", 0)) + 1
+	runtime_role_diagnostics[key] = record
+	if not _reported_blocked_roles.has(key):
+		_reported_blocked_roles[key] = true
+		push_warning("Runtime visual role '%s' uses an explicit diagnostic fallback: %s" % [role_name, str(policy.get("reason", "unregistered role"))])
+
+func _record_runtime_role_failure(role_name: String, category: String, path: String, policy: Dictionary, failure: String) -> void:
+	var key := "%s:%s" % [category, role_name.to_lower()]
+	var record: Dictionary = runtime_role_diagnostics.get(key, {})
+	record["role"] = role_name
+	record["category"] = category
+	record["path"] = path
+	record["status"] = str(policy.get("status", "missing"))
+	record["approved"] = bool(policy.get("approved", false))
+	record["fallback_mode"] = str(policy.get("fallback_mode", "none"))
+	record["failure"] = failure
+	runtime_role_diagnostics[key] = record
+
+func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: String, variant_seed: String = "") -> Node3D:
+	var normalized_path := outfit_path.replace("\\", "/").to_lower()
+	var is_opening_assembly := normalized_path.contains("/characters_universal/runtime/") and normalized_path.ends_with("_atlas.gltf")
+	if is_opening_assembly:
+		outfit_root.set_meta("character_composite", true)
+		outfit_root.set_meta("character_rig_layer_count", 1)
+		outfit_root.set_meta("character_identity", "kael" if role_name in ["player_human", "player_kael"] else ("anwen" if role_name in ["sister_anwen_human", "sister_anwen"] else role_name.to_lower()))
+		outfit_root.set_meta("character_base_path", outfit_path)
+		outfit_root.set_meta("character_outfit_path", outfit_path)
+		var baked_hair := "Hair_SimpleParted.gltf"
+		if normalized_path.contains("anwen") or normalized_path.contains("villager_female"):
+			baked_hair = "Hair_Buns.gltf"
+		elif normalized_path.contains("villager_worker") or normalized_path.contains("villager_hooded"):
+			baked_hair = "Hair_Buzzed.gltf"
+		outfit_root.set_meta("character_hair_path", "baked:%s" % baked_hair)
+		outfit_root.set_meta("character_asset_family", "quaternius_animated_humanoid")
+		outfit_root.set_meta("character_animation_family", "universal_animation_library_2")
+		outfit_root.set_meta("character_prebaked_identity", true)
+		return outfit_root
+	var is_ranger_runtime := normalized_path.contains("assets_external/characters_ranger/") and normalized_path.ends_with("male_ranger_runtime.gltf")
+	if is_ranger_runtime:
+		# The optimized Ranger outfit owns the body, clothing, and 65-bone rig, but
+		# its hood source leaves an open collar around the neck and does not carry a
+		# fitted face. Reuse the same-family Universal head/hair layers on the
+		# compatible skeleton, then hide only that incompatible hood shell. This
+		# keeps Senn recognizably Ranger while removing the visible neck ring without
+		# adding root-mounted proxy anatomy.
+		var ranger_hood := outfit_root.find_child("Male_Ranger_Head_Hood", true, false) as MeshInstance3D
+		if ranger_hood != null:
+			ranger_hood.visible = false
+		var ranger_head := _instantiate_resource(_load_cached_resource("res://assets_external/characters_universal/Male_Head.gltf"))
+		var ranger_hair := _instantiate_resource(_load_cached_resource("res://assets_external/characters_universal/Hair_SimpleParted.gltf"))
+		var merged_ranger_face := _merge_shared_rig_layers(outfit_root, [ranger_head, ranger_hair])
+		if not merged_ranger_face:
+			if ranger_hood != null:
+				ranger_hood.visible = true
+			if ranger_head != null:
+				ranger_head.free()
+			if ranger_hair != null:
+				ranger_hair.free()
+		else:
+			outfit_root.set_meta("character_ranger_face_source", "universal_male_head_simple_parted")
+		outfit_root.set_meta("character_composite", true)
+		outfit_root.set_meta("character_rig_layer_count", 1)
+		outfit_root.set_meta("character_identity", role_name.to_lower())
+		outfit_root.set_meta("character_base_path", outfit_path)
+		outfit_root.set_meta("character_outfit_path", outfit_path)
+		outfit_root.set_meta("character_asset_family", "quaternius_ranger")
+		outfit_root.set_meta("character_animation_family", "universal_animation_library_2")
+		return outfit_root
+	var is_fullbody_male := normalized_path.ends_with("superhero_male_fullbody.gltf")
+	var is_fullbody_female := normalized_path.ends_with("superhero_female_fullbody.gltf")
+	if is_fullbody_male or is_fullbody_female:
+		# These sources already contain one connected head, body, hair and
+		# skeleton. Wrap the imported scene only to keep the existing character
+		# composition contract stable; do not add a second head or costume layer.
+		var composite := Node3D.new()
+		composite.name = "%sCompleteHumanoid" % ("Male" if is_fullbody_male else "Female")
+		composite.add_child(outfit_root)
+		composite.set_meta("character_composite", true)
+		composite.set_meta("character_rig_layer_count", 1)
+		composite.set_meta("character_identity", "unified_male" if is_fullbody_male else "unified_female")
+		composite.set_meta("character_base_path", outfit_path)
+		composite.set_meta("character_outfit_path", outfit_path)
+		return composite
+	var is_kael := role_name in ["player_human", "player_kael"] and normalized_path.ends_with("male_peasant.gltf")
+	var is_anwen := role_name in ["sister_anwen_human", "sister_anwen"] and normalized_path.ends_with("female_peasant.gltf")
+	# Match the complete filename. `female_peasant.gltf` also ends with the
+	# substring `male_peasant.gltf`, which previously gave Anwen and female
+	# villagers the male head assembly.
+	var is_shared_male := normalized_path.ends_with("/male_peasant.gltf")
+	var is_shared_female := normalized_path.ends_with("/female_peasant.gltf")
+	if not is_kael and not is_anwen and not is_shared_male and not is_shared_female:
+		return outfit_root
+	# The A-set Universal peasant scenes are already complete humanoids. They
+	# contain the body, native head, eyes, brows and hair on the imported rig.
+	# Composing Male_Head/Female_Head and another hair scene here creates the
+	# visible neck hump and doubled silhouette that used to appear on Kael and
+	# Anwen. Keep the source as one authored layer and only apply identity
+	# materials/facing during the normal preparation pass.
+	if _has_native_humanoid_parts(outfit_root):
+		outfit_root.set_meta("character_composite", true)
+		outfit_root.set_meta("character_rig_layer_count", 1)
+		outfit_root.set_meta("character_identity", "kael" if is_kael else ("anwen" if is_anwen else role_name.to_lower()))
+		outfit_root.set_meta("character_base_path", outfit_path)
+		outfit_root.set_meta("character_outfit_path", outfit_path)
+		outfit_root.set_meta("character_hair_path", "")
+		outfit_root.set_meta("character_asset_family", "quaternius_animated_humanoid")
+		outfit_root.set_meta("character_animation_family", "universal_animation_library_2")
+		return outfit_root
+	var base_path := "res://assets_external/characters_universal/Male_Head.gltf" if (is_kael or is_shared_male) else "res://assets_external/characters_universal/Female_Head.gltf"
+	var base := _instantiate_resource(_load_cached_resource(base_path))
+	if base == null:
+		return outfit_root
+	var hair_path := _hair_path_for_role(role_name, is_shared_male, variant_seed)
+	var hair := _instantiate_resource(_load_cached_resource(hair_path))
+	var composite := Node3D.new()
+	var label := "Kael" if is_kael else ("Anwen" if is_anwen else role_name.capitalize())
+	composite.name = "%sSharedHumanoidComposite" % label
+	base.name = "%sNativeHead" % label
+	outfit_root.name = "%sPeasantOutfit" % label
+	composite.add_child(base)
+	composite.add_child(outfit_root)
+	if hair != null:
+		hair.name = "%sNativeHair" % label
+		composite.add_child(hair)
+	var merged_layers := _merge_shared_rig_layers(outfit_root, [base, hair])
+	composite.set_meta("character_composite", true)
+	composite.set_meta("character_rig_layer_count", 1 if merged_layers else 3)
+	composite.set_meta("character_identity", "kael" if is_kael else role_name.to_lower())
+	composite.set_meta("character_base_path", base_path)
+	composite.set_meta("character_outfit_path", outfit_path)
+	composite.set_meta("character_hair_path", hair_path)
+	# Universal body/head/hair layers are merged onto one shared skeleton. Keep
+	# the family marker on the composite root so all runtime and QA contracts
+	# inspect the same authored source instead of mistaking it for a legacy
+	# direct-body mapping.
+	composite.set_meta("character_asset_family", "quaternius_animated_humanoid")
+	composite.set_meta("character_animation_family", "universal_animation_library_2")
+	return composite
+
+func _has_native_humanoid_parts(root: Node) -> bool:
+	var has_body := false
+	var has_face := false
+	var has_hair := false
+	for raw_mesh in root.find_children("*", "MeshInstance3D", true, false):
+		var mesh := raw_mesh as MeshInstance3D
+		if mesh == null:
+			continue
+		var token := mesh.name.to_lower()
+		if token.contains("body") or token.contains("arms") or token.contains("legs") or token.contains("feet"):
+			has_body = true
+		if token.contains("head") or token.contains("eyes") or token.contains("eyebrow") or token.contains("face"):
+			has_face = true
+		if token.contains("hair"):
+			has_hair = true
+	return has_body and has_face and has_hair
+
+func _merge_shared_rig_layers(outfit_root: Node3D, layers: Array) -> bool:
+	var shared_skeleton := _find_skeleton(outfit_root)
+	if shared_skeleton == null:
+		return false
+	for layer in layers:
+		if layer == null:
+			continue
+		var layer_skeleton := _find_skeleton(layer)
+		if layer_skeleton == null or not _skeletons_match(shared_skeleton, layer_skeleton):
+			return false
+	for layer in layers:
+		if layer == null:
+			continue
+		var layer_node := layer as Node
+		var meshes: Array[Node] = layer_node.find_children("*", "MeshInstance3D", true, false)
+		for raw_mesh in meshes:
+			var mesh := raw_mesh as MeshInstance3D
+			var mesh_pose := _composed_local_transform(mesh)
+			var skeleton_pose := _composed_local_transform(shared_skeleton)
+			mesh.owner = null
+			# Imported head and hair scenes carry meaningful layer transforms. Keep
+			# their composed pose while moving the skin onto the shared skeleton.
+			# These layers are composed before entering the scene tree, so using
+			# Node.reparent(..., true) would query an unavailable global transform
+			# and emit renderer errors. Convert the pose explicitly instead.
+			mesh.reparent(shared_skeleton, false)
+			mesh.transform = skeleton_pose.affine_inverse() * mesh_pose
+			mesh.skeleton = NodePath("..")
+		layer_node.free()
+	return true
+
+func _composed_local_transform(node: Node3D) -> Transform3D:
+	var result := node.transform
+	var parent := node.get_parent()
+	while parent is Node3D:
+		result = (parent as Node3D).transform * result
+		parent = parent.get_parent()
+	return result
+
+func _find_skeleton(node: Node) -> Skeleton3D:
+	if node is Skeleton3D:
+		return node as Skeleton3D
+	for child in node.get_children():
+		var found := _find_skeleton(child)
+		if found != null:
+			return found
+	return null
+
+func _skeletons_match(first: Skeleton3D, second: Skeleton3D) -> bool:
+	if first.get_bone_count() != second.get_bone_count():
+		return false
+	for index in range(first.get_bone_count()):
+		if first.get_bone_name(index) != second.get_bone_name(index):
+			return false
+	return true
+
+func _hair_path_for_role(role_name: String, male: bool, variant_seed: String = "") -> String:
+	var role := role_name.to_lower()
+	if role in ["sister_anwen_human", "sister_anwen"] or not male:
+		return "res://assets_external/characters_universal/Hair_Buns.gltf"
+	if role.contains("hooded") or role.contains("ranger") or role.contains("patrol") or role.contains("guard"):
+		return "res://assets_external/characters_universal/Hair_Buzzed.gltf"
+	# Crowd recipes must affect the authored mesh, not only its material wash.
+	# Keep named heroes fixed while allowing stable actor seeds to alternate the
+	# two compatible male hair sources without changing the shared skeleton.
+	if not variant_seed.is_empty() and _stable_seed(variant_seed) % 2 == 1:
+		return "res://assets_external/characters_universal/Hair_Buzzed.gltf"
+	return "res://assets_external/characters_universal/Hair_SimpleParted.gltf"
+
+func _stable_seed(value: String) -> int:
+	var result := 17
+	for index in range(value.length()):
+		result = absi((result * 31 + value.unicode_at(index)) % 2147483647)
+	return result
+
+func spawn_character(role_name: String) -> Node3D:
+	return spawn_for_role(role_name, "characters")
+
+func spawn_enemy(role_name: String) -> Node3D:
+	return spawn_for_role(role_name, "enemies")
+
+func spawn_prop(role_name: String) -> Node3D:
+	return spawn_for_role(role_name, "props")
+
+func spawn_environment(role_name: String) -> Node3D:
+	return spawn_for_role(role_name, "environment")
+
+func _ensure_database() -> void:
+	if database == null:
+		database = AssetDatabase.new()
+		add_child(database)
+		if database.has_method("reload"):
+			database.reload()
+
+func _instantiate_resource(resource) -> Node3D:
+	if resource == null:
+		return null
+	if resource is PackedScene:
+		var node = resource.instantiate()
+		if node is Node3D:
+			return node
+		var wrapper = Node3D.new()
+		wrapper.add_child(node)
+		return wrapper
+	if resource is Mesh:
+		var mesh_instance = MeshInstance3D.new()
+		mesh_instance.mesh = resource
+		return mesh_instance
+	return null
+
+func load_runtime_resource(path: String):
+	return _load_cached_resource(path)
+
+func instantiate_runtime_resource(resource) -> Node3D:
+	return _instantiate_resource(resource)
+
+func _instantiate_source_file(path: String) -> Node3D:
+	var ext: String = path.get_extension().to_lower()
+	if ext == "obj":
+		return _instantiate_obj(path)
+	if ext == "glb" or ext == "gltf" or ext == "fbx" or ext == "dae":
+		return _instantiate_resource(_load_cached_resource(path))
+	return null
+
+func _load_cached_resource(path: String):
+	if resource_cache.has(path):
+		return resource_cache[path]
+	if not ResourceLoader.exists(path):
+		return null
+	var resource: Resource
+	if pending_role_resources.has(path):
+		resource = ResourceLoader.load_threaded_get(path)
+		pending_role_resources.erase(path)
+	else:
+		resource = ResourceLoader.load(path)
+	if resource != null:
+		resource_cache[path] = resource
+	return resource
+
+func prewarm_roles(role_names: Array) -> Dictionary:
+	# Load selected runtime resources into the shared cache without spawning nodes.
+	_ensure_database()
+	var loaded: Array[String] = []
+	var missing: Array[String] = []
+	for raw_role in role_names:
+		var role := str(raw_role)
+		if role == "":
+			continue
+		var entry: Dictionary = database.get_asset_for_role(role)
+		var path := str(entry.get("path", ""))
+		if path == "" or not (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
+			missing.append(role)
+			continue
+		# Castle's selected environment kit is intentionally kept as compact OBJ
+		# sources. ResourceLoader cannot cache those files, so prewarming only the
+		# ResourceLoader path leaves the expensive text parse for the first gate
+		# transition. Populate the same mesh/material caches used by spawning.
+		var warmed := false
+		if path.get_extension().to_lower() == "obj":
+			warmed = _load_obj_mesh(path) != null and _obj_material(path) != null
+		else:
+			warmed = _load_cached_resource(path) != null
+		if warmed:
+			loaded.append(role)
+		else:
+			missing.append(role)
+	return {"loaded": loaded, "missing": missing}
+
+func _instantiate_obj(path: String) -> Node3D:
+	if _is_forest_tree(path):
+		var tree_mesh := _load_forest_tree_mesh(path)
+		if tree_mesh == null:
+			return null
+		var tree_instance := MeshInstance3D.new()
+		tree_instance.mesh = tree_mesh
+		return tree_instance
+	var mesh: ArrayMesh = _load_obj_mesh(path)
+	if mesh == null:
+		return null
+	var mesh_instance = MeshInstance3D.new()
+	mesh_instance.mesh = mesh
+	mesh_instance.material_override = _obj_material(path)
+	return mesh_instance
+
+func get_forest_tree_mesh(path: String) -> ArrayMesh:
+	if not _is_forest_tree(path):
+		push_error("Unapproved forest tree mesh: " + path)
+		return null
+	return _load_forest_tree_mesh(path)
+
+func _load_forest_tree_mesh(path: String) -> ArrayMesh:
+	var key := path + ":runtime_tree"
+	if mesh_cache.has(key):
+		return mesh_cache[key]
+	var imported := _load_cached_resource(path) as ArrayMesh
+	if imported == null or imported.get_surface_count() < 2:
+		return null
+	var mesh := imported.duplicate(false) as ArrayMesh
+	for index in mesh.get_surface_count():
+		mesh.surface_set_material(index, _forest_tree_material(mesh.surface_get_name(index)))
+	mesh_cache[key] = mesh
+	return mesh
+
+func _load_obj_mesh(path: String) -> ArrayMesh:
+	if mesh_cache.has(path):
+		return mesh_cache[path]
+	var imported := _load_cached_resource(path) as ArrayMesh
+	if imported != null:
+		var bounds := imported.get_aabb()
+		var longest := maxf(bounds.size.x, maxf(bounds.size.y, bounds.size.z))
+		var scale_factor := clampf(_target_height_for_path(path) / maxf(bounds.size.y, maxf(longest * 0.25, 0.01)), 0.01, 8.0)
+		var center := Vector3(bounds.get_center().x, bounds.position.y, bounds.get_center().z)
+		var transform := Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * scale_factor), -center * scale_factor)
+		var surface := SurfaceTool.new()
+		for index in imported.get_surface_count():
+			surface.append_from(imported, index, transform)
+		var result := surface.commit()
+		mesh_cache[path] = result
+		return result
+	return _load_obj_mesh_text(path)
+
+func _is_forest_tree(path: String) -> bool:
+	return path.ends_with("/TwistedTree_2.obj") or path.ends_with("/TwistedTree_4.obj") or path.ends_with("/CommonTree_5.obj")
+
+func _forest_tree_material(surface_name: String) -> StandardMaterial3D:
+	var bark := surface_name.begins_with("Bark_")
+	var key := "forest_tree_bark" if bark else "forest_tree_leaves"
+	if material_cache.has(key):
+		return material_cache[key]
+	var material := StandardMaterial3D.new()
+	material.albedo_color = Color(0.27, 0.20, 0.15) if bark else Color(0.12, 0.24, 0.13)
+	material.roughness = 0.88
+	material_cache[key] = material
+	return material
+
+func _load_obj_mesh_text(path: String) -> ArrayMesh:
+	var file = FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return null
+	var source_vertices: Array[Vector3] = []
+	var source_uvs: Array[Vector2] = []
+	var source_normals: Array[Vector3] = []
+	var face_tokens: Array = []
+	var min_bounds = Vector3(999999.0, 999999.0, 999999.0)
+	var max_bounds = Vector3(-999999.0, -999999.0, -999999.0)
+	while not file.eof_reached():
+		var line: String = file.get_line().strip_edges()
+		if line.begins_with("v "):
+			var parts: PackedStringArray = line.split(" ", false)
+			if parts.size() >= 4:
+				var vertex = Vector3(float(parts[1]), float(parts[2]), float(parts[3]))
+				source_vertices.append(vertex)
+				min_bounds = Vector3(min(min_bounds.x, vertex.x), min(min_bounds.y, vertex.y), min(min_bounds.z, vertex.z))
+				max_bounds = Vector3(max(max_bounds.x, vertex.x), max(max_bounds.y, vertex.y), max(max_bounds.z, vertex.z))
+		elif line.begins_with("vt "):
+			var uv_parts: PackedStringArray = line.split(" ", false)
+			if uv_parts.size() >= 3:
+				source_uvs.append(Vector2(float(uv_parts[1]), 1.0 - float(uv_parts[2])))
+		elif line.begins_with("vn "):
+			var normal_parts: PackedStringArray = line.split(" ", false)
+			if normal_parts.size() >= 4:
+				source_normals.append(Vector3(float(normal_parts[1]), float(normal_parts[2]), float(normal_parts[3])).normalized())
+		elif line.begins_with("f "):
+			var parts_face: PackedStringArray = line.split(" ", false)
+			var parsed_face: Array = []
+			for i: int in range(1, parts_face.size()):
+				var token: Dictionary = _parse_face_token(str(parts_face[i]), source_vertices.size(), source_uvs.size(), source_normals.size())
+				if int(token.get("v", -1)) >= 0:
+					parsed_face.append(token)
+			if parsed_face.size() >= 3:
+				face_tokens.append(parsed_face)
+	if source_vertices.is_empty() or face_tokens.is_empty():
+		return null
+
+	var vertices = PackedVector3Array()
+	var normals = PackedVector3Array()
+	var uvs = PackedVector2Array()
+	var indices = PackedInt32Array()
+	var center = Vector3((min_bounds.x + max_bounds.x) * 0.5, min_bounds.y, (min_bounds.z + max_bounds.z) * 0.5)
+	var raw_size: Vector3 = max_bounds - min_bounds
+	var longest: float = max(max(raw_size.x, raw_size.y), raw_size.z)
+	var target_height: float = _target_height_for_path(path)
+	var scale_factor: float = target_height / max(raw_size.y, longest * 0.25, 0.01)
+	scale_factor = clamp(scale_factor, 0.01, 8.0)
+	for face in face_tokens:
+		for i: int in range(1, face.size() - 1):
+			var triangle: Array = [face[0], face[i], face[i + 1]]
+			var first_index: int = vertices.size()
+			for token_dict in triangle:
+				var vi: int = int(token_dict.get("v", -1))
+				var ti: int = int(token_dict.get("t", -1))
+				var ni: int = int(token_dict.get("n", -1))
+				var transformed: Vector3 = (source_vertices[vi] - center) * scale_factor
+				vertices.append(transformed)
+				if ti >= 0 and ti < source_uvs.size():
+					uvs.append(source_uvs[ti])
+				else:
+					uvs.append(Vector2.ZERO)
+				if ni >= 0 and ni < source_normals.size():
+					normals.append(source_normals[ni])
+				else:
+					normals.append(Vector3.ZERO)
+				indices.append(vertices.size() - 1)
+			if normals[first_index] == Vector3.ZERO:
+				var a: Vector3 = vertices[first_index]
+				var b: Vector3 = vertices[first_index + 1]
+				var c: Vector3 = vertices[first_index + 2]
+				var normal: Vector3 = (b - a).cross(c - a).normalized()
+				normals[first_index] = normal
+				normals[first_index + 1] = normal
+				normals[first_index + 2] = normal
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	arrays[Mesh.ARRAY_NORMAL] = normals
+	arrays[Mesh.ARRAY_TEX_UV] = uvs
+	arrays[Mesh.ARRAY_INDEX] = indices
+	var mesh = ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	mesh_cache[path] = mesh
+	return mesh
+
+func _parse_face_token(raw_token: String, vertex_count: int, uv_count: int, normal_count: int) -> Dictionary:
+	var values: PackedStringArray = raw_token.split("/")
+	var vertex_index: int = _resolve_obj_index(str(values[0]) if values.size() > 0 else "", vertex_count)
+	var uv_index: int = _resolve_obj_index(str(values[1]) if values.size() > 1 else "", uv_count)
+	var normal_index: int = _resolve_obj_index(str(values[2]) if values.size() > 2 else "", normal_count)
+	return {"v": vertex_index, "t": uv_index, "n": normal_index}
+
+func _resolve_obj_index(raw_value: String, count: int) -> int:
+	if raw_value == "":
+		return -1
+	var parsed: int = int(raw_value)
+	if parsed < 0:
+		return count + parsed
+	return parsed - 1
+
+func _target_height_for_path(path: String) -> float:
+	var lowered: String = path.to_lower()
+	if "characters" in lowered:
+		return 1.78
+	if "orcskull" in lowered or "skeleton" in lowered:
+		return 1.72
+	if "dragon" in lowered:
+		return 3.80
+	if "slime" in lowered:
+		return 0.92
+	if "wolf" in lowered:
+		return 1.08
+	if "tree" in lowered:
+		return 4.2
+	if "cart" in lowered:
+		return 1.35
+	if "barrel" in lowered:
+		return 1.05
+	if "crate" in lowered:
+		return 0.82
+	if "anvil" in lowered:
+		return 0.75
+	if "rock" in lowered:
+		return 0.9
+	if "wall" in lowered or "roof" in lowered:
+		return 2.0
+	return 1.2
+
+func _target_height_for_role(role_name: String, path: String) -> float:
+	var role := role_name.to_lower()
+	if role != "":
+		var known_height := CharacterRoleSpec.target_height(role, -1.0)
+		if known_height > 0.0:
+			return known_height
+	# Large authored focal creatures are normalized to a human-scale source
+	# first, then receive their encounter-specific multiplier in the zone
+	# builder. This keeps the Wolf source grounded while giving the Hart the
+	# intended supernatural height.
+	if role == "white_hart_avatar":
+		return 1.72
+	if role == "ashwing_creature":
+		return 3.80
+	if role.contains("ghoul_stalker"):
+		return 1.66
+	if role.contains("ghoul_brute"):
+		return 1.90
+	if role.contains("ghoul_gaunt") or role.contains("ghoulkin_creature"):
+		return 1.72
+	if role in ["player_human", "player_kael"]:
+		return 1.78
+	if role in ["sister_anwen_human", "sister_anwen"]:
+		return 1.68
+	if role.contains("villager_female") or role in ["mira_human", "mira_herbalist"]:
+		return 1.66
+	if role.contains("villager_hooded"):
+		return 1.69
+	if role.contains("villager_worker"):
+		return 1.74
+	if role.contains("villager"):
+		return 1.72
+	if role.contains("castle_guard"):
+		return 1.82
+	if role.contains("road_ranger") or role.contains("rook"):
+		return 1.75
+	return _target_height_for_path(path)
+
+func _obj_material(path: String) -> StandardMaterial3D:
+	if material_cache.has(path):
+		return material_cache[path]
+	var material = StandardMaterial3D.new()
+	var texture_path: String = _find_texture_for_obj(path)
+	if texture_path != "":
+		var texture: Texture2D = _load_external_texture(texture_path)
+		if texture != null:
+			material.albedo_texture = texture
+			material.albedo_color = Color.WHITE
+	else:
+		material.albedo_color = _category_color(path)
+	material.roughness = 0.82
+	material_cache[path] = material
+	return material
+
+func _load_external_texture(texture_path: String) -> Texture2D:
+	if ResourceLoader.exists(texture_path):
+		var resource = ResourceLoader.load(texture_path)
+		if resource is Texture2D:
+			return resource
+	var image = Image.new()
+	var absolute_path: String = ProjectSettings.globalize_path(texture_path)
+	var error: Error = image.load(absolute_path)
+	if error != OK:
+		return null
+	return ImageTexture.create_from_image(image)
+
+func _find_texture_for_obj(path: String) -> String:
+	var directory: String = path.get_base_dir()
+	var base_name: String = path.get_file().get_basename()
+	var direct_candidates: Array[String] = [
+		"%s/%s_Texture.png" % [directory, base_name],
+		"%s/%s.png" % [directory, base_name],
+		"%s/%s_Diffuse.png" % [directory, base_name],
+		"%s/%s_Albedo.png" % [directory, base_name]
+	]
+	for candidate: String in direct_candidates:
+		if ResourceLoader.exists(candidate) or FileAccess.file_exists(candidate):
+			return candidate
+	var files: PackedStringArray = DirAccess.get_files_at(directory)
+	var lowered_base: String = base_name.to_lower()
+	for file_name: String in files:
+		var lowered: String = file_name.to_lower()
+		if not (lowered.ends_with(".png") or lowered.ends_with(".jpg") or lowered.ends_with(".jpeg")):
+			continue
+		if lowered.begins_with(lowered_base) and not lowered.contains("normal"):
+			return "%s/%s" % [directory, file_name]
+	return ""
+
+func _category_color(path: String) -> Color:
+	var lowered: String = path.to_lower()
+	if "characters" in lowered:
+		return Color(0.62, 0.56, 0.48)
+	if "enemies" in lowered:
+		return Color(0.42, 0.36, 0.30)
+	if "forest" in lowered:
+		return Color(0.22, 0.36, 0.20)
+	if "village" in lowered:
+		return Color(0.43, 0.33, 0.24)
+	if "props" in lowered:
+		return Color(0.38, 0.29, 0.20)
+	return Color(0.50, 0.48, 0.43)
+
+func _finalize_asset_root(root: Node3D, role_name: String = "") -> void:
+	if role_name != "":
+		root.rotation_degrees.y = CharacterRoleSpec.visual_forward_degrees(role_name)
+	else:
+		root.rotation_degrees.y = 180.0 if root.name.to_lower().contains("character") else root.rotation_degrees.y
+	var hero_role := role_name in ["player_human", "player_kael", "sister_anwen_human", "sister_anwen"]
+	var focal_creature := role_name in ["white_hart_avatar", "white_hart_boss", "ashwing_creature", "ashwing_boss", "bell_eater_boss", "rootbound_colossus", "rootbound_colossus_boss"]
+	var lod_distance := 48.0 if focal_creature else CharacterRoleSpec.lod_distance(role_name, 14.0)
+	var lod_bias := 0.50 if hero_role else 0.40
+	for mesh_instance in _collect_meshes(root):
+		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		mesh_instance.lod_bias = lod_bias
+		mesh_instance.visibility_range_end = lod_distance
+	root.set_meta("character_role_spec", CharacterRoleSpec.for_role(role_name))
+	root.set_meta("source_forward_positive_z", role_name in [
+		"player_human", "player_kael", "sister_anwen", "sister_anwen_human",
+		"mira_human", "rook_human", "villager_human", "villager_female_human",
+		"villager_worker_human", "villager_hooded_human", "castle_guard_human",
+		"road_ranger_human", "bandit_deserter", "bandit_tracker"
+	])
+
+func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", category: String = "") -> void:
+	if path.get_extension().to_lower() != "obj":
+		_normalize_scene_bounds(root, _target_height_for_role(role_name, path))
+	_apply_safe_materials(root, path)
+	_apply_universal_character_material_budget(root, path)
+	_finalize_asset_root(root, role_name)
+	if CharacterAnimationFusion.is_shared_body(path):
+		# Retain both the imported source and immutable retargeted variants with
+		# this helper; actor AnimationPlayers own independent playback state.
+		var library_source: Resource = _load_cached_resource(CharacterAnimationFusion.ANIMATION_LIBRARY_PATH)
+		var fused_player := CharacterAnimationFusion.attach_shared_library(root, library_source, prepared_animation_libraries)
+		root.set_meta("shared_animation_library", fused_player != null and fused_player.get_animation_list().size() > 0)
+	if "characters" in path.to_lower() and not _has_skeleton(root):
+		_apply_character_wrapper(root, root.name)
+	if category in ["characters","enemies"] and _has_skeleton(root):
+		var report := CharacterVisualContract.validate(root,true)
+		root.set_meta("character_visual_contract",report)
+		root.set_meta("character_visual_role",role_name)
+		root.set_meta("character_role_contract", CharacterRoleContract.inspect(root, role_name))
+		if not bool(report.valid):
+			push_error("Incomplete skeletal visual for %s: %s" % [role_name,str(report)])
+
+func _apply_universal_character_material_budget(root: Node3D, path: String) -> void:
+	if not path.to_lower().contains("/characters_universal/"):
+		return
+	if path.to_lower().contains("/runtime/") and path.to_lower().ends_with("_a_set_atlas.gltf"):
+		for mesh_instance in _collect_meshes(root):
+			mesh_instance.set_meta("universal_material_budget", "single_material_prebaked_atlas")
+		return
+	# The low-poly Universal meshes carry normal maps on every body/head surface.
+	# Preserve geometry, albedo, vertex colours, scalar response, skeletons and
+	# sockets while collapsing that redundant branch before the first frame.
+	for mesh_instance in _collect_meshes(root):
+		if mesh_instance.mesh == null or mesh_instance.mesh.get_surface_count() == 0:
+			continue
+		var local_mesh := mesh_instance.mesh.duplicate(false) as Mesh
+		if local_mesh == null:
+			continue
+		var changed := false
+		for surface_index in range(local_mesh.get_surface_count()):
+			var source := local_mesh.surface_get_material(surface_index)
+			if not (source is StandardMaterial3D):
+				continue
+			var material := (source as StandardMaterial3D).duplicate() as StandardMaterial3D
+			if material.normal_enabled or material.normal_texture != null:
+				material.normal_enabled = false
+				material.normal_texture = null
+				changed = true
+			local_mesh.surface_set_material(surface_index, material)
+		if changed:
+			mesh_instance.mesh = local_mesh
+			mesh_instance.set_meta("universal_material_budget", "normal_maps_collapsed")
+
+func _has_skeleton(root: Node) -> bool:
+	if root is Skeleton3D:
+		return true
+	for child in root.get_children():
+		if _has_skeleton(child):
+			return true
+	return false
+
+func _apply_safe_materials(root: Node3D, path: String) -> void:
+	var fallback: StandardMaterial3D = null
+	var authored_stag_palette := path.ends_with("/WhiteHart_Stag.glb")
+	for mesh_instance in _collect_meshes(root):
+		if mesh_instance.mesh == null:
+			continue
+		var mesh: Mesh = mesh_instance.mesh
+		if mesh.get_surface_count() == 0:
+			if fallback == null:
+				fallback = _fallback_material_for_path(path)
+			mesh_instance.material_override = fallback
+		else:
+			# Keep one material ownership path per instance. If an imported surface
+			# is empty or the default white material, make a local mesh copy and put
+			# the fallback on its base surface instead of adding a surface override
+			# beside material_override. That combination is unsafe during teardown.
+			var source_mesh: Mesh = mesh
+			var has_surface_overrides := false
+			var surface_overrides: Array[Material] = []
+			for surface_index in range(mesh.get_surface_count()):
+				var override_material := mesh_instance.get_surface_override_material(surface_index)
+				surface_overrides.append(override_material)
+				if override_material != null:
+					has_surface_overrides = true
+			var repairs: Dictionary = repaired_mesh_cache.get(source_mesh, {})
+			# Instance-specific imported materials must not leak into the shared
+			# source/path cache or disappear when override bindings are consolidated.
+			var local_mesh: Mesh = mesh.duplicate(false) as Mesh if has_surface_overrides else repairs.get(path)
+			if local_mesh != null:
+				mesh_instance.mesh = local_mesh
+				mesh = local_mesh
+			var authored_surfaces: Array = mesh.get_meta("authored_surface_overrides", []).duplicate()
+			for surface_index in range(mesh.get_surface_count()):
+				var authored_override := surface_overrides[surface_index]
+				if authored_override != null:
+					mesh.surface_set_material(surface_index, authored_override)
+					if surface_index not in authored_surfaces:
+						authored_surfaces.append(surface_index)
+				var surface_material: Material = mesh.surface_get_material(surface_index)
+				if surface_material == null or (surface_index not in authored_surfaces and not authored_stag_palette and _is_default_white_material(surface_material)):
+					if fallback == null:
+						fallback = _fallback_material_for_path(path)
+					if local_mesh == null:
+						# Only surface bindings change. Keep immutable authored materials
+						# and textures shared instead of duplicating their resource graph.
+						local_mesh = mesh.duplicate(false) as Mesh
+						if local_mesh != null:
+							mesh_instance.mesh = local_mesh
+							mesh = local_mesh
+					if local_mesh != null:
+						mesh.surface_set_material(surface_index, fallback)
+				# Clear any stale imported/generated surface binding. Valid base
+				# materials remain visible and do not need an instance override.
+				mesh_instance.set_surface_override_material(surface_index, null)
+			if has_surface_overrides:
+				mesh.set_meta("authored_surface_overrides", authored_surfaces)
+			if local_mesh != null and not has_surface_overrides:
+				repairs[path] = local_mesh
+				repaired_mesh_cache[source_mesh] = repairs
+			if mesh_instance.material_override != null and _is_default_white_material(mesh_instance.material_override):
+				mesh_instance.material_override = null
+		mesh_instance.set_meta("validated_material", true)
+
+func cache_stats() -> Dictionary:
+	return {
+		"meshes": mesh_cache.size(),
+		"materials": material_cache.size(),
+		"resources": resource_cache.size(),
+	}
+
+func is_role_warmed(role_name: String) -> bool:
+	_ensure_database()
+	if database == null:
+		return false
+	var entry: Dictionary = database.get_asset_for_role(role_name)
+	var path := str(entry.get("path", ""))
+	if path == "":
+		return false
+	if path.get_extension().to_lower() == "obj":
+		return mesh_cache.has(path) and material_cache.has(path)
+	return resource_cache.has(path)
+
+func _needs_fallback_material(mesh_instance: MeshInstance3D) -> bool:
+	if mesh_instance.material_override != null:
+		return _is_default_white_material(mesh_instance.material_override)
+	if mesh_instance.mesh == null or mesh_instance.mesh.get_surface_count() == 0:
+		return true
+	var saw_material = false
+	for surface_index in range(mesh_instance.mesh.get_surface_count()):
+		var material = mesh_instance.mesh.surface_get_material(surface_index)
+		if material == null:
+			continue
+		saw_material = true
+		if not _is_default_white_material(material):
+			return false
+	return true if not saw_material else true
+
+func _is_default_white_material(material: Material) -> bool:
+	if material is StandardMaterial3D:
+		var standard = material as StandardMaterial3D
+		if standard.albedo_texture != null:
+			return false
+		var color = standard.albedo_color
+		return color.r > 0.86 and color.g > 0.86 and color.b > 0.86
+	return false
+
+func _fallback_material_for_path(path: String) -> StandardMaterial3D:
+	var key = "fallback:%s" % path
+	if material_cache.has(key):
+		return material_cache[key]
+	var lowered = path.to_lower()
+	var color = Color(0.30, 0.28, 0.24)
+	var roughness = 0.88
+	var metallic = 0.0
+	var texture_path = _find_texture_for_obj(path)
+	if texture_path != "":
+		var textured = StandardMaterial3D.new()
+		var texture = _load_external_texture(texture_path)
+		if texture != null:
+			textured.albedo_texture = texture
+			textured.albedo_color = _tint_for_path(lowered)
+			textured.roughness = 0.84
+			material_cache[key] = textured
+			return textured
+	if "tree" in lowered or "bush" in lowered or "forest" in lowered:
+		color = Color(0.16, 0.28, 0.13) if ("tree" in lowered or "bush" in lowered) else Color(0.20, 0.24, 0.18)
+	elif "rock" in lowered or "stone" in lowered or "wall" in lowered or "arch" in lowered:
+		color = Color(0.30, 0.30, 0.27)
+	elif "roof" in lowered:
+		color = Color(0.18, 0.11, 0.065)
+	elif "wood" in lowered or "barrel" in lowered or "crate" in lowered or "cart" in lowered or "fence" in lowered:
+		color = Color(0.26, 0.16, 0.085)
+	elif "torch" in lowered:
+		color = Color(0.16, 0.12, 0.09)
+		metallic = 0.15
+	elif "anvil" in lowered or "metal" in lowered:
+		color = Color(0.30, 0.29, 0.27)
+		metallic = 0.35
+		roughness = 0.64
+	elif "skeleton" in lowered or "bone" in lowered:
+		color = Color(0.58, 0.52, 0.42)
+	elif "slime" in lowered or "wolf" in lowered or "enemies" in lowered:
+		color = Color(0.22, 0.17, 0.13)
+	elif "universal" in lowered:
+		color = Color(0.24, 0.22, 0.19)
+	elif "characters" in lowered:
+		color = Color(0.25, 0.24, 0.20)
+	var material = _mat_with_roughness(color, roughness)
+	material.metallic = metallic
+	material_cache[key] = material
+	return material
+
+func _tint_for_path(lowered_path: String) -> Color:
+	if "universal" in lowered_path:
+		return Color(0.88, 0.84, 0.76)
+	return Color(0.82, 0.80, 0.74)
+
+func _normalize_scene_bounds(root: Node3D, target_height: float) -> void:
+	if bool(root.get_meta("character_normalized", false)):
+		# A source may be composed from several shared-rig layers, but the
+		# resulting root is normalized exactly once after composition.
+		return
+	var bounds: AABB = _calculate_node_bounds(root)
+	if bounds.size == Vector3.ZERO:
+		return
+	var height: float = max(bounds.size.y, 0.01)
+	var longest: float = max(max(bounds.size.x, bounds.size.y), bounds.size.z)
+	var scale_basis := height
+	# Character bounds are measured from the complete skinned body. The
+	# longest-axis fallback is only for non-character imported props, where a
+	# malformed source origin can otherwise create a paper-thin result.
+	if not _has_skeleton(root):
+		scale_basis = max(height, longest * 0.25)
+	var scale_factor: float = target_height / max(scale_basis, 0.01)
+	scale_factor = clamp(scale_factor, 0.01, 8.0)
+	var center_xz = Vector3(bounds.position.x + bounds.size.x * 0.5, bounds.position.y, bounds.position.z + bounds.size.z * 0.5)
+	root.scale *= scale_factor
+	root.position -= center_xz * scale_factor
+	root.set_meta("character_normalized", true)
+	root.set_meta("normalized_target_height", target_height)
+	root.set_meta("normalized_scale", root.scale)
+	root.set_meta("normalized_position", root.position)
+	CharacterRoleContract.mark_normalized(root, bounds, target_height, scale_factor)
+
+func apply_normalized_scale(root: Node3D, multiplier: float) -> void:
+	if root == null:
+		return
+	if bool(root.get_meta("character_role_scale_applied", false)):
+		return
+	var base_scale: Vector3 = root.get_meta("normalized_scale", root.scale)
+	var role_scale := clampf(multiplier, 0.85, 1.50)
+	root.scale = base_scale * role_scale
+	root.set_meta("character_role_scale", role_scale)
+	root.set_meta("character_role_scale_applied", true)
+
+func _calculate_node_bounds(root: Node3D) -> AABB:
+	var state: Dictionary = {"has_bounds": false, "bounds": AABB()}
+	_accumulate_node_bounds(root, Transform3D.IDENTITY, state)
+	if bool(state.get("has_bounds", false)):
+		return state.get("bounds", AABB())
+	return AABB()
+
+func _accumulate_node_bounds(node: Node, parent_transform: Transform3D, state: Dictionary) -> void:
+	var current_transform: Transform3D = parent_transform
+	if node is Node3D:
+		current_transform = parent_transform * (node as Node3D).transform
+	if node is MeshInstance3D:
+		var mesh_instance: MeshInstance3D = node as MeshInstance3D
+		if mesh_instance.mesh != null:
+			var mesh_bounds: AABB = current_transform * mesh_instance.mesh.get_aabb()
+			if bool(state.get("has_bounds", false)):
+				state["bounds"] = (state["bounds"] as AABB).merge(mesh_bounds)
+			else:
+				state["bounds"] = mesh_bounds
+				state["has_bounds"] = true
+	for child in node.get_children():
+		_accumulate_node_bounds(child, current_transform, state)
+
+func _apply_character_wrapper(root: Node3D, role_name: String) -> void:
+	# Legacy OBJ wrappers created detached faces, shoulders, hair and weapons.
+	# They are intentionally disabled: incomplete roles must be replaced by a
+	# shared rig, never cosmetically disguised with root-mounted geometry.
+	root.set_meta("character_overlay_contract", "disabled")
+
+func _mat_with_roughness(color: Color, roughness: float) -> StandardMaterial3D:
+	var material = StandardMaterial3D.new()
+	material.albedo_color = color
+	material.roughness = roughness
+	return material
+
+func _collect_meshes(root: Node) -> Array[MeshInstance3D]:
+	var results: Array[MeshInstance3D] = []
+	if root is MeshInstance3D:
+		results.append(root)
+	for child in root.get_children():
+		results.append_array(_collect_meshes(child))
+	return results
+
+func _placeholder(role_name: String, category: String) -> Node3D:
+	var root = Node3D.new()
+	root.name = "%s_placeholder" % role_name
+	var mesh = MeshInstance3D.new()
+	mesh.mesh = _placeholder_mesh(category)
+	mesh.material_override = _placeholder_material(category)
+	root.add_child(mesh)
+	if category == "characters" or category == "enemies":
+		mesh.position.y = 0.9
+		var head = MeshInstance3D.new()
+		head.mesh = SphereMesh.new()
+		head.scale = Vector3(0.28, 0.28, 0.28)
+		head.position.y = 1.75
+		head.material_override = _placeholder_material(category)
+		root.add_child(head)
+	return root
+
+func _placeholder_mesh(category: String) -> Mesh:
+	if category == "characters" or category == "enemies":
+		var capsule = CapsuleMesh.new()
+		capsule.height = 1.5
+		capsule.radius = 0.34
+		return capsule
+	var box = BoxMesh.new()
+	box.size = Vector3(1, 1, 1)
+	return box
+
+func _placeholder_material(category: String) -> StandardMaterial3D:
+	var material = StandardMaterial3D.new()
+	var colors = {
+		"characters": Color(0.25, 0.30, 0.26),
+		"enemies": Color(0.38, 0.18, 0.15),
+		"environment": Color(0.23, 0.22, 0.20),
+		"props": Color(0.30, 0.22, 0.14)
+	}
+	material.albedo_color = colors.get(category, Color(0.35, 0.35, 0.35))
+	material.roughness = 0.9
+	return material

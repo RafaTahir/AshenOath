@@ -1,0 +1,99 @@
+# OS/editor junk
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.tmp
+*.temp
+*.swp
+*.bak
+*~
+.vscode/
+.idea/
+work/
+
+# Secrets and local env
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Godot local/import caches
+**/.godot/
+**/*.uid
+**/*.import
+**/export_presets.cfg.bak
+
+# Logs and diagnostics
+*.log
+web_export*.log
+*.trace
+__pycache__/
+*.pyc
+**/.release-gate/
+**/.verification-cache/
+
+# Local browser/native preview artifacts and one-off probes
+outputs/AshenOathTheRoadBetweenCrowns/gl_compatibility*
+outputs/AshenOathTheRoadBetweenCrowns/tools/_probe_*.gd
+outputs/AshenOathTheRoadBetweenCrowns/tools/_inspect_milestone_c_assets.gd
+
+# Raw downloads and archives
+**/downloads/
+**/raw_downloads/
+**/raw/
+**/assets_external/textures/pbr/
+**/cache/
+**/*.zip
+**/*.7z
+**/*.rar
+**/*.tar
+**/*.tar.gz
+**/*.tgz
+**/node_modules/
+
+# Development-only screenshots/galleries
+**/Development_Gallery/
+**/verification_screenshots/
+**/screenshots/
+**/*screenshot*.png
+**/*Screenshot*.png
+
+# Track QA-003's approval contract and workflow note, but never gallery captures.
+!outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/
+outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/*
+!outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/README.md
+!outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/qa_003_approval_manifest.json
+
+# Old/generated web exports outside the deploy folder
+outputs/AshenOath_Web/
+outputs/AshenOath_Web_Slim/
+
+# Keep the deployable static site tracked
+# World filtering depends on authored mip chains, so retain their import settings.
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/*_albedo.jpg.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/*_normal.jpg.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/textures/runtime/*_orm.jpg.import
+!web/
+!web/**
+# LR-001: pin shipped texture imports; future editor detection must not change them.
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Eye_Brown.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Eye_Normal.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Hair_1_BaseColor_1K.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Hair_1_Normal_1K.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Regular_Male_Dark_BaseColor_1K.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Regular_Male_Normal_1K.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Regular_Male_Roughness_1K.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Superhero_Male_Dark_1K.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Superhero_Male_Normal_1K.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_universal/T_Superhero_Male_Roughness_1K.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/BlueDemon_Atlas_Monsters.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Creep_Creep_BaseColor.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Creep_Creep_Metallic-Creep_Roughness.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Creep_Creep_Normal_OpenGL.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Demon_Atlas_Monsters.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Ghost_Atlas_Monsters.png.import
+!outputs/AshenOathTheRoadBetweenCrowns/assets_external/enemies/ultimate_monsters/Orc_Atlas_Monsters.png.import
+.vercel
+.env*

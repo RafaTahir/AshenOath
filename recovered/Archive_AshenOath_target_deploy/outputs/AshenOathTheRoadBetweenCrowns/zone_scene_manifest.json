@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "program": "SCENE-001",
+  "policy": "authored_layers_are_optional_until_collision_and_save_gates_pass",
+  "zones": {
+    "greyfen": {
+      "gameplay": "res://scenes/zones/greyfen_gameplay.tscn",
+      "decoration": "res://scenes/zones/greyfen_decoration.tscn",
+      "status": "authored_layer"
+    },
+    "wychwood": {
+      "gameplay": "res://scenes/zones/wychwood_gameplay.tscn",
+      "decoration": "res://scenes/zones/wychwood_decoration.tscn",
+      "status": "authored_layer"
+    },
+    "cemetery": {
+      "gameplay": "res://scenes/zones/cemetery_gameplay.tscn",
+      "decoration": "res://scenes/zones/cemetery_decoration.tscn",
+      "status": "authored_layer"
+    },
+    "deep_woods": {"gameplay": "", "decoration": "", "status": "procedural_fallback"},
+    "long_road": {"gameplay": "", "decoration": "", "status": "procedural_fallback"},
+    "castle_approach": {"gameplay": "", "decoration": "", "status": "procedural_fallback"},
+    "courtyard": {"gameplay": "", "decoration": "", "status": "procedural_fallback"},
+    "record_hall": {"gameplay": "", "decoration": "", "status": "procedural_fallback"},
+    "undercroft": {"gameplay": "", "decoration": "", "status": "procedural_fallback"},
+    "assembly": {"gameplay": "", "decoration": "", "status": "procedural_fallback"},
+    "hart_glade": {"gameplay": "", "decoration": "", "status": "procedural_fallback"}
+  }
+}

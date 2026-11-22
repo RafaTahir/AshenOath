@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "ticket": "AI-002",
+  "profiles": {
+    "skirmisher": {"spacing": "orbit", "memory": 2.2},
+    "flanker": {"spacing": "wide flank", "memory": 2.8},
+    "feinter": {"spacing": "lateral feint", "memory": 2.4},
+    "brute": {"spacing": "direct heavy", "memory": 1.8},
+    "lurker": {"spacing": "slow reveal", "memory": 3.0},
+    "sentinel": {"spacing": "hold and pursue", "memory": 4.0},
+    "duelist": {"spacing": "measured lateral", "memory": 3.5},
+    "boss": {"spacing": "arena focus", "memory": 6.0}
+  },
+  "perception": {"refresh_seconds": 0.18, "requires_line_of_sight": true, "uses_last_known_position": true}
+}

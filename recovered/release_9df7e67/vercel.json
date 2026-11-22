@@ -1,0 +1,57 @@
+{
+  "outputDirectory": "web",
+  "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/index.wasm",
+      "headers": [
+        { "key": "Content-Type", "value": "application/wasm" },
+        { "key": "Content-Encoding", "value": "gzip" }
+      ]
+    },
+    {
+      "source": "/index.pck",
+      "headers": [
+        { "key": "Content-Encoding", "value": "gzip" }
+      ]
+    },
+    {
+      "source": "/(index.html|index.pck|index.js|index.wasm|index.audio.worklet.js|index.audio.position.worklet.js)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/index.png",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600"
+        }
+      ]
+    },
+    {
+      "source": "/packs/(.*)",
+      "headers": [
+        { "key": "Content-Encoding", "value": "gzip" },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/favicon.ico",
+      "destination": "/index.png"
+    },
+    {
+      "source": "/",
+      "destination": "/index.html"
+    }
+  ]
+}

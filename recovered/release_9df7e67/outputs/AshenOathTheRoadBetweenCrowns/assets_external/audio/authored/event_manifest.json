@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "build_tool": "tools/build_authored_event_audio.ps1",
+  "source_archives": {
+    "tinysized.zip": "7f00e2b1dae15e68db0e1d6096767f03755e9e7c247128afc3e935e63774d7db",
+    "monster_sfx_pack.zip": "f39c5ae356b1fc01284057ee48e35ec1a52fcc84bfa959b77d0a696adc8459e4"
+  },
+  "entries": [
+    {
+      "id": "ghoul_breath",
+      "events": [
+        "ghoulkin_idle",
+        "enemy_windup"
+      ],
+      "path": "res://assets_external/audio/authored/ghoul_breath.ogg",
+      "bytes": 8101,
+      "sha256": "0422824dd050855b168c10d71eeaa4de77a969a5f508b10e5a2ac52fc0876a59",
+      "source": "monster_sfx\\monster_sfx_pack\\monster-1.wav",
+      "source_sha256": "eadff00fc48c13eede6255f97ca7bd47e8c44a4bef33edc5ced92f4ca3521575",
+      "author": "Ogrebane",
+      "source_url": "https://opengameart.org/content/monster-sound-effects-pack",
+      "license": "CC0-1.0",
+      "seconds": 0.65,
+      "gain_db": -6,
+      "sample_rate": 48000,
+      "channels": 1,
+      "pack_owner": "audio",
+      "status": "native_recording_candidate_not_listening_approved"
+    },
+    {
+      "id": "ghoul_attack",
+      "events": [
+        "ghoulkin_lunge"
+      ],
+      "path": "res://assets_external/audio/authored/ghoul_attack.ogg",
+      "bytes": 6273,
+      "sha256": "42d88e2249510339872a8f3c804e0a35cb23040d571370124fef9bbdf5e33d54",
+      "source": "monster_sfx\\monster_sfx_pack\\monster-2.wav",
+      "source_sha256": "1c511470f5a01ec81e9f8a9889a9b13ecb27a0dbc14fadcffb022b346971afa8",
+      "author": "Ogrebane",
+      "source_url": "https://opengameart.org/content/monster-sound-effects-pack",
+      "license": "CC0-1.0",
+      "seconds": 0.38,
+      "gain_db": -6,
+      "sample_rate": 48000,
+      "channels": 1,
+      "pack_owner": "audio",
+      "status": "native_recording_candidate_not_listening_approved"
+    },
+    {
+      "id": "ghoul_hit",
+      "events": [
+        "stagger"
+      ],
+      "path": "res://assets_external/audio/authored/ghoul_hit.ogg",
+      "bytes": 5954,
+      "sha256": "2b82fc24e6c85adf282cdb930239eb8e4799df029bac10f144bcb56d67098145",
+      "source": "monster_sfx\\monster_sfx_pack\\monster-3.wav",
+      "source_sha256": "22d83560604f25fea0b03b4710ed86c5afc739bdbb24b5e96b614803b02c07fd",
+      "author": "Ogrebane",
+      "source_url": "https://opengameart.org/content/monster-sound-effects-pack",
+      "license": "CC0-1.0",
+      "seconds": 0.35,
+      "gain_db": -6,
+      "sample_rate": 48000,
+      "channels": 1,
+      "pack_owner": "audio",
+      "status": "native_recording_candidate_not_listening_approved"
+    },
+    {
+      "id": "ghoul_death",
+      "events": [
+        "death"
+      ],
+      "path": "res://assets_external/audio/authored/ghoul_death.ogg",
+      "bytes": 10299,
+      "sha256": "8ba82103095b091ad8b6fcabdc1eaef1ce2e185ac037734d4bcb32636e694f0b",
+      "source": "monster_sfx\\monster_sfx_pack\\monster-6.wav",
+      "source_sha256": "8aac51b6b0d058bf8a78000463897a3e633e3012f6517b6de3e36e453d6ad772",
+      "author": "Ogrebane",
+      "source_url": "https://opengameart.org/content/monster-sound-effects-pack",
+      "license": "CC0-1.0",
+      "seconds": 1.01,
+      "gain_db": -6,
+      "sample_rate": 48000,
+      "channels": 1,
+      "pack_owner": "audio",
+      "status": "native_recording_candidate_not_listening_approved"
+    },
+    {
+      "id": "oathfire_charge",
+      "events": [
+        "oathfire_charge"
+      ],
+      "path": "res://assets_external/audio/authored/oathfire_charge.ogg",
+      "bytes": 8236,
+      "sha256": "e02b0f257ff099232467270acfeba5a6a334e1ac26bc22fe112a712e48d1dc93",
+      "source": "sfx-cc0\\compressed-air-spray-01.wav",
+      "source_sha256": "24439d722c11958197d39a351d6e26ba34c10df438f91e9c811e1e58b15f1135",
+      "author": "Vehicle (Jan Schupke)",
+      "source_url": "https://opengameart.org/content/fantasy-sound-effects-tinysized-sfx",
+      "license": "CC0-1.0",
+      "seconds": 0.75,
+      "gain_db": -8,
+      "sample_rate": 48000,
+      "channels": 1,
+      "pack_owner": "audio",
+      "status": "native_recording_candidate_not_listening_approved"
+    },
+    {
+      "id": "oathfire_release",
+      "events": [
+        "oathfire_release"
+      ],
+      "path": "res://assets_external/audio/authored/oathfire_release.ogg",
+      "bytes": 9427,
+      "sha256": "6227b5243c6d1544c37f98ce6d2914988470d3cc4c80e89ffbc9fd2967a20e7f",
+      "source": "sfx-cc0\\paralyzer-discharge-01.wav",
+      "source_sha256": "8eaee5635e55ba4fe344f776e1b1830aa17501510ab9eb55a9fb1ba0dc82f827",
+      "author": "Vehicle (Jan Schupke)",
+      "source_url": "https://opengameart.org/content/fantasy-sound-effects-tinysized-sfx",
+      "license": "CC0-1.0",
+      "seconds": 0.48,
+      "gain_db": -8,
+      "sample_rate": 48000,
+      "channels": 1,
+      "pack_owner": "audio",
+      "status": "native_recording_candidate_not_listening_approved"
+    },
+    {
+      "id": "candle_light",
+      "events": [
+        "shrine_candle"
+      ],
+      "path": "res://assets_external/audio/authored/candle_light.ogg",
+      "bytes": 9393,
+      "sha256": "ee3f11ff3cd7716bce5e0cff7f340ea23a74efc42973127195b7b73daa6e6123",
+      "source": "sfx-cc0\\match-light-01.wav",
+      "source_sha256": "328c652eec7f5cbe6d63a3bc29d973e7391dca9d10da323a0cc37b994c02c536",
+      "author": "Vehicle (Jan Schupke)",
+      "source_url": "https://opengameart.org/content/fantasy-sound-effects-tinysized-sfx",
+      "license": "CC0-1.0",
+      "seconds": 0.7,
+      "gain_db": -6,
+      "sample_rate": 48000,
+      "channels": 1,
+      "pack_owner": "audio",
+      "status": "native_recording_candidate_not_listening_approved"
+    },
+    {
+      "id": "potion_uncork",
+      "events": [
+        "potion"
+      ],
+      "path": "res://assets_external/audio/authored/potion_uncork.ogg",
+      "bytes": 6656,
+      "sha256": "1ec88cf135ccd12c55feab02fa90a0ccfc66c773fc09f6bf7e7c7cd8d0007d32",
+      "source": "sfx-cc0\\bottle-glass-uncork-01.wav",
+      "source_sha256": "af8a6f3fde9764856cbd1dde6749912876764e2c2cb34a5b72f97ee6c476f3b4",
+      "author": "Vehicle (Jan Schupke)",
+      "source_url": "https://opengameart.org/content/fantasy-sound-effects-tinysized-sfx",
+      "license": "CC0-1.0",
+      "seconds": 0.75,
+      "gain_db": -6,
+      "sample_rate": 48000,
+      "channels": 1,
+      "pack_owner": "audio",
+      "status": "native_recording_candidate_not_listening_approved"
+    },
+    {
+      "id": "forest_twigs",
+      "events": [
+        "wychwood_drop"
+      ],
+      "path": "res://assets_external/audio/authored/forest_twigs.ogg",
+      "bytes": 8483,
+      "sha256": "1320b1444cfcf8e42be65a0b3c33d564da2b52fba5352866e5de58992e0e1f06",
+      "source": "sfx-cc0\\wood-twigs-break-01.wav",
+      "source_sha256": "383c87c96cf30a207a9922f16768b1bd5138d7fd66bb7f4c2ff4e15e058b1803",
+      "author": "Vehicle (Jan Schupke)",
+      "source_url": "https://opengameart.org/content/fantasy-sound-effects-tinysized-sfx",
+      "license": "CC0-1.0",
+      "seconds": 0.85,
+      "gain_db": -6,
+      "sample_rate": 48000,
+      "channels": 1,
+      "pack_owner": "audio",
+      "status": "native_recording_candidate_not_listening_approved"
+    }
+  ]
+}

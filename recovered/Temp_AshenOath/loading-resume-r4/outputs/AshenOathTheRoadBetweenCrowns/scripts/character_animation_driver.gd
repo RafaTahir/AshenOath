@@ -1,0 +1,987 @@
+extends Node
+
+signal action_started(action_name: String)
+signal action_finished(action_name: String)
+signal contract_failed(reason: String)
+signal locomotion_step(side: StringName)
+signal activity_contact(event: String, position: Vector3)
+signal terminal_state_changed(dead: bool)
+
+const STATE_ALIASES := {
+	"idle": ["idle", "idlesword", "idleweapon", "attackingidle"],
+	"walk": ["walk", "walking"],
+	"walk_back": ["walkback", "backwalk", "walk", "walking"],
+	"strafe": ["strafe", "walk", "walking"],
+	"strafe_left": ["walkleft", "strafeleft", "runleft", "strafe", "walk"],
+	"strafe_right": ["walkright", "straferight", "runright", "strafe", "walk"],
+	"run": ["run", "running", "sprint"],
+	"run_back": ["runback", "backrun", "run", "running", "sprint"],
+	"jump": ["jump", "jumpidle", "run"],
+	"work": ["work", "interact", "idle", "idlesword"],
+	"dialogue": ["dialogue", "talk", "interact", "idle", "idlesword"],
+	"story_offer": ["interact", "talk", "dialogue"],
+	"story_explain": ["talk", "dialogue", "interact"],
+	"story_listen": ["idle", "idlesword", "idleweapon"],
+	"windup": ["windup", "attack", "punch"],
+	"attack": ["attack", "swordslash", "punch"],
+	"attack_light": ["swordslash", "attack", "punch"],
+	"attack_heavy": ["swordslash", "attack", "punch"],
+	"dodge": ["roll", "dodge", "run"],
+	"block": ["block", "parry", "idleweapon", "idlesword", "idle"],
+	"parry": ["parry", "block", "hitreceive", "hitrecieve", "receivehit", "recievehit"],
+	"greet": ["wave", "interact", "talk", "idle"],
+	"draw": ["sworddraw", "draw", "interact", "idle"],
+	"sheath": ["swordsheath", "sheath", "interact", "idle"],
+	"beam_cast": ["interact", "cast", "attack"],
+	"hit": ["hitreceive", "hitrecieve", "receivehit", "recievehit", "hitreact", "spawn"],
+	"hurt": ["hitreceive", "hitrecieve", "receivehit", "recievehit", "hitreact", "spawn"],
+	"death": ["death", "die"]
+}
+
+const ACTION_PRIORITY := {
+	"draw": 1,
+	"sheath": 1,
+	"jump": 1,
+	"dialogue": 1,
+	"work": 1,
+	"story_offer": 1,
+	"story_explain": 1,
+	"greet": 1,
+	"dodge": 2,
+	"attack": 3,
+	"attack_light": 3,
+	"attack_heavy": 3,
+	"beam_cast": 3,
+	"parry": 4,
+	"block": 4,
+	"hit": 5,
+	"hurt": 5,
+	"death": 100,
+}
+const LOOPING_ACTIONS := {"beam_cast": true}
+const LOCOMOTION_STATES := ["walk", "walk_back", "strafe", "strafe_left", "strafe_right", "run", "run_back"]
+# Per full left/right cycle at the reference adult height. These are explicit
+# authoring calibrations, not claims of measured root motion: the supplied
+# in-place library does not carry travel distance. Roles can tune either value.
+const REFERENCE_HEIGHT_M := 1.72
+const WALK_CYCLE_DISTANCE_M := 1.45
+const RUN_CYCLE_DISTANCE_M := 3.20
+
+var character_root: Node3D
+var animation_player: AnimationPlayer
+var animation_players: Array[AnimationPlayer] = []
+var skeleton: Skeleton3D
+var clip_map: Dictionary = {}
+var resolved_clip_map: Dictionary = {}
+var authored_directional_clips: Dictionary = {}
+var contract_errors: Array[String] = []
+var current_state := ""
+var action_active := false
+var dead := false
+var distance_suspended := false
+var target_playback_scale := 1.0
+var current_playback_scale := 1.0
+var manual_update_interval := 0.0
+var manual_update_accumulator := 0.0
+var externally_ticked := false
+var manual_tick_timer: Timer
+var current_direction := Vector3.ZERO
+var current_local_direction := Vector3.ZERO
+var requested_speed_ratio := 0.0
+var current_speed_mps := 0.0
+var physical_motion_available := false
+var locomotion_height_scale := 1.0
+var grounded := true
+var locomotion_state := "idle"
+var forward_only_locomotion := false
+var _forward_run := false
+var presentation_state := ""
+var action_elapsed := 0.0
+var action_looping := false
+var active_action_clip := StringName()
+var root_motion_disabled := true
+var last_locomotion_clip := StringName()
+var last_locomotion_state := StringName()
+var last_locomotion_phase := -1.0
+var locomotion_phase_distance := 0.0
+var locomotion_step_index := 0
+var story_gesture_remaining := 0.0
+var story_dialogue_active := false
+var life_modifier
+var animation_graph
+var action_duration := 0.0
+var configured := false
+var bound_track_counts: Dictionary = {}
+static var _resolved_bindings: Dictionary = {}
+
+func _ready() -> void:
+	# Imported actors are configured before their visual root is parented. Defer
+	# timer startup until this driver actually belongs to the SceneTree.
+	_start_manual_tick(true)
+	_reconcile_clock()
+
+func configure(root: Node3D, clips: Dictionary) -> bool:
+	_clear_playback()
+	character_root = root
+	clip_map = clips.duplicate()
+	resolved_clip_map.clear()
+	authored_directional_clips.clear()
+	contract_errors.clear()
+	animation_players.clear()
+	bound_track_counts.clear()
+	current_state = ""
+	action_active = false
+	dead = false
+	presentation_state = ""
+	current_direction = Vector3.ZERO
+	current_local_direction = Vector3.ZERO
+	requested_speed_ratio = 0.0
+	current_speed_mps = 0.0
+	physical_motion_available = false
+	var role_spec: Dictionary = root.get_meta("character_role_spec", {})
+	locomotion_height_scale = clampf(float(role_spec.get("height", REFERENCE_HEIGHT_M)) / REFERENCE_HEIGHT_M, 0.65, 1.80)
+	grounded = true
+	locomotion_state = "idle"
+	action_elapsed = 0.0
+	action_looping = false
+	active_action_clip = StringName()
+	last_locomotion_clip = StringName()
+	last_locomotion_state = StringName()
+	last_locomotion_phase = -1.0
+	locomotion_phase_distance = 0.0
+	locomotion_step_index = 0
+	if not is_instance_valid(root):
+		return _fail_contract("character root is missing")
+	_collect_animation_players(root)
+	animation_player = animation_players[0] if not animation_players.is_empty() else null
+	skeleton = _find_type(root, "Skeleton3D") as Skeleton3D
+	if animation_player == null or skeleton == null or skeleton.get_bone_count() == 0:
+		return _fail_contract("missing AnimationPlayer or Skeleton3D")
+	var previous: WeakRef = skeleton.get_meta("character_motion_owner") if skeleton.has_meta("character_motion_owner") else null
+	if previous != null and is_instance_valid(previous.get_ref()) and previous.get_ref() != self:
+		return _fail_contract("skeleton already has an animation owner")
+	var binding_key := var_to_str([clip_map, animation_player.get_animation_list()]).sha256_text()
+	if _resolved_bindings.has(binding_key):
+		resolved_clip_map = _resolved_bindings[binding_key].resolved.duplicate()
+		authored_directional_clips = _resolved_bindings[binding_key].directional.duplicate()
+	else:
+		for state in clip_map:
+			var resolved := _resolve_clip(str(state), str(clip_map[state]))
+			if resolved != StringName():
+				resolved_clip_map[state] = resolved
+		_resolved_bindings[binding_key] = {"resolved": resolved_clip_map.duplicate(), "directional": authored_directional_clips.duplicate()}
+	if not resolved_clip_map.has("idle"):
+		return _fail_contract("required idle clip is missing")
+	for state: String in ["idle", "walk", "run"]:
+		if state != "idle" and not clip_map.has(state):
+			continue
+		var clip := StringName(resolved_clip_map.get(state, ""))
+		if clip == StringName():
+			return _fail_contract("required %s clip is missing" % state)
+		var bound := _bound_bone_tracks(clip)
+		bound_track_counts[state] = bound
+		if bound == 0:
+			return _fail_contract("%s clip '%s' has no tracks bound to the actor skeleton" % [state, clip])
+	# Resolve aliases once; AnimationPlayer now supplies libraries, never playback.
+	for state: String in STATE_ALIASES:
+		_clip_for(state)
+	var directions := {}
+	for state: String in ["walk_back", "run_back"]:
+		directions[state] = _playback_direction_for_state(state) > 0.0
+	animation_graph = preload("res://scripts/systems/character_animation_graph.gd").new()
+	var graph_clips := {}
+	for state: String in resolved_clip_map:
+		if resolved_clip_map[state] != StringName():
+			graph_clips[state] = resolved_clip_map[state]
+	if not animation_graph.configure(self, animation_player, graph_clips, directions, locomotion_height_scale):
+		return _fail_contract("AnimationTree cannot bind its animation root")
+	configured = true
+	skeleton.set_meta("character_motion_owner", weakref(self))
+	var silhouette := skeleton.get_node_or_null("CharacterSilhouette")
+	if silhouette != null:
+		silhouette.bind_motion(self)
+	_ensure_life_modifier()
+	_reconcile_clock()
+	_play_state("idle", 0.0)
+	var face_reference: WeakRef = skeleton.get_meta("character_face_owner") if skeleton.has_meta("character_face_owner") else null
+	var face: Node = face_reference.get_ref() if face_reference != null else null
+	if not is_instance_valid(face):
+		face = character_root.find_child("CharacterFaceDriver", true, false)
+	if face != null and face.has_method("bind_motion"):
+		face.bind_motion(self)
+	terminal_state_changed.emit(false)
+	return true
+
+func _clear_playback() -> void:
+	configured = false
+	set_process(false)
+	if is_instance_valid(manual_tick_timer):
+		manual_tick_timer.stop()
+	if animation_graph != null and is_instance_valid(animation_graph.tree):
+		animation_graph.tree.active = false
+		animation_graph.tree.free()
+	animation_graph = null
+	if is_instance_valid(skeleton) and skeleton.has_meta("character_motion_owner"):
+		var reference: WeakRef = skeleton.get_meta("character_motion_owner")
+		if reference != null and reference.get_ref() == self:
+			skeleton.remove_meta("character_motion_owner")
+	if is_instance_valid(life_modifier):
+		life_modifier.free()
+	life_modifier = null
+
+func _fail_contract(reason: String) -> bool:
+	_clear_playback()
+	contract_errors.append(reason)
+	contract_failed.emit(reason)
+	return false
+
+func _bound_bone_tracks(clip: StringName) -> int:
+	var animation := animation_player.get_animation(clip)
+	var origin := animation_player.get_node_or_null(animation_player.root_node)
+	if animation == null or origin == null:
+		return 0
+	var bound := 0
+	for index in animation.get_track_count():
+		if not animation.track_is_enabled(index) or animation.track_get_key_count(index) == 0:
+			continue
+		if animation.track_get_type(index) not in [Animation.TYPE_POSITION_3D, Animation.TYPE_ROTATION_3D, Animation.TYPE_SCALE_3D]:
+			continue
+		var path := animation.track_get_path(index)
+		if path.get_subname_count() == 0:
+			continue
+		var target := origin if path.get_name_count() == 0 else origin.get_node_or_null(NodePath(path.get_concatenated_names()))
+		if target == skeleton and skeleton.find_bone(str(path.get_subname(0))) >= 0:
+			bound += 1
+	return bound
+
+static func record_configuration(zone: Node, actor_id: String, driver: Node) -> bool:
+	var errors: Dictionary = zone.get_meta("actor_animation_errors", {})
+	var valid: bool = is_instance_valid(driver) and driver.is_valid()
+	if not valid:
+		var report: Dictionary = driver.get_contract_report() if is_instance_valid(driver) else {}
+		errors[actor_id] = "Actor '%s': %s" % [actor_id, "; ".join(report.get("errors", ["animation driver is missing"]))]
+		zone.set_meta("actor_animation_errors", errors)
+		push_error(errors[actor_id])
+		return false
+	errors.erase(actor_id)
+	zone.set_meta("actor_animation_errors", errors)
+	var actors: Dictionary = zone.get_meta("actor_animation_owners", {})
+	actors[actor_id] = {"actor": weakref(driver.character_root), "driver": weakref(driver)}
+	zone.set_meta("actor_animation_owners", actors)
+	return true
+
+static func zone_contract(zone: Node, resume: bool = false) -> Dictionary:
+	var errors: Array[String] = []
+	for reason in zone.get_meta("actor_animation_errors", {}).values():
+		errors.append(str(reason))
+	var actors: Dictionary = zone.get_meta("actor_animation_owners", {})
+	for id in actors:
+		var actor: Node = actors[id].actor.get_ref()
+		if not is_instance_valid(actor) or actor.is_queued_for_deletion():
+			continue
+		var driver: Node = actors[id].driver.get_ref()
+		if not is_instance_valid(driver) or not driver.is_valid():
+			errors.append("Actor '%s' has no valid animation owner" % id)
+		elif resume:
+			driver._reconcile_clock()
+	return {"ok": errors.is_empty(), "errors": errors}
+
+func _process(delta: float) -> void:
+	if externally_ticked:
+		return
+	_advance_animation(delta)
+
+func set_external_tick(enabled: bool) -> void:
+	# The owning physics/simulation loop can drive throttled animation without
+	# waking this node on every rendered frame.
+	if externally_ticked != enabled:
+		manual_update_accumulator = 0.0
+	externally_ticked = enabled
+	_reconcile_clock()
+
+func capture_clock() -> Dictionary:
+	return {"external":externally_ticked, "interval":manual_update_interval, "suspended":distance_suspended}
+
+func restore_clock(policy: Dictionary) -> void:
+	externally_ticked = bool(policy.get("external", false))
+	manual_update_interval = maxf(float(policy.get("interval", 0.0)), 0.0)
+	distance_suspended = bool(policy.get("suspended", false))
+	manual_update_accumulator = 0.0
+	process_mode = Node.PROCESS_MODE_DISABLED if distance_suspended else Node.PROCESS_MODE_INHERIT
+	_reconcile_clock()
+
+func _reconcile_clock() -> void:
+	var manual := externally_ticked or manual_update_interval > 0.0
+	for player: AnimationPlayer in animation_players:
+		player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
+		player.active = false
+	if is_valid():
+		animation_graph.activate(distance_suspended)
+	set_process(is_valid() and not distance_suspended and not externally_ticked and not manual)
+	if is_instance_valid(manual_tick_timer):
+		if not is_valid() or distance_suspended or externally_ticked or manual_update_interval <= 0.0:
+			manual_tick_timer.stop()
+		elif manual_tick_timer.is_stopped():
+			_start_manual_tick()
+
+func _on_manual_tick() -> void:
+	if externally_ticked or distance_suspended or manual_update_interval <= 0.0:
+		return
+	var elapsed := manual_tick_timer.wait_time
+	# Timer.start(first_delay) also replaces its repeating period. Restore the
+	# requested rate after that first staggered tick and account for its real span.
+	if not is_equal_approx(elapsed, manual_update_interval):
+		_start_manual_tick()
+	_advance_animation(elapsed)
+
+func advance_external(delta: float) -> void:
+	if not externally_ticked:
+		return
+	_advance_animation(delta)
+
+func _advance_animation(delta: float) -> void:
+	if animation_graph == null or distance_suspended or not is_inside_tree():
+		return
+	if story_gesture_remaining > 0.0:
+		story_gesture_remaining = maxf(story_gesture_remaining - delta, 0.0)
+		if story_gesture_remaining <= 0.0 and story_dialogue_active:
+			stop_action()
+			set_dialogue_pose(true)
+	if manual_update_interval > 0.0 and not externally_ticked:
+		manual_update_accumulator += delta
+		if manual_update_accumulator < manual_update_interval:
+			return
+		delta = manual_update_accumulator
+		manual_update_accumulator = 0.0
+	animation_graph.set_gait(current_speed_mps)
+	if not action_active and presentation_state == "" and grounded:
+		target_playback_scale = animation_graph.rate_for(current_state)
+		current_playback_scale = target_playback_scale
+	else:
+		current_playback_scale = lerpf(current_playback_scale, target_playback_scale, 1.0 - exp(-10.0 * delta))
+	animation_graph.set_action_rate(current_playback_scale)
+	animation_graph.advance(delta)
+	if action_active:
+		action_elapsed += delta
+		if not dead and not action_looping and action_elapsed >= action_duration:
+			_finish_action()
+	_emit_locomotion_step_events()
+
+func set_update_rate_hz(rate_hz: float) -> void:
+	manual_update_interval = 0.0 if rate_hz <= 0.0 else 1.0 / maxf(rate_hz, 1.0)
+	# Manual NPC animation is timer-driven. The previous implementation still
+	# entered _process on every rendered frame and only returned after checking
+	# its accumulator, which kept every ambient rig in the Web script budget.
+	if manual_update_interval > 0.0:
+		if manual_tick_timer == null or not is_instance_valid(manual_tick_timer):
+			manual_tick_timer = Timer.new()
+			manual_tick_timer.name = "ManualAnimationTick"
+			manual_tick_timer.one_shot = false
+			manual_tick_timer.process_callback = Timer.TIMER_PROCESS_IDLE
+			manual_tick_timer.timeout.connect(_on_manual_tick)
+			add_child(manual_tick_timer)
+		manual_tick_timer.wait_time = manual_update_interval
+		manual_update_accumulator = 0.0
+		if not externally_ticked and not distance_suspended:
+			_start_manual_tick(true)
+	else:
+		manual_update_accumulator = 0.0
+		if manual_tick_timer != null and is_instance_valid(manual_tick_timer):
+			manual_tick_timer.stop()
+	_reconcile_clock()
+
+func is_valid() -> bool:
+	return configured and is_instance_valid(character_root) and is_instance_valid(animation_player) \
+		and is_instance_valid(skeleton) and skeleton.get_bone_count() > 0 \
+		and animation_graph != null and is_instance_valid(animation_graph.tree) \
+		and contract_errors.is_empty() and resolved_clip_map.has("idle")
+
+func is_evaluation_scheduled() -> bool:
+	# Manual mixers stay active but evaluate only explicit scheduled advances.
+	# Distance suspension disables both the schedule and mixer.
+	if not is_valid() or distance_suspended or not is_inside_tree() or not can_process() or not animation_graph.scheduled():
+		return false
+	var timer_running := is_instance_valid(manual_tick_timer) and not manual_tick_timer.is_stopped()
+	if externally_ticked:
+		return not is_processing() and not timer_running
+	if manual_update_interval > 0.0:
+		return not is_processing() and timer_running
+	return is_processing() and not timer_running
+
+func set_distance_suspended(suspended: bool) -> void:
+	if distance_suspended == suspended:
+		_reconcile_clock()
+		return
+	distance_suspended = suspended
+	process_mode = Node.PROCESS_MODE_DISABLED if suspended else Node.PROCESS_MODE_INHERIT
+	if manual_tick_timer != null and is_instance_valid(manual_tick_timer):
+		if suspended or externally_ticked or manual_update_interval <= 0.0:
+			manual_tick_timer.stop()
+		else:
+			_start_manual_tick()
+	_reconcile_clock()
+	if not suspended and not dead:
+		_play_state(current_state if current_state != "" else "idle", 0.0)
+
+func _start_manual_tick(stagger_first_tick := false) -> void:
+	if manual_tick_timer == null or not is_instance_valid(manual_tick_timer):
+		return
+	if not is_valid() or not is_inside_tree() or externally_ticked or distance_suspended or manual_update_interval <= 0.0:
+		return
+	var delay := manual_update_interval
+	if stagger_first_tick:
+		var phase_slot := int(character_root.get_instance_id() % 17) if character_root != null else 0
+		delay *= 1.0 - float(phase_slot) / 17.0
+	manual_tick_timer.start(maxf(delay, 0.02))
+
+func set_locomotion(speed_ratio: float, _direction: Vector3, grounded: bool) -> void:
+	# Compatibility for role controllers which still supply a normalized ratio.
+	# Do not guess metres/second from the magnitude of their direction argument:
+	# legacy callers use both unit directions and velocities here.
+	physical_motion_available = false
+	current_speed_mps = maxf(speed_ratio, 0.0) * 2.0
+	_update_locomotion(speed_ratio, _direction, grounded)
+
+func set_locomotion_motion(world_velocity: Vector3, grounded: bool, reference_speed: float = 5.3, running: bool = false) -> void:
+	# The owner supplies achieved travel after collision/path movement. Animation
+	# never moves the actor and does not keep stepping into a blocked wall.
+	var horizontal_velocity := Vector3(world_velocity.x, 0.0, world_velocity.z)
+	physical_motion_available = true
+	current_speed_mps = horizontal_velocity.length()
+	_forward_run = running
+	_update_locomotion(current_speed_mps / maxf(reference_speed, 0.1), horizontal_velocity, grounded)
+
+func _update_locomotion(speed_ratio: float, world_direction: Vector3, on_ground: bool) -> void:
+	requested_speed_ratio = clampf(speed_ratio, 0.0, 1.35)
+	grounded = on_ground
+	current_direction = Vector3(world_direction.x, 0.0, world_direction.z)
+	if animation_graph != null:
+		animation_graph.set_gait(current_speed_mps)
+	current_direction = current_direction.normalized() if current_direction.length_squared() > 0.0001 else Vector3.ZERO
+	var visible_forward := get_visible_forward()
+	if visible_forward.length_squared() > 0.5 and current_direction != Vector3.ZERO:
+		# Construct a horizontal, unit-length facing frame. Imported scale, root
+		# pitch/roll and the source +Z convention cannot alter direction thresholds.
+		var visible_right := visible_forward.cross(Vector3.UP).normalized()
+		current_local_direction = Vector3(current_direction.dot(visible_right), 0.0, -current_direction.dot(visible_forward))
+	else:
+		current_local_direction = Vector3.ZERO
+	if not is_valid() or dead or action_active or presentation_state != "":
+		return
+	var previously_moving: bool = locomotion_state in LOCOMOTION_STATES
+	var is_moving: bool = current_speed_mps > (0.045 if previously_moving else 0.08) if physical_motion_available else requested_speed_ratio > (0.035 if previously_moving else 0.05)
+	var was_backwards: bool = locomotion_state in ["walk_back", "run_back"]
+	var moving_backwards: bool = current_local_direction.z > (0.18 if was_backwards else 0.42)
+	var was_lateral: bool = locomotion_state in ["strafe", "strafe_left", "strafe_right"]
+	var lateral_ratio: float = 1.05 if was_lateral else 1.30
+	var moving_laterally: bool = absf(current_local_direction.x) > absf(current_local_direction.z) * lateral_ratio
+	var was_running: bool = locomotion_state in ["run", "run_back"]
+	var run_threshold: float = (1.80 if was_running else 2.05) * locomotion_height_scale
+	var wants_running: bool = current_speed_mps > run_threshold if physical_motion_available else requested_speed_ratio > (0.66 if was_running else 0.74)
+	var state := "idle"
+	if not on_ground:
+		state = "jump"
+	elif is_moving:
+		if forward_only_locomotion:
+			state = "run" if _forward_run and _clip_for("run") != StringName() else "walk"
+		elif moving_laterally:
+			var lateral_state: String = "strafe_left" if current_local_direction.x < 0.0 else "strafe_right"
+			state = lateral_state if _authored_directional_clip(lateral_state) != StringName() else "strafe"
+		elif moving_backwards:
+			# Do not turn a missing backward sprint into frantic reverse Sprint.
+			# A role with an actual backward run may still use its authored gait.
+			state = "run_back" if wants_running and _authored_directional_clip("run_back") != StringName() else "walk_back"
+		else:
+			state = "run" if wants_running and _clip_for("run") != StringName() else "walk"
+	locomotion_state = state
+	target_playback_scale = animation_graph.rate_for(state)
+	current_playback_scale = target_playback_scale
+	_play_state(state, 0.16)
+
+func trigger_action(action_name: String, playback_scale: float = 1.0, blend_time: float = 0.10, force: bool = false, duration: float = 0.0, reset_timed_mixer: bool = false) -> bool:
+	if not is_valid() or dead:
+		return false
+	if action_active:
+		var active_priority: int = int(ACTION_PRIORITY.get(current_state, 0))
+		var requested_priority: int = int(ACTION_PRIORITY.get(action_name, 0))
+		if not force and requested_priority < active_priority:
+			return false
+		if not force and current_state == action_name:
+			return false
+	var clip := _clip_for(action_name)
+	if clip == StringName():
+		return false
+	clear_life_activity()
+	presentation_state = ""
+	action_active = true
+	current_state = action_name
+	action_elapsed = 0.0
+	action_looping = bool(LOOPING_ACTIONS.get(action_name, false))
+	active_action_clip = clip
+	# Timed combat must finish its clip within the controller's damage/recovery
+	# clock. The general locomotion/action speed clamp cannot express that rate.
+	target_playback_scale = animation_player.get_animation(clip).length / duration if duration > 0.0 else clampf(playback_scale, 0.55, 1.45)
+	current_playback_scale = target_playback_scale
+	action_duration = duration if duration > 0.0 else animation_player.get_animation(clip).length / maxf(target_playback_scale, 0.01)
+	if reset_timed_mixer and animation_graph.playback != null:
+		# A calibrated contact clock cannot inherit a pending fade/reset from
+		# the prior swing. Other action callers retain their existing blending.
+		animation_graph.playback.stop()
+		animation_graph.advance(0.0)
+	animation_graph.transition(action_name, blend_time, true)
+	animation_graph.set_action_rate(current_playback_scale)
+	if reset_timed_mixer:
+		animation_graph.advance(0.0)
+		animation_graph.advance(0.0)
+	action_started.emit(action_name)
+	return true
+
+func fit_action_tail(contact_fraction: float, seconds: float) -> bool:
+	# The gameplay owner has reached contact. Continue this same clip from its
+	# sampled contact pose; only its remaining playback rate and finish change.
+	if not is_valid() or dead or distance_suspended or not action_active or action_looping or active_action_clip == StringName():
+		return false
+	if not is_finite(contact_fraction) or contact_fraction <= 0.0 or contact_fraction >= 1.0 or not is_finite(seconds) or seconds <= 0.0:
+		return false
+	var animation := animation_player.get_animation(active_action_clip)
+	if animation == null:
+		return false
+	target_playback_scale = animation.length * (1.0 - contact_fraction) / seconds
+	current_playback_scale = target_playback_scale
+	action_duration = action_elapsed + seconds
+	animation_graph.set_action_rate(current_playback_scale)
+	return true
+
+func stop_action(recover_state: String = "idle", blend_time: float = 0.10) -> void:
+	if not action_active and presentation_state == "":
+		return
+	action_active = false
+	action_looping = false
+	active_action_clip = StringName()
+	action_elapsed = 0.0
+	if dead:
+		return
+	current_state = ""
+	_play_state(recover_state, clampf(blend_time, 0.0, 0.25))
+
+func set_dialogue_pose(active: bool) -> void:
+	story_dialogue_active = active
+	if dead or not is_valid():
+		return
+	if active:
+		clear_life_activity()
+		if presentation_state == "dialogue":
+			return
+		action_active = false
+		presentation_state = "dialogue"
+		current_state = ""
+		target_playback_scale = 1.0
+		_play_state("dialogue", 0.14)
+	else:
+		if presentation_state == "dialogue":
+			presentation_state = ""
+			current_state = ""
+			_play_state("idle", 0.12)
+
+func play_story_gesture(kind: String, pace: float = 0.9) -> void:
+	if not story_dialogue_active or dead or kind not in ["offer", "explain"]:
+		return
+	if trigger_action("story_" + kind, pace, 0.18):
+		# A shared Interact clip may be looping. A bounded gesture returns to
+		# attentive stillness rather than repeatedly handing over an empty object.
+		story_gesture_remaining = 1.8 / maxf(pace, 0.5)
+
+func stop_story_gesture() -> void:
+	story_dialogue_active = false
+	story_gesture_remaining = 0.0
+	if dead:
+		return
+	stop_action()
+	presentation_state = ""
+	current_state = ""
+	_play_state("idle", 0.18)
+
+func set_story_listening(listening: bool) -> void:
+	if dead or not story_dialogue_active:
+		return
+	story_gesture_remaining = 0.0
+	stop_action()
+	if listening:
+		presentation_state = "story_listen"
+		current_state = ""
+		_play_state("story_listen", 0.20)
+	else:
+		presentation_state = ""
+		set_dialogue_pose(true)
+
+func set_working(active: bool) -> void:
+	if dead or not is_valid():
+		return
+	if active and (action_active or story_dialogue_active):
+		return
+	clear_life_activity()
+	if active:
+		if presentation_state == "work":
+			return
+		action_active = false
+		presentation_state = "work"
+		current_state = ""
+		target_playback_scale = 1.0
+		_play_state("work", 0.14)
+	else:
+		if presentation_state == "work":
+			presentation_state = ""
+			current_state = ""
+			_play_state("idle", 0.12)
+
+func reset_for_journey_restore() -> void:
+	# A cached player can survive the load; health restoration alone cannot
+	# release the terminal animation state or the final sampled death pose.
+	dead = false
+	clear_life_activity()
+	story_dialogue_active = false
+	story_gesture_remaining = 0.0
+	presentation_state = ""
+	current_direction = Vector3.ZERO
+	current_local_direction = Vector3.ZERO
+	requested_speed_ratio = 0.0
+	current_speed_mps = 0.0
+	physical_motion_available = false
+	locomotion_state = "idle"
+	last_locomotion_clip = StringName()
+	last_locomotion_state = StringName()
+	last_locomotion_phase = -1.0
+	locomotion_phase_distance = 0.0
+	target_playback_scale = 1.0
+	current_playback_scale = 1.0
+	if skeleton != null:
+		skeleton.reset_bone_poses()
+	action_active = true
+	stop_action("idle", 0.0)
+	terminal_state_changed.emit(false)
+
+func set_dead() -> void:
+	if dead:
+		return
+	dead = true
+	terminal_state_changed.emit(true)
+	clear_life_activity()
+	current_state = "death"
+	action_active = true
+	presentation_state = ""
+	action_looping = false
+	action_elapsed = 0.0
+	target_playback_scale = 1.0
+	current_playback_scale = 1.0
+	var clip := _clip_for("death")
+	if clip != StringName():
+		active_action_clip = clip
+		animation_graph.transition("death", 0.08, true)
+		animation_graph.set_action_rate(1.0)
+
+func set_life_activity(kind: String) -> void:
+	if kind == "":
+		clear_life_activity()
+		return
+	if dead or not is_valid() or action_active or story_dialogue_active:
+		return
+	if presentation_state == "life:" + kind:
+		return
+	if life_modifier == null:
+		life_modifier = load("res://scripts/character_life_modifier.gd").new()
+		life_modifier.name = "CharacterLifePose"
+		skeleton.add_child(life_modifier)
+		life_modifier.configure(character_root, self)
+	life_modifier.activity = kind
+	presentation_state = "life:" + kind
+	current_state = ""
+	target_playback_scale = 1.0
+	_play_state("idle", 0.18)
+
+func clear_life_activity() -> void:
+	if life_modifier != null:
+		life_modifier.activity = ""
+		life_modifier.station = {}
+		life_modifier.activity_prop = ""
+		life_modifier.carried_activity = ""
+	if presentation_state.begins_with("life:"):
+		presentation_state = ""
+		current_state = ""
+		if is_valid() and not dead:
+			_play_state("idle", 0.18)
+
+func get_skeleton() -> Skeleton3D:
+	return skeleton
+
+func set_life_workstation(value: Dictionary) -> void:
+	if value.is_empty() and life_modifier == null:
+		return
+	_ensure_life_modifier()
+	if life_modifier != null:
+		life_modifier.station = value
+
+func set_carried_activity(kind: String) -> void:
+	if kind == "" and life_modifier == null:
+		return
+	_ensure_life_modifier()
+	if life_modifier != null:
+		life_modifier.carried_activity = kind
+
+func set_activity_prop(kind: String) -> void:
+	if kind == "" and life_modifier == null:
+		return
+	_ensure_life_modifier()
+	if life_modifier != null:
+		life_modifier.activity_prop = kind
+
+func set_creature_presence(id: String, intent: String, amount: float) -> void:
+	_ensure_life_modifier()
+	if life_modifier != null:
+		life_modifier.creature_id = id
+		life_modifier.creature_intent = intent
+		life_modifier.creature_amount = clampf(amount, 0.0, 1.0)
+
+func set_observation_clip(requested: String) -> bool:
+	if not is_valid() or dead or action_active or story_dialogue_active: return false
+	for clip: StringName in animation_player.get_animation_list():
+		if str(clip).get_file().to_lower() != requested.to_lower(): continue
+		presentation_state = "ecology"
+		current_state = "ecology"
+		target_playback_scale = 1.0
+		animation_graph.ambient_clip(str(clip))
+		return true
+	return false
+
+func _ensure_life_modifier() -> void:
+	if life_modifier == null and is_valid() and skeleton != null:
+		life_modifier = load("res://scripts/character_life_modifier.gd").new()
+		life_modifier.name = "CharacterLifePose"
+		skeleton.add_child(life_modifier)
+		life_modifier.configure(character_root, self)
+
+func get_animation_player() -> AnimationPlayer:
+	return animation_player
+
+func sample_pose() -> void:
+	if animation_graph != null:
+		animation_graph.advance(0.0)
+
+func get_playback_direction_for_state(state: String) -> float:
+	# Expose the resolved direction to focused motion tests. A reverse gait may
+	# use an authored reverse clip or a forward clip played backwards; callers
+	# should not infer that distinction from the clip name alone.
+	return _playback_direction_for_state(state)
+
+func get_clip_for_state(state: String) -> StringName:
+	return _clip_for(state)
+
+func get_contract_report() -> Dictionary:
+	return {
+		"valid": is_valid() and contract_errors.is_empty() and resolved_clip_map.has("idle"),
+		"states": resolved_clip_map.duplicate(),
+		"errors": contract_errors.duplicate(),
+		"bound_bone_tracks": bound_track_counts.duplicate(),
+		"current_state": current_state,
+		"playback_scale": current_playback_scale,
+		"locomotion_state": locomotion_state,
+		"presentation_state": presentation_state,
+		"requested_speed_ratio": requested_speed_ratio,
+		"speed_mps": current_speed_mps,
+		"physical_motion_available": physical_motion_available,
+		"locomotion_height_scale": locomotion_height_scale,
+		"grounded": grounded,
+		"current_direction": current_direction,
+		"current_local_direction": current_local_direction,
+		"action_active": action_active,
+		"action_elapsed": action_elapsed,
+		"root_motion_disabled": root_motion_disabled,
+		"pose_owner": "AnimationTree"
+	}
+
+func get_locomotion_state() -> String:
+	return locomotion_state
+
+func get_visible_forward() -> Vector3:
+	if character_root == null:
+		return Vector3.ZERO
+	var forward := character_root.global_transform.basis.z if bool(character_root.get_meta("source_forward_positive_z", false)) else -character_root.global_transform.basis.z
+	forward.y = 0.0
+	return forward.normalized() if forward.length_squared() > 0.002 else Vector3.ZERO
+
+func has_active_action() -> bool:
+	return action_active
+
+func get_action_progress() -> float:
+	if not action_active or active_action_clip == StringName() or animation_player == null:
+		return 0.0
+	var animation := animation_player.get_animation(active_action_clip)
+	if animation == null or animation.length <= 0.0:
+		return 0.0
+	return clampf(action_elapsed / maxf(action_duration, 0.01), 0.0, 1.0)
+
+func _play_state(state: String, blend: float) -> void:
+	if animation_graph == null or current_state == state:
+		return
+	current_state = state
+	animation_graph.transition(state, blend)
+	animation_graph.set_gait(current_speed_mps)
+	if state not in LOCOMOTION_STATES and state != "idle":
+		animation_graph.set_action_rate(target_playback_scale)
+	if state not in LOCOMOTION_STATES:
+		last_locomotion_phase = -1.0
+		locomotion_phase_distance = 0.0
+
+func _clip_for(state: String) -> StringName:
+	if resolved_clip_map.has(state):
+		return StringName(resolved_clip_map[state])
+	var clip: StringName = _resolve_clip(state, str(clip_map.get(state, "")))
+	resolved_clip_map[state] = clip
+	return clip
+
+func _resolve_clip(state: String, requested: String) -> StringName:
+	if animation_player == null:
+		return StringName()
+	if state in ["walk_back", "run_back", "strafe_left", "strafe_right"]:
+		var directional_clip: StringName = _authored_directional_clip(state)
+		if directional_clip != StringName():
+			return directional_clip
+	var keys: Array[String] = []
+	var wanted_key := _clip_key(requested)
+	if not wanted_key.is_empty():
+		keys.append(wanted_key)
+	for alias in STATE_ALIASES.get(state, []):
+		var alias_key := _clip_key(str(alias))
+		if not keys.has(alias_key):
+			keys.append(alias_key)
+	var candidates := animation_player.get_animation_list()
+	# Resolve exact names first. The old contains-only pass could select a
+	# zombie/carry clip for a normal walk simply because it appeared earlier in
+	# an imported library.
+	for key in keys:
+		for candidate in candidates:
+			var candidate_key := _clip_key(str(candidate))
+			if candidate_key == key and _locomotion_candidate_allowed(state, candidate_key):
+				return candidate
+	for key in keys:
+		for candidate in candidates:
+			var candidate_key := _clip_key(str(candidate))
+			if not _locomotion_candidate_allowed(state, candidate_key):
+				continue
+			if candidate_key.ends_with(key) or candidate_key.contains(key):
+				return candidate
+	return StringName()
+
+func _locomotion_candidate_allowed(state: String, candidate_key: String) -> bool:
+	if state not in LOCOMOTION_STATES:
+		return true
+	# These clips are useful for special enemies or carried-object animation,
+	# but they visibly collapse a human gait when used as general locomotion.
+	for banned in ["zombie", "carry", "limp", "crawl", "stagger", "attack", "sword", "hit"]:
+		if candidate_key.contains(banned):
+			return false
+	if state in ["walk", "run"]:
+		for directional_word in ["back", "reverse", "strafe", "left", "right"]:
+			if candidate_key.contains(directional_word):
+				return false
+	return true
+
+func _authored_directional_clip(state: String) -> StringName:
+	if authored_directional_clips.has(state):
+		return StringName(authored_directional_clips[state])
+	if animation_player == null:
+		return StringName()
+	var direction_keys: Array[String] = []
+	match state:
+		"walk_back":
+			direction_keys.assign(["walkback", "backwalk", "backwardwalk", "walkreverse", "runback", "backrun"])
+		"run_back":
+			direction_keys.assign(["runback", "backrun", "backwardrun", "runreverse"])
+		"strafe_left":
+			direction_keys.assign(["walkleft", "strafeleft", "leftstrafe", "runleft"])
+		"strafe_right":
+			direction_keys.assign(["walkright", "straferight", "rightstrafe", "runright"])
+	for direction_key in direction_keys:
+		for candidate in animation_player.get_animation_list():
+			var candidate_key: String = _clip_key(str(candidate))
+			if candidate_key.contains(direction_key) and _locomotion_candidate_allowed(state, candidate_key):
+				authored_directional_clips[state] = candidate
+				return candidate
+	authored_directional_clips[state] = StringName()
+	return StringName()
+
+func _clip_key(value: String) -> String:
+	return value.to_lower().replace("characterarmature", "").replace("humanarmature", "").replace("human armature", "").replace("|", "").replace("_", "").replace("-", "").replace(" ", "")
+
+func _finish_action() -> void:
+	if dead:
+		return
+	if action_active and action_looping:
+		return
+	if not action_active:
+		return
+	var finished_state := current_state
+	action_active = false
+	action_looping = false
+	active_action_clip = StringName()
+	action_elapsed = 0.0
+	current_state = ""
+	action_finished.emit(finished_state)
+	if action_active or dead:
+		return
+	if story_dialogue_active and finished_state.begins_with("story_"):
+		story_gesture_remaining = 0.0
+		set_dialogue_pose(true)
+	else:
+		_play_state("idle", 0.10)
+
+func _find_type(root: Node, type_name: String) -> Node:
+	if root.is_class(type_name):
+		return root
+	for child in root.get_children():
+		var found := _find_type(child, type_name)
+		if found != null:
+			return found
+	return null
+
+func _collect_animation_players(root: Node) -> void:
+	if root == character_root and root.has_meta("prepared_player_paths"):
+		for path in root.get_meta("prepared_player_paths"):
+			var candidate := root.get_node_or_null(NodePath(path)) as AnimationPlayer
+			if candidate != null:
+				animation_players.append(candidate)
+		return
+	if root is AnimationPlayer:
+		animation_players.append(root as AnimationPlayer)
+	for child in root.get_children():
+		_collect_animation_players(child)
+
+func _playback_direction_for_state(state: String) -> float:
+	if state not in ["walk_back", "run_back"]:
+		return 1.0
+	var resolved_clip := _clip_for(state)
+	if resolved_clip == StringName():
+		return 1.0
+	# An explicit walk_back:Walk mapping is still a forward fallback. Identify
+	# the actual authored directional clip, not equality with a role-map alias.
+	var authored_clip: StringName = _authored_directional_clip(state)
+	return 1.0 if authored_clip != StringName() and resolved_clip == authored_clip else -1.0
+
+func _emit_locomotion_step_events() -> void:
+	if animation_graph == null or action_active or not grounded or current_speed_mps <= 0.045 or current_state not in LOCOMOTION_STATES:
+		last_locomotion_clip = StringName()
+		last_locomotion_state = StringName()
+		last_locomotion_phase = -1.0
+		locomotion_phase_distance = 0.0
+		return
+	var phase: float = animation_graph.gait_phase
+	if last_locomotion_phase < 0.0:
+		last_locomotion_phase = phase
+		locomotion_phase_distance = 0.0
+		return
+	# The normalized walk/run graph shares one cycle clock; blending never seeks.
+	locomotion_phase_distance += maxf(phase - last_locomotion_phase, 0.0)
+	while locomotion_phase_distance >= 0.5:
+		locomotion_phase_distance -= 0.5
+		locomotion_step.emit(StringName("left") if locomotion_step_index % 2 == 0 else StringName("right"))
+		locomotion_step_index += 1
+	last_locomotion_phase = phase

@@ -1,0 +1,530 @@
+extends RefCounted
+
+const RiverSection = preload("res://scripts/zones/river_section.gd")
+const BridgeSurfaceContract = preload("res://scripts/bridge_surface_contract.gd")
+const LandscapePresentation = preload("res://scripts/world_landscape_presentation.gd")
+const BUILD_STEPS := 31
+
+func step_count(_zone_id: String) -> int:
+	return BUILD_STEPS
+
+func build(context: ZoneBuildContext) -> void:
+	var previous := context.use_scene_rng(78233)
+	for step in range(BUILD_STEPS): build_step(context,step)
+	context.restore_scene_rng(previous)
+
+func build_step(context: ZoneBuildContext, step: int) -> bool:
+	var presentation := context.zone_root.get_node_or_null("WychwoodAuthoredPresentation") as Node3D
+	match step:
+		0: _begin(context)
+		1:
+			context.make_split_ground(44.0, 34.0, 0.0, 3.4, Color(0.065, 0.105, 0.07), BridgeSurfaceContract.DECK_WIDTH, BridgeSurfaceContract.bridge_length(3.4), BridgeSurfaceContract.APPROACH_LENGTH)
+		2: RiverSection.new().build(context, 0.0, 44.0, 3.4)
+		3: context.make_wychwood_terrain_layers()
+		4: context.make_play_area_bounds(44, 34, Color(0.04, 0.075, 0.045))
+		5: context.make_wychwood_path_edges()
+		6: _build_light_composition(context)
+		7: _build_gate_threshold(context)
+		8: _begin_authored_presentation(context)
+		9: _make_root_arch(presentation,context)
+		10: _make_canopy_layer(presentation, context, "WychwoodCanopyLower", 2.8, 6 if context.quality_preset() == "potato" else 9 if context.quality_preset() == "balanced" else 12, Color(0.13, 0.22, 0.13))
+		11: _make_canopy_layer(presentation, context, "WychwoodCanopyUpper", 4.4, 4 if context.quality_preset() == "potato" else 7 if context.quality_preset() == "balanced" else 9, Color(0.09, 0.17, 0.11))
+		12: _make_understory_layer(presentation,context)
+		13: _make_forest_floor_layer(presentation,context)
+		14: _make_path_floor_edges(presentation,context)
+		15: _make_path_rock_edges(presentation)
+		16: _make_clue_sightline_markers(presentation,context)
+		17: _make_clearing_frame(presentation,context)
+		18: _build_forest_frame(context)
+		19: _build_investigation_route(context)
+		20: _build_combat_clearing(context)
+		21: context.make_quality_wychwood_overhaul()
+		22: _build_gameplay_content(context)
+		23,24,25,26,27: _build_encounter_wave(context,step-23)
+		28,29: _build_bandit(context,step-28)
+		30: context.make_narrative_aftermath()
+		_: return false
+	return true
+
+func _begin(context: ZoneBuildContext) -> void:
+	var root := Node3D.new()
+	root.name = "AuthoredWychwoodSection"
+	root.set_meta("ticket", "WORLD-002")
+	root.set_meta("main_route_half_width", 2.6)
+	context.add_node(root)
+
+func _begin_authored_presentation(context: ZoneBuildContext) -> void:
+	var presentation := Node3D.new()
+	presentation.name = "WychwoodAuthoredPresentation"
+	presentation.set_meta("ticket", "WORLD-013")
+	presentation.set_meta("route_half_width", 2.6)
+	presentation.set_meta("river_crossing", "bridge_only")
+	presentation.set_meta("canopy_layers", 2)
+	presentation.set_meta("clue_sightlines", 5)
+	presentation.set_meta("combat_arena_authored", true)
+	context.add_node(presentation)
+
+func _make_east_layby(context: ZoneBuildContext) -> void:
+	var road := MeshInstance3D.new()
+	road.name = "MudRoad"
+	road.mesh = preload("res://scripts/prepared_zone_geometry.gd").mesh("wychwood_layby")
+	var material := context.make_world_material("wet_mud", Color(0.43, 0.41, 0.34)).duplicate() as StandardMaterial3D
+	material.vertex_color_use_as_albedo = true
+	road.material_override = material
+	road.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	context.add_node(road)
+
+func _make_root_arch(parent: Node3D, context: ZoneBuildContext) -> void:
+	var root_material := context.make_world_material("timber", Color(0.64, 0.56, 0.44))
+	var tree_mesh := context.forest_tree_mesh("res://assets_external/environment/forest/TwistedTree_2.obj")
+	if tree_mesh == null:
+		push_error("Required Wychwood threshold tree is missing")
+		return
+	var bounds := tree_mesh.get_aabb()
+	var bottom_center := bounds.position + Vector3(bounds.size.x * 0.5, 0, bounds.size.z * 0.5)
+	var arch_z := 10.15
+	for side in [-1.0, 1.0]:
+		var post := MeshInstance3D.new()
+		post.name = "WychwoodRootArchPost"
+		post.mesh = tree_mesh
+		var scale_value := Vector3(1.75, 3.65, 1.55) / bounds.size.max(Vector3.ONE * 0.01)
+		var basis := Basis.from_euler(Vector3(0, side * 0.72, side * 0.08)).scaled(scale_value)
+		post.transform = Transform3D(basis, Vector3(side * 3.75, 0.035, arch_z) - basis * bottom_center)
+		post.visibility_range_begin = 2.8
+		post.visibility_range_begin_margin = 0.5
+		parent.add_child(post)
+	for side in [-1.0, 1.0]:
+		_add_root_branch(parent, root_material, "WychwoodRootArchLintel", Vector3(side * 3.25, 2.03, arch_z), Vector3(side * 1.78, 3.02, arch_z - 0.12), 0.15, 0.11)
+		_add_root_branch(parent, root_material, "WychwoodRootArchCrown", Vector3(side * 1.78, 3.02, arch_z - 0.12), Vector3(0, 3.32, arch_z - 0.07), 0.11, 0.075)
+		_add_root_branch(parent, root_material, "WychwoodRootArchTwig", Vector3(side * 2.25, 2.70, arch_z - 0.07), Vector3(side * 2.78, 3.27, arch_z - 0.40), 0.055, 0.025)
+
+func _add_root_branch(parent: Node3D, material: Material, branch_name: String, start: Vector3, end: Vector3, base_radius: float, tip_radius: float) -> void:
+	var branch := MeshInstance3D.new()
+	branch.name = branch_name
+	var mesh := CylinderMesh.new()
+	mesh.bottom_radius = base_radius
+	mesh.top_radius = tip_radius
+	mesh.height = start.distance_to(end)
+	mesh.radial_segments = 7
+	branch.mesh = mesh
+	branch.position = (start + end) * 0.5
+	branch.basis = Basis(Quaternion(Vector3.UP, (end - start).normalized()))
+	branch.material_override = material
+	branch.visibility_range_begin = 2.8
+	branch.visibility_range_begin_margin = 0.5
+	parent.add_child(branch)
+
+func _make_canopy_layer(parent: Node3D, context: ZoneBuildContext, node_name: String, height: float, count: int, color: Color) -> void:
+	var source := load("res://assets_external/environment/forest/Bush_Common.obj") as ArrayMesh
+	if source == null:
+		push_error("Wychwood canopy foliage resource is missing")
+		return
+	var mesh := source.duplicate() as ArrayMesh
+	var foliage := context.make_material(color)
+	foliage.roughness = 0.95
+	for surface_index in range(mesh.get_surface_count()):
+		mesh.surface_set_material(surface_index, foliage)
+	var multimesh := MultiMesh.new()
+	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	multimesh.mesh = mesh
+	multimesh.instance_count = count
+	var batch := MultiMeshInstance3D.new()
+	batch.name = node_name
+	batch.multimesh = multimesh
+	batch.visibility_range_end = 54.0
+	parent.add_child(batch)
+	var prepared := preload("res://scripts/prepared_zone_geometry.gd").resource("wychwood_canopy_" + str(height) + "_" + str(count))
+	multimesh.buffer = prepared.get_meta("buffer")
+	if preload("res://scripts/performance_comparison_options.gd").enabled("static_bounds"):
+		multimesh.custom_aabb = prepared.get_meta("bounds")
+
+func _make_understory_layer(parent: Node3D, context: ZoneBuildContext) -> void:
+	var count := 10 if context.quality_preset() == "potato" else 16 if context.quality_preset() == "balanced" else 22
+	var source := load("res://assets_external/environment/forest/Bush_Common.obj") as ArrayMesh
+	if source == null:
+		push_error("Wychwood understory foliage resource is missing")
+		return
+	var mesh := source.duplicate() as ArrayMesh
+	var foliage := context.make_material(Color(0.16, 0.25, 0.12))
+	foliage.roughness = 0.98
+	for surface_index in range(mesh.get_surface_count()):
+		mesh.surface_set_material(surface_index, foliage)
+	var multimesh := MultiMesh.new()
+	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	multimesh.mesh = mesh
+	multimesh.instance_count = count
+	var batch := MultiMeshInstance3D.new()
+	batch.name = "WychwoodUnderstoryBatch"
+	batch.multimesh = multimesh
+	batch.visibility_range_end = 32.0
+	parent.add_child(batch)
+	var prepared := preload("res://scripts/prepared_zone_geometry.gd").resource("wychwood_understory_" + str(count))
+	multimesh.buffer = prepared.get_meta("buffer")
+	if preload("res://scripts/performance_comparison_options.gd").enabled("static_bounds"):
+		multimesh.custom_aabb = prepared.get_meta("bounds")
+
+func _make_forest_floor_layer(parent: Node3D, context: ZoneBuildContext) -> void:
+	var count := 12 if context.quality_preset() == "potato" else 20 if context.quality_preset() == "balanced" else 28
+	var source := load("res://assets_external/environment/forest/Bush_Common.obj") as ArrayMesh
+	if source == null:
+		push_error("Wychwood forest-floor foliage resource is missing")
+		return
+	var mesh := source.duplicate() as ArrayMesh
+	var fallen_leaves := context.make_material(Color(0.18, 0.19, 0.10))
+	fallen_leaves.roughness = 1.0
+	for surface_index in range(mesh.get_surface_count()):
+		mesh.surface_set_material(surface_index, fallen_leaves)
+	var multimesh := MultiMesh.new()
+	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	multimesh.mesh = mesh
+	multimesh.instance_count = count
+	var batch := MultiMeshInstance3D.new()
+	batch.name = "WychwoodForestFloorDetail"
+	batch.multimesh = multimesh
+	batch.visibility_range_end = 28.0
+	parent.add_child(batch)
+	var prepared := preload("res://scripts/prepared_zone_geometry.gd").resource("wychwood_floor_" + str(count))
+	multimesh.buffer = prepared.get_meta("buffer")
+	if preload("res://scripts/performance_comparison_options.gd").enabled("static_bounds"):
+		multimesh.custom_aabb = prepared.get_meta("bounds")
+
+func _make_path_floor_edges(parent: Node3D, context: ZoneBuildContext) -> void:
+	var material := context.make_world_material("forest_ground", Color(0.48, 0.53, 0.40))
+	for side in [-1.0, 1.0]:
+		for bank in [0, 1]:
+			var mesh := preload("res://scripts/prepared_zone_geometry.gd").mesh("wychwood_floor_edge_%s_%s" % [side, bank])
+			var edge := MeshInstance3D.new()
+			edge.name = "WychwoodPathFloorEdge_%s_%s" % ["West" if side < 0.0 else "East", "North" if bank == 0 else "South"]
+			edge.mesh = mesh
+			edge.material_override = material
+			edge.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			parent.add_child(edge)
+
+func _make_path_rock_edges(parent: Node3D) -> void:
+	var rock_texture := load("res://assets_external/environment/forest/PathRocks_Diffuse.png") as Texture2D
+	if rock_texture == null:
+		push_error("Wychwood path rocks are missing their approved material")
+		return
+	var material := StandardMaterial3D.new()
+	material.albedo_texture = rock_texture
+	material.albedo_color = Color(0.68, 0.72, 0.66)
+	material.roughness = 0.98
+	var batch := MeshInstance3D.new()
+	batch.name = "WychwoodPathRockBatch"
+	batch.mesh = preload("res://scripts/prepared_zone_geometry.gd").mesh("wychwood_path_rocks")
+	batch.material_override = material
+	batch.visibility_range_end = 28.0
+	batch.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	batch.set_meta("source_pack", "Quaternius Stylized Nature MegaKit CC0")
+	parent.add_child(batch)
+
+func _make_clue_sightline_markers(parent: Node3D, context: ZoneBuildContext) -> void:
+	var route := Node3D.new()
+	route.name = "WychwoodClueSightlines"
+	route.set_meta("count", 5)
+	route.set_meta("route_width", 5.2)
+	route.set_meta("order_independent", true)
+	parent.add_child(route)
+	var positions := [Vector3(-2.0, 0.0, 7.4), Vector3(-4.0, 0.0, 4.0), Vector3(3.8, 0.0, 2.2), Vector3(2.5, 0.0, 4.8), Vector3(0.0, 0.0, -4.2)]
+	for index in range(5):
+		var marker := Node3D.new()
+		marker.name = "ClueSightline_%02d" % index
+		marker.set_meta("clearance", 1.35)
+		marker.set_meta("purpose", "readable_layby")
+		marker.position = positions[index]
+		route.add_child(marker)
+
+func _make_clearing_frame(parent: Node3D, context: ZoneBuildContext) -> void:
+	var arena := Node3D.new()
+	arena.name = "WychwoodCombatClearingFrame"
+	arena.set_meta("center", Vector3(0, 0, -6.5))
+	arena.set_meta("safe_half_extents", Vector2(5.2, 4.2))
+	arena.set_meta("enemy_spacing", 2.3)
+	parent.add_child(arena)
+	var ash_material := context.make_material(Color(0.145, 0.115, 0.085))
+	ash_material.roughness = 1.0
+	ash_material.emission_enabled = true
+	ash_material.emission = Color(0.022, 0.016, 0.010)
+	ash_material.emission_energy_multiplier = 0.16
+	var rock_mesh := load("res://assets_external/environment/forest/RockPath_Round_Small_1.obj") as ArrayMesh
+	var rock_texture := load("res://assets_external/environment/forest/PathRocks_Diffuse.png") as Texture2D
+	if rock_mesh == null or rock_texture == null:
+		push_error("Wychwood clearing boundary rocks are missing their approved source")
+		return
+	var rock_bounds := rock_mesh.get_aabb()
+	var rock_center := rock_bounds.position + Vector3(rock_bounds.size.x * 0.5, 0, rock_bounds.size.z * 0.5)
+	var rock_surface := SurfaceTool.new()
+	for index in range(6):
+		var angle := TAU * float(index) / 6.0
+		var size := Vector3(0.75 + float(index % 2) * 0.17, 0.32 + float(index % 3) * 0.08, 0.62 + float(index % 2) * 0.11)
+		var scale_value := size / rock_bounds.size.max(Vector3.ONE * 0.01)
+		var basis := Basis(Vector3.UP, angle + float(index) * 0.37).scaled(scale_value)
+		var origin := Vector3(cos(angle) * 5.0, 0.065, -6.5 + sin(angle) * 3.7) - basis * rock_center
+		rock_surface.append_from(rock_mesh, 0, Transform3D(basis, origin))
+	var stones := MeshInstance3D.new()
+	stones.name = "WychwoodClearingBoundaryStones"
+	stones.mesh = rock_surface.commit()
+	var stone_material := StandardMaterial3D.new()
+	stone_material.albedo_texture = rock_texture
+	stone_material.albedo_color = Color(0.50, 0.55, 0.49)
+	stone_material.roughness = 0.98
+	stones.material_override = stone_material
+	stones.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	arena.add_child(stones)
+	var stain_data := [
+		[Vector3(-2.3, 0.035, -8.1), 1.35, 0.72],
+		[Vector3(2.1, 0.035, -7.4), 1.05, 0.85],
+		[Vector3(-0.4, 0.035, -4.8), 0.78, 0.50],
+	]
+	for stain_index in range(stain_data.size()):
+		var patch_data: Array = stain_data[stain_index]
+		_make_clearing_stain(arena, ash_material, patch_data[0], float(patch_data[1]), float(patch_data[2]), stain_index)
+	var landmark := Node3D.new()
+	landmark.name = "WychwoodMemoryLandmark"
+	landmark.set_meta("purpose", "combat_aftermath_anchor")
+	landmark.set_meta("visual_state", "unresolved_memory")
+	landmark.position = Vector3(0, 0, -10.8)
+	arena.add_child(landmark)
+	_make_memory_shrine(landmark, context)
+	var witness_tree = context.make_fitted_environment_role("forest_tree", Vector3(0, 0, -10.8), Vector3(3.2, 4.8, 3.0), -9.0, false)
+	if witness_tree != null:
+		witness_tree.name = "WychwoodMemoryWitnessTree"
+		witness_tree.set_meta("purpose", "combat_aftermath_anchor")
+		var witness_material := context.make_material(Color(0.075, 0.090, 0.068))
+		witness_material.roughness = 0.98
+		witness_material.emission_enabled = true
+		witness_material.emission = Color(0.020, 0.055, 0.038)
+		witness_material.emission_energy_multiplier = 0.28
+		_apply_witness_material(witness_tree, witness_material)
+	context.make_ritual_stone(Vector3(0, 0, -10.8))
+
+func _make_clearing_stain(parent: Node3D, material: Material, position: Vector3, radius: float, depth_scale: float, stain_index: int) -> void:
+	var vertices := PackedVector3Array()
+	var uvs := PackedVector2Array()
+	var points := 12
+	for segment_index in range(points):
+		var next := (segment_index + 1) % points
+		var angle := TAU * float(segment_index) / float(points)
+		var variation := 0.82 + 0.15 * sin(float(segment_index) * 2.17 + radius)
+		var point := Vector3(cos(angle) * radius * variation, 0, sin(angle) * radius * depth_scale * variation)
+		var next_angle := TAU * float(next) / float(points)
+		var next_variation := 0.82 + 0.15 * sin(float(next) * 2.17 + radius)
+		var next_point := Vector3(cos(next_angle) * radius * next_variation, 0, sin(next_angle) * radius * depth_scale * next_variation)
+		# Clockwise in XZ produces an upward-facing triangle in Godot.
+		for vertex in [Vector3.ZERO, next_point, point]:
+			vertices.append(vertex)
+			uvs.append(Vector2(0.5 + vertex.x / (radius * 2.0), 0.5 + vertex.z / (radius * depth_scale * 2.0)))
+	var arrays := []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	arrays[Mesh.ARRAY_TEX_UV] = uvs
+	var mesh := ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	var stain := MeshInstance3D.new()
+	stain.name = "WychwoodClearingAshStain_%d" % stain_index
+	stain.mesh = mesh
+	stain.position = position
+	stain.material_override = material
+	parent.add_child(stain)
+
+func _make_memory_shrine(parent: Node3D, context: ZoneBuildContext) -> void:
+	var token_material := context.make_material(Color(0.30, 0.47, 0.39))
+	token_material.emission_enabled = true
+	token_material.emission = Color(0.08, 0.22, 0.16)
+	token_material.emission_energy_multiplier = 0.45
+	for data in [[Vector3(-0.58, 1.62, -0.12), -12.0], [Vector3(0.48, 1.92, 0.08), 9.0], [Vector3(0.05, 1.30, 0.16), 0.0]]:
+		var token := MeshInstance3D.new()
+		token.name = "MemoryShrineWitnessToken"
+		var token_mesh := BoxMesh.new()
+		token_mesh.size = Vector3(0.11, 0.24, 0.035)
+		token.mesh = token_mesh
+		token.position = data[0]
+		token.rotation_degrees.z = float(data[1])
+		token.material_override = token_material
+		parent.add_child(token)
+
+func _apply_witness_material(node: Node, material: Material) -> void:
+	if node is MeshInstance3D:
+		(node as MeshInstance3D).material_override = material
+	for child in node.get_children():
+		_apply_witness_material(child, material)
+
+func _build_light_composition(context: ZoneBuildContext) -> void:
+	context.make_light("Moon Shaft", Vector3(-2.2, 5.0, -5.5), Color(0.56, 0.64, 0.76), 3.8)
+	context.make_light("Trail Threat", Vector3(3.0, 2.9, -6.1), Color(0.77, 0.58, 0.38), 2.0)
+	context.make_fog_sheet(Vector3(0, 1.0, -6), Vector3(24, 1, 8), Color(0.24, 0.30, 0.28, 0.20))
+	context.make_fog_sheet(Vector3(-10, 0.8, 5), Vector3(14, 1, 5), Color(0.16, 0.24, 0.18, 0.16))
+
+func _build_gate_threshold(context: ZoneBuildContext) -> void:
+	var marker := Node3D.new()
+	marker.name = "WychwoodGateThreshold"
+	marker.set_meta("clear_half_width", 3.4)
+	context.add_node(marker)
+	for x in [-3.7, 3.7]:
+		context.make_torch(Vector3(x, 0, 13.4))
+		context.make_tree(Vector3(x * 2.15, 0, 13.8))
+	context.append_prepared_detail("WychwoodThresholdBrokenSign_6dbf88a82b")
+
+func _build_forest_frame(context: ZoneBuildContext) -> void:
+	_build_distant_forest(context)
+	for x in [-20.0, -16.0, -12.0, -8.0, 8.0, 12.0, 16.0, 20.0]:
+		context.make_tree(Vector3(x, 0, 15.2))
+		context.make_tree(Vector3(x, 0, -15.2))
+	context.make_tree_wall(16.0, -20.0, 7, false)
+	context.make_tree_wall(16.0, 20.0, 7, false)
+	context.make_tree_cluster([
+		Vector3(-18,0,-12), Vector3(-15,0,-6), Vector3(-16,0,7), Vector3(-13,0,13),
+		Vector3(16,0,-12), Vector3(18,0,-5), Vector3(17,0,5), Vector3(14,0,13),
+		Vector3(-8,0,-14), Vector3(8,0,14), Vector3(-4,0,15), Vector3(5,0,-15),
+	])
+	for tree in [
+		[Vector3(-13.0,0,10.0), 0.74, -12.0], [Vector3(12.5,0,9.2), 0.66, 17.0],
+		[Vector3(-12.6,0,5.7), 0.64, 24.0], [Vector3(13.2,0,4.9), 0.76, -16.0],
+		[Vector3(-12.8,0,-4.0), 0.72, 9.0], [Vector3(12.4,0,-3.8), 0.68, -22.0],
+		[Vector3(-11.4,0,-11.0), 0.78, -6.0], [Vector3(11.8,0,-11.4), 0.74, 19.0],
+	]:
+		context.make_tree(tree[0])
+		var marker := Node3D.new()
+		marker.name = "WychwoodLandmarkTree"
+		marker.position = tree[0]
+		marker.set_meta("authored_scale", float(tree[1]))
+		marker.set_meta("authored_yaw", float(tree[2]))
+		marker.add_to_group("wychwood_landmark_tree")
+		context.add_node(marker)
+
+func _build_distant_forest(context: ZoneBuildContext) -> void:
+	var apron_surface := SurfaceTool.new()
+	apron_surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for point in [Vector3(-42, -0.35, -38), Vector3(42, -0.35, -38), Vector3(-42, -0.35, 38), Vector3(42, -0.35, -38), Vector3(42, -0.35, 38), Vector3(-42, -0.35, 38)]:
+		apron_surface.set_uv(Vector2(point.x, point.z))
+		apron_surface.add_vertex(point)
+	apron_surface.generate_normals()
+	var apron := MeshInstance3D.new()
+	apron.name = "WychwoodDistantForestGround"
+	apron.mesh = apron_surface.commit()
+	apron.material_override = context.make_world_material("forest_ground", Color(0.38, 0.43, 0.34))
+	apron.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	context.add_node(apron)
+	LandscapePresentation.build(context, Vector2(42, 38), 1.3, -0.35)
+	var count := 16 if context.quality_preset() == "potato" else 32
+	var source_paths := ["TwistedTree_2.obj", "CommonTree_5.obj"]
+	for source_index in range(source_paths.size()):
+		var source := context.forest_tree_mesh("res://assets_external/environment/forest/" + source_paths[source_index])
+		if source == null:
+			push_error("Wychwood distant forest resource is missing: " + source_paths[source_index])
+			return
+		var bounds := source.get_aabb()
+		var bottom_center := bounds.position + Vector3(bounds.size.x * 0.5, 0, bounds.size.z * 0.5)
+		var multimesh := MultiMesh.new()
+		multimesh.transform_format = MultiMesh.TRANSFORM_3D
+		multimesh.mesh = source
+		var species_count := (count + 1 - source_index) / 2
+		multimesh.instance_count = species_count
+		var batch := MultiMeshInstance3D.new()
+		batch.name = "WychwoodDistantForest" if source_index == 0 else "WychwoodDistantForest_%d" % source_index
+		batch.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		batch.multimesh = multimesh
+		context.add_node(batch)
+		for local_index in range(species_count):
+			var index := local_index * 2 + source_index
+			var ring := index % 2
+			var angle := TAU * (float(index / 2) + 0.27 + float(ring) * 0.51) / float(count / 2)
+			var position := Vector3(cos(angle) * (32.0 + float(ring) * 7.0), -0.35, sin(angle) * (28.0 + float(ring) * 8.0))
+			if index % 4 == 0:
+				position = Vector3(-19.0 + float(index / 4) * 5.4, -0.35, -19.0 - float(index % 3) * 1.2)
+			var height := 8.0 + float(index % 5) * 0.75 + float(ring) * 2.1
+			var scale_factor := height / maxf(bounds.size.y, 0.01)
+			var basis := Basis.from_euler(Vector3(0, float(index) * 1.73, 0)).scaled(Vector3.ONE * scale_factor)
+			multimesh.set_instance_transform(local_index, Transform3D(basis, position - basis * bottom_center))
+
+func _build_investigation_route(context: ZoneBuildContext) -> void:
+	var marker := Node3D.new()
+	marker.name = "WychwoodInvestigationRoute"
+	marker.set_meta("clue_laybys", 3)
+	context.add_node(marker)
+	context.make_wychwood_route_dressing()
+	context.make_wychwood_corridor()
+	context.make_wychwood_story_beats()
+	for pos in [Vector3(-8,0,-3), Vector3(6.7,0,-9.2), Vector3(9.8,0,-12.0), Vector3(-5,0,9.8)]:
+		context.make_deadfall(pos)
+	for bush in [Vector3(-6.6,0,8.0), Vector3(6.2,0,6.2), Vector3(-6.7,0,3.2), Vector3(6.8,0,-2.4)]:
+		_make_route_bush(context, bush)
+		var bush_marker := Node3D.new()
+		bush_marker.name = "WychwoodRouteBushMarker"
+		bush_marker.position = bush
+		bush_marker.add_to_group("wychwood_route_bush")
+		context.add_node(bush_marker)
+
+func _make_route_bush(context: ZoneBuildContext, position: Vector3) -> void:
+	var source := load("res://assets_external/environment/forest/Bush_Common.obj") as ArrayMesh
+	if source == null:
+		push_error("Wychwood route bush foliage resource is missing")
+		return
+	var bounds := source.get_aabb()
+	var bottom_center := bounds.position + Vector3(bounds.size.x * 0.5, 0, bounds.size.z * 0.5)
+	var material := context.make_material(Color(0.055, 0.17, 0.072))
+	material.roughness = 0.98
+	var mesh := source.duplicate() as ArrayMesh
+	for surface_index in range(mesh.get_surface_count()):
+		mesh.surface_set_material(surface_index, material)
+	for index in range(3):
+		var leaf_mass := MeshInstance3D.new()
+		leaf_mass.name = "WychwoodRouteBushMass"
+		leaf_mass.add_to_group("wychwood_route_bush_visual")
+		leaf_mass.mesh = mesh
+		var target_size := Vector3(0.83 + float(index % 2) * 0.15, 0.62 + float(index % 2) * 0.08, 0.72)
+		var normalized_scale := target_size / bounds.size.max(Vector3.ONE * 0.01)
+		var basis := Basis(Vector3.UP, deg_to_rad(float(index) * 37.0)).scaled(normalized_scale)
+		leaf_mass.transform = Transform3D(basis, position + Vector3(float(index - 1) * 0.42, 0.045, 0.12 * float((index + 1) % 2)) - basis * bottom_center)
+		context.add_node(leaf_mass)
+
+func _build_combat_clearing(context: ZoneBuildContext) -> void:
+	var marker := Node3D.new()
+	marker.name = "AuthoredWychwoodCombatArena"
+	marker.set_meta("safe_half_extents", Vector2(5.2, 4.2))
+	context.add_node(marker)
+	context.make_monster_clearing(Vector3(0, 0, -6.5))
+	# Keep the ritual cluster west of the reserved x=10.8 north-arrival route.
+	# The former stones at (6.8, -10.2) and (10.0, -9.8) each caught a
+	# player-sized capsule returning from the Deep Wood.
+	for pos in [Vector3(5.4,0,-8.6), Vector3(8.5,0,-11.6), Vector3(6.6,0,-10.0), Vector3(8.5,0,-8.1)]:
+		context.make_ritual_stone(pos)
+
+func _build_gameplay_content(context: ZoneBuildContext) -> void:
+	context.make_zone_gate("Back to Greyfen", Vector3(0, 0, 15), "greyfen", Vector3(0, 1, -13))
+	context.make_clue("corpse", "Identify Bram by his cart ledger", Vector3(-0.9, 0, 9.0), "main_road_of_crows", "bram", Color(0.32, 0.18, 0.16))
+	context.make_clue("black_feathers", "Identify Sella by the red-thread feathers", Vector3(0.9, 0, 7.3), "main_road_of_crows", "sella", Color(0.03, 0.03, 0.035))
+	context.make_clue("oren_token", "Recover Oren's scratched shrine token", Vector3(3.8, 0, 2.2), "main_road_of_crows", "oren", Color(0.46, 0.28, 0.12))
+	context.make_clue("claw_marks", "Recover the blackened Vargan wire", Vector3(-0.8, 0, 5.6), "main_road_of_crows", "vargan_wire", Color(0.18, 0.18, 0.18))
+	context.make_clue("tracks", "Read the deliberate drag marks", Vector3(0, 0, -4.2), "main_road_of_crows", "drag_marks", Color(0.15, 0.11, 0.08))
+	if context.is_quest_active("main_teeth_in_rain") and context.is_objective_done("main_teeth_in_rain", "read_chapel_names"):
+		if not context.is_objective_done("main_teeth_in_rain", "name_the_dead"):
+			context.make_clue("ritual_stones", "Speak Oren's name at the ritual stones", Vector3(8, 0, -10), "main_teeth_in_rain", "name_the_dead", Color(0.38, 0.38, 0.36))
+		else:
+			context.make_zone_gate("Enter deeper Wychwood", Vector3(10.8, 0, -13.2), "deep_wood", Vector3(0, 1, 12))
+	if context.is_quest_active("side_black_dog") and not bool(context.get_story_flag("black_dog_bandit_camp_inspected", false)):
+		context.make_clue("bandit_camp", "Inspect bandit camp", Vector3(-12, 0, -12), "side_black_dog", "find_dog", Color(0.30, 0.18, 0.10))
+	context.make_clue("bitter_roots", "Collect bitter roots", Vector3(8, 0, -7.8), "side_bitter_roots", "collect_roots", Color(0.46, 0.22, 0.16))
+	# Inspecting the bed supplies evidence. Mira's treatment is a separate,
+	# explicit conversation choice and must never finish on this interaction.
+	context.make_clue("sacrifice_roots", "Study the sacrifice-root bed", Vector3(10, 0, -9.2), "side_bitter_roots", "study_roots", Color(0.38, 0.16, 0.13))
+	context.make_herb("mooncap", Vector3(-7, 0, -6), Color(0.58, 0.65, 0.86))
+	context.make_herb("redroot", Vector3(-10, 0, -2), Color(0.55, 0.12, 0.11))
+	context.make_herb("grave_moss", Vector3(5, 0, -13), Color(0.24, 0.42, 0.24))
+
+func _build_encounter_wave(context: ZoneBuildContext, wave: int) -> void:
+	if wave < context.wychwood_wave_progress(): return
+	if context.is_quest_active("main_road_of_crows") and not context.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
+		var brute_z := -14.2 if context.is_objective_done("main_road_of_crows", "drag_marks") else -12.4
+		var ids := ["ghoulkin", "ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]
+		var positions := [Vector3(-2.4, 0.8, -8.8), Vector3(2.7, 0.8, -9.6), Vector3(-4.8, 0.8, -3.8), Vector3(4.6, 0.8, -5.3), Vector3(0.2, 0.8, brute_z)]
+		var enemy = context.spawn_enemy(ids[wave], positions[wave])
+		if enemy != null:
+			enemy.set_meta("wychwood_wave", wave)
+			# Every retained wave is constructed before readiness; only the earned
+			# next wave is active, as on ordinary direct arrival and Continue.
+			enemy.set_encounter_active(wave == context.wychwood_wave_progress())
+
+func _build_bandit(context: ZoneBuildContext, index: int) -> void:
+	if context.is_quest_active("side_black_dog") and not context.is_objective_done("side_black_dog", "find_dog") and not bool(context.get_story_flag("black_dog_bandits_defeated", false)):
+		context.spawn_enemy("bandit", Vector3(-14, 0.8, -14) if index == 0 else Vector3(-12, 0.8, -15))

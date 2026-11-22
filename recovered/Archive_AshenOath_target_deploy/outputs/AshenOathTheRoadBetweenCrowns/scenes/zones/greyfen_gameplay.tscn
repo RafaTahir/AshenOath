@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[node name="GreyfenGameplayLayer" type="Node3D"]
+
+[node name="SpawnAnchor" type="Marker3D" parent="."]
+position = Vector3(0, 0, 7)
+
+[node name="ShrineApproachAnchor" type="Marker3D" parent="."]
+position = Vector3(0, 0, 0)
+
+[node name="WychwoodGateAnchor" type="Marker3D" parent="."]
+position = Vector3(0, 0, -38)
+
+[node name="RiverBridgeAnchor" type="Marker3D" parent="."]
+position = Vector3(0, 0, -15)

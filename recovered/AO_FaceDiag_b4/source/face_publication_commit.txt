@@ -1,0 +1,11 @@
+Publish the lower-face geometry repair for eleven cast assets
+
+Package lower-face-repair-20261112-1653ba2-r4 from source 1653ba2,
+retaining the combined campaign baseline b4b52e4 as the prior release.
+Preserve the exact generated resources, source inputs and predecessor proofs.
+
+The one authorized runtime diagnostic established the legacy chin collapse
+on Kael and Tor. Pure source admission, maintained packaging, resource closure,
+graph validation and transport byte inspection passed. No post-repair gameplay
+or visual acceptance is claimed; Anwen uses a separate head and remains
+unconfirmed. Publication and observed deployment are recorded separately.

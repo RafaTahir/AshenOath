@@ -1,0 +1,45 @@
+{
+  "version": 2,
+  "ticket": "CHAR-002",
+  "shared_skeleton": "Quaternius CharacterArmature for humans; AshenHumanoidSkeleton for ghouls",
+  "animation_map": {
+    "idle": "Idle",
+    "walk": "Walk",
+    "run": "Run",
+    "attack": "Attack",
+    "heavy_attack": "HeavyAttack",
+    "hit": "RecieveHit",
+    "dodge": "Dodge",
+    "death": "Death"
+  },
+  "equipment_sockets": {
+    "right_hand": "Hand.R",
+    "left_hand": "Hand.L",
+    "head": "Head"
+  },
+  "roles": {
+    "player_human": "res://assets_external/characters_universal/Male_Peasant.gltf",
+    "sister_anwen_human": "res://assets_external/characters_universal/Female_Peasant.gltf",
+    "villager_male": "res://assets_external/characters_universal/Male_Peasant.gltf",
+    "villager_female": "res://assets_external/characters_universal/Female_Peasant.gltf",
+    "villager_worker": "res://assets_external/characters_universal/Male_Peasant.gltf",
+    "villager_hooded": "res://assets_external/characters_universal/Female_Peasant.gltf",
+    "castle_guard": "res://assets_external/characters_universal/Male_Peasant.gltf",
+    "road_ranger": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+    "ghoul_gaunt": "res://assets_external/animated/OrcSkull_Animated_CC0.gltf",
+    "ghoul_stalker": "res://assets_external/characters_real/GhoulStalker_Real.glb",
+    "ghoul_brute": "res://assets_external/characters_real/GhoulBrute_Real.glb",
+    "orc_skull_real": "res://assets_external/animated/OrcSkull_Animated_CC0.gltf"
+  },
+  "role_specs": {
+    "kael": {"height": 1.78, "lod": 22.0, "occupation": "hunter"},
+    "anwen": {"height": 1.68, "lod": 22.0, "occupation": "cleric"},
+    "villager_male": {"height": 1.72, "lod": 14.0, "occupation": "villager"},
+    "villager_female": {"height": 1.66, "lod": 14.0, "occupation": "villager"},
+    "villager_worker": {"height": 1.74, "lod": 14.0, "occupation": "worker"},
+    "villager_hooded": {"height": 1.69, "lod": 14.0, "occupation": "pilgrim"},
+    "castle_guard": {"height": 1.82, "lod": 16.0, "occupation": "guard"},
+    "road_ranger": {"height": 1.75, "lod": 16.0, "occupation": "ranger"}
+  },
+  "lod_distance": {"hero_full": 22.0, "crowd_full": 14.0, "animation_far_tick": 20.0}
+}

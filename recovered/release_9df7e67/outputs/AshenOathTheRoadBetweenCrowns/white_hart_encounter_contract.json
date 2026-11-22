@@ -1,0 +1,18 @@
+{
+  "ticket": "BOSS-001",
+  "enemy": "white_hart_avatar",
+  "arena": "hart_glade",
+  "combat_endings": ["bind", "kill"],
+  "peaceful_endings": ["expose", "free"],
+  "phases": [
+    {"phase": 1, "health_above": 0.66},
+    {"phase": 2, "health_above": 0.33},
+    {"phase": 3, "health_above": 0.0}
+  ],
+  "rules": {
+    "leash_radius": 10.0,
+    "global_balance_unchanged": true,
+    "peaceful_resolution_valid": true,
+    "ending_applies_after_death": true
+  }
+}

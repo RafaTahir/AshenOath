@@ -1,3 +1,0 @@
-Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
-
-{"actual_background_draws":3,"actual_degenerate_clipped_polygons":[{"epsilon":0.003,"points":[[158.0,85.0],[157.997009277344,85.0608749389648],[157.997009277344,84.9391174316406]]}],"collinear_helper_returns_indices":true,"cost_scope":"Headless math micro-observation only; extra test runs only in the existing invalidated background-polygon loop; not a frame-time benchmark.","engine_errors":[],"extra_triangulation_usec_per64vertex_polygon":40.1875,"kind":"hud_navigation_polygon_regression","normal_circle_valid":true,"passed":true}

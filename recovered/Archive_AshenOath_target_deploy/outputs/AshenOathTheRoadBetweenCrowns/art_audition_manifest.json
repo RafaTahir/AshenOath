@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "ticket": "ART-001",
+  "direction": "grounded_stylized_dark_fantasy",
+  "camera": {
+    "resolution": [1280, 720],
+    "portrait_fov": 34.0,
+    "portrait_position": [0.0, 1.22, 3.4],
+    "portrait_target": [0.0, 1.02, 0.0]
+  },
+  "roles": {
+    "kael": {
+      "baseline": "res://assets_external/characters/Adventurer_PolyPizza_Quaternius_CC0.glb",
+      "candidate": "res://assets_external/animated/Warrior_Animated_CC0.gltf",
+      "decision": "rejected_for_char_001",
+      "required_height": 1.78,
+      "notes": "Warrior has a clearer hunter/combat silhouette, authored clothing and a matching weapon. Facial identity remains a CHAR-001 requirement."
+    },
+    "sister_anwen": {
+      "baseline": "res://assets_external/characters/AnimatedWoman_PolyPizza_Quaternius_CC0.glb",
+      "candidate": "res://assets_external/animated/Cleric_Animated_CC0.gltf",
+      "decision": "rejected_for_char_001",
+      "required_height": 1.68,
+      "notes": "Cleric communicates shrine authority through robe, staff and silhouette. Age, hair and facial identity still require authored treatment."
+    },
+    "ghoulkin": {
+      "baseline": "res://assets_external/characters_real/GhoulGaunt_Real.glb",
+      "candidate": "res://assets_external/animated/OrcSkull_Animated_CC0.gltf",
+      "decision": "reference_only_for_mon_001",
+      "required_height": 1.82,
+      "notes": "OrcSkull is cohesive and animated but is only a direction candidate. MON-001 must remove heroic proportions and create a cursed-human horror silhouette."
+    }
+  },
+  "greyfen": {
+    "baseline": "runtime Greyfen procedural street",
+    "decision": "components_selected_for_asset_001_composition_rejected",
+    "required_assets": [
+      "res://assets_external/environment/village/Wall_Plaster_Door_Flat.obj",
+      "res://assets_external/environment/village/Wall_UnevenBrick_Straight.obj",
+      "res://assets_external/environment/village/Roof_RoundTiles_4x6.obj",
+      "res://assets_external/environment/village/Door_1_Flat.obj",
+      "res://assets_external/environment/village/Prop_Chimney.obj",
+      "res://assets_external/environment/props/Stall_Cart_Empty.obj",
+      "res://assets_external/environment/props/Barrel.obj",
+      "res://assets_external/environment/forest/CommonTree_1.obj"
+    ],
+    "notes": "WORLD-001 must author complete buildings from the kit instead of treating isolated wall and roof pieces as role-complete houses."
+  },
+  "rejected_patterns": [
+    "primitive face or eye boxes",
+    "root-mounted anatomy and clothing",
+    "single wall panel presented as a complete building",
+    "cone trees on the player route",
+    "flat checkerboard road patches",
+    "default white or untextured major actors",
+    "character identity created only by tint or scale"
+  ]
+}

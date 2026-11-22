@@ -1,0 +1,377 @@
+{
+  "schema_version": 2,
+  "program": "SOUL-REBUILD",
+  "shared_human_skeleton": "QuaterniusAnimatedHumanoid32 plus compatible Ranger profile",
+  "shared_monster_skeleton": "QuaterniusMonster",
+  "roles": {
+    "kael": {
+      "family": "human",
+      "source_pack": "quaternius_universal_base_characters",
+      "outfit_pack": "quaternius_universal_base_characters",
+      "target_height": 1.78,
+      "triangle_budget": 20000,
+      "texture_budget": 1024,
+      "required_clips": [
+        "Idle",
+        "Walk",
+        "Run",
+        "Attack",
+        "HeavyAttack",
+        "Dodge",
+        "RecieveHit",
+        "Death"
+      ],
+      "equipment_sockets": [
+        "Weapon.R",
+        "Fist.L",
+        "Head"
+      ],
+      "status": "opening_single_material_a_set",
+      "approved": true,
+      "export_eligible": true,
+      "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
+      "sha256": "76b9abd7664a1a230f74501d03e6388553ab933732d4e1ab66c399a34286f276",
+      "model": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
+      "outfit": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
+      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+      "runtime_artifacts": [
+        {
+          "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
+          "bytes": 30477,
+          "sha256": "76b9abd7664a1a230f74501d03e6388553ab933732d4e1ab66c399a34286f276"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.bin",
+          "bytes": 1171216,
+          "sha256": "d808c177751183950b609ce6d7dcba3544d08bc9c653d06e22f6ff0075040926"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.png",
+          "bytes": 1231404,
+          "sha256": "c9494c06134cc2e7dff2558307efe49e677b9a35127dfbdd70f5315ae9ea3101"
+        }
+      ],
+      "animation_library": "embedded",
+      "notes": "Complete clothed Universal body assembly with native facial anatomy, deterministic occupation palette, shared non-root-motion clips, and 1K maps.",
+      "blocked_reason": ""
+    },
+    "sister_anwen": {
+      "family": "human",
+      "source_pack": "quaternius_universal_base_characters",
+      "outfit_pack": "quaternius_universal_base_characters",
+      "target_height": 1.68,
+      "triangle_budget": 20000,
+      "texture_budget": 1024,
+      "required_clips": [
+        "Idle",
+        "Walk",
+        "Dialogue",
+        "RecieveHit"
+      ],
+      "equipment_sockets": [
+        "Weapon.R",
+        "Head"
+      ],
+      "status": "opening_single_material_a_set",
+      "approved": true,
+      "export_eligible": true,
+      "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
+      "sha256": "bc18388f80f73a739c996efa963565dc283d1491d1006643cc3ee0f3bf05587c",
+      "model": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
+      "outfit": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
+      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+      "runtime_artifacts": [
+        {
+          "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
+          "bytes": 31257,
+          "sha256": "bc18388f80f73a739c996efa963565dc283d1491d1006643cc3ee0f3bf05587c"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.bin",
+          "bytes": 1440748,
+          "sha256": "b4e8b543a3dd8510d097f6c63af461c6b61f2a3ed62f64748e09a7f556d989f9"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.png",
+          "bytes": 1207791,
+          "sha256": "36a470db2bda34b853ebfd57307ecc86af0ba198067a9285fc1b33e95b29632d"
+        }
+      ],
+      "animation_library": "embedded",
+      "notes": "Complete clothed Universal body assembly with native facial anatomy, deterministic occupation palette, shared non-root-motion clips, and 1K maps.",
+      "blocked_reason": ""
+    },
+    "villager": {
+      "family": "human",
+      "source_pack": "quaternius_universal_base_characters",
+      "outfit_pack": "quaternius_universal_base_characters",
+      "target_height_range": [
+        1.55,
+        1.9
+      ],
+      "triangle_budget": 14000,
+      "texture_budget": 1024,
+      "required_clips": [
+        "Idle",
+        "Walk",
+        "Work"
+      ],
+      "equipment_sockets": [
+        "Head",
+        "Hand.R"
+      ],
+      "status": "opening_single_material_crowd",
+      "approved": true,
+      "export_eligible": true,
+      "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+      "sha256": "7039f60e180bcf8c1d699790e5cc578ef8d287e26e878ce4f7495d0549c36544",
+      "model_family": "res://assets_external/characters_universal/{Male_Peasant,Female_Peasant}_and_native_head_hair.gltf",
+      "model": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+      "runtime_artifacts": [
+        {
+          "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+          "bytes": 30510,
+          "sha256": "7039f60e180bcf8c1d699790e5cc578ef8d287e26e878ce4f7495d0549c36544"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.bin",
+          "bytes": 1171216,
+          "sha256": "d808c177751183950b609ce6d7dcba3544d08bc9c653d06e22f6ff0075040926"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.png",
+          "bytes": 1250672,
+          "sha256": "608c6c6acc4987dcfe92c01589131d9981e2e9711e78e093295640fb1e17518d"
+        }
+      ],
+      "notes": "Complete clothed Universal body assembly with native facial anatomy, deterministic occupation palette, shared non-root-motion clips, and 1K maps.",
+      "outfit": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+      "blocked_reason": ""
+    },
+    "guard": {
+      "family": "human",
+      "source_pack": "quaternius_universal_base_characters",
+      "outfit_pack": "quaternius_universal_base_characters",
+      "target_height_range": [
+        1.65,
+        1.9
+      ],
+      "triangle_budget": 16000,
+      "texture_budget": 1024,
+      "required_clips": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "RecieveHit",
+        "Death"
+      ],
+      "equipment_sockets": [
+        "Head",
+        "Hand.R",
+        "Hand.L"
+      ],
+      "status": "opening_single_material_crowd",
+      "approved": true,
+      "export_eligible": true,
+      "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+      "sha256": "c98bfbee092140937e2907535a8beb2d3aa1e5185f9313f9b5a880a1f1291afe",
+      "model": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+      "runtime_artifacts": [
+        {
+          "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+          "bytes": 30516,
+          "sha256": "c98bfbee092140937e2907535a8beb2d3aa1e5185f9313f9b5a880a1f1291afe"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.bin",
+          "bytes": 1150432,
+          "sha256": "42eda764ce432ec2cc96adeab7453f2676d1be764c9f032e125664c73ce4ce1d"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.png",
+          "bytes": 1241900,
+          "sha256": "920aaef0d1ee27e63c15bedb68a307c893fc417ab6494e90b854e58cbd7f79d7"
+        }
+      ],
+      "notes": "Complete clothed Universal body assembly with native facial anatomy, deterministic occupation palette, shared non-root-motion clips, and 1K maps.",
+      "outfit": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+      "blocked_reason": ""
+    },
+    "ranger": {
+      "family": "human",
+      "source_pack": "quaternius_modular_character_outfits_fantasy",
+      "target_height": 1.75,
+      "triangle_budget": 20000,
+      "texture_budget": 1024,
+      "required_clips": [
+        "Idle",
+        "Walk",
+        "Run",
+        "RecieveHit",
+        "Death"
+      ],
+      "equipment_sockets": [
+        "Head",
+        "Hand.R",
+        "Hand.L"
+      ],
+      "status": "runtime_accepted",
+      "approved": true,
+      "export_eligible": true,
+      "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
+      "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt",
+      "runtime_artifacts": [
+        {
+          "path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+          "bytes": 54079,
+          "sha256": "8eea71448ca41108589c7d13e9261de92b7068df8166b6e54bf29e6f1e530dbe"
+        },
+        {
+          "path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.bin",
+          "bytes": 1746884,
+          "sha256": "5bbb0d42cb324c6c27ce00417e68a876d92978f07d161f83590f0d7c0570eff6"
+        },
+        {
+          "path": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png",
+          "bytes": 840454,
+          "sha256": "220dd4fabbfecce9847e876e2e2b02327315c08aac096d4648b62d5c53716c90"
+        },
+        {
+          "path": "res://assets_external/characters_ranger/T_Ranger_Normal_1K.png",
+          "bytes": 940081,
+          "sha256": "a4daa2410b007ad9fe7e15ac7ecc1e579ab08aafa3725ba3f158c5a24c68b540"
+        },
+        {
+          "path": "res://assets_external/characters_ranger/T_Ranger_ORM_1K.png",
+          "bytes": 786403,
+          "sha256": "76cfba43d6748a79a7ea26184415e4810731f6e4b207c3c84a6b1a084b49bd9f"
+        }
+      ],
+      "path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+      "sha256": "8EEA71448CA41108589C7D13E9261DE92B7068DF8166B6E54BF29E6F1E530DBE",
+      "model": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+      "animation_library": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres"
+    },
+    "ghoulkin": {
+      "family": "monster",
+      "source_pack": "quaternius_lowpoly_animated_monsters",
+      "target_height_range": [
+        1.6,
+        2.0
+      ],
+      "triangle_budget": 18000,
+      "texture_budget": 1024,
+      "required_clips": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "RecieveHit",
+        "Death"
+      ],
+      "equipment_sockets": [],
+      "status": "char_restore_001_retained_skeleton_family",
+      "approved": false,
+      "export_eligible": false,
+      "blocked_reason": "Retained Skeleton source is runtime-valid; bespoke cursed-human family art remains a later visual gate.",
+      "path": "res://assets_external/enemies/Skeleton.fbx",
+      "current_fallback": "res://assets_external/enemies/Skeleton.fbx"
+    },
+    "ghoulkin_skeleton": {
+      "family": "monster",
+      "source_pack": "quaternius_lowpoly_animated_monsters",
+      "target_height": 1.72,
+      "triangle_budget": 12000,
+      "texture_budget": 1024,
+      "required_clips": [
+        "SkeletonArmature|Skeleton_Idle",
+        "SkeletonArmature|Skeleton_Running",
+        "SkeletonArmature|Skeleton_Attack",
+        "SkeletonArmature|Skeleton_Spawn",
+        "SkeletonArmature|Skeleton_Death"
+      ],
+      "equipment_sockets": [],
+      "status": "mon_002_verified_runtime",
+      "approved": false,
+      "export_eligible": false,
+      "path": "res://assets_external/enemies/Skeleton.fbx",
+      "source_url": "https://opengameart.org/sites/default/files/Animated%20Monster%20Pack%20by%20%40Quaternius.zip",
+      "license": "CC0 1.0",
+      "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+      "current_fallback": "res://assets_external/enemies/Skeleton.fbx",
+      "blocked_reason": "The selected animated skeleton is a verified runtime family source, but final bespoke horror-family visual approval remains blocked until the Ultimate Monsters source is downloadable and audited.",
+      "notes": "Complete articulated skeleton source replaces the rejected generated Ghoul mannequin for Wychwood family runtime audition. Final horror-family visual approval remains open."
+    },
+    "bog_wretch": {
+      "family": "monster",
+      "source_pack": "quaternius_lowpoly_animated_monsters",
+      "target_height": 1.6,
+      "triangle_budget": 18000,
+      "texture_budget": 1024,
+      "required_clips": [
+        "Idle2",
+        "Walk",
+        "Attack",
+        "Hit",
+        "Death"
+      ],
+      "equipment_sockets": [],
+      "status": "runtime_accepted_connected_family",
+      "approved": false,
+      "export_eligible": false,
+      "blocked_reason": "Retained Skeleton source is runtime-valid; bespoke swamp anatomy and visual approval remain a later gate.",
+      "path": "res://assets_external/enemies/Skeleton.fbx",
+      "current_fallback": "res://assets_external/enemies/Skeleton.fbx",
+      "notes": "Retained Skeleton source with swamp palette, elongated posture, and memory-core dressing profile."
+    },
+    "gravebound_knight": {
+      "family": "monster",
+      "source_pack": "quaternius_lowpoly_animated_monsters",
+      "target_height": 1.88,
+      "triangle_budget": 20000,
+      "texture_budget": 1024,
+      "required_clips": [
+        "Idle2",
+        "Walk",
+        "Attack",
+        "Hit",
+        "Death"
+      ],
+      "equipment_sockets": [],
+      "status": "runtime_accepted_connected_family",
+      "approved": false,
+      "export_eligible": false,
+      "blocked_reason": "Retained Skeleton source is runtime-valid; bespoke Gravebound armor and visual approval remain a later gate.",
+      "path": "res://assets_external/enemies/Skeleton.fbx",
+      "current_fallback": "res://assets_external/enemies/Skeleton.fbx",
+      "notes": "Retained Skeleton source with iron/ash material, armor dressing, and testimony-ready posture profile."
+    },
+    "white_hart": {
+      "family": "animal",
+      "source_pack": "quaternius_ultimate_animated_animals",
+      "target_height": 2.55,
+      "triangle_budget": 24000,
+      "texture_budget": 1024,
+      "required_clips": [
+        "Idle",
+        "Walk",
+        "Gallop",
+        "Attack",
+        "Death"
+      ],
+      "equipment_sockets": [
+        "Head"
+      ],
+      "status": "runtime_candidate_connected_animal",
+      "approved": false,
+      "export_eligible": false,
+      "blocked_reason": "The selected animated stag source is not locally acquired; the Wolf mapping is a temporary finale fallback.",
+      "current_fallback": "res://assets_external/enemies/WhiteHart_Stag.glb"
+    }
+  }
+}

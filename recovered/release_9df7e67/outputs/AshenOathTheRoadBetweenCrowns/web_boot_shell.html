@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>$GODOT_PROJECT_NAME</title>
+  <link rel="preload" href="menu-background.png" as="image">
+  <style>
+    :root { color-scheme: dark; --paper: #e7e0d0; --brass: #c6a66d; --line: #48534d; }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; height: 100dvh; margin: 0; overflow: hidden; overscroll-behavior: none; }
+    body { background: #0b1010 url('menu-background.png') center / cover no-repeat; color: var(--paper); font-family: system-ui, sans-serif; }
+    #canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; display: block; background: transparent; touch-action: none; }
+    #canvas:focus-visible { outline: 2px solid var(--brass); outline-offset: -2px; }
+    #startup-error { position: fixed; inset: 0; display: grid; place-items: center; overflow: auto; padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left)); background: #0b1010e8; }
+    #startup-error[hidden] { display: none; }
+    #error-content { width: min(460px, 100%); }
+    h1 { margin: 0 0 16px; font-size: 24px; line-height: 1.3; letter-spacing: 0; }
+    p { margin: 0 0 16px; font-size: 16px; line-height: 1.5; overflow-wrap: anywhere; }
+    button { min-height: 48px; padding: 12px 20px; border: 1px solid var(--brass); border-radius: 2px; background: #172320; color: var(--paper); font: 600 16px/1.4 system-ui, sans-serif; cursor: pointer; }
+    button:hover { background: #26352e; }
+    button:focus-visible { outline: 2px solid var(--paper); outline-offset: 4px; }
+  </style>
+  $GODOT_HEAD_INCLUDE
+</head>
+<body>
+  <canvas id="canvas" tabindex="0" aria-label="Ashen Oath game"></canvas>
+  <section id="startup-error" hidden role="alert" aria-labelledby="error-title">
+    <div id="error-content">
+      <h1 id="error-title">Ashen Oath could not start</h1>
+      <p id="error-message"></p>
+      <p>Your saved journeys are kept.</p>
+      <button id="reload" type="button">Reload</button>
+    </div>
+  </section>
+  <script>
+    (() => {
+      const canvas = document.getElementById('canvas');
+      const errorPanel = document.getElementById('startup-error');
+      const reload = document.getElementById('reload');
+      const SHELL_BUILD_ID = 'DIRECT-MENU-CANDIDATE';
+      const RUNTIME_PACK_CONTRACT = 'direct-menu-candidate';
+      const GODOT_CONFIG = $GODOT_CONFIG;
+      let engine = null, engineBooted = false, started = false, failed = false;
+      let startupResourceError = '';
+      const bootMetrics = {
+        state: 'bootstrap_ready', first_paint_ms: performance.now(),
+        engine_start_ms: 0, engine_ready_ms: 0, menu_ready_ms: 0,
+        progress_samples: 0, build_id: SHELL_BUILD_ID,
+        runtime_pack_contract: RUNTIME_PACK_CONTRACT,
+      };
+      window.__ashenOathBoot = bootMetrics;
+      window.__ashenOathPreloadedPacks = {};
+      function setBootState(state, extra = {}) {
+        Object.assign(bootMetrics, extra, { state });
+        document.documentElement.dataset.bootState = state;
+        window.dispatchEvent(new CustomEvent('ashen-oath-boot', { detail: { ...bootMetrics } }));
+      }
+      performance.mark('ashen-oath-first-paint');
+      let startupDeadline = window.setTimeout(checkStartupDeadline, 120000);
+      function checkStartupDeadline() {
+        if (failed || bootMetrics.menu_ready_ms) return;
+        if (document.hidden) {
+          startupDeadline = window.setTimeout(checkStartupDeadline, 120000);
+          return;
+        }
+        showStartupError('The game could not finish starting. Check your connection and reload.');
+      }
+      function showStartupError(message, error = null) {
+        if (failed || bootMetrics.menu_ready_ms) return;
+        failed = true;
+        window.clearTimeout(startupDeadline);
+        document.getElementById('error-message').textContent = message;
+        errorPanel.hidden = false;
+        setBootState('failed', { error: String(error || message) });
+        try { engine?.requestQuit(); } catch (_) {}
+        if (!document.hidden) reload.focus({ preventScroll: true });
+        if (error) console.error(error);
+      }
+      window.__ashenOathBootstrapFailure = showStartupError;
+      reload.addEventListener('click', () => window.location.reload());
+      window.addEventListener('ashen-oath-menu-ready', () => {
+        if (failed || bootMetrics.menu_ready_ms) return;
+        window.clearTimeout(startupDeadline);
+        performance.mark('ashen-oath-menu-ready');
+        setBootState('menu_ready', { menu_ready_ms: performance.now() });
+      });
+
+      const displayPointer = window.matchMedia('(any-pointer: coarse)');
+      const safeAreaProbe = document.createElement('div');
+      safeAreaProbe.setAttribute('aria-hidden', 'true');
+      safeAreaProbe.style.cssText = 'position:fixed;inset:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);';
+      document.body.appendChild(safeAreaProbe);
+      let displayFrame = null, displayRevision = 0, displayKey = '';
+      function publishDisplayMetrics() {
+        displayFrame = null;
+        if (document.hidden) return;
+        const bounds = canvas.getBoundingClientRect();
+        if (bounds.width <= 0 || bounds.height <= 0) return;
+        const probe = getComputedStyle(safeAreaProbe);
+        const inset = (side) => Math.max(0, Number.parseFloat(probe.getPropertyValue('padding-' + side)) || 0);
+        const viewport = window.visualViewport;
+        const layoutWidth = document.documentElement.clientWidth || window.innerWidth;
+        const layoutHeight = window.innerHeight;
+        const visibleLeft = Math.max(inset('left'), viewport?.offsetLeft || 0);
+        const visibleTop = Math.max(inset('top'), viewport?.offsetTop || 0);
+        const visibleRight = Math.min(layoutWidth - inset('right'), viewport ? viewport.offsetLeft + viewport.width : layoutWidth);
+        const visibleBottom = Math.min(layoutHeight - inset('bottom'), viewport ? viewport.offsetTop + viewport.height : layoutHeight);
+        const rounded = (value) => Math.round(value * 2) / 2;
+        const clipped = (value, maximum) => rounded(Math.min(maximum, Math.max(0, value)));
+        const metrics = {
+          width: rounded(bounds.width), height: rounded(bounds.height),
+          inset_left: clipped(visibleLeft - bounds.left, bounds.width),
+          inset_top: clipped(visibleTop - bounds.top, bounds.height),
+          inset_right: clipped(bounds.right - visibleRight, bounds.width),
+          inset_bottom: clipped(bounds.bottom - visibleBottom, bounds.height),
+          coarse_pointer: displayPointer.matches,
+        };
+        const key = JSON.stringify(metrics);
+        if (key === displayKey) return;
+        displayKey = key;
+        metrics.revision = ++displayRevision;
+        window.__ashenOathDisplay = metrics;
+        window.dispatchEvent(new CustomEvent('ashen-oath-display', { detail: { ...metrics } }));
+      }
+      function queueDisplayMetrics() {
+        if (displayFrame === null) displayFrame = requestAnimationFrame(publishDisplayMetrics);
+      }
+      window.addEventListener('resize', queueDisplayMetrics, { passive: true });
+      window.addEventListener('pageshow', queueDisplayMetrics, { passive: true });
+      document.addEventListener('fullscreenchange', queueDisplayMetrics);
+      document.addEventListener('visibilitychange', queueDisplayMetrics);
+      window.visualViewport?.addEventListener('resize', queueDisplayMetrics, { passive: true });
+      window.visualViewport?.addEventListener('scroll', queueDisplayMetrics, { passive: true });
+      displayPointer.addEventListener?.('change', queueDisplayMetrics);
+      const displayObserver = typeof ResizeObserver === 'function' ? new ResizeObserver(queueDisplayMetrics) : null;
+      displayObserver?.observe(canvas);
+      publishDisplayMetrics();
+
+      async function sha256Hex(payload) {
+        if (!window.crypto?.subtle) throw new Error('browser SHA-256 support unavailable');
+        return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', payload)))
+          .map((value) => value.toString(16).padStart(2, '0')).join('');
+      }
+      async function prefetchOpeningPack() {
+        const controller = new AbortController();
+        const timeout = window.setTimeout(() => controller.abort(), 90000);
+        window.__ashenOathPreloadedPacks.opening = { state: 'loading' };
+        let packCache = null, packUrl = '';
+        try {
+          const releaseResponse = await fetch('release_manifest.json', { cache: 'no-cache', signal: controller.signal });
+          if (!releaseResponse.ok) throw new Error(`release manifest HTTP ${releaseResponse.status}`);
+          const release = await releaseResponse.json();
+          if (String(release?.build_id || '') !== SHELL_BUILD_ID) throw new Error('Page/release identity mismatch');
+          const manifestResponse = await fetch('runtime_pack_manifest.json', { cache: 'no-cache', signal: controller.signal });
+          if (!manifestResponse.ok) throw new Error(`runtime pack manifest HTTP ${manifestResponse.status}`);
+          const manifestPayload = await manifestResponse.arrayBuffer();
+          const manifestDigest = await sha256Hex(manifestPayload);
+          if (manifestDigest !== String(release?.runtime_pack_manifest?.sha256 || '').toLowerCase()) throw new Error('Runtime manifest hash mismatch');
+          const manifest = JSON.parse(new TextDecoder().decode(manifestPayload));
+          if (String(manifest?.release_id || '') !== SHELL_BUILD_ID) throw new Error('Runtime manifest release mismatch');
+          const opening = manifest?.packs?.opening;
+          if (!opening?.url || !opening.sha256) throw new Error('Opening pack identity is missing');
+          packUrl = new URL(opening.url, window.location.href).href;
+          let response = null;
+          if ('caches' in window) {
+            const cacheKey = String(release?.compatibility_key || manifestDigest).slice(0, 24);
+            packCache = await caches.open(`ashenoath-runtime-packs-${cacheKey}`);
+            response = await packCache.match(packUrl);
+          }
+          if (!response) response = await fetch(packUrl, { cache: 'no-cache', signal: controller.signal });
+          if (!response.ok) throw new Error(`opening pack HTTP ${response.status}`);
+          const payload = await response.arrayBuffer();
+          if (opening.bytes > 0 && payload.byteLength !== opening.bytes) throw new Error('Opening pack byte count mismatch');
+          const digest = await sha256Hex(payload);
+          if (digest !== String(opening.sha256).toLowerCase()) throw new Error('Opening pack hash mismatch');
+          if (packCache) await packCache.put(packUrl, new Response(payload)).catch(() => {});
+          const metadata = { state: 'verified', path: '/opening.pck', url: packUrl, version: String(opening.version || ''), bytes: payload.byteLength, sha256: digest };
+          window.__ashenOathPreloadedPacks.opening = metadata;
+          bootMetrics.opening_prefetch_state = 'verified';
+          return { ...metadata, payload };
+        } catch (error) {
+          if (packCache && packUrl) await packCache.delete(packUrl).catch(() => {});
+          window.__ashenOathPreloadedPacks.opening = { state: 'failed', error: String(error) };
+          bootMetrics.opening_prefetch_state = 'failed';
+          bootMetrics.opening_prefetch_error = String(error);
+          return null;
+        } finally {
+          window.clearTimeout(timeout);
+        }
+      }
+      let openingFetchPromise = prefetchOpeningPack();
+      let openingPreloadPromise = null;
+      async function mountOpeningPackAfterReady() {
+        if (!engineBooted || failed) return null;
+        if (openingPreloadPromise) return openingPreloadPromise;
+        openingPreloadPromise = (async () => {
+          const preload = await openingFetchPromise;
+          if (!preload || failed) return null;
+          try {
+            engine.copyToFS(preload.path, preload.payload);
+            const { payload, ...metadata } = preload;
+            openingFetchPromise = null;
+            const detail = { ...metadata, state: 'preloaded' };
+            window.__ashenOathPreloadedPacks.opening = detail;
+            bootMetrics.opening_prefetch_state = 'preloaded';
+            window.dispatchEvent(new CustomEvent('ashenoath-opening-pack', { detail }));
+            return detail;
+          } catch (error) {
+            const detail = { state: 'failed', error: String(error) };
+            window.__ashenOathPreloadedPacks.opening = detail;
+            window.dispatchEvent(new CustomEvent('ashenoath-opening-pack', { detail }));
+            return null;
+          }
+        })();
+        return openingPreloadPromise;
+      }
+      window.__ashenOathBeginOpeningPackMount = mountOpeningPackAfterReady;
+      window.__ashenOathStart = async () => {
+        if (started || failed) return;
+        started = true;
+        bootMetrics.engine_start_ms = performance.now();
+        setBootState('engine_starting');
+        try {
+          if (typeof Engine !== 'function') throw new Error('Game engine script unavailable');
+          const missing = Engine.getMissingFeatures({ threads: false });
+          if (missing.length) {
+            showStartupError('This browser needs WebGL 2 and WebAssembly to open Ashen Oath.', missing.join(', '));
+            return;
+          }
+          engine = new Engine(GODOT_CONFIG);
+          // startGame downloads/initializes WASM and the root PCK together.
+          await engine.startGame({
+            onProgress: (current, total) => {
+              bootMetrics.progress_samples += 1;
+              bootMetrics.downloaded_bytes = current;
+              bootMetrics.download_total_bytes = total;
+            },
+            onPrintError: (...messages) => {
+              const message = messages.join(' ');
+              if (message.includes('Preload file') || message.includes('Failed to load script')) {
+                startupResourceError = message;
+                bootMetrics.resource_error = message;
+              }
+              console.error(...messages);
+            },
+          });
+          if (failed) return;
+          engineBooted = true;
+          bootMetrics.engine_ready_ms = performance.now();
+          performance.mark('ashen-oath-engine-ready');
+          if (!bootMetrics.menu_ready_ms) setBootState('engine_ready');
+          void mountOpeningPackAfterReady();
+        } catch (error) {
+          showStartupError(startupResourceError ? 'Required game files are missing or damaged. Reload to try again.' : 'The game files could not be opened. Check your connection and reload.', error);
+        }
+      };
+    })();
+  </script>
+  <script src="$GODOT_URL" onerror="window.__ashenOathBootstrapFailure('The game engine could not be downloaded. Check your connection and reload.')"></script>
+  <script>window.__ashenOathStart();</script>
+</body>
+</html>

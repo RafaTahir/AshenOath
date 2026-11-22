@@ -1,0 +1,44 @@
+{
+  "version": 3,
+  "ticket": "MON-002",
+  "families": {
+    "ghoulkin": {
+      "visual_role": "ghoulkin_creature",
+      "profile": "skirmisher",
+      "height": 1.63,
+      "skin": "authored_ash_skin_and_burial_cloth_atlas",
+      "runtime_source_role": "ghoulkin_creature",
+      "source_path": "res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.gltf"
+    },
+    "wychwood_stalker": {
+      "visual_role": "wychwood_stalker_creature",
+      "profile": "flanker",
+      "height": 1.60,
+      "skin": "runtime_materials",
+      "runtime_source_role": "wychwood_stalker_creature",
+      "source_path": "res://assets_external/enemies/Skeleton.fbx"
+    },
+    "wychwood_raider": {
+      "visual_role": "wychwood_raider_creature",
+      "profile": "feinter",
+      "height": 1.86,
+      "skin": "runtime_materials",
+      "runtime_source_role": "wychwood_raider_creature",
+      "source_path": "res://assets_external/enemies/Skeleton.fbx"
+    },
+    "wychwood_brute": {
+      "visual_role": "ghoulkin_skeleton",
+      "profile": "brute",
+      "height": 1.98,
+      "skin": "runtime_materials",
+      "runtime_source_role": "ghoulkin_skeleton",
+      "source_path": "res://assets_external/enemies/Skeleton.fbx"
+    }
+  },
+  "shared_contract": {
+    "required_states": ["idle", "walk", "run", "attack", "hit", "death"],
+    "root_motion": false,
+    "proxy_anatomy": false,
+    "source_policy": "roles_use_validated_cc0_monster_families_with_deterministic_profiles"
+  }
+}

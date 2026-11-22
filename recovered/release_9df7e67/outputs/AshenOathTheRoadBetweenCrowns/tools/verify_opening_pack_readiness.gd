@@ -1,0 +1,64 @@
+extends SceneTree
+
+func _initialize() -> void:
+	var manager = load("res://scripts/runtime_pack_manager.gd").new()
+	manager.requests = {"base": {"state": "ready", "progress": 1.0}}
+	if manager.startup_packs_ready():
+		_fail(manager, "Base alone must not publish a bare Greyfen")
+		return
+	manager.requests["opening"] = {"state": "failed", "error": "fixture missing pack"}
+	if manager.startup_pack_failures().size() != 1:
+		_fail(manager, "Opening failure must expose the startup retry state")
+		return
+	if manager.zone_packs_ready("greyfen"):
+		_fail(manager, "Greyfen detail/travel permits a missing opening pack")
+		return
+	manager.requests["opening"] = {"state": "ready", "progress": 1.0}
+	manager.quality_preset = "quality"
+	if manager.startup_packs_ready() or manager.zone_packs_ready("greyfen"):
+		_fail(manager, "Saved Quality permits unmounted PBR textures")
+		return
+	manager.requests["quality_materials"] = {"state": "failed", "error": "fixture"}
+	if manager.startup_pack_failures().size() != 1:
+		_fail(manager, "Quality download failure must be retryable")
+		return
+	manager.quality_preset = "balanced"
+	if not manager.startup_pack_failures().is_empty():
+		_fail(manager, "Balanced was poisoned by an unrelated Quality failure")
+		return
+	manager.quality_preset = "quality"
+	manager.requests["quality_materials"] = {"state": "ready", "progress": 1.0}
+	if not manager.startup_packs_ready() or not manager.zone_packs_ready("greyfen"):
+		_fail(manager, "Mounted Quality content was rejected")
+		return
+	manager.quality_preset = "balanced"
+	if not manager.startup_packs_ready():
+		_fail(manager, "Opening and base must allow prewarm without campaign")
+		return
+	if manager.zone_packs_ready("wychwood"):
+		_fail(manager, "Wychwood permits missing monster resources")
+		return
+	manager.requests["monsters"] = {"state": "ready", "progress": 1.0}
+	if not manager.zone_packs_ready("wychwood"):
+		_fail(manager, "Wychwood unnecessarily requires campaign characters")
+		return
+	manager.requests["campaign"] = {"state": "ready", "progress": 1.0}
+	if manager.zone_packs_ready("vargan_court"):
+		_fail(manager, "Castle permits missing character resources")
+		return
+	manager.requests["characters"] = {"state": "failed", "error": "fixture"}
+	if manager.zone_pack_failures("vargan_court").size() != 1:
+		_fail(manager, "Character pack failure is not propagated")
+		return
+	manager.requests["characters"] = {"state": "ready", "progress": 1.0}
+	if not manager.zone_packs_ready("vargan_court"):
+		_fail(manager, "Complete Castle content rejected")
+		return
+	manager.free()
+	print("OPENING PACK READINESS: PASS (state contract, not Web download proof)")
+	quit(0)
+
+func _fail(manager: Node, reason: String) -> void:
+	manager.free()
+	printerr("OPENING PACK READINESS: FAIL - " + reason)
+	quit(1)

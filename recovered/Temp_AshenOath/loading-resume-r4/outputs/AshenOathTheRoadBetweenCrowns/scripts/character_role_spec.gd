@@ -1,0 +1,251 @@
+extends RefCounted
+
+## One source of truth for route-visible character proportions.
+## Visual normalization, collision sizing, and screenshot checks should use the
+## same role contract instead of multiplying ad-hoc scale values at spawn time.
+
+const DEFAULT_SPEC := {
+	"height": 1.72,
+	"collision_height": 1.65,
+	"collision_radius": 0.32,
+	"lod": 14.0,
+	"ground_offset": 0.0,
+	"skeleton_profile": "QuaterniusUniversalHumanoid",
+	"animation_profile": "Neutral_shared_retargeted",
+	"equipment_sockets": {
+		"head": ["head", "Head", "Head_2"],
+		"weapon": ["hand_r", "handr", "r_hand", "Hand.R", "Weapon.R", "WeaponR", "Fist.R", "FistR"],
+		"offhand": ["hand_l", "handl", "l_hand", "Hand.L", "Fist.L", "FistL"]
+	},
+	"required_sockets": ["head", "weapon", "offhand"],
+	"height_tolerance": 0.08,
+	"visual_forward_degrees": 0.0,
+	"posture": "upright",
+}
+
+const POSTURES := {
+	"upright": {"spine":0.0, "neck":0.0, "roll":0.0},
+	"worked": {"spine":3.0, "neck":-2.0, "roll":1.0},
+	"guarded": {"spine":-1.0, "neck":2.0, "roll":0.0},
+	"weary": {"spine":2.0, "neck":3.0, "roll":-1.0},
+	"noble": {"spine":-2.0, "neck":-2.0, "roll":0.0},
+	"coiled": {"spine":3.0, "neck":-3.0, "roll":-1.5},
+}
+
+# These are anatomical changes, not random root scaling. Every pair among the
+# four professions differs on at least two authored proportion axes.
+const SILHOUETTES := {
+	"blacksmith": {"shoulder_width":1.25, "head_scale":0.98, "torso_length":0.92, "hunch":10.0, "posture":"worked", "layers":["apron", "smith_tool"]},
+	"ranger": {"shoulder_width":0.85, "head_scale":1.08, "torso_length":1.04, "hunch":5.0, "posture":"coiled", "layers":["cloak", "satchel"]},
+	"cleric": {"shoulder_width":0.90, "head_scale":1.12, "torso_length":0.94, "hunch":16.0, "posture":"weary", "layers":["walking_stick"]},
+	"guard": {"shoulder_width":1.18, "head_scale":0.88, "torso_length":1.08, "hunch":0.0, "posture":"guarded", "layers":["helmet", "pauldron_left", "pauldron_right"]},
+	"noble": {"shoulder_width":1.06, "head_scale":0.96, "torso_length":1.06, "hunch":0.0, "posture":"noble", "layers":["mantle"]},
+	"worker": {"shoulder_width":1.10, "head_scale":1.04, "torso_length":0.96, "hunch":7.0, "posture":"worked", "layers":["satchel"]},
+	"scholar": {"shoulder_width":0.92, "head_scale":1.08, "torso_length":1.03, "hunch":8.0, "posture":"weary", "layers":["satchel"]},
+	"villager": {"shoulder_width":1.0, "head_scale":1.0, "torso_length":1.0, "hunch":0.0, "posture":"upright", "layers":[]},
+	"player": {"shoulder_width":1.0, "head_scale":1.0, "torso_length":1.0, "hunch":0.0, "posture":"upright", "layers":[]},
+}
+
+static func silhouette_for_role(role_id: String, seed: String = "") -> Dictionary:
+	var words := " " + (role_id + " " + seed).to_lower().replace("_", " ").replace("-", " ") + " "
+	var archetype := "villager"
+	if role_id in ["player", "player_kael", "player_human", "kael"]:
+		archetype = "player"
+	elif _has_word(words, ["blacksmith", "tor", "forge"]):
+		archetype = "blacksmith"
+	elif _has_word(words, ["edric", "lord", "noble"]):
+		archetype = "noble"
+	elif _has_word(words, ["anwen", "cleric", "sister", "pilgrim", "shrine"]):
+		archetype = "cleric"
+	elif _has_word(words, ["guard", "knight", "halvern", "patrol", "soldier"]):
+		archetype = "guard"
+	elif _has_word(words, ["ranger", "senn", "tracker", "iven", "rook", "maren", "deserter"]):
+		archetype = "ranger"
+	elif _has_word(words, ["vale", "lysa", "record", "keeper", "steward", "merrow"]):
+		archetype = "scholar"
+	elif _has_word(words, ["worker", "nessa", "dain", "oris", "edda", "toma", "ressa", "nera", "tavin", "odran", "maelin"]):
+		archetype = "worker"
+	var result: Dictionary = SILHOUETTES[archetype].duplicate(true)
+	result["archetype"] = archetype
+	return result
+
+static func _has_word(words: String, candidates: Array) -> bool:
+	for word: String in candidates:
+		if words.contains(" " + word + " "):
+			return true
+	return false
+
+const SPECS := {
+	# Preserve body length when the refined jaw adds depth below the old sole.
+	"silt_maw": {"height":0.65305743, "collision_height":0.52, "collision_radius":0.42, "lod":24.0, "required_sockets":[], "visual_forward_degrees":180.0},
+	"millback": {"height":1.15, "collision_height":0.9, "collision_radius":0.65, "lod":26.0, "required_sockets":[], "visual_forward_degrees":180.0},
+	"glassmoth": {"height":0.9, "collision_height":0.5, "collision_radius":0.28, "lod":22.0, "required_sockets":[], "visual_forward_degrees":180.0, "airborne":true},
+	"knell_leech": {"height":0.58, "collision_height":0.46, "collision_radius":0.30, "lod":22.0, "required_sockets":[], "visual_forward_degrees":180.0},
+	"hearthscale": {"height":0.80, "collision_height":0.60, "collision_radius":0.45, "lod":26.0, "required_sockets":[], "visual_forward_degrees":180.0},
+	"gallows_weaver": {"height":1.3, "collision_height":0.8, "collision_radius":0.58, "lod":28.0, "required_sockets":[], "visual_forward_degrees":180.0},
+	"reed_choir": {"height":0.70, "collision_height":0.5, "collision_radius":0.40, "lod":24.0, "required_sockets":[], "visual_forward_degrees":180.0},
+	# Shell seating adds height; compensate the visual scale, keeping collision.
+	"inkblind": {"height":0.53655974, "collision_height":0.4, "collision_radius":0.30, "lod":22.0, "required_sockets":[], "visual_forward_degrees":180.0},
+	"cairn_mother": {"height":1.5, "collision_height":1.2, "collision_radius":0.7, "lod":32.0, "required_sockets":[], "visual_forward_degrees":180.0},
+	# The refined ray has a cambered body. Compensate visual normalization so
+	# its existing wingspan/depth and collision footprint stay the same.
+	"shroud_swimmer": {"height":0.56232453, "collision_height":0.22, "collision_radius":0.55, "lod":28.0, "required_sockets":[], "visual_forward_degrees":180.0, "airborne":true},
+	"captain_senn": {"height":1.75, "collision_height":1.64, "collision_radius":0.31, "lod":32.0, "visual_forward_degrees":180.0},
+	"player_human": {"height": 1.78, "collision_height": 1.65, "collision_radius": 0.32, "lod": 22.0, "visual_forward_degrees": 180.0},
+	"player_kael": {"height": 1.78, "collision_height": 1.65, "collision_radius": 0.32, "lod": 22.0, "visual_forward_degrees": 180.0},
+	"sister_anwen": {"height": 1.68, "collision_height": 1.58, "collision_radius": 0.30, "lod": 22.0, "visual_forward_degrees": 180.0},
+	"sister_anwen_human": {"height": 1.68, "collision_height": 1.58, "collision_radius": 0.30, "lod": 22.0, "visual_forward_degrees": 180.0},
+	"mira_human": {"height": 1.66, "collision_height": 1.56, "collision_radius": 0.30, "lod": 14.0, "visual_forward_degrees": 180.0},
+	"rook_human": {"height": 1.75, "collision_height": 1.64, "collision_radius": 0.31, "lod": 14.0, "visual_forward_degrees": 180.0},
+	"villager_human": {"height": 1.72, "collision_height": 1.62, "collision_radius": 0.31, "lod": 14.0, "visual_forward_degrees": 180.0},
+	"villager_female_human": {"height": 1.66, "collision_height": 1.56, "collision_radius": 0.30, "lod": 14.0, "visual_forward_degrees": 180.0},
+	"villager_worker_human": {"height": 1.74, "collision_height": 1.64, "collision_radius": 0.31, "lod": 14.0, "visual_forward_degrees": 180.0},
+	"villager_hooded_human": {"height": 1.69, "collision_height": 1.59, "lod": 14.0, "visual_forward_degrees": 180.0},
+	"castle_guard_human": {"height": 1.82, "collision_height": 1.72, "collision_radius": 0.33, "lod": 16.0, "visual_forward_degrees": 180.0},
+	# Focal road actors must survive the chase camera's offset and wide arrival
+	# sightline; the crowd cutoff otherwise leaves visible weapons without bodies.
+	"road_ranger_human": {"height": 1.75, "collision_height": 1.64, "collision_radius": 0.31, "lod": 32.0, "visual_forward_degrees": 180.0},
+	"bandit_deserter": {"height": 1.75, "collision_height": 1.64, "collision_radius": 0.31, "lod": 32.0, "visual_forward_degrees": 180.0},
+	"bandit_tracker": {"height": 1.70, "collision_height": 1.60, "collision_radius": 0.31, "lod": 32.0, "visual_forward_degrees": 180.0},
+	"ghoulkin": {"height": 1.72, "collision_height": 1.65, "collision_radius": 0.34, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	"ghoulkin_skeleton": {"height": 1.72, "collision_height": 1.65, "collision_radius": 0.34, "lod": 18.0, "skeleton_profile": "QuaterniusAnimatedMonster", "animation_profile": "AnimatedMonster_shared", "required_sockets": [], "visual_forward_degrees": 180.0},
+	"wychwood_stalker": {"height": 1.66, "collision_height": 1.60, "collision_radius": 0.32, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	"wychwood_raider": {"height": 1.72, "collision_height": 1.65, "collision_radius": 0.34, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	"wychwood_brute": {"height": 1.90, "collision_height": 1.80, "collision_radius": 0.40, "lod": 20.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	"bog_wretch": {"height": 1.60, "collision_height": 1.52, "collision_radius": 0.38, "lod": 16.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	"gravebound_knight": {"height": 1.88, "collision_height": 1.78, "collision_radius": 0.38, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	# The retained Wolf source is authored along +X rather than the humanoid
+	# +Z convention. A quarter-turn presents its face toward the actor target.
+	"white_hart_avatar": {"height": 2.55, "collision_height": 2.25, "collision_radius": 0.58, "lod": 24.0, "required_sockets": [], "visual_forward_degrees": 180.0},
+	# The finale Hart is a landmark creature. Keep the legacy avatar role for
+	# old saves and interaction data, but normalize the released boss display to
+	# one explicit focal height instead of applying a second runtime multiplier.
+	# The Wolf source carries an authored local origin above its visible feet.
+	# Preserve the measured source correction after rendered-bounds grounding so
+	# the Hart's hooves meet the glade platform rather than floating above it.
+	"white_hart_boss": {"height": 3.60, "collision_height": 3.30, "collision_radius": 0.78, "lod": 56.0, "ground_offset": 0.0, "required_sockets": [], "visual_forward_degrees": 180.0},
+	"bell_eater": {"height": 2.35, "collision_height": 2.10, "collision_radius": 0.50, "lod": 22.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	# Bell-Eater is a focal creature, not a human-sized Ghoulkin. Its imported
+	# cursed-human source is normalized directly to the encounter silhouette so
+	# the rendered body and collision capsule stay in the same scale contract.
+	"bell_eater_boss": {"height": 3.80, "collision_height": 3.60, "collision_radius": 0.82, "lod": 48.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	# Rootbound is a landmark-scale forest guardian. Normalize its connected
+	# source once to the encounter height; identity dressing never multiplies it.
+	"rootbound_colossus": {"height": 4.40, "collision_height": 4.10, "collision_radius": 1.05, "lod": 52.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	"rootbound_colossus_boss": {"height": 4.40, "collision_height": 4.10, "collision_radius": 1.05, "lod": 52.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	"ashwing": {"height": 2.40, "collision_height": 2.10, "collision_radius": 0.56, "lod": 24.0, "required_sockets": [], "visual_forward_degrees": 180.0, "airborne": true},
+	"ashwing_boss": {"height": 4.80, "collision_height": 3.80, "collision_radius": 0.90, "lod": 56.0, "required_sockets": [], "visual_forward_degrees": 180.0, "airborne": true},
+	"halvern_boss": {"height": 1.88, "collision_height": 1.78, "collision_radius": 0.38, "lod": 20.0, "required_sockets": ["head", "weapon"], "visual_forward_degrees": 180.0},
+	"ghoulkin_creature": {"height": 1.72, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	"wychwood_stalker_creature": {"height": 1.60, "collision_height": 1.48, "collision_radius": 0.30, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	"wychwood_raider_creature": {"height": 2.05, "collision_height": 1.85, "collision_radius": 0.38, "lod": 22.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	"wychwood_brute_creature": {"height": 1.92, "collision_height": 1.80, "collision_radius": 0.40, "lod": 22.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	"ghoul_stalker_real": {"height": 1.72, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	# The derived cursed-human GLB is authored facing Godot -Z already. Keeping
+	# the human 180-degree correction here made bosses turn their backs to Kael.
+	"ghoul_brute_real": {"height": 1.90, "lod": 20.0, "required_sockets": ["head"], "visual_forward_degrees": 0.0},
+	"bog_wretch_creature": {"height": 1.72, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	# The Gravebound source's visible face is on its imported +Z side. Keep the
+	# actor's gameplay yaw authoritative, but rotate this mesh once so Halvern's
+	# guard, face, and testimony stance face Kael instead of showing his back.
+	"gravebound_knight_creature": {"height": 1.88, "lod": 18.0, "required_sockets": ["head"], "visual_forward_degrees": 180.0},
+	"ashwing_creature": {"height": 2.40, "lod": 24.0, "required_sockets": [], "visual_forward_degrees": 180.0, "airborne": true},
+}
+
+const CAST_DIMENSIONS := {
+	"kael":"player_human", "anwen":"sister_anwen_human", "rook":"rook_human",
+	"mira":"mira_human", "tor":"villager_worker_human", "elna":"villager_female_human",
+	"toma":"villager_human", "senn":"captain_senn", "edric":"castle_guard_human",
+	"vale":"villager_female_human", "merrow":"castle_guard_human",
+	"nessa":"villager_female_human", "nera":"villager_hooded_human"
+}
+static var _cast_dimensions: Dictionary = {}
+
+static func _dimension_key(role: String) -> String:
+	if _cast_dimensions.is_empty():
+		_cast_dimensions = CAST_DIMENSIONS.duplicate()
+		var roster: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/design_pack_cast.json"))
+		if roster is Dictionary:
+			for alias: String in roster.get("legacy_cast", {}):
+				var person := str(roster.legacy_cast[alias])
+				if CAST_DIMENSIONS.has(person):
+					_cast_dimensions[alias] = CAST_DIMENSIONS[person]
+	var creature_aliases := {"white_hart":"white_hart_boss", "halvern":"halvern_boss", "returned_soldier":"gravebound_knight", "bracken":"hearthscale", "bracken_companion":"hearthscale"}
+	return str(_cast_dimensions.get(role, creature_aliases.get(role, role)))
+
+static func for_role(role_id: String, seed: String = "") -> Dictionary:
+	var key := role_id.strip_edges().to_lower()
+	var dimensions := _dimension_key(key)
+	var result: Dictionary = DEFAULT_SPEC.duplicate(true)
+	if SPECS.has(dimensions):
+		result.merge(SPECS[dimensions], true)
+	result["role"] = key
+	result["known"] = SPECS.has(dimensions)
+	result["silhouette"] = silhouette_for_role(key, seed)
+	result["posture"] = str(result.silhouette.posture)
+	return result
+
+static func target_height(role_id: String, fallback: float = 1.72) -> float:
+	var spec := for_role(role_id)
+	return float(spec.get("height", fallback)) if bool(spec.get("known", false)) else fallback
+
+static func encounter_camera_bounds(role_id: String) -> AABB:
+	# Outward-rounded full idle/windup/attack/hit/death envelopes, validated
+	# against the retained skinned sources by verify_large_encounter_frame.
+	return {
+		"rootbound_colossus_boss": AABB(Vector3(-1.94, -0.01, -2.73), Vector3(3.95, 4.42, 2.50)),
+		"ashwing_boss": AABB(Vector3(-4.08, -0.09, -2.88), Vector3(7.27, 5.13, 5.17)),
+		"white_hart_boss": AABB(Vector3(-2.48, -0.44, -2.73), Vector3(3.04, 3.39, 3.81)),
+	}.get(role_id, AABB())
+
+static func collision_height(role_id: String, fallback: float = 1.65) -> float:
+	var spec := for_role(role_id)
+	return float(spec.get("collision_height", fallback)) if bool(spec.get("known", false)) else fallback
+
+static func collision_radius(role_id: String, fallback: float = 0.32) -> float:
+	var spec := for_role(role_id)
+	return float(spec.get("collision_radius", fallback)) if bool(spec.get("known", false)) else fallback
+
+static func lod_distance(role_id: String, fallback: float = 14.0) -> float:
+	var spec := for_role(role_id)
+	return float(spec.get("lod", fallback)) if bool(spec.get("known", false)) else fallback
+
+static func facing_degrees(role_id: String) -> float:
+	return visual_forward_degrees(role_id)
+
+static func visual_forward_degrees(role_id: String) -> float:
+	var spec := for_role(role_id)
+	# Keep the legacy accessor above while making the source-facing contract
+	# explicit for every new runtime role.
+	return float(spec.get("visual_forward_degrees", spec.get("facing_degrees", 0.0)))
+
+static func ground_offset(role_id: String, fallback: float = 0.0) -> float:
+	var spec := for_role(role_id)
+	return float(spec.get("ground_offset", fallback))
+
+static func is_airborne(role_id: String) -> bool:
+	var spec := for_role(role_id)
+	return bool(spec.get("airborne", false))
+
+static func skeleton_profile(role_id: String, fallback: String = "unclassified") -> String:
+	var spec := for_role(role_id)
+	return str(spec.get("skeleton_profile", fallback))
+
+static func animation_profile(role_id: String, fallback: String = "") -> String:
+	var spec := for_role(role_id)
+	return str(spec.get("animation_profile", fallback))
+
+static func equipment_sockets(role_id: String) -> Dictionary:
+	var spec := for_role(role_id)
+	return (spec.get("equipment_sockets", {}) as Dictionary).duplicate(true)
+
+static func required_sockets(role_id: String) -> Array[String]:
+	var spec := for_role(role_id)
+	var result: Array[String] = []
+	for socket in spec.get("required_sockets", []):
+		result.append(str(socket))
+	return result
+
+static func height_tolerance(role_id: String, fallback: float = 0.08) -> float:
+	var spec := for_role(role_id)
+	return float(spec.get("height_tolerance", fallback))

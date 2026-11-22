@@ -1,2 +1,0 @@
-# Optional build-only lossless PCK compression; never shipped to clients.
-zopfli==0.4.0
