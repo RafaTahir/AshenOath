@@ -93,6 +93,7 @@ var _road_travel: Dictionary = {}
 var _road_travel_serial := 0
 var _road_commit_queued := false
 var _road_resource_key: Array = []
+const EntryView = preload("res://scripts/views/neighbor_entry_view.gd")
 const PREPARATION_RENDER_LAYER := 1 << 19
 
 func configure(runtime_host: Node, stream_service: Node) -> void:
@@ -321,16 +322,8 @@ func request_road_travel(target: String, arrival: Vector3) -> bool:
 
 func _road_arrival(edge: Dictionary) -> Vector3:
 	var marker := preload("res://scripts/connected_route_geometry.gd").entrance_for(host.zone_root, str(edge.target))
-	if is_instance_valid(marker):
-		var authored: Variant = marker.get_meta("spawn_pos",Vector3.ZERO)
-		if authored is Vector3 and authored != Vector3.ZERO: return authored
-	var raw: Array = edge.get("arrival",[])
-	if raw.size() >= 3: return Vector3(float(raw[0]),float(raw[1]),float(raw[2]))
-	var reverse := WorldSectorManifest.connection_between(str(edge.target),str(edge.source))
-	if not reverse.is_empty():
-		var inside := WorldSectorManifest.connector_points(reverse)[0]-WorldSectorManifest.direction(str(reverse.id))
-		return Vector3(inside.x,1.0,inside.z)
-	return Vector3(0,1,0)
+	var authored: Variant = marker.get_meta("spawn_pos", Vector3.ZERO) if is_instance_valid(marker) else null
+	return preload("res://scripts/core/route_destination_resources.gd").arrival_point(edge, authored)
 
 func _clear_road_travel() -> void:
 	if _road_travel.is_empty(): return
@@ -506,7 +499,7 @@ func complete_crossing(previous_root: Node3D) -> void:
 func _advance_preparation() -> void:
 	_added_nodes.clear()
 	var started := Time.get_ticks_usec()
-	var layers: Array[String] = host.ZoneSceneCatalog.prepared_road_layers(_neighbor_scope.zone_id)
+	var layers: Array[String] = preload("res://scripts/core/route_destination_resources.gd").layers(_neighbor_scope.zone_id)
 	var attach_layer := _layer_cursor < layers.size()
 	var configure_runtime := not _configuration_ready
 	var unit_name := "build_%d" % _neighbor_step
@@ -680,59 +673,6 @@ func _render_finished() -> void:
 		if extra > 4000:
 			_build_cooldown = maxf(_build_cooldown,minf(0.10,extra/500000.0))
 
-func _entry_camera_transform() -> Transform3D:
-	var reverse := WorldSectorManifest.connection_between(_neighbor_scope.zone_id,str(host.current_zone_id))
-	if reverse.is_empty(): return Transform3D(Basis.IDENTITY,Vector3(0,2.5,10))
-	var frame := WorldSectorManifest.crossing_frame(reverse)
-	var outward := WorldSectorManifest.direction(str(reverse.id))
-	var eye := frame.origin+outward*3.0+Vector3.UP*2.5
-	return Transform3D(Basis.IDENTITY,eye).looking_at(frame.origin-outward*6.0+Vector3.UP,Vector3.UP)
-
-func _render_material_key(material: Material) -> Variant:
-	if material == null: return RID()
-	# A custom shader resource owns the program. Each material keeps its uniforms.
-	if material is ShaderMaterial and material.shader != null and material.next_pass == null:
-		return [material.shader.get_rid(), material.render_priority]
-	return material.get_rid()
-
-func _render_group_key(visual: GeometryInstance3D) -> Array:
-	var mesh: Mesh
-	var key: Array = [visual.get_class(), visual.cast_shadow,
-		_render_material_key(visual.material_override), _render_material_key(visual.material_overlay)]
-	if visual is MeshInstance3D:
-		mesh = visual.mesh
-		key.append(visual.skin != null)
-	elif visual is MultiMeshInstance3D and visual.multimesh != null:
-		mesh = visual.multimesh.mesh
-		key.append(visual.multimesh.use_colors)
-		key.append(visual.multimesh.use_custom_data)
-		key.append(visual.multimesh.transform_format)
-	if mesh != null:
-		for surface in mesh.get_surface_count():
-			if visual.material_override == null:
-				var material: Material = visual.get_active_material(surface) if visual is MeshInstance3D else mesh.surface_get_material(surface)
-				key.append(_render_material_key(material))
-			# Meshes with the same vertex layout can warm the same material variant.
-			# The real entry draw still submits every visible mesh.
-			if mesh is ArrayMesh:
-				key.append([mesh.surface_get_primitive_type(surface), mesh.surface_get_format(surface)])
-			else: key.append(mesh.get_rid())
-	else: key.append(visual.get_instance_id())
-	return key
-
-func _intersects_entry_view(bounds: AABB, planes: Array[Plane]) -> bool:
-	# Keep slabs and other large meshes spanning the frustum even when none
-	# of their original corners is inside it.
-	for plane: Plane in planes:
-		var end := bounds.end
-		var nearest := Vector3(
-			bounds.position.x if plane.normal.x >= 0.0 else end.x,
-			bounds.position.y if plane.normal.y >= 0.0 else end.y,
-			bounds.position.z if plane.normal.z >= 0.0 else end.z)
-		if plane.is_point_over(nearest):
-			return false
-	return true
-
 func _advance_render_preparation() -> void:
 	if not is_instance_valid(_neighbor_view) or _neighbor_scope == null: return
 	if _render_frame >= 0 and not _render_done:
@@ -751,7 +691,7 @@ func _advance_render_preparation() -> void:
 		_neighbor_view.size = Vector2i(64,64)
 		preload("res://scripts/connected_route_geometry.gd").open_gate(_neighbor_scope.zone_root,str(host.current_zone_id),true)
 		_render_camera.far = 90.0
-		_render_camera.global_transform = _entry_camera_transform()
+		_render_camera.global_transform = EntryView.camera_transform(_neighbor_scope.zone_id, str(host.current_zone_id))
 		var source_view: Viewport = host.get_viewport()
 		var source_camera := source_view.get_camera_3d()
 		if is_instance_valid(source_camera):
@@ -774,8 +714,8 @@ func _advance_render_preparation() -> void:
 		if visual is MeshInstance3D and visual.mesh == null: continue
 		if visual is MultiMeshInstance3D and (visual.multimesh == null or visual.multimesh.mesh == null): continue
 		var bounds := visual.global_transform * visual.get_aabb()
-		if not _intersects_entry_view(bounds, _render_entry_planes): continue
-		var key := _render_group_key(visual)
+		if not EntryView.intersects(bounds, _render_entry_planes): continue
+		var key := EntryView.render_group_key(visual)
 		if _render_groups.has(key): continue
 		_render_groups[key] = true
 		_render_current = visual; _render_layers = visual.layers
@@ -1015,7 +955,7 @@ func on_zone_activated(zone_id: String, local_position: Vector3 = Vector3.ZERO) 
 		discovered_sectors[normalized] = true
 	if normalized not in active_sector_ids:
 		active_sector_ids.append(normalized)
-	active_sector_ids = _kept_sector_ids(normalized)
+	active_sector_ids = preload("res://scripts/core/route_destination_resources.gd").kept_sector_ids(normalized, host.story_state)
 	pending_transition.clear()
 	cooldown = 0.25
 	last_transition["state"] = "active"
@@ -1079,9 +1019,3 @@ func _zone_bounds(zone_id: String) -> Vector2:
 		return host.get_zone_half_extents(zone_id)
 	return WorldSectorManifest.bounds(zone_id)
 
-func _kept_sector_ids(zone_id: String) -> Array[String]:
-	var kept: Array[String] = [zone_id]
-	for neighbor in WorldSectorManifest.neighbors(zone_id,host.story_state):
-		if neighbor not in kept:
-			kept.append(neighbor)
-	return kept

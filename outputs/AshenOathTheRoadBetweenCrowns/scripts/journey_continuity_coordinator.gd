@@ -153,30 +153,12 @@ func take_arrival(generation: int, actual_zone: String, objective_view: Dictiona
 		title = "The road begins"
 	elif reason in ["aftermath", "ending_return"]:
 		title = "The road home"
-	var body_parts: Array[String] = []
-	if restored:
-		var source_label: String = str(context.get("source_label", "")).strip_edges()
-		if source_label != "":
-			body_parts.append("Recorded source: " + source_label)
-		body_parts.append("This moment's recorded story state has been restored.")
-	var promise: String = str(recap.get("promise", "")).strip_edges()
-	if promise != "":
-		body_parts.append(promise)
-	if restored:
-		var last_commitment: String = str(recap.get("last_commitment", "")).strip_edges()
-		if last_commitment != "":
-			body_parts.append("Last commitment: " + last_commitment)
-	if next_action != "":
-		body_parts.append("Next: %s%s" % [next_action, " (" + destination_name + ")" if destination_name != "" else ""])
-	if restored or reason in ["new_journey", "new_game"]:
-		var route_hint: String = str(recap.get("route_hint", "") if objective_view.is_empty() else objective_view.get("route_hint", "")).strip_edges()
-		if route_hint != "" and route_hint.trim_suffix(".") != next_action.trim_suffix("."):
-			body_parts.append(route_hint)
+	var body: String = preload("res://scripts/views/journal_route_text.gd").arrival(context, objective_view, recap, reason, restored, next_action, destination_name)
 	var journey_id: String = str(context.get("journey_id", "session"))
 	var context_id: String = "journey:%s:arrival:%d" % [journey_id, generation]
 	var model := {
 		"id":context_id, "context_id":context_id, "generation":generation,
-		"reason":reason, "title":title, "body":"\n\n".join(body_parts),
+		"reason":reason, "title":title, "body":body,
 		"zone_name":zone_name, "zone_id":zone_id,
 		"next_action":next_action, "destination_name":destination_name,
 		"journal_section":"return", "announce":announce,

@@ -38,6 +38,9 @@ var builder_reference: WeakRef
 var stream_environment_units: Array[Callable] = []
 var stream_environment_cursor: int = 0
 var prepared_story_flags: Dictionary = {}
+var road_entrances: Dictionary = {}
+var road_materials: Dictionary = {}
+var opening_presentation_ready: bool = false
 var preparing: bool = false
 var _released: bool = false
 
@@ -53,6 +56,9 @@ static func for_root(root: Node3D, id: String = "") -> ZoneInstanceScope:
 		anchor.scope.zone_id = id if not id.is_empty() else str(root.name)
 		root.add_child(anchor, false, Node.INTERNAL_MODE_BACK)
 	return anchor.scope
+
+func supports_opening_spatial(service: Node) -> bool:
+	return opening_presentation_ready and spatial_service == service
 
 func is_current(epoch: int) -> bool:
 	return not cancelled and not _released and generation == epoch and is_instance_valid(zone_root)
@@ -97,6 +103,8 @@ func release() -> void:
 	if is_instance_valid(builder) and not builder.is_queued_for_deletion():
 		builder.queue_free()
 	stream_environment_units.clear()
+	road_entrances.clear()
+	road_materials.clear()
 	tree_batch_data.clear()
 	deadfall_batch_data.clear()
 	prop_batch_data.clear()

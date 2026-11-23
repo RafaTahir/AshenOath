@@ -257,7 +257,7 @@ func _start_new_game_world() -> void:
 	if game_started or not new_game_start_pending:
 		return
 	var prepared_root := route_zone_cache.get("greyfen") as Node3D
-	if prepared_root == null or not bool(prepared_root.get_meta("opening_presentation_ready", false)):
+	if not is_instance_valid(prepared_root) or not ZoneInstanceScope.for_root(prepared_root).opening_presentation_ready:
 		return
 	var revision := preload("res://scripts/campaign_revision.gd").new_journey_revision()
 	if not quests.can_load_campaign_revision(revision):
@@ -272,10 +272,9 @@ func _start_new_game_world() -> void:
 		hud.set_new_game_ready(true)
 	if hud != null and hud.has_method("set_new_game_status"):
 		hud.set_new_game_status("Greyfen is ready.")
-	var prewarmed_greyfen = route_zone_cache.get("greyfen")
 	var prewarmed_enemies: Array = route_enemy_cache.get("greyfen", [])
-	print("LOADING: new_game_handoff prewarmed=%s cached_zones=%d" % [prewarmed_greyfen != null, route_zone_cache.size()])
-	if prewarmed_greyfen != null:
+	print("LOADING: new_game_handoff prewarmed=%s cached_zones=%d" % [prepared_root != null, route_zone_cache.size()])
+	if prepared_root != null:
 		# Remove only the preserved root from the cache before trimming unrelated
 		# entries. Do not pass it through the retirement path: that schedules a
 		# renderer teardown for the very scene we are about to activate.
@@ -286,12 +285,12 @@ func _start_new_game_world() -> void:
 		# it. Clear that active reference before trimming unrelated cache entries;
 		# otherwise _clear_route_zone_cache() mistakes the root we are handing off
 		# for a retired zone and performs the expensive renderer teardown again.
-		if zone_root == prewarmed_greyfen:
+		if zone_root == prepared_root:
 			zone_root = null
 	_clear_route_zone_cache()
 	print("LOADING: new_game_stage=cache_clear elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
-	if prewarmed_greyfen != null and is_instance_valid(prewarmed_greyfen):
-		_cache_route_zone("greyfen", prewarmed_greyfen, prewarmed_enemies, _zone_state_signature("greyfen"), true, false, false)
+	if prepared_root != null and is_instance_valid(prepared_root):
+		_cache_route_zone("greyfen", prepared_root, prewarmed_enemies, _zone_state_signature("greyfen"), true, false, false)
 	game_started = true
 	_host.get_viewport().disable_3d = false
 	paused_by_menu = false
@@ -308,9 +307,9 @@ func _start_new_game_world() -> void:
 	progression.load_state({})
 	current_zone_id = "greyfen"
 	day_night.set_time(day_night.START_TIME_MINUTES, 0)
-	opening_detail_pending = prewarmed_greyfen != null \
-		and not bool(prewarmed_greyfen.get_meta("opening_detail_complete", false)) \
-		and str(prewarmed_greyfen.get_meta("opening_build_profile", "")) in ["opening_fast", "opening_boot"]
+	opening_detail_pending = prepared_root != null \
+		and not bool(prepared_root.get_meta("opening_detail_complete", false)) \
+		and str(prepared_root.get_meta("opening_build_profile", "")) in ["opening_fast", "opening_boot"]
 	opening_detail_stage_index = 0
 	opening_detail_generation += 1
 	opening_save_generation += 1
@@ -497,8 +496,7 @@ func _schedule_deferred_zone_audio(zone_id: String, root: Node3D) -> void:
 	_host.call_deferred("_finish_deferred_zone_audio", zone_id, root, _zone_audio_generation, audio.music_request_generation)
 
 func _finish_deferred_zone_audio(zone_id: String, root: Node3D, generation: int, music_request: int) -> void:
-	var delay_timer := _create_owned_timer(0.45, true)
-	await delay_timer.timeout
+	await _create_owned_timer(0.45, true).timeout
 	if resource_shutdown_prepared or not game_started or generation != _zone_audio_generation or current_zone_id != zone_id or zone_root != root:
 		return
 	_apply_zone_audio(zone_id, music_request)
@@ -587,23 +585,7 @@ func _valid_cached_enemies(entries: Array) -> Array:
 	return zone_residency._valid_cached_enemies(entries)
 
 func _zone_state_signature(zone_id: String = current_zone_id) -> int:
-	var quest_world_state: Dictionary = quests.world_signature_state(zone_id) if quests != null else {}
-	var story_world_state: Dictionary = story_state.world_signature_state(zone_id) if story_state != null else {}
-	if story_world_state.get("flags") is Dictionary:
-		# Live companion movement and clothing wear do not change zone construction.
-		var zone_flags: Dictionary = story_world_state.flags.duplicate()
-		zone_flags.erase("bracken_travel")
-		zone_flags.erase("everyday_wear")
-		story_world_state.flags = zone_flags
-	var zone_removed: Dictionary = {}
-	for key: String in removed_interactions:
-		if key.begins_with(zone_id + ":"): zone_removed[key] = removed_interactions[key]
-	return hash([
-		story_world_state,
-		quest_world_state,
-		zone_removed,
-		str(settings.settings.get("quality_preset","balanced")) if settings != null else "balanced",
-	])
+	return preload("res://scripts/core/zone_build_signature.gd").for_zone(zone_id, quests, story_state, removed_interactions, str(settings.settings.get("quality_preset", "balanced")) if settings != null else "balanced")
 
 func _begin_zone_world_reads(zone_id: String, reset: bool = true) -> void:
 	preload("res://scripts/prepared_zone_geometry.gd").set_zone_scope(zone_id)

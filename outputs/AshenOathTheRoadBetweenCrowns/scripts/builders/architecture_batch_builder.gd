@@ -4,9 +4,12 @@ const Scope = preload("res://scripts/core/zone_instance_scope.gd")
 const TERRAIN_PATCHES_PER_UNIT := 8
 var _host: Api
 var _scope: Scope
+const TreeBatches = preload("res://scripts/builders/tree_batch_builder.gd")
+var tree_batches: TreeBatches
 func _init(host: Api, scope: Scope) -> void:
 	_host = host
 	_scope = scope
+	tree_batches = TreeBatches.new(host, scope)
 func _append_prepared_detail(id: String) -> void:
 	var entry: Variant = preload("res://scripts/prepared_static_batches.gd").entry(id)
 	if entry.is_empty():
@@ -154,7 +157,7 @@ func flush_environment_next_unit() -> bool:
 		for key in _scope.house_module_batch_data: _scope.stream_environment_units.append(_host._publish_environment_3.bind(str(key)))
 		for key in _scope.prop_batch_data: _scope.stream_environment_units.append(_host._publish_environment_4.bind(str(key)))
 		if not _scope.tree_batch_data.is_empty():
-			_scope.stream_environment_units.append_array(_host.tree_publication_units(_publish_procedural_trees))
+			_scope.stream_environment_units.append_array(tree_batches.publication_units())
 		for index: int in _host.zone_actor_spawner.pending_ecology_indices():
 			_scope.stream_environment_units.append(_host._build_design_pack_ecology.bind(index))
 		if not _scope.deadfall_batch_data.is_empty():
@@ -296,31 +299,7 @@ func _publish_environment_4(only_key: String = "") -> void:
 		var batch: Variant = _host._make_multimesh_batch("WorldPropBatch_%s" % str(batch_key), _host.shared_box_mesh, transforms.size(), entry.get("material"))
 		_host._upload_static_batch(batch, transforms)
 func _publish_environment_5() -> void:
-	if not _scope.tree_batch_data.is_empty() and not _host._flush_authored_tree_assets():
-		_publish_procedural_trees()
-func _publish_procedural_trees() -> void:
-	var trunk_mesh := BoxMesh.new()
-	trunk_mesh.size = Vector3(0.42, 1.8, 0.42)
-	var trunks := _host._make_multimesh_batch("TreeTrunkBatch", trunk_mesh, _scope.tree_batch_data.size(), _host.world_materials.get_material("timber", str(_host.settings.settings.get("quality_preset", "balanced")), Color(0.42, 0.30, 0.20), 0.0, false))
-	var crown_mesh := SphereMesh.new()
-	crown_mesh.radius = 0.72
-	crown_mesh.height = 1.62
-	crown_mesh.radial_segments = 8
-	crown_mesh.rings = 4
-	var crown_material := _host._mat(Color.WHITE)
-	crown_material.vertex_color_use_as_albedo = true
-	var crowns := _host._make_multimesh_batch("TreeCrownBatch", crown_mesh, _scope.tree_batch_data.size(), crown_material, true)
-	var trunk_transforms: Array = []
-	var crown_transforms: Array = []
-	var crown_colors: Array = []
-	for item: Dictionary in _scope.tree_batch_data:
-		trunk_transforms.append(item.trunk)
-		var crown_transform: Transform3D = item.crown
-		crown_transform.basis = crown_transform.basis.scaled(Vector3(1.10, 0.72, 1.10))
-		crown_transforms.append(crown_transform)
-		crown_colors.append(item.color)
-	_host._upload_static_batch(trunks, trunk_transforms)
-	_host._upload_static_batch(crowns, crown_transforms, crown_colors)
+	tree_batches.flush()
 func _publish_environment_6(include_ecology: bool = true) -> void:
 	if include_ecology: _host._build_design_pack_ecology()
 	if not _scope.deadfall_batch_data.is_empty():
@@ -331,88 +310,6 @@ func _publish_environment_6(include_ecology: bool = true) -> void:
 		deadfall_mesh.radial_segments = 7
 		var deadfalls: Variant = _host._make_multimesh_batch("DeadfallBatch", deadfall_mesh, _scope.deadfall_batch_data.size(), _host.world_materials.get_material("timber", str(_host.settings.settings.get("quality_preset", "balanced")), Color(0.34, 0.25, 0.17), 0.0, false))
 		_host._upload_static_batch(deadfalls, _scope.deadfall_batch_data)
-func _make_shrine_scene(pos: Vector3) -> void:
-	var shrine_mesh: Variant = load("res://assets_external/environment/village/GreyfenShrine_Authored.res") as ArrayMesh
-	if shrine_mesh == null or shrine_mesh.get_surface_count() != 6:
-		push_error("Required authored Greyfen shrine is unavailable")
-		return
-	var shrine: Variant = MeshInstance3D.new()
-	shrine.name = "GreyfenAuthoredOathstone"
-	shrine.position = pos
-	shrine.mesh = shrine_mesh
-	_scope.zone_root.add_child(shrine)
-	preload("res://scripts/camera_controller.gd").install_visual_clearance(shrine)
-	var shrine_tints: Variant = {
-		"medieval_brick": Color(0.68, 0.68, 0.62),
-		"plaster": Color(0.70, 0.71, 0.66),
-		"timber": Color(0.37, 0.27, 0.19),
-		"roof_tiles": Color(0.39, 0.18, 0.17),
-		"glazing": Color(0.29, 0.56, 0.50),
-		"metal": Color(0.20, 0.28, 0.26),
-	}
-	var shrine_quality: Variant = str(_host.settings.settings.get("quality_preset", "balanced"))
-	for surface_index in shrine_mesh.get_surface_count():
-		var surface_name: Variant = shrine_mesh.surface_get_name(surface_index)
-		if not shrine_tints.has(surface_name):
-			push_error("Unknown authored Greyfen shrine surface: " + surface_name)
-			return
-		var material_role: Variant = surface_name if _host.world_materials.SURFACES.has(surface_name) else "metal"
-		var material: StandardMaterial3D = _host._mat(shrine_tints[surface_name]) if surface_name == "glazing" else _host.world_materials.get_material(material_role, shrine_quality, shrine_tints[surface_name], 0.0, false)
-		shrine.set_surface_override_material(surface_index, material)
-	_host._make_collision_box("ShrinePlinth", pos + Vector3(0, 0.18, 0), Vector3(2.36, 0.36, 1.64))
-	_host._make_collision_box("ShrineOathstone", pos + Vector3(0, 0.96, 0), Vector3(0.88, 1.10, 0.62))
-	_host._make_loose_role("crate", pos + Vector3(-1.15, 0, -0.65), Vector3.ONE * 0.48, -12.0)
-	_host._make_loose_role("barrel", pos + Vector3(1.2, 0, 1.40), Vector3.ONE * 0.42, 16.0)
-	_host._make_light("ShrineGlow", pos + Vector3(0, 1.7, -0.3), Color(0.56, 0.78, 0.62), 1.6)
-	_host._make_world_prop_anchor("shrine", "shrine", pos, "crow_shrine_state")
-	preload("res://scripts/living_cast_stations.gd").add_care_table(_scope.zone_root)
-func _make_blacksmith_scene(pos: Vector3) -> void:
-	var forge_mesh: Variant = load("res://assets_external/environment/village/GreyfenForge_Authored.res") as ArrayMesh
-	if forge_mesh == null or forge_mesh.get_surface_count() != 6:
-		push_error("Required authored Greyfen forge is unavailable")
-		return
-	var shop: Variant = Node3D.new()
-	shop.name = "GreyfenBlacksmithStoneShop"
-	shop.position = pos
-	_scope.zone_root.add_child(shop)
-	var workshop: Variant = MeshInstance3D.new()
-	workshop.name = "BlacksmithAuthoredForge"
-	workshop.mesh = forge_mesh
-	shop.add_child(workshop)
-	var forge_tints: Variant = {
-		"medieval_brick": Color(0.66, 0.62, 0.55),
-		"plaster": Color(0.77, 0.69, 0.57),
-		"timber": Color(0.42, 0.31, 0.21),
-		"roof_tiles": Color(0.40, 0.26, 0.20),
-		"glazing": Color(0.16, 0.22, 0.24),
-		"metal": Color(0.30, 0.30, 0.29),
-	}
-	var forge_quality: Variant = str(_host.settings.settings.get("quality_preset", "balanced"))
-	for surface_index in forge_mesh.get_surface_count():
-		var surface_name: Variant = forge_mesh.surface_get_name(surface_index)
-		if not forge_tints.has(surface_name):
-			push_error("Unknown authored Greyfen forge surface: " + surface_name)
-			return
-		var material_role: Variant = surface_name if _host.world_materials.SURFACES.has(surface_name) else "metal"
-		var material: StandardMaterial3D = _host._mat(forge_tints[surface_name]) if surface_name == "glazing" else _host.world_materials.get_material(material_role, forge_quality, forge_tints[surface_name], 0.0, false)
-		workshop.set_surface_override_material(surface_index, material)
-	_host._make_collision_box("BlacksmithRearWall", pos + Vector3(0, 1.27, 2.33), Vector3(3.4, 1.94, 0.20))
-	for side in [-1.0, 1.0]:
-		_host._make_collision_box("BlacksmithSideWall", pos + Vector3(side * 1.69, 1.27, 1.2), Vector3(0.20, 1.94, 2.4))
-	_host._make_collision_box("ForgeHearth", pos + Vector3(1.5, 0.30, -1.1), Vector3(0.96, 0.55, 0.88))
-	_host._make_collision_box("ForgeCoal", pos + Vector3(1.5, 0.38, -1.1), Vector3(0.62, 0.08, 0.48))
-	_host._make_light("ForgeLight", pos + Vector3(1.5, 1.5, -1.1), Color(1.0, 0.35, 0.12), 2.5)
-	var work: Variant = MeshInstance3D.new()
-	work.name = "BlacksmithFittedWork"
-	work.mesh = load("res://assets_external/environment/props/GreyfenForgeWork_Authored.res") as ArrayMesh
-	if work.mesh == null:
-		push_error("Greyfen requires its fitted anvil, workbench, stock and fuel")
-		work.free()
-		return
-	shop.add_child(work)
-	_host._make_loose_role("barrel", pos + Vector3(2.15, 0, 0.95), Vector3.ONE * 0.55, -20.0)
-	_host._make_torch(pos + Vector3(-1.8, 0, -1.2))
-	_host._make_world_prop_anchor("forge", "forge", pos + Vector3(1.5, 0.55, -1.1), "iron_fate")
 func _ensure_mesh_surface_materials(mesh: Mesh, fallback: Material) -> int:
 	if mesh == null or fallback == null:
 		return 0

@@ -289,8 +289,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	var cache_matches: bool = is_instance_valid(cached_root) and int(host.route_zone_signatures.get(zone_id, -1)) == requested_signature
 	var opening_spatial: Node = host.greyfen_prewarm_spatial_service if zone_id == "greyfen" else null
 	var using_prewarmed_spatial := is_instance_valid(opening_spatial) and cache_matches \
-		and bool(cached_root.get_meta("opening_presentation_ready", false)) \
-		and InstanceScope.for_root(cached_root).spatial_service == opening_spatial
+		and InstanceScope.for_root(cached_root).supports_opening_spatial(opening_spatial)
 	var cached_spatial_service: Node = host.route_spatial_cache.get(zone_id)
 	var using_cached_spatial := is_instance_valid(cached_spatial_service) and cache_matches
 	print("LOADING: zone_begin id=%s prewarm=%s cached=%s" % [zone_id, using_prewarmed_spatial, using_cached_spatial])

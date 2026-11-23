@@ -92,17 +92,7 @@ func _refresh_story_focus() -> void:
 		_queue_responsive_layout()
 
 func route_caption(compact: bool) -> String:
-	var route := str(_navigation_model.get("route_hint", ""))
-	var destination := str(_navigation_model.get("destination", ""))
-	if destination != "":
-		if compact: return str(_navigation_model.get("route_short", destination))
-		return "To " + destination + ("\n" + route if route != "" else "")
-	var distance := int(_navigation_model.get("distance_m", -1))
-	var scope := str(_navigation_model.get("scope", "exploration"))
-	if distance >= 0 and scope in ["local", "aftermath"]:
-		if compact: return "%d m" % distance
-		return "%d m%s" % [distance, " · " + route if route != "" else " to the next step"]
-	return route
+	return preload("res://scripts/views/hud_quest_tracker_layout.gd").caption(_navigation_model, compact)
 
 func _fit_tracker_height() -> void:
 	# Preserve primary reading text; secondary guidance uses the remaining room.

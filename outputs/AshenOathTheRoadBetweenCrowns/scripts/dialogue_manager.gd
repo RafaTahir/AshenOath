@@ -263,7 +263,7 @@ func get_dialogue(id: String) -> Dictionary:
 	base["fallback_text"] = str(base.get("fallback_text", base.get("greeting", "...")))
 	base["subtitle_fallback"] = true
 	base["presentation"] = _presentation_contract(base.get("presentation", {}))
-	var recovering_road_report: bool = id == "report_decision" and preload("res://scripts/story_route_catalog.gd").legacy_road_report_pending(story_state)
+	var recovering_road_report: bool = id == "report_decision" and preload("res://scripts/core/road_evidence_report.gd").pending(story_state)
 	var visible_actions: Array = []
 	for action in base.get("actions", []):
 		if str(action.get("type", "")) in ["ending", "final_choice"]:

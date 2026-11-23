@@ -358,19 +358,14 @@ func toggle_fullscreen() -> void:
 	apply()
 
 func cycle_mouse_sensitivity() -> void:
-	var values = [0.0018, 0.0024, 0.003, 0.0038, 0.0048]
-	var idx = values.find(float(settings["mouse_sensitivity"]))
-	if idx < 0:
-		idx = 2
-	settings["mouse_sensitivity"] = values[(idx + 1) % values.size()]
+	var values := [0.0018, 0.0024, 0.003, 0.0038, 0.0048]
+	var current := float(settings["mouse_sensitivity"])
+	settings["mouse_sensitivity"] = _cycle_float(current if current in values else 0.003, values)
 	apply()
 
 func cycle_gamepad_look_sensitivity() -> void:
-	var values := [0.65, 1.0, 1.35]
 	var current := float(settings.get("gamepad_look_sensitivity", 1.0))
-	var idx := values.find(current)
-	settings["gamepad_look_sensitivity"] = values[(idx + 1) % values.size()]
-	apply()
+	set_user_option("gamepad_look_sensitivity", _cycle_float(current, [0.65, 1.0, 1.35]))
 
 func toggle_gamepad_vibration() -> void:
 	settings["gamepad_vibration"] = not bool(settings.get("gamepad_vibration", true))
@@ -400,10 +395,8 @@ func cycle_touch_controls() -> void:
 	apply()
 
 func cycle_touch_look_sensitivity() -> void:
-	var values := [0.65, 1.0, 1.35]
 	var current := float(settings.get("touch_look_sensitivity", 1.0))
-	var index := values.find(current)
-	settings["touch_look_sensitivity"] = values[(index + 1) % values.size()]
+	settings["touch_look_sensitivity"] = _cycle_float(current, [0.65, 1.0, 1.35])
 	apply()
 
 func toggle_invert_y() -> void:

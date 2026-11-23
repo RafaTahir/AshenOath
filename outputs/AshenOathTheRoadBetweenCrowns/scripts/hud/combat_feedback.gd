@@ -398,10 +398,8 @@ func _build_hud() -> void:
 	_quest_marker.text = "◆"
 	tracker_label = _hud_label(hud_root, "QuestTrackerObjective", 20)
 	tracker_label.max_lines_visible = -1
-	tracker_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	tracker_route_label = _hud_label(hud_root, "StoryRouteHint", 16)
 	tracker_route_label.max_lines_visible = 2
-	tracker_route_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	tracker_work_label = _hud_label(hud_root, "NearbyStoryWork", 16)
 	tracker_work_label.max_lines_visible = 2
 	tracker_footer_label = _hud_label(hud_root, "JournalBinding", 16)

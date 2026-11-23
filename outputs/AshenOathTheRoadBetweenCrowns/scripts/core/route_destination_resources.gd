@@ -29,3 +29,27 @@ static func paths(host: Node, target: String) -> Array[String]:
 	if not music_path.is_empty() and ResourceLoader.exists(music_path):
 		required.append(music_path)
 	return required
+
+static func arrival_point(edge: Dictionary, authored: Variant) -> Vector3:
+	if authored is Vector3 and authored != Vector3.ZERO:
+		return authored
+	var raw: Array = edge.get("arrival",[])
+	if raw.size() >= 3: return Vector3(float(raw[0]),float(raw[1]),float(raw[2]))
+	var reverse := WorldSectorManifest.connection_between(str(edge.target),str(edge.source))
+	if not reverse.is_empty():
+		var inside := WorldSectorManifest.connector_points(reverse)[0]-WorldSectorManifest.direction(str(reverse.id))
+		return Vector3(inside.x,1.0,inside.z)
+	return Vector3(0,1,0)
+
+static func kept_sector_ids(zone_id: String, story: Node) -> Array[String]:
+	var kept: Array[String] = [zone_id]
+	for neighbor in WorldSectorManifest.neighbors(zone_id,story):
+		if neighbor not in kept:
+			kept.append(neighbor)
+	return kept
+
+static func layers(zone_id: String) -> Array[String]:
+	var selected: Array[String] = ["gameplay"]
+	if zone_id != "greyfen":
+		selected.append("decoration")
+	return selected

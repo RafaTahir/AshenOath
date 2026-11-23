@@ -22,9 +22,6 @@ func _publish_environment_4(only_key: String = "") -> void:
 	assert(false, "Construction hook requires a bound facade: _publish_environment_4")
 func _publish_environment_5() -> void:
 	assert(false, "Construction hook requires a bound facade: _publish_environment_5")
-func tree_publication_units(fallback: Callable) -> Array[Callable]:
-	assert(false, "Construction hook requires a bound facade: tree_publication_units")
-	return []
 func _publish_environment_6(include_ecology: bool = true) -> void:
 	assert(false, "Construction hook requires a bound facade: _publish_environment_6")
 func _publish_connected_route(index: int) -> void:

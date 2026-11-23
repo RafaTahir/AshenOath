@@ -29,6 +29,20 @@ jobs:
             outputs/AshenOathTheRoadBetweenCrowns/assets/icons/iron_trap.svg
             outputs/AshenOathTheRoadBetweenCrowns/assets_external/ui/greyfen_menu_stylized.png
             outputs/AshenOathTheRoadBetweenCrowns/assets/ui/story_chapters_atlas.png
+            outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/prepared/wychwood_ground_*.res
+            # The archive check searches these tracked files in the worktree
+            # and index. Include them in the checkout's batched blob fetch.
+            *.ps1
+            *.py
+            *.mjs
+            *.js
+            *.gd
+            *.tscn
+            *.yml
+            *.yaml
+            /CODEX_WORKFLOW.md
+            /DEPLOYMENT_POLICY.md
+            /DEPLOYMENT_WORKFLOW.md
           sparse-checkout-cone-mode: false
       - name: Cache pinned Godot 4.6.3
         id: godot-cache

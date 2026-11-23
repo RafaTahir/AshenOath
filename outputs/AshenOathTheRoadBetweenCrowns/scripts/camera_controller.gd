@@ -444,12 +444,8 @@ func frame_dialogue_target(dialogue_target: Node3D) -> void:
 
 func frame_dialogue_beat(actor: Node3D, speaker_id: String, framing: String) -> void:
 	if not is_instance_valid(target) or not is_instance_valid(actor) or camera == null: return
-	if _reduced_story_motion:
-		# Keep the established two-person composition through page changes.
-		return
-	# A subtitle page or a change of speaker is not a camera direction.
-	# Only explicit authored emphasis may leave the established two-shot.
-	if framing not in ["authored_close", "authored_two_shot"]:
+	# Only authored beats change the two-shot, and Reduced Motion keeps it.
+	if _reduced_story_motion or framing not in ["authored_close", "authored_two_shot"]:
 		return
 	var actor_changed: bool = _dialogue_actor == null or _dialogue_actor.get_ref() != actor
 	if framing == "authored_two_shot":

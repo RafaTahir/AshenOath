@@ -15,14 +15,13 @@ static func acquire() -> RefCounted:
 
 func request(path: String, owner: Object, token: String = "") -> Error:
 	var frame := Engine.get_process_frames()
+	# Recheck an earlier claim for the requested path even within a frame.
+	var sweep: Array = [path] if _requests.has(path) else []
 	if frame != _last_orphan_sweep_frame:
 		_last_orphan_sweep_frame = frame
-		for known_path: String in _requests.keys():
-			_collect_finished_orphan(known_path)
-	elif _requests.has(path):
-		# A release and a new claim can occur within the same frame. A fresh
-		# request must not inherit an unclaimed failure for this path.
-		_collect_finished_orphan(path)
+		sweep = _requests.keys()
+	for known_path: String in sweep:
+		_collect_finished_orphan(known_path)
 	if not _requests.has(path):
 		var error := ResourceLoader.load_threaded_request(path)
 		if error != OK:
@@ -35,23 +34,11 @@ func status(path: String, progress: Array = []) -> int:
 	if not _requests.has(path):
 		return ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
 	var record: Dictionary = _requests[path]
-	if int(record.status) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
-		var values: Array = []
-		record.status = ResourceLoader.load_threaded_get_status(path, values)
-		record.progress = float(values[0]) if not values.is_empty() else 0.0
-		if int(record.status) in [ResourceLoader.THREAD_LOAD_LOADED, ResourceLoader.THREAD_LOAD_FAILED]:
-			# The engine retains a request token even when loading failed. Consume
-			# that result once before a cancelled/failed claim can be discarded.
-			var loaded: bool = int(record.status) == ResourceLoader.THREAD_LOAD_LOADED
-			record.resource = ResourceLoader.load_threaded_get(path)
-			if loaded:
-				record.progress = 1.0
-			if not loaded or record.resource == null:
-				record.status = ResourceLoader.THREAD_LOAD_FAILED
-	if not progress.is_empty():
-		progress[0] = record.progress
-	else:
+	preload("res://scripts/core/threaded_resource_poll.gd").refresh(path, record)
+	if progress.is_empty():
 		progress.append(record.progress)
+	else:
+		progress[0] = record.progress
 	return int(record.status)
 
 func take(path: String, owner: Object, token: String = "", wait: bool = false) -> Resource:
@@ -80,13 +67,13 @@ func release(path: String, owner: Object, token: String = "", drain: bool = fals
 		return
 	var record: Dictionary = _requests[path]
 	record.owners.erase(_claim(owner, token))
-	if record.owners.is_empty():
-		var state := status(path)
-		if state == ResourceLoader.THREAD_LOAD_IN_PROGRESS and drain:
-			ResourceLoader.load_threaded_get(path)
-		elif state == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
-			return # The engine cannot cancel; consume it on the next poll or shutdown.
-		_requests.erase(path)
+	if not record.owners.is_empty():
+		return
+	if status(path) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+		if not drain:
+			return # The worker still owns its engine request until it finishes.
+		ResourceLoader.load_threaded_get(path)
+	_requests.erase(path)
 
 func _collect_finished_orphan(path: String) -> void:
 	var record: Dictionary = _requests[path]

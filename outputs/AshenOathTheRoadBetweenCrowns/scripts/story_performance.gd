@@ -26,7 +26,7 @@ static func begin(target: Node3D, player: Node3D, _dialogue: Dictionary = {}, st
 	if is_instance_valid(player) and player != target:
 		begin_actor(player, target, state)
 
-static func begin_actor(target: Node3D, partner: Node3D, state = null) -> void:
+static func begin_actor(target: Node3D, partner: Node3D, state: Variant = null) -> void:
 	var performance := target.get_node_or_null("StoryPerformance")
 	if performance != null and performance.active:
 		return
@@ -56,10 +56,7 @@ static func finish_actor(target: Node3D) -> void:
 		performance.stop()
 
 static func speaker_matches(identity: String, speaker_id: String) -> bool:
-	if speaker_id == "narrator" or identity.is_empty(): return false
-	var canonical := CastProfile.canonical_identity(identity)
-	if not canonical.is_empty(): return CastProfile.canonical_identity(speaker_id) == canonical
-	return identity == speaker_id
+	return preload("res://scripts/views/actor_dialogue_pose.gd").speaker_matches(identity, speaker_id)
 
 static func page(target: Node3D, entry: Dictionary, audio: Node, speaker: Node3D, eyeline: Node3D, reacts: bool) -> void:
 	var performance := target.get_node_or_null("StoryPerformance")
@@ -75,16 +72,7 @@ func owns_speaker_identity(speaker: String) -> bool:
 		return true
 	if id != "kael" and actor.has_method("is_interaction_enabled"):
 		var actor_id := str(actor.get("interaction_id"))
-		var supporting_speakers: Dictionary = {
-			"vargan_gate_guard":["vargan_steward", "merrow"],
-			"vargan_patrol":["vargan_patrol_guard", "guard"],
-			"vargan_steward":["steward_merrow", "merrow"],
-			"vargan_servant":["tired_castle_servant", "servant"],
-			"vargan_record_keeper":["record_keeper_vale", "vale"],
-			"returned_soldier":["the_returned_soldier", "len"],
-			"white_hart":["white_hart"]
-		}
-		return speaker in supporting_speakers.get(actor_id, [])
+		return preload("res://scripts/views/actor_dialogue_pose.gd").supporting_speaker(actor_id, speaker)
 	return false
 
 func present_page(entry: Dictionary, owns_voice: bool, eyeline: Node3D, reacts: bool) -> void:
@@ -94,16 +82,7 @@ func present_page(entry: Dictionary, owns_voice: bool, eyeline: Node3D, reacts: 
 	speaking = owns_voice
 	delivery_active = false
 	var direction: Dictionary = entry.get("performance", {})
-	if is_instance_valid(driver):
-		driver.set_story_listening(true)
-	if is_instance_valid(face):
-		face.clear_story_gesture()
-		face.set_speech_amount(0.0)
-		if is_instance_valid(eyeline):
-			face.set_focus_target(eyeline)
-		var rest_expression := str(profile.get("expression", "neutral"))
-		var emotion := str(direction.get("emotion", entry.get("emotion", rest_expression))) if speaking else str(direction.get("listener_emotion", rest_expression))
-		face.set_expression(emotion if speaking or reacts else rest_expression)
+	preload("res://scripts/views/actor_dialogue_pose.gd").apply_pose(driver, face, eyeline, speaking, reacts, profile, entry, direction)
 	pending_gesture = ""
 	if speaking:
 		pending_gesture = str(direction.get("gesture", ""))
@@ -111,7 +90,7 @@ func present_page(entry: Dictionary, owns_voice: bool, eyeline: Node3D, reacts: 
 		pending_gesture = str(direction.get("listener_gesture", "remember" if str(direction.get("emotion", "")) == "grieving" else ""))
 	next_beat = elapsed + float(direction.get("reaction_delay", 0.18))
 
-func start(target: Node3D, player: Node3D, state) -> void:
+func start(target: Node3D, player: Node3D, state: Variant) -> void:
 	if active:
 		stop()
 	if not Presence.claim(target, "dialogue", get_instance_id()):
@@ -126,10 +105,7 @@ func start(target: Node3D, player: Node3D, state) -> void:
 		profile = CastProfile.get_profile("player")
 	driver = actor.find_child("CharacterAnimationDriver", true, false)
 	face = actor.find_child("CharacterFaceDriver", true, false)
-	if is_instance_valid(driver) and bool(driver.dead):
-		Presence.release(target, "dialogue", get_instance_id())
-		return
-	if driver == null and face == null:
+	if (is_instance_valid(driver) and bool(driver.dead)) or (driver == null and face == null):
 		Presence.release(target, "dialogue", get_instance_id())
 		return
 	process_mode = Node.PROCESS_MODE_ALWAYS

@@ -478,9 +478,5 @@ func _apply_expression() -> void:
 
 func play_story_gesture(kind: String) -> void:
 	_reconcile_face_eligibility()
-	if head_modifier != null and face_pose_eligible and attention_mode != "sleep":
+	if is_instance_valid(head_modifier) and (kind.is_empty() or (face_pose_eligible and attention_mode != "sleep")):
 		head_modifier.gesture(kind)
-
-func clear_story_gesture() -> void:
-	if is_instance_valid(head_modifier):
-		head_modifier.gesture_time = 0.0

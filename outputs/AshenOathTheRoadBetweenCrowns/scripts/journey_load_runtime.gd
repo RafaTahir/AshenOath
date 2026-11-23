@@ -197,11 +197,10 @@ func begin_arrival(game, reason: String, target: String) -> void:
 	if pending(game):
 		return
 	var view: Dictionary = game.quest_presentation.get_navigation_view_model() if game.quest_presentation != null else {}
-	var context: Dictionary = {
+	game.journey_arrival_generation = game.journey_continuity.begin_arrival(reason, target, {
 		"source_zone": str(game.current_zone_id),
 		"promise_signature": Continuity.promise_signature(view)
-	}
-	game.journey_arrival_generation = game.journey_continuity.begin_arrival(reason, target, context)
+	})
 	game.hud.clear_journey_transients(false)
 
 func publish_arrival(game) -> void:

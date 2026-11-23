@@ -7,6 +7,7 @@ func _hud_label(parent: Node, node_name: String, font_size: int) -> Label:
 	var label := Label.new()
 	label.name = node_name
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS if node_name in ["QuestTrackerObjective", "StoryRouteHint"] else TextServer.OVERRUN_NO_TRIMMING
 	label.clip_text = true
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.add_theme_font_size_override("font_size", font_size)
@@ -487,61 +488,7 @@ func _apply_responsive_gameplay(policy: Dictionary) -> void:
 	compass_back.visible = high_contrast and dial_visible
 	var quest_y: float = location_y + 34.0 * unit if dial_visible else top + (66.0 if touch else 56.0) * unit
 	var room_below: float = maxf(0.0, (safe.end.y - reserved_bottom - gap if touch else bottom - 136.0 * unit) - quest_y)
-	tracker_title_label.add_theme_font_size_override("font_size", int(fonts.body))
-	tracker_title_label.size.x = quest_width
-	var title_height: float = maxf((42.0 if not compact else 25.0) * unit, _hud_text_height(tracker_title_label, 2) + 2.0 * unit)
-	tracker_label.add_theme_font_size_override("font_size", int(fonts.body))
-	tracker_label.size.x = maxf(0.0, quest_width - 22.0 * unit)
-	tracker_label.max_lines_visible = -1
-	var minimum_line := _hud_text_height(tracker_label, 1)
-	var action_needed := _hud_text_height(tracker_label) + 2.0 * unit
-	var show_title := (not compact or room_below >= 140.0 * unit) and title_height + 13.0 * unit + action_needed <= room_below
-	tracker_title_label.visible = show_title
-	tracker_title_label.position = Vector2(quest_x, quest_y)
-	tracker_title_label.size = Vector2(quest_width, title_height)
-	tracker_caption_label.visible = false
-	_quest_rule.visible = show_title
-	_quest_rule.position = Vector2(quest_x, quest_y + title_height + 2.0 * unit)
-	_quest_rule.size = Vector2(minf(90.0 * unit, quest_width), maxf(1.0, unit))
-	var action_y: float = quest_y + title_height + 13.0 * unit if show_title else quest_y
-	var action_room := maxf(0.0, quest_y + room_below - action_y)
-	var action_lines := _fit_hud_lines(tracker_label, action_room, tracker_label.get_line_count())
-	var action_height := minf(action_room, _hud_text_height(tracker_label, action_lines) + 2.0 * unit)
-	tracker_label.visible = action_room >= minimum_line and tracker_label.text != ""
-	tracker_label.max_lines_visible = action_lines
-	_quest_marker.visible = tracker_label.visible
-	_quest_marker.position = Vector2(quest_x - 2.0 * unit, action_y + 2.0 * unit)
-	_quest_marker.size = Vector2(20.0 * unit, 24.0 * unit)
-	_quest_marker.add_theme_font_size_override("font_size", int(fonts.caption))
-	tracker_label.position = Vector2(quest_x + 22.0 * unit, action_y)
-	tracker_label.size = Vector2(maxf(0.0, quest_width - 22.0 * unit), action_height)
-	var route_y: float = action_y + action_height + 5.0 * unit
-	for label: Label in [tracker_route_label, tracker_work_label, tracker_footer_label]:
-		label.add_theme_font_size_override("font_size", int(fonts.caption))
-	# Reserve complete caption lines, including the active font's metrics and spacing.
-	tracker_route_label.text = view.quest_panel.route_caption(compact)
-	tracker_route_label.max_lines_visible = 1 if compact else 2
-	var route_height := _hud_text_height(tracker_route_label, tracker_route_label.max_lines_visible) + 2.0 * unit
-	var work_height := _hud_text_height(tracker_work_label, 2) + 2.0 * unit
-	var footer_height := _hud_text_height(tracker_footer_label, 1) + 2.0 * unit
-	var panel_end := action_y + action_height
-	tracker_route_label.position = Vector2(quest_x + 22.0 * unit, route_y)
-	tracker_route_label.size = Vector2(quest_width - 22.0 * unit, route_height)
-	tracker_route_label.visible = tracker_label.visible and tracker_route_label.text != "" and route_y + route_height <= quest_y + room_below
-	if tracker_route_label.visible: panel_end = route_y + route_height
-	var work_y := panel_end + 2.0 * unit
-	tracker_work_label.position = Vector2(quest_x + 22.0 * unit, work_y)
-	tracker_work_label.size = Vector2(quest_width - 22.0 * unit, work_height)
-	tracker_work_label.visible = tracker_label.visible and not compact and tracker_work_label.text != "" and work_y + work_height <= quest_y + room_below
-	if tracker_work_label.visible: panel_end = work_y + work_height
-	var footer_y := panel_end + 4.0 * unit
-	tracker_footer_label.position = Vector2(quest_x + 22.0 * unit, footer_y)
-	tracker_footer_label.size = Vector2(quest_width - 22.0 * unit, footer_height)
-	tracker_footer_label.visible = tracker_label.visible and not compact and not touch and footer_y + footer_height <= quest_y + room_below
-	if tracker_footer_label.visible: panel_end = footer_y + footer_height
-	tracker_back.position = Vector2(quest_x - 8.0 * unit, quest_y - 6.0 * unit)
-	tracker_back.size = Vector2(quest_width + 16.0 * unit, panel_end - quest_y + 6.0 * unit)
-	tracker_back.visible = tracker_label.visible
+	preload("res://scripts/views/hud_quest_tracker_layout.gd").apply(self, Vector2(quest_x, quest_y), quest_width, room_below, unit, fonts, compact, touch)
 	var slot_width: float = (86.0 if compact else 94.0) * unit
 	var slot_height: float = 116.0 * unit
 	var slots_visible: bool = not (touch and compact)

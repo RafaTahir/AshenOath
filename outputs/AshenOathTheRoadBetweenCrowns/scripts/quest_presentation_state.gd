@@ -111,7 +111,7 @@ func _build_objective_view_model() -> Dictionary:
 	if continuation.is_empty():
 		continuation = preload("res://scripts/greyfen_guidance.gd").view(story_state, zone_id)
 	if continuation.is_empty():
-		continuation = RouteCatalog.legacy_road_report_guidance(story_state, quest_manager, zone_id)
+		continuation = preload("res://scripts/core/road_evidence_report.gd").guidance(story_state, quest_manager, zone_id)
 	if not continuation.is_empty():
 		view.objective_id = str(continuation.get("id", ""))
 		view.quest_title = str(continuation.get("title", "THE ROAD HOME"))

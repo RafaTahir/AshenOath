@@ -16,12 +16,10 @@ var _visual_nodes: Array[Node3D] = []
 var _elapsed := 0.0
 var _bindings: Array[Dictionary] = []
 var _motion: Tween
+var _reduced_motion := false
 
 func _ready() -> void:
 	add_to_group("interactive_world_prop")
-	# WorldPropController owns ambient motion centrally. Keeping one process loop
-	# on every interactive component created a redundant per-prop scene scan.
-	set_process(false)
 	_cache_visual_nodes.call_deferred()
 
 func configure(id: String, prop_kind: String, persistent_key: String = "", initial_state: String = "idle", state_owner: Node = null) -> void:
@@ -56,9 +54,7 @@ func activate() -> void:
 		next = "extinguished" if current_state == "lit" else "lit"
 	elif kind == "forge":
 		next = "working" if current_state != "working" else "cooling"
-	elif kind == "door" or kind == "gate":
-		next = "closed" if current_state == "open" else "open"
-	elif kind in ["container", "shutter", "seat", "bucket", "bellows", "mechanism"]:
+	elif kind in ["door", "gate", "container", "shutter", "seat", "bucket", "bellows", "mechanism"]:
 		next = "closed" if current_state == "open" else "open"
 	set_state(next)
 
@@ -75,13 +71,12 @@ func bind_visual(node: Node3D, property: String, idle_value: Variant, active_val
 	_apply_state()
 
 func set_reduced_motion(enabled: bool) -> void:
-	set_meta("reduced_motion", enabled)
+	_reduced_motion = enabled
 	if enabled and _motion != null and _motion.is_valid():
 		_apply_state()
 
 func get_state() -> String:
 	return current_state
-
 func get_prop_id() -> String:
 	return prop_id
 
@@ -107,7 +102,7 @@ func _apply_state() -> void:
 		var target: Node3D = binding.node.get_ref()
 		if not is_instance_valid(target): continue
 		var goal: Variant = binding.active if active else binding.idle
-		if not is_inside_tree() or get_tree().paused or bool(get_meta("reduced_motion", false)):
+		if not is_inside_tree() or get_tree().paused or _reduced_motion:
 			target.set_indexed(NodePath(str(binding.property)), goal)
 		else:
 			if _motion == null: _motion = create_tween().set_parallel(true)

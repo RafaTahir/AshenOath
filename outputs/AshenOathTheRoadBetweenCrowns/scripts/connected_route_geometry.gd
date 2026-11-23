@@ -1,7 +1,6 @@
 extends RefCounted
 
 const Sectors = preload("res://scripts/world_sector_manifest.gd")
-static var _door_meshes: Dictionary = {}
 static var _meshes: Dictionary = {}
 static var _shapes: Dictionary = {}
 static var _landmark_box: BoxMesh
@@ -13,36 +12,7 @@ static func soil_crest_height(station: int) -> float:
 	return SOIL_CREST_HEIGHT + sin(float(station) * 1.7) * 0.15
 
 static func open_authored_door(door: MeshInstance3D) -> void:
-	if door.mesh == null or door.mesh.get_surface_count() < 2 or door.has_meta("hinged_authored_door"): return
-	var source := door.mesh as ArrayMesh
-	if source == null: return
-	var materials: Array[Material] = []
-	for i in range(source.get_surface_count()):
-		materials.append(door.get_active_material(i))
-		door.set_surface_override_material(i,null)
-	var key := source.get_rid()
-	if not _door_meshes.has(key):
-		var frame := ArrayMesh.new()
-		var leaf := ArrayMesh.new()
-		for i in range(source.get_surface_count()):
-			var mesh := leaf if i == 1 else frame
-			mesh.add_surface_from_arrays(source.surface_get_primitive_type(i),source.surface_get_arrays(i))
-		_door_meshes[key] = [frame,leaf]
-	var parts: Array = _door_meshes[key]
-	door.mesh = parts[0]
-	var surface := 0
-	for i in range(materials.size()):
-		if i == 1: continue
-		door.set_surface_override_material(surface,materials[i]); surface += 1
-	var hinge := Node3D.new(); hinge.name = "OpenDoorHinge"
-	var leaf := MeshInstance3D.new(); leaf.mesh = parts[1]
-	hinge.position.x = leaf.mesh.get_aabb().position.x
-	leaf.position.x = -hinge.position.x
-	leaf.material_override = materials[1]
-	leaf.cast_shadow = door.cast_shadow
-	door.add_child(hinge); hinge.add_child(leaf)
-	hinge.rotation.y = PI*0.5
-	door.set_meta("hinged_authored_door",true)
+	preload("res://scripts/views/authored_door_hinge.gd").open_authored_door(door)
 
 static func install(context: ZoneBuildContext, only_edge: int = -1) -> void:
 	var roads := context.zone_root.get_node_or_null("ConnectedRoads") as Node3D
@@ -58,7 +28,7 @@ static func install(context: ZoneBuildContext, only_edge: int = -1) -> void:
 		roads.name = "ConnectedRoads"
 		context.add_node(roads)
 	var stone := context.zone_id in ["vargan_approach","vargan_court","record_hall","undercroft"]
-	var materials := _road_materials(roads, context, stone)
+	var materials := preload("res://scripts/views/connected_road_surfaces.gd").materials(context, stone)
 	var ground: Material = materials.ground
 	var banks: Material = materials.banks
 	var timber: Material = materials.timber
@@ -128,41 +98,21 @@ static func install(context: ZoneBuildContext, only_edge: int = -1) -> void:
 				# Authored/cached scene markers need the same entrance contract as
 				# gates made by the procedural builder.
 				entrance.set_meta("interactive_road_entrance",true)
-				path.set_meta("road_entrance", weakref(entrance))
+				context.scope.road_entrances[str(edge.target)] = weakref(entrance)
 				entrance.set_interaction_enabled(true)
 				entrance.set_deferred("monitoring",true)
 				entrance.set_deferred("monitorable",true)
 
 static func entrance_for(root: Node3D, target: String) -> Node:
 	if not is_instance_valid(root): return null
-	var road := root.get_node_or_null("ConnectedRoads/RoadTo_" + target)
-	var reference: WeakRef = road.get_meta("road_entrance", null) if road != null else null
+	var entrances: Dictionary = ZoneInstanceScope.for_root(root).road_entrances
+	var reference: WeakRef = entrances.get(target)
 	var entrance: Node = reference.get_ref() if reference != null else null
 	if is_instance_valid(entrance) and not entrance.is_queued_for_deletion() and root.is_ancestor_of(entrance):
 		return entrance
 	entrance = root.find_child("gate_" + target, true, false)
-	if road != null and is_instance_valid(entrance): road.set_meta("road_entrance", weakref(entrance))
+	if is_instance_valid(entrance): entrances[target] = weakref(entrance)
 	return entrance
-
-static func _road_materials(roads: Node3D, context: ZoneBuildContext, stone: bool) -> Dictionary:
-	# Staged and immediate construction share the same zone-owned finishes.
-	var quality := context.quality_preset()
-	var materials: Dictionary = roads.get_meta("connected_road_materials", {})
-	if str(materials.get("quality", "")) == quality:
-		return materials
-	var ground := context.make_world_material("cobblestone" if stone else "forest_ground", Color(0.43, 0.47, 0.40)).duplicate() as BaseMaterial3D
-	var banks := context.make_world_material("medieval_brick" if stone else "forest_ground", Color(0.39, 0.43, 0.35)).duplicate() as BaseMaterial3D
-	ground.cull_mode = BaseMaterial3D.CULL_DISABLED
-	banks.cull_mode = BaseMaterial3D.CULL_DISABLED
-	ground.emission_enabled = true
-	ground.emission = Color(0.06, 0.07, 0.06)
-	ground.emission_energy_multiplier = 0.2
-	var timber := context.make_world_material("timber", Color(0.52, 0.45, 0.32))
-	var masonry := context.make_world_material("medieval_brick", Color(0.60, 0.61, 0.55)).duplicate() as BaseMaterial3D
-	masonry.cull_mode = BaseMaterial3D.CULL_DISABLED
-	materials = {"quality": quality, "ground": ground, "banks": banks, "timber": timber, "masonry": masonry}
-	roads.set_meta("connected_road_materials", materials)
-	return materials
 
 static func _route_style(edge: Dictionary) -> String:
 	var pair: Array = [str(edge.source),str(edge.target)]

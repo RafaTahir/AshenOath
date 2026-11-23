@@ -175,7 +175,7 @@ static func for_objective(quest_id: String, objective_id: String, state = null, 
 			entry = _unfinished_group_route(quest_id, ["evidence_mile_marker", "evidence_supply_cart", "evidence_gate_notice", "evidence_iron_binding", "evidence_ledger_fragment"], quests, current_zone, entry)
 	if current_zone == "assembly" and (quest_id == "side_millers_measure" and objective_id == "ash_choice" or quest_id == "side_soldiers_debt" and objective_id == "debt_choice"):
 		entry = ["assembly", ["assembly_choice"], "Bring the recovered account to the assembly.", "Keep this record available without claiming anyone's consent."]
-	entry = _community_progress(quest_id,objective_id,entry,state)
+	entry = preload("res://scripts/core/community_route_details.gd").progress(quest_id, objective_id, entry, state)
 	var ids: Array[String] = []
 	for id in entry[1]:
 		ids.append(str(id))
@@ -206,29 +206,6 @@ static func for_objective(quest_id: String, objective_id: String, state = null, 
 		result["next_action"] = "Optional: corroborate the road closure; the command proof remains in the archive"
 	return result
 
-static func _community_progress(quest: String, objective: String, entry: Array, state) -> Array:
-	if state == null or quest not in preload("res://scripts/campaign_revision.gd").NEW_CHAPTERS: return entry
-	var result := entry.duplicate(true)
-	if objective=="secure_route":
-		result[1]=[]
-		var ids: Array = ["crossing_beam","crossing_rail","crossing_load"] if str(state.get_flag("community_route",""))=="crossing" else ["ferry_landing","ferry_rope","ferry_load"]
-		for id: String in ids: result[1].append("community:work:"+id)
-	var targets: Array = []
-	for id: String in result[1]:
-		if id.begins_with("community:work:") and bool(state.get_flag("community_work:"+id.trim_prefix("community:work:"),false)): continue
-		if id.begins_with("community:survey:") and bool(state.get_flag("community_survey:"+id.trim_prefix("community:survey:"),false)): continue
-		targets.append(id)
-	result[1]=targets
-	var choice_flag := "community_distribution" if quest=="main_empty_tables" else "community_records"
-	if objective in ["settle_tables","settle_records"] and str(state.get_flag(choice_flag,""))!="": result[1]=["community:aftermath:"+quest]
-	if objective=="open_route" and bool(state.get_flag("community_route_load_carried",false)):
-		if bool(state.get_flag("community_route_load_crossed",false)): result[1]=["community:delivery"]
-		elif str(state.get_flag("community_route",""))=="ferry": result[1]=["community:ferry"]
-		else:
-			result[1]=[]
-			result[2]="Carry the load over the repaired crossing between the two railings."
-	return result
-
 static func _unfinished_group_route(quest_id: String, members: Array, quests, current_zone: String, fallback: Array) -> Array:
 	# Prefer unfinished evidence in this place without revealing a hidden pin.
 	# Quest completion also preserves discoveries from saves predating evidence history.
@@ -243,20 +220,6 @@ static func _unfinished_group_route(quest_id: String, members: Array, quests, cu
 		if str(entry[0]) == current_zone:
 			return entry
 	return fallback if first_pending.is_empty() else first_pending
-
-static func legacy_road_report_pending(state) -> bool:
-	return state != null and bool(state.get_flag("legacy_report_choice_required", false)) and str(state.get_flag("evidence_report", "")) == ""
-
-static func legacy_road_report_guidance(state, quests, zone_id: String) -> Dictionary:
-	if zone_id not in ["greyfen", "wychwood"] or not legacy_road_report_pending(state):
-		return {}
-	if bool(state.get_flag("final_choice_completed", false)) or (quests != null and quests.tracked_quest_is_manual and quests.get_tracked_quest() != ""):
-		return {}
-	var route := for_objective("main_road_of_crows", "return_village", state, quests, zone_id)
-	route["id"] = "legacy_road_report"
-	route["title"] = "The unfiled road report"
-	route["purpose"] = "The road investigation is recorded. Choose how to share what survives in the account."
-	return route
 
 static func ending_continuation(state, current_zone: String) -> Dictionary:
 	if state == null:

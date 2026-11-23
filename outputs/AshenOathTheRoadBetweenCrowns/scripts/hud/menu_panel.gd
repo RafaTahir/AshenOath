@@ -166,16 +166,10 @@ func show_companion_commands(travel: Dictionary) -> void:
 	_set_ui_pointer("pause")
 	_clear_menu()
 	menu_layer.visible = true
-	var place: String = str(travel.get("zone", "greyfen")).replace("_", " ").capitalize()
-	var present: bool = bool(travel.get("present", false))
-	var status := "Along the road with Kael" if present else "Finding a safe path to Kael"
-	if str(travel.get("command", "follow")) == "wait":
-		status = "Waiting in " + place
-	var box := _menu_box("Bracken", status)
-	for entry: Array in [["follow", "Walk with me"], ["wait", "Wait here"], ["recall", "Come, Bracken"]]:
+	var model := preload("res://scripts/views/companion_rescue_props.gd").command_menu(travel)
+	var box := _menu_box("Bracken", str(model.status))
+	for entry: Array in model.commands:
 		var command: String = str(entry[0])
-		if command == "wait" and not present:
-			continue
 		_add_menu_button(box, str(entry[1]), func(selected: String = command): action_selected.emit({"type":"companion_command", "command":selected}), false, "companion:" + command)
 	_add_menu_button(box, "Return", func(): resume_requested.emit(), false, "resume")
 

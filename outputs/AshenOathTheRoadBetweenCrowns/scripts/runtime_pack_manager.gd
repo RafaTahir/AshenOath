@@ -143,16 +143,7 @@ func is_ready(pack_id: String) -> bool:
 	return bool(mounted.get(id, false)) or get_state(id) == "ready"
 
 func get_web_preloaded_state(pack_id: String) -> String:
-	return str(_web_preloaded_metadata(_normalise_id(pack_id)).get("state", ""))
-
-func _web_preloaded_metadata(id: String) -> Dictionary:
-	if not OS.has_feature("web"):
-		return {}
-	var raw_metadata := str(JavaScriptBridge.eval(
-		"JSON.stringify((window.__ashenOathPreloadedPacks || {})[%s] || null)" % JSON.stringify(id), true
-	))
-	var parsed: Variant = JSON.parse_string(raw_metadata)
-	return parsed if parsed is Dictionary else {}
+	return str(preload("res://scripts/core/browser_preloaded_packs.gd").metadata(_normalise_id(pack_id)).get("state", ""))
 
 func has_embedded_content(pack_id: String) -> bool:
 	# Builder scripts can live in the root PCK even when the scene assets belong
@@ -667,28 +658,15 @@ func _start_download(id: String) -> void:
 	_emit_startup_progress()
 
 func _try_mount_web_preloaded_pack(id: String) -> bool:
-	var metadata := _web_preloaded_metadata(id)
+	var metadata := preload("res://scripts/core/browser_preloaded_packs.gd").metadata(id)
 	if str(metadata.get("state", "")) != "preloaded":
 		return false
-	var pack := get_pack(id)
-	var expected_hash := str(pack.get("sha256", "")).to_lower()
-	var expected_bytes := int(pack.get("bytes", 0))
-	if str(metadata.get("sha256", "")).to_lower() != expected_hash \
-			or int(metadata.get("bytes", 0)) != expected_bytes \
-			or str(metadata.get("version", "")) != str(pack.get("version", "")):
-		_reject_web_preloaded_pack(id, "The browser pack identity did not match this release")
+	var result := preload("res://scripts/core/browser_preloaded_packs.gd").inspect(metadata, get_pack(id))
+	if not str(result.error).is_empty():
+		_reject_web_preloaded_pack(id, str(result.error))
 		return true
-	var path := str(metadata.get("path", ""))
-	var file := FileAccess.open(path, FileAccess.READ)
-	if file == null:
-		_reject_web_preloaded_pack(id, "The browser could not open the prepared pack")
-		return true
-	var magic := file.get_buffer(4)
-	var actual_bytes := file.get_length()
-	file.close()
-	if actual_bytes != expected_bytes or magic != PackedByteArray([71, 68, 80, 67]):
-		_reject_web_preloaded_pack(id, "The browser pack file was incomplete or invalid")
-		return true
+	var path: String = result.path
+	var actual_bytes: int = result.bytes
 	var request: Dictionary = requests.get(id, {})
 	request["state"] = "mounting"
 	request["progress"] = 0.97
@@ -956,7 +934,7 @@ func _process(delta: float) -> void:
 			var id := str(value)
 			if not OS.has_feature("web") or get_state(id) != "shell_loading":
 				continue
-			var metadata := _web_preloaded_metadata(id)
+			var metadata := preload("res://scripts/core/browser_preloaded_packs.gd").metadata(id)
 			var state := str(metadata.get("state", ""))
 			if state == "cache_skipped":
 				active_downloads.erase(id)

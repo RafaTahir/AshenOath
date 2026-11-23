@@ -325,7 +325,7 @@ func _next_exit_guidance(zone_id: String, destination: String, candidates: Array
 		var target: String = str(candidate.get("zone_target"))
 		if target == "" or target not in available:
 			continue
-		var steps: int = _steps_to(target, destination, zone_id)
+		var steps: int = preload("res://scripts/core/route_distance.gd").steps_to(target, destination, zone_id, quests, story_state)
 		var distance: float = candidate.global_position.distance_squared_to(position)
 		if steps >= 0 and (steps < best_steps or (steps == best_steps and distance < best_distance)):
 			best_steps = steps
@@ -344,25 +344,6 @@ func _next_exit_guidance(zone_id: String, destination: String, candidates: Array
 func _road_guidance(direction: String, destination: String) -> Dictionary:
 	var place := RouteCatalog.zone_name(destination)
 	return {"hint": "Take the %s road toward %s" % [direction, place], "short": "%s road · %s" % [direction.capitalize(), place]}
-
-func _steps_to(source: String, destination: String, excluded_zone: String) -> int:
-	# The manifest supplies adjacency, not a revealed map. Only the available
-	# gate in the current place is ever shown to the player.
-	if source == destination:
-		return 0
-	var visited: Dictionary = {excluded_zone:true, source:true}
-	var queue: Array = [[source, 0]]
-	while not queue.is_empty():
-		var entry: Array = queue.pop_front()
-		for next_zone in SectorManifest.available_neighbors(str(entry[0]), quests, story_state):
-			if visited.has(next_zone):
-				continue
-			var steps: int = int(entry[1]) + 1
-			if next_zone == destination:
-				return steps
-			visited[next_zone] = true
-			queue.append([next_zone, steps])
-	return -1
 
 func _view() -> Dictionary:
 	if presentation != null and presentation.has_method("get_navigation_view_model"):

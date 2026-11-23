@@ -76,11 +76,6 @@ static func _zone_record(zone_id: String) -> Dictionary:
 	var record: Dictionary = _manifest.get(zone_id.strip_edges().to_lower(), {})
 	return record if not record.is_empty() else fallback
 
-static func prepared_road_layers(zone_id: String) -> Array[String]:
-	var layers: Array[String] = ["gameplay"]
-	if zone_id != "greyfen": layers.append("decoration")
-	return layers
-
 static func resource_paths(zone_id: String, layers: Array[String] = ["gameplay", "decoration"]) -> Array[String]:
 	var paths: Array[String] = []
 	var record := _zone_record(zone_id)

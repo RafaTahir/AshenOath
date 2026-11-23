@@ -35,21 +35,6 @@ static func normalize_expression(value: String) -> String:
 static func supports_expression(value: String) -> bool:
 	return normalize_expression(value) in EXPRESSIONS
 
-static func gesture_offset(kind: String, progress: float) -> Vector3:
-	var t := clampf(progress, 0.0, 1.0)
-	var envelope := pow(sin(t * PI), 2.0)
-	match kind:
-		"acknowledge", "nod": return Vector3(0.07 * envelope, 0, 0)
-		"disagree": return Vector3(0, sin(t * TAU * 1.5) * 0.085 * envelope, 0)
-		"remember", "recall": return Vector3(0.09 * envelope, -0.035 * envelope, -0.025 * envelope)
-		"reassure": return Vector3(0.035 * envelope, 0, 0.04 * envelope)
-		"guarded_listening": return Vector3(-0.025 * envelope, 0.035 * envelope, -0.018 * envelope)
-		"offer": return Vector3(0.045 * envelope, 0, -0.018 * envelope)
-		"explain": return Vector3(sin(t * TAU) * 0.035 * envelope, 0.045 * envelope, 0.015 * envelope)
-		"hesitate": return Vector3(0.045 * envelope, -0.065 * envelope, -0.018 * envelope)
-		"relief": return Vector3(0.06 * sin(t * TAU) * envelope, 0.0, 0.018 * envelope)
-	return Vector3.ZERO
-
 const FACE_CONTROLS := ["Eye_L", "Eye_R", "LidUpper_L", "LidUpper_R", "LidLower_L", "LidLower_R", "Brow_L", "Brow_R", "Mouth_L", "Mouth_R", "Jaw"]
 
 func configure(skeleton: Skeleton3D) -> void:
@@ -100,6 +85,9 @@ func has_living_face() -> bool:
 	return facial_bones.size() == FACE_CONTROLS.size()
 
 func gesture(kind: String) -> bool:
+	if kind.is_empty():
+		gesture_time = 0.0
+		return true
 	if not GESTURE_SECONDS.has(kind):
 		return false
 	gesture_kind = kind
@@ -118,7 +106,7 @@ func _process_modification() -> void:
 		if gesture_time >= length:
 			gesture_time = 0.0
 		else:
-			delivery = gesture_offset(gesture_kind, gesture_time / length)
+			delivery = preload("res://scripts/views/story_face_gesture.gd").offset(gesture_kind, gesture_time / length)
 	var weight := 1.0 - exp(-5.0 * delta)
 	var motion_ref: WeakRef = skeleton.get_meta("character_motion_owner") if skeleton.has_meta("character_motion_owner") else null
 	var motion: Node = motion_ref.get_ref() if motion_ref != null else null

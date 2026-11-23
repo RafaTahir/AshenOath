@@ -1,7 +1,7 @@
 extends "res://scripts/systems/game_bindings.gd"
 signal opening_phase_changed(phase: String)
 
-const OPENING_WELL_MESH := "res://assets_external/environment/village/GreyfenWell_Authored.res"
+const OpeningBuildInputs = preload("res://scripts/core/opening_build_inputs.gd")
 
 func _record_opening_stage(root: Node3D, stage: String) -> void:
 	var completed: Dictionary = root.get_meta("opening_completed_stages", {})
@@ -301,25 +301,16 @@ func _prepare_opening_services(generation: int) -> void:
 	var services_ready: bool = await runtime_services.prepare_gameplay_services(Callable(_host, "_opening_attempt_current").bind(generation))
 	if not _opening_attempt_current(generation):
 		return
-	if not services_ready:
-		_opening_prepare_failed("%s Select Retry to try again." % runtime_services.preparation_error if runtime_services.preparation_error != "" else "Journey services could not be prepared. Select Retry to try again.")
-		return
-	_ensure_gameplay_runtime()
-	if not gameplay_runtime_ready:
+	if services_ready:
+		_ensure_gameplay_runtime()
+	if not services_ready or not gameplay_runtime_ready:
 		_opening_prepare_failed("%s Select Retry to try again." % runtime_services.preparation_error if runtime_services.preparation_error != "" else "Journey services could not be prepared. Select Retry to try again.")
 		return
 	_publish_web_opening_state("resources", "Preparing characters and materials...")
 	world_materials.begin_prewarm_attempt()
 	asset_helper.begin_resource_attempt()
 	asset_helper.set_zone_scope("greyfen")
-	var scene_paths := ZoneSceneCatalog.resource_paths("greyfen", ["gameplay"])
-	scene_paths.append_array(ZoneCompositionRouter.resource_paths("greyfen"))
-	scene_paths.append_array([
-		OPENING_WELL_MESH,
-		"res://assets_external/environment/village/GreyfenShrine_Authored.res",
-		"res://assets_external/environment/village/GreyfenForge_Authored.res",
-	])
-	var scene_status: Error = asset_helper.request_resource_paths(scene_paths)
+	var scene_status: Error = asset_helper.request_resource_paths(OpeningBuildInputs.scene_paths())
 	if scene_status != OK:
 		_opening_prepare_failed("Greyfen's authored scene could not be prepared. %s Select Retry to try again." % asset_helper.resource_prewarm_error)
 		return
@@ -327,18 +318,13 @@ func _prepare_opening_services(generation: int) -> void:
 	if environment_status != OK:
 		_opening_prepare_failed("Greyfen's environment could not be prepared. %s Select Retry to try again." % asset_helper.resource_prewarm_error)
 		return
-	# Actor bodies, props and surface textures are independent once the opening
-	# packs mount. Let the shared request owner overlap their materialization.
 	if DisplayServer.get_name().to_lower() != "headless":
 		world_materials.prewarm_surfaces(world_materials.PBR_SURFACE_IDS, str(settings.settings.get("quality_preset", "balanced")))
 		var props_status: Error = asset_helper.request_resource_paths(CharacterPresentation.OPENING_OCCUPATION_PROP_PATHS)
 		if props_status != OK:
 			_opening_prepare_failed("Greyfen's opening props could not be prepared. Select New Game to retry.")
 			return
-		var named_roles: Array[String] = ["player_kael", "sister_anwen"]
-		for actor_id in OPENING_NAMED_ACTOR_IDS:
-			named_roles.append(_role_for_interactable(actor_id))
-		var actors_status: Error = asset_helper.request_role_resources(named_roles)
+		var actors_status: Error = asset_helper.request_role_resources(OpeningBuildInputs.actor_roles(_host))
 		if actors_status != OK:
 			_opening_prepare_failed("Greyfen's opening characters could not be prepared. Select New Game to retry.")
 			return
@@ -578,7 +564,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	zone_root.process_mode = Node.PROCESS_MODE_PAUSABLE
 	zone_root.position = Vector3.ZERO
 	var was_paused := _host.get_tree().paused
-	opening_well_mesh = asset_helper.load_runtime_resource(OPENING_WELL_MESH) as ArrayMesh
+	opening_well_mesh = asset_helper.load_runtime_resource(OpeningBuildInputs.OPENING_WELL_MESH) as ArrayMesh
 	if opening_well_mesh == null or opening_well_mesh.get_surface_count() != 6:
 		_host.get_tree().paused = was_paused
 		_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's authored well could not be prepared. Select New Game to retry.")
@@ -655,7 +641,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		if not _opening_attempt_current(generation): return
 		opening_startup_metrics["opening_first_draw_ms"] = float(first_draw_finished_usec - opening_phase_started_usec) / 1000.0
 	if not world_transition.mark_prepared("greyfen", generation): return
-	prewarm_root.set_meta("opening_presentation_ready", true)
+	ZoneInstanceScope.for_root(prewarm_root).opening_presentation_ready = true
 	_host.get_tree().paused = was_paused
 	if game_started or zone_root != prewarm_root:
 		if prewarm_root != null and prewarm_root != zone_root and is_instance_valid(prewarm_root):

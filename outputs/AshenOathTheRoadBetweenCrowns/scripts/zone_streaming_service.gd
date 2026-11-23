@@ -11,6 +11,7 @@ signal zone_activation_requested(zone_id: String, arrival_id: String)
 const SharedResourceRequests = preload("res://scripts/shared_resource_requests.gd")
 const SceneCatalog = preload("res://scripts/zone_scene_catalog.gd")
 const CompositionRouter = preload("res://scripts/zone_composition_router.gd")
+const ResourceBatch = preload("res://scripts/core/zone_resource_batch.gd")
 const AUTHORED_LAYER_PATHS := {
 	"greyfen": "res://scenes/runtime/greyfen_gameplay_core.tscn",
 	"wychwood": "res://scenes/zones/wychwood_gameplay.tscn",
@@ -29,7 +30,6 @@ var resource_requests = SharedResourceRequests.acquire()
 var _status_poll_accumulator := 0.0
 var focused_destination := ""
 const STATUS_POLL_INTERVAL := 0.10
-const RESOURCE_TIMEOUT_MSEC := 30000
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -48,8 +48,7 @@ func neighbors(zone_id: String) -> Array[String]:
 func prewarm_neighbors(zone_id: String) -> void:
 	# Proximity scheduling owns decoded resources. Merely mounting a shared pack
 	# must not start importing every neighboring scene on the arrival frame.
-	var keep_ids: Array[String] = []
-	keep_ids.append(zone_id.strip_edges().to_lower())
+	var keep_ids: Array[String] = [zone_id.strip_edges().to_lower()]
 	keep_ids.append_array(neighbors(zone_id))
 	retire_unneeded_zones(keep_ids)
 
@@ -70,17 +69,13 @@ func request_zone(zone_id: String, resource_path: String = "", additional_paths:
 	var canonical := "bandit_road" if id == "long_road" else id
 	var desired: Array[String] = [resource_path]
 	if resource_path == "":
-		desired = SceneCatalog.resource_paths(canonical, SceneCatalog.prepared_road_layers(canonical)) if exact_paths else SceneCatalog.resource_paths(canonical)
+		desired = SceneCatalog.resource_paths(canonical, preload("res://scripts/core/route_destination_resources.gd").layers(canonical)) if exact_paths else SceneCatalog.resource_paths(canonical)
 		desired.append_array(CompositionRouter.resource_paths(canonical) + additional_paths)
 	var previous: Dictionary = requests.get(id, {})
 	var reusable := str(previous.get("state", "")) in ["waiting_pack", "loading", "ready"]
 	# A portal request may reuse a broader preparation. An exact road request
 	# replaces obsolete encounter inputs and adds every missing dependency.
-	var paths: Array[String] = []
-	if reusable and not exact_paths:
-		paths.assign(previous.paths)
-	for path: String in desired:
-		if path not in paths: paths.append(path)
+	var paths: Array[String] = ResourceBatch.merged_paths(previous, desired, reusable and not exact_paths)
 	if reusable and previous.paths == paths:
 		return
 	if paths.is_empty():
@@ -88,25 +83,17 @@ func request_zone(zone_id: String, resource_path: String = "", additional_paths:
 			requests[id] = {"state": "waiting_pack", "progress": 0.0}
 		_fail_request(id, "No resource preparation registered for zone")
 		return
-	var resources: Dictionary = {}
-	var current := str(previous.get("current_path", ""))
-	if reusable:
-		for path: String in paths:
-			if previous.resources.has(path): resources[path] = previous.resources[path]
-	if not reusable or current not in paths:
+	var batch := ResourceBatch.prepare(paths, previous, reusable)
+	if str(batch.current_path).is_empty():
 		_release_request(id)
-		current = ""
-	var progress := float(resources.size()) / float(paths.size())
-	requests[id] = {"state": "waiting_pack" if current.is_empty() else "loading", "progress": progress,
-		"resource": null, "paths": paths, "resources": resources, "current_path": current,
-		"current_started_ms": int(previous.get("current_started_ms", 0)), "next_index": 0}
+	requests[id] = batch
 	var packs = owner_node.get("runtime_packs") if is_instance_valid(owner_node) else null
 	if packs != null:
 		for pack_id in packs.required_zone_packs(canonical):
 			packs.request_pack(pack_id, 500)
 	set_process(true)
 	_begin_request(id)
-	if get_state(id) != "failed": zone_progress.emit(id, progress)
+	if get_state(id) != "failed": zone_progress.emit(id, float(batch.progress))
 
 func _begin_request(id: String) -> void:
 	if not focused_destination.is_empty() and id != focused_destination:
@@ -120,12 +107,8 @@ func _begin_request(id: String) -> void:
 		return
 	var request: Dictionary = requests[id]
 	if not str(request.get("current_path","")).is_empty(): return
-	var index := int(request.next_index)
-	while index < request.paths.size() and request.resources.has(request.paths[index]):
-		index += 1
-	request.next_index = index
-	if index < request.paths.size():
-		var path: String = request.paths[index]
+	var path := ResourceBatch.next_path(request)
+	if not path.is_empty():
 		if not ResourceLoader.exists(path):
 			_fail_request(id, "Missing resource: %s" % path)
 			return
@@ -134,7 +117,7 @@ func _begin_request(id: String) -> void:
 			_fail_request(id, "Unable to request %s: %s" % [path, error_string(error)])
 			return
 		request["current_path"] = path
-		request["current_started_ms"] = Time.get_ticks_msec()
+		ResourceBatch.start_clock(request)
 	request.state = "loading"
 
 func request_zone_for_portal(zone_id: String) -> bool:
@@ -219,28 +202,12 @@ func _process(delta: float) -> void:
 		if get_state(str(id)) != "loading":
 			continue
 		pending = true
-		var partial := 0.0
-		var path := str(request.current_path)
-		if not path.is_empty():
-			var progress: Array = []
-			var status: int = resource_requests.status(path, progress)
-			if status == ResourceLoader.THREAD_LOAD_LOADED:
-				var loaded: Resource = resource_requests.take(path, self, str(id))
-				request["current_path"] = ""
-				if loaded == null:
-					_fail_request(str(id), "Unable to load %s" % path)
-					continue
-				request.resources[path] = loaded
-			elif status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
-				if Time.get_ticks_msec() - int(request.current_started_ms) >= RESOURCE_TIMEOUT_MSEC:
-					_fail_request(str(id), "Resource preparation timed out: %s" % path)
-					continue
-				partial = float(progress[0]) if not progress.is_empty() else 0.0
-			else:
-				_fail_request(str(id), "Unable to load %s" % path)
-				continue
+		var result := ResourceBatch.poll(request, resource_requests, self, str(id))
+		if not str(result.error).is_empty():
+			_fail_request(str(id), str(result.error))
+			continue
 		var complete: bool = request.resources.size() == request.paths.size()
-		var value := (float(request.resources.size()) + partial) / float(request.paths.size())
+		var value := (float(request.resources.size()) + float(result.progress)) / float(request.paths.size())
 		var previous_value := float(request.get("progress", 0.0))
 		request["progress"] = value
 		if complete:

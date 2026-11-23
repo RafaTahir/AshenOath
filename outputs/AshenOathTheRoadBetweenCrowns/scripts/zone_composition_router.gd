@@ -98,19 +98,7 @@ static func build_core_detail_stage(host: Node, zone_id: String, stage: String) 
 	return result
 
 static func apply_core_detail_stage(host: Node, context: ZoneBuildContext, builder: RefCounted, stage: String) -> Dictionary:
-	var root := context.zone_root
-	if not is_instance_valid(root) or root != host.zone_root:
-		return _failure(context.zone_id, "detail-stage owner is no longer current")
-	var owns_reads: bool = host.story_state.world_reads.capturing.is_empty()
-	if owns_reads:
-		host._begin_zone_world_reads(context.zone_id, false)
-	builder.build_detail_stage(context, stage)
-	if owns_reads:
-		host._end_zone_world_reads()
-	# Configuration failures are recorded as each actor is created. The covered
-	# opening has one full ownership pass just before the scene can draw.
-	var errors: Array = root.get_meta("actor_animation_errors", {}).values()
-	return {"ok": errors.is_empty(), "errors": errors, "zone": context.zone_id, "stage": stage}
+	return preload("res://scripts/core/zone_detail_publication.gd").apply(host, context, builder, stage)
 
 static func registered_zones() -> Array[String]:
 	var result: Array[String] = []
@@ -123,12 +111,4 @@ static func _canonical(zone_id: String) -> String:
 	return zone_id.strip_edges().to_lower()
 
 static func _failure(zone_id: String, message: String) -> Dictionary:
-	push_error("Zone composition failed for '%s': %s." % [zone_id, message])
-	return {
-		"ok": false,
-		"zone": zone_id,
-		"errors": [message],
-		"ground_count": 0,
-		"bounds_count": 0,
-		"gate_count": 0,
-	}
+	return preload("res://scripts/core/zone_detail_publication.gd").failure(zone_id, message)
