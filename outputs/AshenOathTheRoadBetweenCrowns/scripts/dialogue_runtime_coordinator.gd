@@ -3,6 +3,7 @@ extends RefCounted
 
 const StoryPerformance = preload("res://scripts/story_performance.gd")
 const DialoguePage = preload("res://scripts/views/dialogue_page_performance.gd")
+const PLAYER_SPEAKERS = DialoguePage.PLAYER_SPEAKERS
 
 var _focus_actor: WeakRef
 var _locked_actor: WeakRef

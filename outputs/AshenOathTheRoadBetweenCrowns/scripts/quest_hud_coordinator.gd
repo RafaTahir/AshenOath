@@ -2,6 +2,7 @@ class_name QuestHudCoordinator
 extends RefCounted
 
 const SectorManifest = preload("res://scripts/world_sector_manifest.gd")
+const RouteDistance = preload("res://scripts/core/route_distance.gd")
 const RouteCatalog = preload("res://scripts/story_route_catalog.gd")
 const BridgeContract = preload("res://scripts/bridge_surface_contract.gd")
 
@@ -129,7 +130,7 @@ func _navigation_dial_markers(view: Dictionary, player: Node3D, zone_id: String,
 			var target_zone: String = str(candidate.get("zone_target"))
 			if target_zone == "" or target_zone not in available:
 				continue
-			var steps: int = _steps_to(target_zone, destination, zone_id)
+			var steps: int = RouteDistance.steps_to(target_zone, destination, zone_id, quests, story_state)
 			var distance: float = candidate.global_position.distance_squared_to(player.global_position)
 			if steps >= 0 and (steps < best_steps or (steps == best_steps and distance < nearest)):
 				best_steps = steps
@@ -160,7 +161,7 @@ func _physical_connection(zone_id: String, destination: String, position: Vector
 	for edge: Dictionary in SectorManifest.connections(zone_id,story_state):
 		if not SectorManifest.edge_available(edge, quests, story_state):
 			continue
-		var steps := _steps_to(str(edge.target), destination, zone_id)
+		var steps := RouteDistance.steps_to(str(edge.target), destination, zone_id, quests, story_state)
 		if steps < 0:
 			continue
 		var distance := position.distance_squared_to(SectorManifest.connector_points(edge)[0])
