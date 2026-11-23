@@ -24,6 +24,7 @@ jobs:
             outputs/AshenOathTheRoadBetweenCrowns/shaders
             outputs/AshenOathTheRoadBetweenCrowns/docs/archive
             outputs/AshenOathTheRoadBetweenCrowns/project.godot
+            outputs/AshenOathTheRoadBetweenCrowns/world_sector_manifest.json
             outputs/AshenOathTheRoadBetweenCrowns/assets/ui/fonts/Spectral-Medium.ttf
             outputs/AshenOathTheRoadBetweenCrowns/assets/icons/iron_trap.svg
             outputs/AshenOathTheRoadBetweenCrowns/assets_external/ui/greyfen_menu_stylized.png
@@ -31,7 +32,7 @@ jobs:
           sparse-checkout-cone-mode: false
       - name: Cache pinned Godot 4.6.3
         id: godot-cache
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: ~/.cache/ashen-oath/godot-4.6.3
           key: godot-4.6.3-linux-x86_64-d0bc2113065e481c
