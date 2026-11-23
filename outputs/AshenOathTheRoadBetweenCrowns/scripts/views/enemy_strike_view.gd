@@ -56,13 +56,8 @@ func set_encounter_active(value: bool) -> void:
 			_actor.animation_driver.set_locomotion(0.0, Vector3.ZERO, true)
 
 func stagger(seconds: float = 0.7) -> void:
-	_actor.native_attack_tail_active = false
-	if _actor.animation_driver != null:
-		_actor.animation_driver.set_external_tick(false)
 	_actor.stagger_time = max(_actor.stagger_time, seconds)
-	_actor.windup_time = 0.0
-	_actor.pending_attack_time = 0.0
-	_actor._release_attack_token()
+	_actor._cancel_pending_strike(false)
 	if _actor.animation_driver != null:
 		_actor.animation_driver.trigger_action("hit")
 
@@ -220,8 +215,6 @@ func interrupt_boss_windup(reason: String = "interrupt") -> bool:
 	if not _actor.is_boss or _actor.windup_time <= 0.0:
 		return false
 	var attack_id: Variant = _actor._boss_attack_id()
-	_actor.windup_time = 0.0
-	_actor.pending_attack_time = 0.0
 	_actor.attack_recovery_time = 0.18
 	_actor.stagger(0.90)
 	_actor.write_presentation_tag(_actor, "last_boss_interrupt", reason)

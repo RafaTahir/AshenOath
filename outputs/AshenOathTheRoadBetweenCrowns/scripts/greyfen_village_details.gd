@@ -109,7 +109,7 @@ func _point(id: String, prompt: String, position_value: Vector3, kind: String, w
 	component.name = "PropState"
 	area.add_child(component)
 	component.configure(id, kind, "greyfen_prop:" + id, "closed", game.story_state)
-	component.set_meta("reduced_motion", bool(game.settings.settings.get("reduced_motion", false)))
+	component.set_reduced_motion(bool(game.settings.settings.get("reduced_motion", false)))
 	props[id] = area
 	if kind == "record" and id != "cemetery_return":
 		var record: Node3D = preload("res://scripts/campaign_record_presentation.gd").make_visual("register_mira")
@@ -337,7 +337,7 @@ func _build_common() -> void:
 	for index in range(6):
 		var piece := Work._rod(game,pieces,Vector3(-0.2+index*0.08,1.07,0),0.027,0.025,IRON if index%2==0 else LINEN)
 		pieces.get_node("PropState").bind_visual(piece,"position:z",0.0,float(index%2)*0.12)
-	var seat := _point("common_seat","Sit beside the common table",Vector3(-3.0,0,13.0),"seat","A seat kept clear of the bridge road. Stand whenever you choose; nobody owes the table a game or a confidence.")
+	var seat := _point("common_seat","Sit beside the common table",Vector3(-7.7,0,13.0),"seat","A seat kept clear of the bridge road. Stand whenever you choose; nobody owes the table a game or a confidence.")
 	seat.rotation.y = PI * 0.5
 	_model(seat,"Bench.obj",0.45,Vector3.ZERO)
 	_point("challenges","Read the southern range challenges",Vector3(6.1,0,13.7),"record","Rook: steady hand, eight arrows. Tor: watch a complete pendulum swing. Elna: every distance counts. The untimed practice uses range arrows; your own equipment and ammunition are kept. Losses buy no grievance.")

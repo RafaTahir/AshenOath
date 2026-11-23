@@ -211,7 +211,7 @@ func _verify_solidity(game: Node) -> void:
 			var person := "rook" if id == "common_table" else "blacksmith_tor"
 			# Isolated fixture arrangement: request from a clear table-side position,
 			# not from the bridge centre where the actor must yield to the player.
-			var standing := arrival.global_position + Vector3(0,0.08,1.2)
+			var standing := arrival.global_position + (Vector3(0.9,0.08,0) if id == "common_table" else Vector3(0,0.08,1.2))
 			_check(not game.spatial_service.is_position_occupied(standing,0.34,1.65), "Fixture table-side standing point is obstructed")
 			game.player.global_position = standing
 			var deadline := Time.get_ticks_msec()+90000

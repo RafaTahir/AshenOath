@@ -27,7 +27,7 @@ func show_settings_menu(back_target: String = "pause", requested_page: int = -1)
 	for key: String in groups[names[settings_page]]:
 		_add_setting_control(box, key, s[key])
 	if names[settings_page] == "Controls":
-		_add_menu_button(box, "Customize Bindings", func(): show_remap_menu(controls_back_target))
+		_add_menu_button(box, "Customize Bindings", func(): show_remap_menu(_rendered_screen), false, "customize_bindings")
 	_add_menu_button(box, "Back", _return_from_controls)
 	view.call_deferred("_apply_hud_layout")
 
@@ -134,7 +134,7 @@ func show_controls_menu(back_target: String = "main") -> void:
 		_add_menu_text(box, "Left thumb move | Drag right side to look\nSword: Strike, Heavy, Guard, Dodge, Jump, Oath\nBow: Aim, hold Draw, lift to loose; lower Aim to cancel\nLock, Arrows, Dodge, Jump remain available\nUse the displayed object with Use\nMore: weapons, draw/sheath, supplies, targets, camera, Bracken\nPause and Book open their menus\nLandscape orientation is required during gameplay")
 	else:
 		_add_menu_text(box, "WASD move | Mouse look | Wheel zoom | Page Up/Down zoom\nShift run | Space dodge | X jump | 1 Steel | 2 Bow | 3 Oathblade | H draw/sheath\nLeft mouse light attack | Right mouse heavy / aim bow\nBow: aim, hold left mouse to draw, release to loose; lower aim to cancel\nHold C Oathfire Beam | Tap Q parry | Hold Q block | E interact\nZ cycle arrows | R potion | F bomb | Tab inventory | Esc pause")
-	_add_menu_button(box, "Customize Controls", func(): show_remap_menu(back_target))
+	_add_menu_button(box, "Customize Controls", func(): show_remap_menu("controls"), false, "customize_bindings")
 	_add_menu_button(box, "Back", _return_from_controls)
 
 func show_remap_menu(back_target: String = "main", requested_page: int = -1) -> void:
@@ -304,7 +304,7 @@ func _capture_remap_input(event: InputEvent) -> bool:
 		elif event is InputEventJoypadButton:
 			pressed = (event as InputEventJoypadButton).pressed
 		elif event is InputEventJoypadMotion:
-			pressed = absf((event as InputEventJoypadMotion).axis_value) > 0.45
+			pressed = absf((event as InputEventJoypadMotion).axis_value) >= 0.5
 		if is_binding_event and pressed and input_source != null and input_source.has_method("remap_action"):
 			var result: Dictionary = input_source.remap_action(remap_action_id, event)
 			remap_waiting = false

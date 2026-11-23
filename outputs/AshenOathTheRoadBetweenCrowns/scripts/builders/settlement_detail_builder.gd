@@ -218,20 +218,18 @@ func _add_visual_100_layer(zone_id: String) -> void:
 	_scope.world_vfx.name = "WorldVFXController"
 	_scope.zone_root.add_child(_scope.world_vfx)
 	_scope.world_vfx.configure(zone_id, quality)
-func _install_world_prop_controller(zone_id: String) -> void:
-	_host.StoryWorldDirector.decorate(_host, _scope.zone_root, zone_id)
-	if not _host.neighbor_building: _host.CovenantResolution.restore(_host)
+func _install_world_prop_controller(zone_id: String, phase: int = -1) -> void:
+	_host.StoryWorldDirector.decorate(_host, _scope.zone_root, zone_id, phase)
+	if phase >= 0 and phase < _host.StoryWorldDirector.PRESENTATION_PHASE: return
 	if _scope.zone_root == null or not is_instance_valid(_scope.zone_root):
 		_scope.world_props = null
 		return
-	var existing: Variant = _scope.zone_root.find_child("WorldPropController", true, false) as WorldPropController
-	if existing != null:
-		_scope.world_props = existing
-		return
+	_scope.world_props = _scope.zone_root.get_node_or_null("WorldPropController") as WorldPropController
+	if _scope.world_props != null: return
 	_scope.world_props = _host.WorldPropController.new()
 	_scope.world_props.name = "WorldPropController"
 	_scope.zone_root.add_child(_scope.world_props)
-	_scope.world_props.configure(_scope.zone_root, zone_id, str(_host.settings.settings.get("quality_preset", "balanced")), _host.story_state, _host.audio)
+	_scope.world_props.configure(_scope.zone_root, zone_id, str(_host.settings.settings.get("quality_preset", "balanced")), _host.story_state, _host.audio, _host.settings)
 func _apply_first_route_materials(root: Node) -> void:
 	if root == null:
 		return

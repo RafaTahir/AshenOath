@@ -1,6 +1,6 @@
 import { createServer, get as httpGet } from "node:http";
 import { createReadStream, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
-import { extname, join, normalize, resolve } from "node:path";
+import { extname, join, normalize, resolve, sep } from "node:path";
 import { spawn, spawnSync } from "node:child_process";
 import { gzipSync, gunzipSync } from "node:zlib";
 import { isDeepStrictEqual } from "node:util";
@@ -35,6 +35,15 @@ const presentationMode = args.headed ? "headed" : "headless";
 if (!["hardware", "software"].includes(rendererMode)) throw new Error("--renderer must be hardware or software");
 if (!["all", "chromium", "chrome", "edge", "firefox"].includes(requestedBrowser)) {
   throw new Error("--browser must be all, chromium, chrome, edge or firefox");
+}
+const referenceNetwork = args["reference-network"] ? {
+  urlPattern: "",
+  latency: 50,
+  downloadThroughput: 50_000_000 / 8,
+  uploadThroughput: -1,
+} : null;
+if (referenceNetwork && ["all", "firefox"].includes(requestedBrowser)) {
+  throw new Error("The 50 Mbps / 50 ms reference network requires a Chromium browser");
 }
 const fullCampaign = Boolean(args["full-campaign"]);
 const diagnosticPreparation = Boolean(args["diagnostic-preparation"]);
@@ -71,6 +80,14 @@ const rooksMapMatrix = Boolean(args["rooks-map-matrix"]);
 const millersMeasureMatrix = Boolean(args["millers-measure-matrix"]);
 const bannerlessMatrix = Boolean(args["bannerless-matrix"]);
 const openingSaveContinue = Boolean(args["opening-save-continue"]);
+const privateRoadReport = Boolean(args["private-road-report"]);
+const firstRoutePresentation = Boolean(args["first-route-presentation"]);
+if (privateRoadReport && !openingSaveContinue) {
+  throw new Error("--private-road-report requires --opening-save-continue");
+}
+if (firstRoutePresentation && !openingSaveContinue) {
+  throw new Error("--first-route-presentation requires --opening-save-continue");
+}
 const browserSmoke = Boolean(args["browser-smoke"]);
 const partialCampaign = throughCemetery || throughBellEater || throughTeeth || throughRegister
   || throughRootbound || throughNames || throughAshPreparation || throughAsh
@@ -212,8 +229,24 @@ if (!browsers.length) {
 }
 const candidateIdentity = artifactIdentity(exportDir);
 const transportManifest = JSON.parse(readFileSync(join(exportDir, "release_manifest.json"), "utf8"));
+const contentManifest = JSON.parse(readFileSync(join(exportDir, "runtime_pack_manifest.json"), "utf8"));
 const encodedArtifacts = new Set((transportManifest.artifacts || [])
   .filter(artifact => artifact.content_encoding === "gzip").map(artifact => artifact.path));
+const artifactPaths = new Set(candidateIdentity.files.map(file => file.path));
+const startupPackPaths = new Set();
+const startupPackIds = new Set(contentManifest.startup_dependencies || ["opening", "opening_materials"]);
+const testOrigin = "http://127.0.0.1";
+for (const id of startupPackIds) {
+  const pack = contentManifest.packs?.[id];
+  for (const dependency of pack?.dependencies || []) startupPackIds.add(dependency);
+  if (!pack?.url || String(pack.status).startsWith("embedded")) continue;
+  const url = new URL(pack.url, testOrigin);
+  const relative = url.pathname.slice(1);
+  if (url.origin !== testOrigin || !relative.startsWith("packs/") || !artifactPaths.has(relative)) {
+    throw new Error(`Invalid startup pack path for ${id}: ${pack.url}`);
+  }
+  startupPackPaths.add(relative);
+}
 
 const mime = {
   ".html": "text/html; charset=utf-8",
@@ -225,8 +258,8 @@ const mime = {
 // D: is the canonical workspace, but sequential antivirus/disk reads from it
 // can make localhost transfer tens of megabytes slower than the production
 // CDN and contaminate browser startup measurements. Prime only the immutable
-// candidate files before navigation; this cost is outside the measured route
-// and keeps the HTTP behavior representative without changing game bytes.
+// root files and the declared startup pack closure before navigation. This
+// keeps disk reads out of the shaped startup comparison without changing bytes.
 const serverFileCache = new Map();
 const serverGzipCache = new Map();
 for (const relative of new Set([
@@ -237,13 +270,15 @@ for (const relative of new Set([
   transportManifest.engine?.wasm,
   "index.pck",
   "runtime_pack_manifest.json",
-  "packs/opening.pck",
+  ...startupPackPaths,
 ].filter(Boolean))) {
   const path = resolve(exportDir, relative);
   if (existsSync(path)) {
     const payload = readFileSync(path);
     const encodedOnDisk = encodedArtifacts.has(relative);
-    serverFileCache.set(relative, encodedOnDisk ? gunzipSync(payload) : payload);
+    if (!encodedOnDisk || !startupPackPaths.has(relative)) {
+      serverFileCache.set(relative, encodedOnDisk ? gunzipSync(payload) : payload);
+    }
     // Vercel serves the production HTML, JavaScript, WebAssembly, and PCK
     // responses with gzip. Prepare equivalent bytes before the measured
     // navigation so local cold-start timing does not benchmark an artificial
@@ -251,18 +286,19 @@ for (const relative of new Set([
     serverGzipCache.set(relative, encodedOnDisk ? payload : gzipSync(payload, { level: 6 }));
   }
 }
+const startupResponses = [];
 const server = createServer((request, response) => {
   const requested = decodeURIComponent((request.url || "/").split("?")[0]);
   const relative = requested === "/" ? "index.html" : requested.replace(/^\/+/, "");
   const path = resolve(exportDir, normalize(relative));
-  if (!path.startsWith(exportDir) || !existsSync(path)) {
+  const cached = serverFileCache.get(relative);
+  const acceptsGzip = /(?:^|,|\s)gzip(?:\s|,|$)/i.test(String(request.headers["accept-encoding"] || ""));
+  const compressed = acceptsGzip ? serverGzipCache.get(relative) : null;
+  if (!path.startsWith(exportDir + sep) || (!cached && !compressed && !existsSync(path))) {
     response.writeHead(relative === "favicon.ico" ? 204 : 404);
     response.end();
     return;
   }
-  const cached = serverFileCache.get(relative);
-  const acceptsGzip = /(?:^|,|\s)gzip(?:\s|,|$)/i.test(String(request.headers["accept-encoding"] || ""));
-  const compressed = acceptsGzip ? serverGzipCache.get(relative) : null;
   const encodedOnDisk = encodedArtifacts.has(relative);
   const body = compressed || cached || (!acceptsGzip && encodedOnDisk ? gunzipSync(readFileSync(path)) : null);
   const contentLength = body ? body.byteLength : statSync(path).size;
@@ -278,6 +314,14 @@ const server = createServer((request, response) => {
       : "no-cache, must-revalidate",
   };
   if (compressed || (!body && encodedOnDisk)) headers["Content-Encoding"] = "gzip";
+  if (referenceNetwork && serverGzipCache.has(relative)) {
+    const queuedAt = performance.now();
+    const sample = { path: relative, started_at_ms: Date.now(), bytes: contentLength,
+      from_memory: Boolean(compressed || cached), encoding: headers["Content-Encoding"] || "identity" };
+    startupResponses.push(sample);
+    response.once("finish", () => { sample.server_flush_ms = performance.now() - queuedAt; });
+    response.once("close", () => { sample.completed = response.writableFinished; });
+  }
   response.writeHead(200, headers);
   if (body) response.end(body);
   else createReadStream(path).pipe(response);
@@ -518,7 +562,7 @@ class Cdp {
   }
   recordEvent(message) {
     if (!["Runtime.consoleAPICalled", "Runtime.exceptionThrown", "Log.entryAdded",
-      "Network.requestWillBeSent", "Network.responseReceived", "Network.dataReceived",
+      "Network.requestWillBeSent", "Network.requestWillBeSentExtraInfo", "Network.responseReceived", "Network.dataReceived",
       "Network.loadingFinished", "Network.loadingFailed", "WebAudio.contextCreated",
       "WebAudio.contextChanged"].includes(message.method)) return;
     if (message.method === "Network.dataReceived") {
@@ -1996,6 +2040,8 @@ function networkTimeline(cdp) {
     if (event.method === "Network.requestWillBeSent") {
       row.url = p.request?.url;
       row.started = p.timestamp;
+    } else if (event.method === "Network.requestWillBeSentExtraInfo" && p.appliedNetworkConditionsId) {
+      row.applied_network_conditions_id = p.appliedNetworkConditionsId;
     } else if (event.method === "Network.responseReceived") {
       row.url = p.response?.url || row.url;
       row.status = p.response?.status;
@@ -2701,11 +2747,20 @@ async function useInteraction(cdp, id, checkpoints, expectsDialogue = false, act
         return opened?.visible ? { dialogue: opened } : null;
       }, `${id} dialogue open`, 5000);
       checkpoints.push({ event: "dialogue_input_mode", id, mode: dialogueInput });
+      if (firstRoutePresentation && id === "sister_anwen" && actionLabel === "__close__"
+        && !checkpoints.some(checkpoint => checkpoint.event === "anwen_conversation_presentation")) {
+        const screenshot = await capture(cdp, reportPath.replace(/\.json$/i, "_anwen_conversation.png")).catch(() => "");
+        checkpoints.push({ event: "anwen_conversation_presentation", screenshot,
+          page: openedDialogue.dialogue.page, pages: openedDialogue.dialogue.pages });
+      }
       let chosenRequestedAction = false;
       let closed = false;
       for (let step = 0; step < 48; step += 1) {
-        const current = await freshDialogueState(cdp);
-        if (!current?.visible) { closed = true; break; }
+        // An observation timeout provides no evidence that the dialogue closed.
+        const current = step === 0 ? openedDialogue.dialogue : await waitFor(
+          () => freshDialogueState(cdp), `${id} next dialogue state`, 8000,
+        );
+        if (!current.visible) { closed = true; break; }
         const page = Number(current.page);
         const finalPage = page === Math.max(1, Number(current.pages)) - 1;
         await sleep(260);
@@ -2721,7 +2776,7 @@ async function useInteraction(cdp, id, checkpoints, expectsDialogue = false, act
         }
         await sleep(400);
       }
-      if (!closed && (await freshDialogueState(cdp))?.visible) {
+      if (!closed && (await waitFor(() => freshDialogueState(cdp), `${id} final dialogue state`, 8000)).visible) {
         throw new Error(`${id} exceeded its bounded dialogue/follow-on pages`);
       }
     // A Compatibility frame can deliver the final button press shortly after
@@ -2736,25 +2791,16 @@ async function useInteraction(cdp, id, checkpoints, expectsDialogue = false, act
     // Clear a release whose acknowledgement may have been lost when the
     // interaction keydown moved the game into paused-dialogue mode.
     await dispatchKey(cdp, interactionKey[0], interactionKey[1], false, true).catch(() => {});
-    // Reacquire pointer lock with a direct gameplay gesture. Browsers reject
-    // deferred lock requests made by the dialogue callback itself.
+    // A camera key is an ordinary pointer-capture gesture in gameplay.
+    // A combat click here can strike the speaker as dialogue releases input.
     if (restoreGameplayPointer) {
-      // InputRouter blocks Web capture for 350 ms after restoring gameplay.
-      // The next gesture must occur outside that guard, not inside it.
-      await sleep(400);
-      const beforePointer = Number(cdp.lastObservation?.timestamp_ms);
-      try {
-        await clickAttack(cdp, false);
-      } catch (error) {
-        if (error?.fatal || !String(error?.message || error).includes("timed out")) throw error;
-        await waitFor(async () => {
-          const state = await telemetry(cdp);
-          return Number(state?.timestamp_ms) > beforePointer
-            && state.dialogue?.visible === false && !state.paused
-            && state.player?.can_control === true && state.mouse_mode === 2;
-        }, `${id} delivered gameplay pointer gesture`, 5000);
+      const ready = await waitFor(async () => {
+        const state = await telemetry(cdp);
+        return state?.dialogue?.visible === false && !state.paused && state.player?.can_control ? state : null;
+      }, `${id} restored gameplay`, 8000);
+      if (ready.mouse_mode !== 2) {
+        await tapGameplayKey(cdp, "ArrowRight", "ArrowRight", 70);
       }
-      await sleep(180);
     }
   }
   // A real clue interaction queues an Area3D for deletion. Compatibility Web
@@ -3078,10 +3124,11 @@ async function runOpeningCampaign(cdp, url, checkpoints, onStartupReady, reportI
     ? await resumeEarnedJourney(cdp, url, checkpoints)
     : await startNewGame(cdp, `${url}&scenario=opening-campaign-${Date.now()}`, onStartupReady);
   checkpoints.push({ event: "scenario_start", scenario: "opening-campaign", zone: state.zone });
-  if (fullCampaign && args["finish-line"]) {
+  if ((fullCampaign && args["finish-line"]) || firstRoutePresentation) {
     const screenshot = reportPath.replace(/\.json$/i, "_first_control.png");
-    await capture(cdp, screenshot);
-    checkpoints.push({ event: "first_control_presentation", screenshot, visual: state.player?.visual });
+    const captureRequest = capture(cdp, screenshot);
+    const captured = await (firstRoutePresentation ? captureRequest.catch(() => "") : captureRequest);
+    checkpoints.push({ event: "first_control_presentation", screenshot: captured, visual: state.player?.visual });
   }
   if (stopAfter === "startup") {
     if (repeatStartup) {
@@ -3134,7 +3181,8 @@ async function runOpeningCampaign(cdp, url, checkpoints, onStartupReady, reportI
     }
     return unresolved;
   }
-  await useInteraction(cdp, reportInteraction, checkpoints, true);
+  const reportAction = privateRoadReport ? "Give Anwen the evidence privately" : "";
+  await useInteraction(cdp, reportInteraction, checkpoints, true, reportAction);
   const finalState = await telemetry(cdp);
   if (!finalState?.quests?.road_complete || !finalState?.quests?.bell_active) {
     throw new Error(`Real report did not complete Road of Crows and open Bell Beneath Greyfen`);
@@ -4931,6 +4979,9 @@ async function runOpeningSaveContinue(cdp, url, checkpoints, onStartupReady) {
   if (!original?.quests?.completed?.includes("main_road_of_crows")) {
     throw new Error("Opening route did not earn its save checkpoint");
   }
+  if (privateRoadReport && original.story?.flags?.evidence_report !== "private") {
+    throw new Error("The browser comparison must earn the same private road report as the native route");
+  }
   let changed;
   if (args["settings-baseline-report"]) {
     const baselinePath = resolve(String(args["settings-baseline-report"]));
@@ -4976,6 +5027,7 @@ async function runOpeningSaveContinue(cdp, url, checkpoints, onStartupReady) {
     || Math.hypot(resumed.player.position.x - earned.player.position.x,
       resumed.player.position.z - earned.player.position.z) > 0.15
     || Math.abs(resumed.player.health - earned.player.health) > 0.01
+    || (privateRoadReport && resumed.story?.flags?.evidence_report !== "private")
     || !isDeepStrictEqual(resumed.quests.objectives, earned.quests.objectives)) {
     throw new Error("Normal Continue did not restore the exact durable earned Quick Save");
   }
@@ -6622,6 +6674,13 @@ async function testBrowser(name, executable) {
       cdp.send("Performance.enable"),
       ...(name === "Firefox" ? [] : [cdp.send("WebAudio.enable")]),
     ]);
+    if (referenceNetwork) {
+      const { ruleIds } = await cdp.send("Network.emulateNetworkConditionsByRule", {
+        matchedNetworkConditions: [referenceNetwork],
+      });
+      if (!ruleIds?.[0]) throw new Error("Chromium did not confirm the reference network rule");
+      cdp.referenceNetwork = { ...referenceNetwork, rule_id: ruleIds[0] };
+    }
     await cdp.send("Emulation.setDeviceMetricsOverride", {
       width: viewport.width,
       height: viewport.height,
@@ -6846,6 +6905,7 @@ async function testBrowser(name, executable) {
       startup_runs: cdp.startupRuns || [],
       renderer_mode: rendererMode,
       presentation_mode: presentationMode,
+      reference_network: cdp.referenceNetwork || null,
       renderer,
       elapsed_ms: Date.now() - started,
       transport: cdp.transportSummary(),
@@ -6893,8 +6953,10 @@ async function testBrowser(name, executable) {
       startup_runs: cdp?.startupRuns || [],
       renderer_mode: rendererMode,
       presentation_mode: presentationMode,
+      reference_network: cdp?.referenceNetwork || null,
       renderer: cdp ? await inspectRenderer(cdp).catch(() => null) : null,
       failure: error.message,
+      failure_stack: error.stack,
       elapsed_ms: Date.now() - started,
       transport: cdp ? cdp.transportSummary() : null,
       checkpoints,
@@ -6976,6 +7038,10 @@ const report = {
   targeted_scope: args["resume-growth"] ? "earned_growth_auto_durability" : args["resume-quality"] ? "earned_quality_dependencies" : undefined,
   export_dir: exportDir,
   artifact: candidateIdentity,
+  server_preloaded_startup_packs: [...startupPackPaths].sort(),
+  // The server flush measures local writes to the socket. Browser receipt and
+  // throttling remain observable separately in the CDP network timeline.
+  server_startup_responses: referenceNetwork ? startupResponses : undefined,
   qa_temp_root: QA_TEMP_ROOT,
   browsers: [],
 };

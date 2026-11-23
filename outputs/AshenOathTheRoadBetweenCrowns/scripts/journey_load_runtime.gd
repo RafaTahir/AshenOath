@@ -55,12 +55,14 @@ func request(game, prepared: Dictionary) -> void:
 		cancel(game, "The session is closing.")
 		return
 	var encounter_packs: Array[String] = game._zone_encounter_packs(target, prepared.get("data", {}))
+	if game.runtime_packs == null:
+		cancel(game, "The destination's content is unavailable. Your current session remains in place.")
+		return
 	if OS.has_feature("web"):
-		if game.runtime_packs == null:
-			cancel(game, "The destination's content is unavailable. Your current session remains in place.")
-			return
 		game.runtime_packs.quality_preset = str(game.settings.settings.get("quality_preset", "balanced"))
-		game.runtime_packs.prioritize_zone(target)
+		game.runtime_packs.prioritize_zone(target, encounter_packs)
+		if not game.game_started:
+			game.runtime_packs.retire_unneeded_packs(game.runtime_packs.required_zone_packs(target, encounter_packs))
 		if not game.runtime_packs.zone_packs_ready(target, encounter_packs):
 			var queued: bool = game.runtime_packs.request_zone_packs(target, encounter_packs, true)
 			if not queued:
@@ -108,20 +110,19 @@ func request(game, prepared: Dictionary) -> void:
 	if not game.quests.can_load_campaign_revision(campaign_revision):
 		cancel(game, "This journey needs campaign chapters that are not present in this release. Your current session is unchanged.")
 		return
-	if game.runtime_packs == null:
-		cancel(game, "The destination's content is unavailable. Select the saved journey to retry.")
-		return
 	var required_packs: Array[String] = game.runtime_packs.required_zone_packs(target, encounter_packs)
-	game.hud.update_journey_load_progress(target, -1.0, "Preparing destination materials...")
+	game.hud.update_journey_load_progress(target, -1.0, "Preparing Kael and the destination...")
 	game.asset_helper.begin_resource_attempt()
-	var environment_status: Error = game.asset_helper.request_environment_resources(required_packs)
+	var resource_status: Error = game.asset_helper.request_environment_resources(required_packs)
+	if resource_status == OK:
+		resource_status = game.asset_helper.request_role_resources(["player_kael"])
 	while _is_current(game, generation):
-		if environment_status in [OK, ERR_BUSY]:
-			environment_status = game.asset_helper.poll_role_resources(30000)
-		if environment_status == OK:
+		if resource_status in [OK, ERR_BUSY]:
+			resource_status = game.asset_helper.poll_role_resources(30000)
+		if resource_status == OK:
 			break
-		if environment_status != ERR_BUSY:
-			cancel(game, "The destination's environment could not be prepared. %s Select the saved journey to retry." % game.asset_helper.resource_prewarm_error)
+		if resource_status != ERR_BUSY:
+			cancel(game, "The destination's resources could not be prepared. %s Select the saved journey to retry." % game.asset_helper.resource_prewarm_error)
 			return
 		await game.get_tree().process_frame
 	if not _is_current(game, generation):
@@ -189,7 +190,7 @@ func cancel(game, reason: String = "Journey loading cancelled.", present: bool =
 	game._invalidate_interaction_prompt()
 	game._refresh_journey_models()
 	game.call_deferred("_persist_story_action")
-	if not game.game_started:
+	if not game.game_started and str(game.opening_startup_metrics.get("phase", "")) != "idle":
 		game.call_deferred("_on_launch_accepted")
 
 func begin_arrival(game, reason: String, target: String) -> void:

@@ -12,6 +12,6 @@ static func apply(area: Node3D, id: String) -> void:
 	visual.mesh = load(str(MESHES[id])) as Mesh
 	visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	area.add_child(visual)
-	if id == "mira_apothecary":
-		preload("res://scripts/camera_controller.gd").install_visual_clearance(visual)
+	if id == "mira_apothecary" and visual.mesh != null:
+		preload("res://scripts/camera_controller.gd").install_visual_clearance(visual, preload("res://scripts/core/prepared_greyfen_social_collision.gd").fitted(id, visual.mesh))
 	area.set_meta("authored_social_furniture", true)

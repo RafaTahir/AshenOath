@@ -9,12 +9,6 @@ func _install_world_prop_controller(zone_id: String) -> void:
 	_zone_construction()._install_world_prop_controller(zone_id)
 
 func _install_opening_soundscape(zone_id: String) -> void:
-	StoryWorldDirector.decorate(_host, zone_root, zone_id)
-	CovenantResolution.restore(_host)
-	_host.call_deferred("_persist_story_action")
-	_host.call_deferred("_finish_covenant_if_ready")
-	if audio != null:
-		audio.set_story_context(story_state, zone_id)
 	if zone_root == null or not is_instance_valid(zone_root) or audio == null:
 		return
 	var soundscape := zone_root.find_child("OpeningSoundscape", true, false) as OpeningSoundscape
@@ -605,57 +599,80 @@ func _ensure_mesh_surface_materials(mesh: Mesh, fallback: Material) -> int:
 			applied += 1
 	return applied
 
-func _validate_zone_render_resources(root: Node, descendants: bool = true) -> Dictionary:
-	var report := {
+func begin_render_resource_pass() -> Dictionary:
+	return {"unbound_surfaces": {}, "report": {
 		"mesh_instances": 0,
 		"multimesh_instances": 0,
 		"fallbacks_applied": 0,
 		"invalid_geometry": 0,
 		"invalid_geometry_names": [],
-	}
-	if root == null:
-		return report
-	var fallback := _valid_material_or_fallback(null)
-	var meshes: Array = [root] if root is MeshInstance3D else []
-	if descendants: meshes.append_array(root.find_children("*", "MeshInstance3D", true, false))
-	for mesh_node in meshes:
-		var mesh_instance := mesh_node as MeshInstance3D
+	}}
+
+func prepare_render_resource(geometry: GeometryInstance3D, validation: Dictionary) -> void:
+	if not validation.has("fallback"):
+		validation["fallback"] = _valid_material_or_fallback(null)
+	var report: Dictionary = validation.report
+	var fallback: Material = validation.fallback
+	var instance := geometry as MeshInstance3D
+	var mesh: Mesh
+	if instance != null:
 		report.mesh_instances += 1
-		if mesh_instance.mesh == null:
-			if not mesh_instance.is_queued_for_deletion():
+		mesh = instance.mesh
+		if mesh == null:
+			if not instance.is_queued_for_deletion():
 				report.invalid_geometry += 1
-				report.invalid_geometry_names.append(str(mesh_instance.name))
-			continue
-		if mesh_instance.mesh.get_surface_count() == 0:
-			mesh_instance.material_override = fallback
+				report.invalid_geometry_names.append(str(instance.name))
+			return
+		if mesh.get_surface_count() == 0:
+			instance.material_override = fallback
 			report.fallbacks_applied += 1
-			continue
-		# RenderingServer consults the mesh's base surface material while releasing
-		# skinned instances, even when an instance override is present.
-		report.fallbacks_applied += _ensure_mesh_surface_materials(mesh_instance.mesh, fallback)
-		for surface_index in range(mesh_instance.mesh.get_surface_count()):
-			var effective := mesh_instance.get_surface_override_material(surface_index)
-			if effective == null:
-				effective = mesh_instance.mesh.surface_get_material(surface_index)
-			if effective == null:
-				var replacement := mesh_instance.material_override if mesh_instance.material_override != null else fallback
-				mesh_instance.set_surface_override_material(surface_index, replacement)
-				report.fallbacks_applied += 1
-	var batches: Array = [root] if root is MultiMeshInstance3D else []
-	if descendants: batches.append_array(root.find_children("*", "MultiMeshInstance3D", true, false))
-	for batch_node in batches:
-		var batch_instance := batch_node as MultiMeshInstance3D
+			return
+	elif geometry is MultiMeshInstance3D:
 		report.multimesh_instances += 1
-		if batch_instance.multimesh == null or batch_instance.multimesh.mesh == null:
+		mesh = geometry.multimesh.mesh if geometry.multimesh != null else null
+		if mesh == null:
 			report.invalid_geometry += 1
-			report.invalid_geometry_names.append(str(batch_instance.name))
-			continue
-		report.fallbacks_applied += _ensure_mesh_surface_materials(batch_instance.multimesh.mesh, fallback)
-		# Mesh-owned materials are valid without an instance override. Replacing
-		# them here destroys transparency/emission (including the star field).
+			report.invalid_geometry_names.append(str(geometry.name))
+			return
+	else:
+		return
+	# The renderer consults base surfaces even on overridden skinned instances.
+	# Check each shared mesh once and retain only holes still needing an override.
+	var surfaces: Dictionary = validation.unbound_surfaces
+	var id := mesh.get_instance_id()
+	if not surfaces.has(id):
+		var unresolved: Array[int] = []
+		for index in mesh.get_surface_count():
+			if mesh.surface_get_material(index) != null:
+				continue
+			if fallback != null:
+				mesh.surface_set_material(index, fallback)
+				report.fallbacks_applied += 1
+			if mesh.surface_get_material(index) == null:
+				unresolved.append(index)
+		surfaces[id] = unresolved
+	if instance != null:
+		for index: int in surfaces[id]:
+			if instance.get_surface_override_material(index) == null:
+				instance.set_surface_override_material(index, instance.material_override if instance.material_override != null else fallback)
+				report.fallbacks_applied += 1
+
+func finish_render_resource_pass(root: Node, validation: Dictionary) -> Dictionary:
+	var report: Dictionary = validation.report
 	root.set_meta("zone_render_resource_report", report)
 	render_resources_validated.emit(report)
 	return report
+
+func _validate_zone_render_resources(root: Node, descendants: bool = true) -> Dictionary:
+	var validation := begin_render_resource_pass()
+	if root == null:
+		return validation.report
+	if root is GeometryInstance3D:
+		prepare_render_resource(root, validation)
+	if descendants:
+		for geometry: GeometryInstance3D in root.find_children("*", "GeometryInstance3D", true, false):
+			prepare_render_resource(geometry, validation)
+	return finish_render_resource_pass(root, validation)
 
 func _make_road(pos: Vector3, size: Vector3, color: Color) -> void:
 	_zone_construction()._make_road(pos, size, color)
@@ -945,10 +962,11 @@ func _publish_opening_batches(generation: int) -> bool:
 	var root := zone_root
 	var builder := _zone_construction()
 	var slice_started := Time.get_ticks_usec()
-	for phase in range(7):
-		if not _opening_attempt_current(generation) or not is_instance_valid(root) or zone_root != root:
+	var complete := false
+	while not complete:
+		if not _opening_attempt_current(generation) or not is_instance_valid(root) or zone_root != root or not is_instance_valid(builder):
 			return false
-		builder.flush_environment_batch_step(phase)
+		complete = builder.flush_environment_next_unit()
 		if Time.get_ticks_usec() - slice_started >= OPENING_BUILD_SLICE_USEC:
 			await _host.get_tree().process_frame
 			await _wait_for_opening_build_slot(generation)

@@ -1,13 +1,40 @@
 extends RefCounted
 var _activities: Node3D
+var _refresh_pending := false
+var _refreshing := false
 func _init(activities: Node3D) -> void:
 	_activities = activities
-func refresh() -> void:
-	_activities._refresh_pending = false
-	if _activities._refreshing or _activities.host == null or not is_instance_valid(_activities.host.zone_root) or not _activities.host.zone_root.is_ancestor_of(_activities) or _activities.zone != str(_activities.host.current_zone_id):
+func queue_refresh() -> void:
+	if _refresh_pending or not _owns_published_zone():
 		return
-	_activities._refreshing = true
-	if not _activities.host.neighbor_building: _activities._reconcile_rewards()
+	_refresh_pending = true
+	_refresh_published_zone.call_deferred()
+
+func _refresh_published_zone() -> void:
+	_refresh_pending = false
+	if _owns_published_zone():
+		refresh()
+
+func _owns_published_zone() -> bool:
+	if not is_instance_valid(_activities) or not _activities.is_inside_tree():
+		return false
+	var owner: Node = _activities.host
+	if not is_instance_valid(owner) or owner.neighbor_building:
+		return false
+	var game: Node = owner.coordinator if owner is ZoneConstructionApi else owner
+	if not is_instance_valid(game):
+		return false
+	var root: Node3D = game.zone_root
+	var transition: WorldTransitionModel = game.world_transition
+	return is_instance_valid(root) and root.is_ancestor_of(_activities) \
+		and transition != null and transition.active_zone_id == _activities.zone and transition.manual_save_allowed()
+
+func refresh() -> void:
+	_refresh_pending = false
+	if _refreshing or _activities.host == null or not is_instance_valid(_activities.host.zone_root) or not _activities.host.zone_root.is_ancestor_of(_activities) or _activities.zone != str(_activities.host.current_zone_id):
+		return
+	_refreshing = true
+	if _owns_published_zone(): _activities._reconcile_rewards()
 	for point: Node3D in _activities.points.values():
 		_activities.write_tag(point, "saga_wanted", false)
 	for id: String in _activities.Catalog.PEOPLE:
@@ -172,7 +199,7 @@ func refresh() -> void:
 	if life != null:
 		life.enroll_region()
 	_activities.host.interaction_focus_dirty = true
-	_activities._refreshing = false
+	_refreshing = false
 
 func _point(id: String, prompt: String, site: String, kind: String) -> Node3D:
 	var point: Node3D = _activities.points.get(id)

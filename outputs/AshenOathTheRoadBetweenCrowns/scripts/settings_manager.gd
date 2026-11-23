@@ -99,6 +99,12 @@ func set_user_option(key: String, value: Variant) -> void:
 	if key == "quality_preset":
 		set_quality_preset(str(value))
 		return
+	if key == "gamepad_look_sensitivity":
+		# Older remaps copied the current global sensitivity into each profile.
+		# An explicit change to the global control now replaces those copies.
+		for profile: Variant in settings.get("gamepad_profiles", {}).values():
+			if profile is Dictionary:
+				profile.erase("look_sensitivity")
 	settings[key] = value
 	apply()
 

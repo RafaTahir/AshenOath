@@ -327,17 +327,30 @@ func _has_living_enemy(enemy_id: String) -> bool:
 		if is_instance_valid(enemy) and not enemy.dead and enemy.enemy_id == enemy_id:
 			return true
 	return false
+var _ecology_sightings: Array = []
+var _ecology_loaded := false
+
+func pending_ecology_indices() -> Array[int]:
+	var pending: Array[int] = []
+	if not _ecology_loaded:
+		var data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/design_pack_ecology.json"))
+		if not data is Dictionary:
+			push_error("Required design-pack ecology data is unavailable")
+			return pending
+		_ecology_sightings = data.get("sightings", [])
+		_ecology_loaded = true
+	for index in _ecology_sightings.size():
+		var sighting: Dictionary = _ecology_sightings[index]
+		var publication_key := ("design_ecology:" + str(sighting.role)).replace(":", "_")
+		if str(sighting.zone) == _scope.zone_id and not _scope.zone_root.has_meta(publication_key):
+			pending.append(index)
+	return pending
+
 func _build_design_pack_ecology(only_index: int = -1) -> void:
-	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/design_pack_ecology.json"))
-	if not data is Dictionary:
-		push_error("Required design-pack ecology data is unavailable")
-		return
-	var sightings: Array = data.get("sightings",[])
-	for index in sightings.size():
+	var pending := pending_ecology_indices()
+	for index in pending:
 		if only_index >= 0 and index != only_index: continue
-		var sighting: Dictionary = sightings[index]
-		if str(sighting.zone) != _scope.zone_id:
-			continue
+		var sighting: Dictionary = _ecology_sightings[index]
 		var id: Variant = "design_ecology:" + str(sighting.role)
 		var publication_key: Variant = id.replace(":", "_")
 		if _scope.zone_root.has_meta(publication_key):

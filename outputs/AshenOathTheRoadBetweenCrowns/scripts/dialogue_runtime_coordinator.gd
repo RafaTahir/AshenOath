@@ -1,6 +1,9 @@
 class_name DialogueRuntimeCoordinator
 extends RefCounted
 
+const StoryPerformance = preload("res://scripts/story_performance.gd")
+const PLAYER_SPEAKERS := ["player", "kael", "player_kael", "player_human"]
+
 var _focus_actor: WeakRef
 var _locked_actor: WeakRef
 var _topic_generation: int = 0
@@ -14,7 +17,8 @@ func get_focus_actor() -> Node3D:
 	return _focus_actor.get_ref() as Node3D if _focus_actor != null else null
 
 func get_page_actor() -> Node3D:
-	return _page_actor.get_ref() as Node3D if _page_actor != null else get_focus_actor()
+	var actor := _page_actor.get_ref() as Node3D if _page_actor != null else null
+	return actor if is_instance_valid(actor) else get_focus_actor()
 
 func stage(area: Node3D, player: Node3D, camera_rig: Node, _validate_position: Callable) -> void:
 	release(player)
@@ -75,23 +79,57 @@ func _supported_step(player: Node3D, candidate: Vector3) -> Variant:
 	return Vector3(candidate.x, float(hit.position.y) + 0.002, candidate.z)
 
 func refresh_page(player: Node3D, camera_rig: Node, page: Dictionary = {}) -> void:
-	var actor := get_focus_actor()
-	var speaker_id: int = int(page.get("speaker_actor_id", 0))
-	var speaker: Node3D = instance_from_id(speaker_id) as Node3D if speaker_id > 0 else null
-	if is_instance_valid(speaker) and speaker.is_visible_in_tree():
+	var previous_actor := get_page_actor()
+	var speaker_id := str(page.get("speaker_id", "")).to_lower()
+	var actor := previous_actor if speaker_id in PLAYER_SPEAKERS or speaker_id in ["narrator", ""] else get_focus_actor()
+	var speaker := _visible_page_actor(page)
+	if is_instance_valid(speaker):
 		actor = speaker
 		if actor != get_focus_actor() and not _supporting_actor_known(actor):
 			_supporting_actors.append(weakref(actor))
 			_set_speaker_pose(actor, true)
-			preload("res://scripts/story_performance.gd").begin(actor, player)
+			StoryPerformance.begin(actor, player)
 	_page_actor = weakref(actor) if is_instance_valid(actor) else null
 	if not is_instance_valid(player) or not is_instance_valid(actor):
 		return
-	_face_pair(actor, player)
+	if actor != previous_actor:
+		_face_pair(actor, player)
 	if camera_rig != null and camera_rig.has_method("frame_dialogue_beat"):
 		camera_rig.call("frame_dialogue_beat", actor, str(page.get("speaker_id", "")), str(page.get("performance", {}).get("framing", "speaker")))
 	else:
 		_frame_camera(camera_rig, actor)
+
+func _visible_page_actor(page: Dictionary) -> Node3D:
+	var speaker_id := str(page.get("speaker_id", "")).to_lower()
+	if speaker_id in PLAYER_SPEAKERS or speaker_id in ["narrator", ""]:
+		return null
+	var instance_id := int(page.get("speaker_actor_id", 0))
+	var actor := instance_from_id(instance_id) as Node3D if instance_id > 0 else null
+	if not is_instance_valid(actor) or actor.is_queued_for_deletion() or not actor.is_visible_in_tree():
+		return null
+	return actor
+
+func present_page(player: Node3D, page: Dictionary, audio: Node) -> void:
+	var focus := get_focus_actor()
+	var partner := get_page_actor()
+	var speaker_id := str(page.get("speaker_id", "")).to_lower()
+	var speaker := _visible_page_actor(page)
+	if speaker_id in PLAYER_SPEAKERS:
+		speaker = player
+	elif speaker == null and is_instance_valid(focus) and speaker_id not in ["narrator", ""]:
+		var performance := focus.get_node_or_null("StoryPerformance")
+		if performance != null and performance.owns_speaker_identity(speaker_id):
+			speaker = focus
+	var participants: Array[Node3D] = [player, focus]
+	for ref: WeakRef in _supporting_actors:
+		participants.append(ref.get_ref() as Node3D)
+	for participant: Node3D in participants:
+		if not is_instance_valid(participant):
+			continue
+		var eyeline := partner if participant == player else player
+		if is_instance_valid(speaker) and speaker != participant:
+			eyeline = speaker
+		StoryPerformance.page(participant, page, audio, speaker, eyeline, participant == player or participant == partner)
 
 func face_actor(actor: Node3D, player: Node3D) -> void:
 	if not is_instance_valid(actor) or not is_instance_valid(player):
@@ -105,7 +143,7 @@ func release(player: Node3D) -> void:
 	for ref: WeakRef in _supporting_actors:
 		var supporting: Node3D = ref.get_ref() as Node3D
 		if is_instance_valid(supporting):
-			preload("res://scripts/story_performance.gd").finish(supporting)
+			StoryPerformance.finish_actor(supporting)
 			_set_speaker_pose(supporting, false)
 	_supporting_actors.clear()
 	_page_actor = null
@@ -116,9 +154,8 @@ func release(player: Node3D) -> void:
 	for turn: Tween in _turns:
 		if turn != null and turn.is_valid(): turn.kill()
 	_turns.clear()
-	var performer := get_focus_actor()
-	if is_instance_valid(performer):
-		preload("res://scripts/story_performance.gd").finish(performer)
+	StoryPerformance.finish_actor(get_focus_actor())
+	StoryPerformance.finish_actor(player)
 	_invalidate_topic_context()
 	_focus_actor = null
 	_set_player_pose(player, false)

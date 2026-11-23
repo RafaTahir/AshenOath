@@ -132,14 +132,14 @@ func route_for_id(game: Node, target_id: String) -> Dictionary:
 			result["waypoint_tolerance"] = 0.25
 			result.ok = not approach.is_empty()
 			return result
-	var points: Array[Vector3] = _route_from_player(game, player, spatial, target.global_position)
+	var conversation := str(target.get("interaction_type")) == "dialogue"
+	var points: Array[Vector3] = [] if conversation else _route_from_player(game, player, spatial, target.global_position)
 	if str(target.get("interaction_type")) != "zone":
-		var conversation := str(target.get("interaction_type")) == "dialogue"
 		var reach := 3.6 if conversation else 2.8
 		# A solid prop centre can be replaced by a remote recovery anchor. That
 		# is safe recovery, but not an interaction approach. Query clear nearby
 		# standing points without moving actors or relaxing ordinary focus rules.
-		if conversation or points.is_empty() or points.back().distance_to(target.global_position) > reach:
+		if points.is_empty() or points.back().distance_to(target.global_position) > reach:
 			points.clear()
 			var toward_player := player.global_position - target.global_position
 			toward_player.y = 0.0

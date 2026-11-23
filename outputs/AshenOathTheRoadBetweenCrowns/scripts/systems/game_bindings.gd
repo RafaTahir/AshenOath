@@ -359,7 +359,8 @@ func _request_journey_load(selection: Dictionary) -> void: _systems["save"]._req
 func _open_journal_section(section_id: String) -> void: _systems["save"]._open_journal_section(section_id)
 func _sync_camera_enemy_cache() -> void: _systems["zone_lifecycle"]._sync_camera_enemy_cache()
 func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void: await _systems["zone_lifecycle"]._load_zone(zone_id, spawn_pos)
-func _finish_deferred_zone_audio(zone_id: String, root: Node3D) -> void: await _systems["zone_lifecycle"]._finish_deferred_zone_audio(zone_id, root)
+func _finish_deferred_zone_audio(zone_id: String, root: Node3D, generation: int, music_request: int) -> void:
+	await _systems["zone_lifecycle"]._finish_deferred_zone_audio(zone_id, root, generation, music_request)
 func _cancel_campaign_visual_prewarm() -> void: _systems["startup"]._cancel_campaign_visual_prewarm()
 func should_defer_visual_role(role: String, category: String) -> bool: return _systems["startup"].should_defer_visual_role(role, category)
 func should_defer_character_role(_role: String, _actor_id: String) -> bool: return _systems["startup"].should_defer_character_role(_role, _actor_id)

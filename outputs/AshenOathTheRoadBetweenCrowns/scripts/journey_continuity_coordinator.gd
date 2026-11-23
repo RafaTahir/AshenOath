@@ -168,6 +168,10 @@ func take_arrival(generation: int, actual_zone: String, objective_view: Dictiona
 			body_parts.append("Last commitment: " + last_commitment)
 	if next_action != "":
 		body_parts.append("Next: %s%s" % [next_action, " (" + destination_name + ")" if destination_name != "" else ""])
+	if restored or reason in ["new_journey", "new_game"]:
+		var route_hint: String = str(recap.get("route_hint", "") if objective_view.is_empty() else objective_view.get("route_hint", "")).strip_edges()
+		if route_hint != "" and route_hint.trim_suffix(".") != next_action.trim_suffix("."):
+			body_parts.append(route_hint)
 	var journey_id: String = str(context.get("journey_id", "session"))
 	var context_id: String = "journey:%s:arrival:%d" % [journey_id, generation]
 	var model := {

@@ -16,8 +16,10 @@
 			"sha256": "1297e5a88117b0944fb0b089a14b88678e976a43f3e267ec603edabad7ebffbf"
 		}
 	],
+	"retained_source": "res://assets_external/environment/props/Bag.obj",
+	"retained_source_sha256": "6aa7124265768200c3b59742a8b866fdc0fcbab002cac712e5e4f241b4b4b375",
 	"runtime_verified": false,
-	"sha256": "ba07631e73dfd2c20870e383b2b87d9dca49a5ebf59a0670bf893ea6bf3892b8",
+	"sha256": "c18e15fcbe45de27e53b76ed5a4aa014c36ed6dc98606f22ccb5602c53e74967",
 	"source_sha256": "eaa6b63303f2b60fa8f49b6d907f91f0dd9eddf7f1c9026e30ed2f9b82947913",
 	"status": "compiled",
 	"user_accepted": false

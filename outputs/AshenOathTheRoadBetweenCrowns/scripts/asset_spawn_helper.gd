@@ -139,18 +139,21 @@ func _fail_resource_prewarm(error: Error, detail: String) -> Error:
 		resource_prewarm_error = detail
 	return _resource_prewarm_status
 
+func role_resource_path(role: String, visual: bool = false, variant_seed: String = "") -> String:
+	_ensure_database()
+	var entry: Dictionary = database.get_visual_asset_for_role(role) if visual else database.get_asset_for_role(role)
+	var path := str(entry.get("path", ""))
+	var prepared := PreparedActorCatalog.entry(role, path, variant_seed) if not building_prepared_assets and not path.is_empty() else {}
+	return _runtime_resource_path(str(prepared.get("path", path)))
+
 func request_role_resources(role_names: Array, visual_roles: bool = false, variant_seed: String = "") -> Error:
 	if _resource_prewarm_status != OK:
 		return _resource_prewarm_status
-	_ensure_database()
 	var paths: Array[String] = []
 	for role in role_names:
-		var entry: Dictionary = database.get_visual_asset_for_role(str(role)) if visual_roles else database.get_asset_for_role(str(role))
-		var path := str(entry.get("path", ""))
+		var path := role_resource_path(str(role), visual_roles, variant_seed)
 		if path.is_empty():
 			return _fail_resource_prewarm(ERR_FILE_NOT_FOUND, "Required actor role has no resource: %s" % role)
-		var prepared := PreparedActorCatalog.entry(str(role), path, variant_seed) if not building_prepared_assets else {}
-		path = _runtime_resource_path(str(prepared.get("path", path)))
 		paths.append(path)
 	return request_resource_paths(paths)
 
@@ -324,7 +327,7 @@ func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: 
 				else:
 					push_error("Required actor material bindings failed: %s (%s): %s" % [role_name, selected_path, material_errors])
 					return null
-			if OS.get_environment("ASHEN_PROFILE_GREYFEN_ACTORS") == "1" and fallback_category == "characters":
+			if OS.get_environment("ASHEN_PROFILE_GREYFEN_ACTORS") == "1" and fallback_category in ["characters", "enemies"]:
 				print("CHARACTER_ASSET_PROFILE role=%s load_ms=%.2f instantiate_ms=%.2f compose_ms=%.2f prepare_ms=%.2f" % [
 					role_name,
 					float(loaded_usec - profile_started) / 1000.0,
@@ -709,10 +712,7 @@ func prewarm_roles(role_names: Array) -> Dictionary:
 		var role := str(raw_role)
 		if role == "":
 			continue
-		var entry: Dictionary = database.get_asset_for_role(role)
-		var path := str(entry.get("path", ""))
-		var prepared := PreparedActorCatalog.entry(role, path) if not building_prepared_assets else {}
-		path = _runtime_resource_path(str(prepared.get("path", path)))
+		var path := role_resource_path(role)
 		if path == "" or not (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
 			missing.append(role)
 			continue

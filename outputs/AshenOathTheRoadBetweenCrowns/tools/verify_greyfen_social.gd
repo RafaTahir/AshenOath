@@ -1,9 +1,16 @@
 extends SceneTree
 
 const ROOT := "res://assets_external/environment/props/"
+const CollisionCatalog = preload("res://scripts/core/prepared_greyfen_social_collision.gd")
+const SocialPresentation = preload("res://scripts/greyfen_social_presentation.gd")
 var failures: Array[String] = []
 
 func _initialize() -> void:
+	if "--collision-only" in OS.get_cmdline_user_args():
+		_verify_baked_collisions()
+		print("GREYFEN SOCIAL COLLISION CONTRACT: %s" % ("PASS" if failures.is_empty() else "FAIL"))
+		quit(0 if failures.is_empty() else 1)
+		return
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://runtime_asset_manifest.json"))
 	var presets := ConfigFile.new()
 	_check(presets.load("res://export_presets.cfg") == OK, "Export presets are unreadable")
@@ -65,6 +72,23 @@ func _initialize() -> void:
 	area.free()
 	print("GREYFEN SOCIAL RESOURCE CONTRACT: %s bytes=%d (not visual/player-route/performance acceptance)" % ["PASS" if failures.is_empty() else "FAIL", total_bytes])
 	quit(0 if failures.is_empty() else 1)
+
+func _verify_baked_collisions() -> void:
+	var catalog := load(CollisionCatalog.PATH) as CollisionCatalog
+	_check(catalog != null, "Missing prepared social collision catalog")
+	if catalog == null: return
+	if "--pack-layout" in OS.get_cmdline_user_args():
+		_check(preload("res://tools/runtime_fixture.gd").pack_owners(CollisionCatalog.PATH) == ["opening"], "Social collision needs one opening pack owner")
+	_check(catalog.shapes.size() == SocialPresentation.MESHES.size(), "Prepared social collision roster differs from authored furniture")
+	for id: String in SocialPresentation.MESHES:
+		var path := str(SocialPresentation.MESHES[id])
+		_check(catalog.source_mesh_sha256.get(path, "") == FileAccess.get_sha256(path), "Prepared collision source changed: " + id)
+		var mesh := load(path) as Mesh
+		var shape: ConcavePolygonShape3D = catalog.shapes.get(id)
+		_check(mesh != null and shape != null, "Missing collision source or output: " + id)
+		if mesh == null or shape == null: continue
+		_check(shape.backface_collision and shape.get_faces() == mesh.create_trimesh_shape().get_faces(), "Prepared collision differs from the original fitted triangles: " + id)
+		_check(CollisionCatalog.fitted(id, mesh) == shape, "Runtime resolver did not select the prepared collision: " + id)
 
 func _check(condition: bool, message: String) -> void:
 	if not condition:

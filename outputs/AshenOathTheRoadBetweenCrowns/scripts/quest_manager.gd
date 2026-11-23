@@ -458,8 +458,12 @@ func journal_stories() -> Array[Dictionary]:
 		var body := "[x] " if done else "[ ] "
 		body += chapter
 		if active.has(id):
+			var known_road_step := get_active_objective_id(id) if id == "main_road_of_crows" else ""
 			for objective: Dictionary in active[id].get("objectives", []):
-				body += "\n    %s %s" % ["[x]" if bool(objective.get("done", false)) else "[ ]", str(objective.text)]
+				var objective_done: bool = bool(objective.get("done", false))
+				if known_road_step != "" and not objective_done and str(objective.get("id", "")) != known_road_step:
+					continue
+				body += "\n    %s %s" % ["[x]" if objective_done else "[ ]", str(objective.text)]
 		group.known.append(body)
 	var result: Array[Dictionary] = []
 	for group: Dictionary in groups.values():

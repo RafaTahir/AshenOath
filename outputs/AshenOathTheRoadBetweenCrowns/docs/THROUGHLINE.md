@@ -8,8 +8,18 @@ for leaving people behind without buying their forgiveness?**
 The abandoned escort is Kael's personal failure, not an alternative explanation
 for the concealed massacre. Maren owns her account and present relief work.
 Learning more never entitles Kael to consent, romance, testimony or absolution.
-All four covenant resolutions remain available. Optional discoveries deepen a
-decision; they are not a hidden test for a legitimate ending.
+Witness, Mercy, Duty and Ash are available in both campaign revisions. The
+expanded journey adds Concord and Open Road with their own prerequisites.
+Optional discoveries deepen decisions while remaining optional.
+
+## Campaign Revisions
+
+[CampaignRevision](../scripts/campaign_revision.gd) selects the expanded graph
+when creating a new journey. A save without a revision marker keeps the
+original graph. Continue, import and replay use the saved revision. Writers
+should check both the base [quest definitions](../data/quests.json) and the
+[community chapters](../data/community_campaign.json) before changing main
+quest order or prerequisites.
 
 ## Regional Dramaturgy
 
@@ -18,12 +28,14 @@ decision; they are not a hidden test for a legitimate ending.
 | Greyfen and its cemetery | Plant the oath in people worth coming home to; expose its first cost. | Useful village work, personal reporting, the grave investigation and Bell-Eater survival before the shrine. | The report's privacy, shrine fate, protected names and remembered help. |
 | Wychwood | Widen who was bound: the missing are people, and the forest is also someone's livelihood. | Tracking the travelers, speaking a recovered name, territorial confrontation and settling the core. | Names and behavior learned in the first investigation change the meaning of the binding. |
 | Deep Woods / mill / farmstead | Turn knowledge into material responsibility: food and shelter can be useful and compromised. | Clear the workers' route; optionally open the sluice and escort them to air; face Ashwing; determine the mill's operation. | Rescued workers, preserved records, smoke damage and the actual flour policy. |
+| Lantern Reach | Give the mill's decision a material follow-through in expanded journeys. | Prepare meals, agree on distribution, then repair the public crossing or rig an escorted ferry. | Food distribution, obligations for upkeep and the first load reaching the far landing. |
 | Long Road and marsh | Test protection without ownership. | Read the crossing, negotiate a stand-down or fight Senn's guards, then settle accountability. | Senn's legitimate presence or absence, stores retained by the crew and a road no longer presented as his property. |
 | Castle Vargan | Reckon with the institution, not another scavenger hunt. | Gain access, secure/copy the command, survive the archive and demand Edric's answer. Corroborating roadside traces are optional. | Guaranteed command proof and Halvern's bounded hearing, never invented knowledge of skipped clues. |
+| Hearthward | Put shelter, protected testimony and voluntary work into practice in expanded journeys. | Prepare the refuge, settle record custody, test the meal round and alarm, and complete the first watch. | A staffed rota, recorded refusals and a refuge ready to receive households. |
 | Hartlands | Choose the responsibility Kael will personally carry. | Hear the Hart and enact Witness, Mercy, Duty or Ash, rather than collect another set of keys. | A changed covenant, continued exploration and the full playable return home. |
 | Greyfen Assembly and homecoming | Bring dispersed accounts into a public reckoning, then show what survives in ordinary life. | Prepare willing speakers or absent people's records; stop renewal; return names, work and a final road reflection. | Help is not conditional on testimony. Returning is an action, not merely ending text. |
 
-## Main-Quest Rhythm
+## Shared Main-Quest Rhythm
 
 1. `main_road_of_crows`: a named missing-person investigation; retain three of
    five clues, the existing encounter and an explicit private/public/retained report.
@@ -49,9 +61,26 @@ decision; they are not a hidden test for a legitimate ending.
 10. `main_hart_remembers`: testimony, commitment and enacted consequence. No
     compulsory sacrifice of somebody else and no new ending gate.
 
-No dialogue-tree prose is rewritten by this implementation. The 57 quests,
-authored conversations, existing choices, reward identities and four endings stay.
-No fake sabotage objective or automatic rescue is introduced just to vary verbs.
+### Expanded Chapter Order and Follow-Through
+
+The expanded journey inserts the following chapters into that sequence. The
+objective IDs, completion flags and authored alternatives are defined in
+`community_campaign.json`.
+
+| Placement | Chapter | Required action and consequence |
+| --- | --- | --- |
+| After Ash at the Mill | The Empty Tables (`main_empty_tables`) | Reach Lantern Reach, hear the households, prepare the kitchen and serve the first meal. Choose a common kitchen or distributed household shares. Access to food is unconditional. |
+| After The Empty Tables | A Road Kept Open (`main_road_kept_open`) | Survey both landings, choose the public crossing or ferry, perform the corresponding repairs, and accompany the first load across. Each route carries its own maintenance work. |
+| After The Last Witness | The House of Many Names (`main_house_many_names`) | Prepare shelter at Hearthward, welcome arrivals and decide how to distribute the public account while protecting private testimony. |
+| After The House of Many Names | What We Promise (`main_what_we_promise`) | Hear available speakers or written answers, practice the meal round, alarm and records handover, then post a voluntary rota and finish the first watch. |
+
+A Soldier Without a Banner follows A Road Kept Open. Crowns Without Mercy
+follows What We Promise. The [story campaign catalog](../data/story_campaign.json)
+sets out the costs and enactment for each ending. Concord needs the four
+community chapters and willing keepers for care, logistics and records. Open
+Road needs the four chapters, a working route and a prepared refuge. It gives
+up territorial protection and access to the Hart's complete account, while
+preserving the human records and giving the households a place to go.
 
 ## Objective and Save Contract
 
@@ -118,10 +147,10 @@ Schedules, sleep, dialogue, danger and quest access keep their existing rules.
 
 ## Delivery and User Review
 
-Implementation and compilation are not runtime acceptance. This change stays
-build-only: source/diff review, production packaging and Git publication; no agent
-playthrough, screenshots or benchmark. Retain strict performance requirements,
-complete-world readiness, existing assets, saves and the 256 MiB package ceiling.
+The [first-route evidence](../../../plans/living-road/COHESIVE_GAME_IMPLEMENTATION.md)
+records the native Road of Crows playthrough and its fresh-process save reload.
+The remaining routes, branch consequences and performance gates need their own
+evidence. The 256 MiB package ceiling applies to delivery.
 
 User checks:
 
@@ -133,5 +162,6 @@ User checks:
    check uninterrupted passage, camera clearance, returns and appearance.
 4. Resolve iron/Senn/renewal differently on genuine checkpoints; observe work,
    banners, absent actors and signs immediately and after Continue/zone return.
-5. Confirm optional omissions leave all four endings and homecoming available,
-   with no repeated rewards, fabricated decisions or altered dialogue prose.
+5. Confirm optional omissions preserve Witness, Mercy, Duty, Ash and homecoming.
+   In an expanded journey check Concord and Open Road against their recorded
+   prerequisites and follow-through.

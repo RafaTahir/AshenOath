@@ -247,7 +247,7 @@ func _update_tutorial_prompts() -> void:
 		return
 	if active_interactable != null and not bool(tutorial_flags.get("interact", false)):
 		tutorial_flags["interact"] = true
-	if current_zone_id == "greyfen" and not bool(tutorial_flags.get("route", false)) and player.global_position.z < -8.0:
+	if current_zone_id == "greyfen" and not bool(tutorial_flags.get("route", false)) and player.global_position.z < -8.0 and player.velocity.z < -0.05:
 		tutorial_flags["route"] = true
 		audio.play_event("cloth_wind", 0.03)
 		audio.set_music_state("wychwood_tension")

@@ -12,7 +12,10 @@ import sys
 import tempfile
 from time import monotonic
 import urllib.request
-from story_voice_catalog import extra_utterances, role_for, canonical_speaker, source_identity, voice_directory, expansion_captions
+from story_voice_catalog import (
+    authored_dialogue_inventory, canonical_speaker, expansion_captions, extra_utterances,
+    retain_selected_contextual_takes, role_for, source_identity, voice_directory,
+)
 
 GAME = Path(__file__).resolve().parents[1]
 REPO = GAME.parents[1]
@@ -21,6 +24,7 @@ MODEL_BASE = "https://github.com/thewh1teagle/kokoro-onnx/releases/download/mode
 MODEL = "kokoro-v1.0.onnx"
 VOICES = "voices-v1.0.bin"
 RECIPE_VERSION = "kokoro-cast-master-1"
+DIALOGUE_CATALOGS = ("dialogue.json", "campaign_dialogue.json", "interaction_scenes.json")
 ALIASES = {
     "kael":"player", "the_hunter":"player", "anwen":"sister_anwen",
     "blacksmith_tor":"tor", "tor_the_smith":"tor", "widow_elna":"elna",
@@ -72,11 +76,13 @@ def download(url: str, path: Path):
 
 def ambient_pages():
     # Read the authored bark pools directly: the game and asset build share text.
-    source = (GAME / "scripts/greyfen_life_controller.gd").read_text(encoding="utf-8-sig")
+    model = GAME / "scripts/models/living_cast_model.gd"
+    owner = model if model.is_file() else GAME / "scripts/greyfen_life_controller.gd"
+    source = owner.read_text(encoding="utf-8-sig")
     def constant(name):
         match = re.search(r"const " + name + r" := (\{.*?\n\})", source, re.S)
         if match is None:
-            raise RuntimeError(f"Missing authored bark pool: {name}")
+            raise RuntimeError(f"Missing authored bark pool in {owner}: {name}")
         return json.loads(match.group(1))
     profiles = constant("ROUTINE_PROFILES")
     ordinary = constant("AMBIENT_LINES")
@@ -95,7 +101,7 @@ def ambient_pages():
 
 def utterances(cast):
     # Keep separate catalogs: merging by scene ID would discard a source variant.
-    for source in ("dialogue.json", "campaign_dialogue.json", "interaction_scenes.json"):
+    for source in DIALOGUE_CATALOGS:
         entries = json.loads((GAME / "data" / source).read_text(encoding="utf-8-sig"))
         for scene_id, base in entries.items():
             for entry in [base, *[{**base, **variant} for variant in base.get("variants", [])]]:
@@ -124,6 +130,12 @@ def baseline_inventory(reference, current_cast):
     files = ["data/" + name + ".json" for name in ("dialogue", "campaign_dialogue", "interaction_scenes", "conversation_topics", "design_pack_cast", "people_place_scenes", "everyday_scenes", "everyday_life", "regional_performances", "cast_life", "voice_cast")]
     files += ["scripts/" + name + ".gd" for name in ("greyfen_life_controller", "village_consequence_routines", "saga_catalog", "saga_activities", "story_scene_direction", "everyday_life")]
     prefix = GAME.relative_to(REPO).as_posix()
+    for refactored_owner in ("scripts/models/living_cast_model.gd", "scripts/views/saga_dialogue_view.gd"):
+        tracked = subprocess.check_output(
+            ["git", "-C", str(REPO), "ls-tree", "--name-only", commit, "--", f"{prefix}/{refactored_owner}"]
+        )
+        if tracked.strip():
+            files.append(refactored_owner)
     current_game = GAME
     with tempfile.TemporaryDirectory(prefix="ashen-voice-baseline-") as folder:
         baseline = Path(folder)
@@ -210,6 +222,7 @@ def main():
     cast_data = json.loads((GAME / "data/voice_cast.json").read_text(encoding="utf-8-sig"))
     cast = cast_data["roles"]
     scheduled = list(utterances(cast))
+    authored_lines = list(authored_dialogue_inventory(GAME, DIALOGUE_CATALOGS, pages))
     baseline_commit, baseline_keys, baseline_cast = "", set(), {}
     if args.baseline_ref:
         if not args.incremental: parser.error("--baseline-ref requires --incremental")
@@ -226,7 +239,7 @@ def main():
             caption["canonical_speaker"] = caption["speaker_id"]
             caption["text_sha256"] = hashlib.sha256(caption["text"].encode("utf-8")).hexdigest()
         args.collect_only.parent.mkdir(parents=True, exist_ok=True)
-        args.collect_only.write_text(json.dumps({"lines":rows, "captions":captions, "baseline_commit":baseline_commit, "synthesis_performed":False}, indent=2, ensure_ascii=False)+"\n", encoding="utf-8")
+        args.collect_only.write_text(json.dumps({"lines":rows, "captions":captions, "authored_lines":authored_lines, "baseline_commit":baseline_commit, "synthesis_performed":False}, indent=2, ensure_ascii=False)+"\n", encoding="utf-8")
         print(f"Collected {len(rows)} runtime tuples; no audio generated.")
         return
     sys.path.insert(0, str(args.runtime))
@@ -374,6 +387,7 @@ def main():
             "audio_sha256":hashlib.sha256(clip.read_bytes()).hexdigest(), "audio_bytes":clip.stat().st_size,
             "speech_envelope_hz":rate / hop, "speech_envelope":np.round(np.clip((rms - 0.008) / reference, 0, 1), 3).tolist(),
             "duration_seconds":len(mono) / rate, "delivery_speed":speed})
+    lines = retain_selected_contextual_takes(GAME, authored_lines, prior.get("lines", []), lines)
     new_bytes = sum(path.stat().st_size for folder in ["living_cast", "community"] for path in (GAME / "assets_external/audio/voices" / folder).glob("*.ogg"))
     if new_bytes > args.max_new_bytes:
         raise RuntimeError(f"New dialogue audio exceeds its budget: {new_bytes} > {args.max_new_bytes}; candidate remains local")
@@ -382,7 +396,9 @@ def main():
         "human_reviewed":False, "review_status":"pending_listening_review", "production_mode":"generated",
         "source":"Kokoro-82M v1.0 full precision; kokoro-onnx 0.6.1", "source_url":"https://huggingface.co/hexgrad/Kokoro-82M",
         "attribution":"Kokoro by hexgrad, Apache-2.0 model weights. kokoro-onnx by thewh1teagle, MIT build-time runtime.",
-        "pronunciation":PRONUNCIATION, "roles":cast, "lines":lines}
+        "pronunciation":PRONUNCIATION, "roles":cast,
+        "lines":lines,
+        "authored_lines":authored_lines}
     manifest["retained_previous_recordings"] = retained
     manifest["synthesized_this_run"] = synthesized
     manifest["batch_new_recording_limit"] = args.max_new_recordings

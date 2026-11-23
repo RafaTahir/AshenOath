@@ -39,10 +39,10 @@ const ROUTES := {
 		"carry_promise":["hearthward",["community:aftermath:main_what_we_promise"],"Keep the first watch beside the posted rota.","Keep withdrawal possible after the meeting ends."]
 	},
 	"main_road_of_crows": {
-		"speak_anwen":["greyfen", ["sister_anwen"], "Anwen cares for a traveler by the north shrine.", "Ask about Bram, Sella and Oren, who have not come home."],
+		"speak_anwen":["greyfen", ["sister_anwen"], "Find Anwen beside the north shrine.", "Learn who went missing and where Anwen last heard of them."],
 		"evidence_ready":["wychwood", [], "Follow the north road into Wychwood; inspect the broken cart and disturbed roadside.", "Bring Anwen an account of what happened to the missing travelers."],
 		"fight_ghoulkin":["wychwood", [], "The pack holds the clearing beyond the cart.", "Carry the road's account back to the living."],
-		"return_village":["greyfen", ["sister_anwen", "notice_board", "retain_evidence"], "Choose how to report at the shrine or notice board.", "What you report will shape Greyfen's response."]
+		"return_village":["greyfen", ["sister_anwen", "notice_board", "retain_evidence"], "Anwen is by the north shrine. The notice board is in the village square.", "Decide who should receive the evidence Kael recovered."]
 	},
 	"main_bell_beneath_greyfen": {
 		"meet_anwen_gate":["greyfen", ["sister_anwen"], "The cemetery is within Greyfen, beside the ruined chapel.", "Hear what Anwen knows about the bell."],
@@ -184,6 +184,8 @@ static func for_objective(quest_id: String, objective_id: String, state = null, 
 		result["next_action"] = "Take the north road into Wychwood" if current_zone == "greyfen" else "Investigate the broken cart and roadside"
 		if current_zone == "wychwood":
 			result["route_hint"] = "Compare the travelers' belongings and tracks around the broken cart."
+	elif quest_id == "main_road_of_crows" and objective_id == "return_village":
+		result["next_action"] = "Report to Anwen or at Greyfen's notice board"
 	if quest_id == "main_last_witness" and objective_id == "break_halvern_guard":
 		result["next_action"] = "Break Halvern's guard or earn his peaceful hearing"
 		if state != null and bool(state.get_flag("command_proof_recovered", false)):
@@ -241,6 +243,20 @@ static func _unfinished_group_route(quest_id: String, members: Array, quests, cu
 		if str(entry[0]) == current_zone:
 			return entry
 	return fallback if first_pending.is_empty() else first_pending
+
+static func legacy_road_report_pending(state) -> bool:
+	return state != null and bool(state.get_flag("legacy_report_choice_required", false)) and str(state.get_flag("evidence_report", "")) == ""
+
+static func legacy_road_report_guidance(state, quests, zone_id: String) -> Dictionary:
+	if zone_id not in ["greyfen", "wychwood"] or not legacy_road_report_pending(state):
+		return {}
+	if bool(state.get_flag("final_choice_completed", false)) or (quests != null and quests.tracked_quest_is_manual and quests.get_tracked_quest() != ""):
+		return {}
+	var route := for_objective("main_road_of_crows", "return_village", state, quests, zone_id)
+	route["id"] = "legacy_road_report"
+	route["title"] = "The unfiled road report"
+	route["purpose"] = "The road investigation is recorded. Choose how to share what survives in the account."
+	return route
 
 static func ending_continuation(state, current_zone: String) -> Dictionary:
 	if state == null:

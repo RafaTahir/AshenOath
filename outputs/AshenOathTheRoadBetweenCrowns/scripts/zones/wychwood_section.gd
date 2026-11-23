@@ -3,6 +3,7 @@ extends RefCounted
 const RiverSection = preload("res://scripts/zones/river_section.gd")
 const BridgeSurfaceContract = preload("res://scripts/bridge_surface_contract.gd")
 const LandscapePresentation = preload("res://scripts/world_landscape_presentation.gd")
+const Terrain = preload("res://scripts/core/wychwood_ground_geometry.gd")
 const BUILD_STEPS := 31
 
 func step_count(_zone_id: String) -> int:
@@ -18,7 +19,7 @@ func build_step(context: ZoneBuildContext, step: int) -> bool:
 	match step:
 		0: _begin(context)
 		1:
-			context.make_split_ground(44.0, 34.0, 0.0, 3.4, Color(0.065, 0.105, 0.07), BridgeSurfaceContract.DECK_WIDTH, BridgeSurfaceContract.bridge_length(3.4), BridgeSurfaceContract.APPROACH_LENGTH)
+			context.make_split_ground(Terrain.WIDTH, Terrain.DEPTH, 0.0, Terrain.RIVER_SPAN, Color(0.065, 0.105, 0.07), BridgeSurfaceContract.DECK_WIDTH, BridgeSurfaceContract.bridge_length(Terrain.RIVER_SPAN), BridgeSurfaceContract.APPROACH_LENGTH)
 		2: RiverSection.new().build(context, 0.0, 44.0, 3.4)
 		3: context.make_wychwood_terrain_layers()
 		4: context.make_play_area_bounds(44, 34, Color(0.04, 0.075, 0.045))
@@ -516,9 +517,8 @@ func _build_encounter_wave(context: ZoneBuildContext, wave: int) -> void:
 	if wave < context.wychwood_wave_progress(): return
 	if context.is_quest_active("main_road_of_crows") and not context.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
 		var brute_z := -14.2 if context.is_objective_done("main_road_of_crows", "drag_marks") else -12.4
-		var ids := ["ghoulkin", "ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]
 		var positions := [Vector3(-2.4, 0.8, -8.8), Vector3(2.7, 0.8, -9.6), Vector3(-4.8, 0.8, -3.8), Vector3(4.6, 0.8, -5.3), Vector3(0.2, 0.8, brute_z)]
-		var enemy = context.spawn_enemy(ids[wave], positions[wave])
+		var enemy = context.spawn_enemy(preload("res://scripts/core/route_destination_resources.gd").WYCHWOOD_OPENING_WAVES[wave], positions[wave])
 		if enemy != null:
 			enemy.set_meta("wychwood_wave", wave)
 			# Every retained wave is constructed before readiness; only the earned

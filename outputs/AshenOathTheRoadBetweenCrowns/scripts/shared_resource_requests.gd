@@ -4,6 +4,7 @@ extends RefCounted
 ## A cancelled consumer cannot discard another consumer's completed resource.
 static var _instance: WeakRef
 var _requests: Dictionary = {}
+var _last_orphan_sweep_frame := -1
 
 static func acquire() -> RefCounted:
 	var current: RefCounted = _instance.get_ref() if _instance != null else null
@@ -13,7 +14,15 @@ static func acquire() -> RefCounted:
 	return current
 
 func request(path: String, owner: Object, token: String = "") -> Error:
-	_collect_finished_orphans()
+	var frame := Engine.get_process_frames()
+	if frame != _last_orphan_sweep_frame:
+		_last_orphan_sweep_frame = frame
+		for known_path: String in _requests.keys():
+			_collect_finished_orphan(known_path)
+	elif _requests.has(path):
+		# A release and a new claim can occur within the same frame. A fresh
+		# request must not inherit an unclaimed failure for this path.
+		_collect_finished_orphan(path)
 	if not _requests.has(path):
 		var error := ResourceLoader.load_threaded_request(path)
 		if error != OK:
@@ -79,14 +88,13 @@ func release(path: String, owner: Object, token: String = "", drain: bool = fals
 			return # The engine cannot cancel; consume it on the next poll or shutdown.
 		_requests.erase(path)
 
-func _collect_finished_orphans() -> void:
-	for path in _requests.keys():
-		var record: Dictionary = _requests[path]
-		for key in record.owners.keys():
-			if record.owners[key].get_ref() == null:
-				record.owners.erase(key)
-		if record.owners.is_empty() and status(path) != ResourceLoader.THREAD_LOAD_IN_PROGRESS:
-			_requests.erase(path)
+func _collect_finished_orphan(path: String) -> void:
+	var record: Dictionary = _requests[path]
+	for key in record.owners.keys():
+		if record.owners[key].get_ref() == null:
+			record.owners.erase(key)
+	if record.owners.is_empty() and status(path) != ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+		_requests.erase(path)
 
 func _claim(owner: Object, token: String) -> String:
 	return "%d:%s" % [owner.get_instance_id(), token]

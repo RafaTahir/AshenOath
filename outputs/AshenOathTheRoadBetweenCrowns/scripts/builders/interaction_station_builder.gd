@@ -150,11 +150,10 @@ func _make_board_game_solidity(area: Node3D, size: Vector3) -> bool:
 	if visual == null or visual.mesh == null:
 		push_error("Required solid board furniture is missing: " + str(area.name))
 		return false
-	var fitted: Variant = visual.mesh.create_trimesh_shape()
+	var fitted: ConcavePolygonShape3D = preload("res://scripts/core/prepared_greyfen_social_collision.gd").fitted(str(area.name), visual.mesh)
 	if fitted == null:
 		push_error("Cannot build solid board furniture: " + str(area.name))
 		return false
-	fitted.backface_collision = true
 	var body: Variant = StaticBody3D.new()
 	body.name = "SolidFurniture"
 	body.collision_layer = 1
@@ -169,11 +168,13 @@ func _make_board_game_solidity(area: Node3D, size: Vector3) -> bool:
 	_host.write_construction_tag(area, "interaction_anchor", Vector3(0, size.y + 0.18, 0))
 	var arrival: Variant = Marker3D.new()
 	arrival.name = "BoardGameOpponentApproach"
-	arrival.position = Vector3((1.0 if str(area.name) == "common_table" else -1.0) * (size.x * 0.5 + 1.0), 0, 0)
+	# Rook takes the open north corner. The east side has the keepsake stand.
+	var common_table := str(area.name) == "common_table"
+	arrival.position = Vector3(size.x * 0.5, 0, -1.6) if common_table else Vector3(-size.x * 0.5 - 1.0, 0, 0)
 	area.add_child(arrival)
 	var corner: Variant = Marker3D.new()
 	corner.name = "BoardGameOpponentCorner"
-	corner.position = Vector3(arrival.position.x, 0, -size.z * 0.90 - 1.1) if str(area.name) == "common_table" else Vector3(0.0, area.position.y, -10.0) - area.position
+	corner.position = Vector3(arrival.position.x, 0, -size.z * 0.90 - 1.1) if common_table else Vector3(0.0, area.position.y, -10.0) - area.position
 	area.add_child(corner)
 	return true
 func _make_board_game_chair(area: Node3D, position: Vector3, yaw: float, batch: MultiMeshInstance3D, first_index: int) -> void:

@@ -61,8 +61,15 @@ func _prepare_opening_after_menu_render() -> void:
 		JavaScriptBridge.eval("window.dispatchEvent(new CustomEvent('ashen-oath-ui-ready'));", false)
 	opening_startup_metrics["loading_view_ready_ms"] = Time.get_ticks_msec()
 	await _host.get_tree().process_frame
-	if not resource_shutdown_prepared and not game_started and not _journey_load_pending():
+	if resource_shutdown_prepared or game_started or _journey_load_pending(): return
+	if not bool(hud._journey_models.get("continue", {}).get("available", false)):
 		_on_launch_accepted()
+		return
+	# The selected journey owns its destination. New Game still starts the
+	# covered Greyfen preparation when the player chooses it from this menu.
+	_publish_web_opening_state("idle")
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.dispatchEvent(new CustomEvent('ashen-oath-menu-ready'));", false)
 
 func _restore_browser_session(delta: float) -> void:
 	if not OS.has_feature("web"):
@@ -353,10 +360,7 @@ func _new_game() -> void:
 	opening_pack_waiting = false
 	campaign_pack_waiting = false
 	pending_player_restore.clear()
-	# Start the player-facing timer at the first New Game request, including the
-	# queued cold-pack/prewarm path. The old branch left this at zero until the
-	# cache was ready, which made the measured handoff look like a stale prior
-	# transition and hid the actual wait from diagnostics.
+	# Include cold preparation in the player's New Game wait.
 	if loading_started_usec <= 0:
 		loading_started_usec = Time.get_ticks_usec()
 	if new_game_started_usec <= 0:
@@ -365,10 +369,9 @@ func _new_game() -> void:
 	if runtime_packs != null:
 		runtime_packs.quality_preset = str(settings.settings.get("quality_preset", "balanced"))
 		if OS.has_feature("web"):
-			runtime_packs.prioritize_zone("greyfen")
+			runtime_packs.prioritize_startup()
 	if OS.has_feature("web") and runtime_packs != null and runtime_packs.has_method("startup_packs_ready"):
 		if not runtime_packs.startup_packs_ready():
-			new_game_start_pending = true
 			new_game_requested_while_preparing = true
 			if not startup_packs_waiting and not greyfen_prewarm_started:
 				_on_launch_accepted()
@@ -376,11 +379,8 @@ func _new_game() -> void:
 				hud.set_new_game_status("Greyfen is waking. Your New Game request will open as soon as it is ready.")
 				_publish_web_opening_state("downloading", "Loading Greyfen for your New Game...", runtime_packs.startup_pack_progress())
 			return
-	# Opening readiness and Greyfen prewarm are separate states on every
-	# platform. A fast click must wait for the covered cache, not trigger a cold
-	# construction while the menu prewarm is still active.
+	# Only hand New Game the covered, ready Greyfen cache.
 	if not route_zone_cache.has("greyfen"):
-		new_game_start_pending = true
 		new_game_requested_while_preparing = true
 		if not greyfen_prewarm_started:
 			_on_launch_accepted()
@@ -388,7 +388,6 @@ func _new_game() -> void:
 			hud.set_new_game_status("Greyfen is opening. Your New Game request is queued.")
 			_publish_web_opening_state("preparing", "Preparing Greyfen for your New Game...")
 		return
-	new_game_start_pending = true
 	new_game_requested_while_preparing = false
 	var generation := opening_prepare_generation
 	_publish_web_opening_state("ready", "Greyfen is ready.", 1.0)

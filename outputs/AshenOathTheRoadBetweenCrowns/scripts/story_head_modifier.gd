@@ -26,7 +26,7 @@ var wanted_expression := Vector4.ZERO
 
 const EXPRESSIONS := ["neutral", "warmth", "wry", "concerned", "suspicion", "guarded", "fear", "anger", "stern", "grieving", "relieved", "resolute"]
 const EXPRESSION_ALIASES := {"warm":"warmth", "concern":"concerned", "grief":"grieving", "relief":"relieved"}
-const GESTURE_SECONDS := {"acknowledge":0.70, "nod":0.70, "disagree":1.05, "remember":1.20, "recall":1.20, "reassure":1.10, "guarded_listening":0.95, "offer":0.90, "explain":1.05}
+const GESTURE_SECONDS := {"acknowledge":0.70, "nod":0.70, "disagree":1.05, "remember":1.20, "recall":1.20, "reassure":1.10, "guarded_listening":0.95, "offer":0.90, "explain":1.05, "hesitate":1.10, "relief":1.15}
 
 static func normalize_expression(value: String) -> String:
 	var key := value.strip_edges().to_lower()
@@ -46,6 +46,8 @@ static func gesture_offset(kind: String, progress: float) -> Vector3:
 		"guarded_listening": return Vector3(-0.025 * envelope, 0.035 * envelope, -0.018 * envelope)
 		"offer": return Vector3(0.045 * envelope, 0, -0.018 * envelope)
 		"explain": return Vector3(sin(t * TAU) * 0.035 * envelope, 0.045 * envelope, 0.015 * envelope)
+		"hesitate": return Vector3(0.045 * envelope, -0.065 * envelope, -0.018 * envelope)
+		"relief": return Vector3(0.06 * sin(t * TAU) * envelope, 0.0, 0.018 * envelope)
 	return Vector3.ZERO
 
 const FACE_CONTROLS := ["Eye_L", "Eye_R", "LidUpper_L", "LidUpper_R", "LidLower_L", "LidLower_R", "Brow_L", "Brow_R", "Mouth_L", "Mouth_R", "Jaw"]

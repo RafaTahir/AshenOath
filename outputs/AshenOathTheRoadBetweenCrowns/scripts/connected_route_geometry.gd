@@ -47,22 +47,23 @@ static func open_authored_door(door: MeshInstance3D) -> void:
 static func install(context: ZoneBuildContext, only_edge: int = -1) -> void:
 	var roads := context.zone_root.get_node_or_null("ConnectedRoads") as Node3D
 	if is_instance_valid(roads) and only_edge < 0: return
+	var edges: Array[Dictionary] = Sectors.connections(context.zone_id,context.story_state)
+	if only_edge >= 0:
+		if only_edge >= edges.size(): return
+		var edge := edges[only_edge]
+		if is_instance_valid(roads) and roads.has_node("RoadTo_" + str(edge.target)): return
+		edges = [edge]
 	if not is_instance_valid(roads):
 		roads = Node3D.new()
 		roads.name = "ConnectedRoads"
 		context.add_node(roads)
 	var stone := context.zone_id in ["vargan_approach","vargan_court","record_hall","undercroft"]
-	var ground := context.make_world_material("cobblestone" if stone else "forest_ground",Color(0.43,0.47,0.40)).duplicate() as BaseMaterial3D
-	var banks := context.make_world_material("medieval_brick" if stone else "forest_ground",Color(0.39,0.43,0.35)).duplicate() as BaseMaterial3D
-	ground.cull_mode = BaseMaterial3D.CULL_DISABLED; banks.cull_mode = BaseMaterial3D.CULL_DISABLED
-	ground.emission_enabled = true; ground.emission = Color(0.06,0.07,0.06); ground.emission_energy_multiplier = 0.2
-	var timber := context.make_world_material("timber",Color(0.52,0.45,0.32))
-	var masonry := context.make_world_material("medieval_brick",Color(0.60,0.61,0.55)).duplicate() as BaseMaterial3D
-	masonry.cull_mode = BaseMaterial3D.CULL_DISABLED
-	var edges: Array[Dictionary] = Sectors.connections(context.zone_id,context.story_state)
-	for edge_index in edges.size():
-		if only_edge >= 0 and edge_index != only_edge: continue
-		var edge: Dictionary = edges[edge_index]
+	var materials := _road_materials(roads, context, stone)
+	var ground: Material = materials.ground
+	var banks: Material = materials.banks
+	var timber: Material = materials.timber
+	var masonry: Material = materials.masonry
+	for edge: Dictionary in edges:
 		if roads.has_node("RoadTo_"+str(edge.target)): continue
 		var path := Node3D.new()
 		path.name = "RoadTo_"+str(edge.target)
@@ -111,7 +112,7 @@ static func install(context: ZoneBuildContext, only_edge: int = -1) -> void:
 		_make_route_details(path,edge,points,left,right,style,timber,masonry,context)
 		_make_gate(path,edge,width,timber)
 		var travel = context.construction_host().seamless_world
-		if travel != null and not travel.uses_prepared_roads() and Sectors.edge_available(edge,context.quests,context.story_state):
+		if travel != null and not travel.requires_prepared_road(edge) and Sectors.edge_available(edge,context.quests,context.story_state):
 			open_gate(context.zone_root,str(edge.target),true)
 			var preparation: Node = path.get_node("TravelGate/RoadPreparation")
 			preparation.set_interaction_enabled(false)
@@ -127,9 +128,41 @@ static func install(context: ZoneBuildContext, only_edge: int = -1) -> void:
 				# Authored/cached scene markers need the same entrance contract as
 				# gates made by the procedural builder.
 				entrance.set_meta("interactive_road_entrance",true)
+				path.set_meta("road_entrance", weakref(entrance))
 				entrance.set_interaction_enabled(true)
 				entrance.set_deferred("monitoring",true)
 				entrance.set_deferred("monitorable",true)
+
+static func entrance_for(root: Node3D, target: String) -> Node:
+	if not is_instance_valid(root): return null
+	var road := root.get_node_or_null("ConnectedRoads/RoadTo_" + target)
+	var reference: WeakRef = road.get_meta("road_entrance", null) if road != null else null
+	var entrance: Node = reference.get_ref() if reference != null else null
+	if is_instance_valid(entrance) and not entrance.is_queued_for_deletion() and root.is_ancestor_of(entrance):
+		return entrance
+	entrance = root.find_child("gate_" + target, true, false)
+	if road != null and is_instance_valid(entrance): road.set_meta("road_entrance", weakref(entrance))
+	return entrance
+
+static func _road_materials(roads: Node3D, context: ZoneBuildContext, stone: bool) -> Dictionary:
+	# Staged and immediate construction share the same zone-owned finishes.
+	var quality := context.quality_preset()
+	var materials: Dictionary = roads.get_meta("connected_road_materials", {})
+	if str(materials.get("quality", "")) == quality:
+		return materials
+	var ground := context.make_world_material("cobblestone" if stone else "forest_ground", Color(0.43, 0.47, 0.40)).duplicate() as BaseMaterial3D
+	var banks := context.make_world_material("medieval_brick" if stone else "forest_ground", Color(0.39, 0.43, 0.35)).duplicate() as BaseMaterial3D
+	ground.cull_mode = BaseMaterial3D.CULL_DISABLED
+	banks.cull_mode = BaseMaterial3D.CULL_DISABLED
+	ground.emission_enabled = true
+	ground.emission = Color(0.06, 0.07, 0.06)
+	ground.emission_energy_multiplier = 0.2
+	var timber := context.make_world_material("timber", Color(0.52, 0.45, 0.32))
+	var masonry := context.make_world_material("medieval_brick", Color(0.60, 0.61, 0.55)).duplicate() as BaseMaterial3D
+	masonry.cull_mode = BaseMaterial3D.CULL_DISABLED
+	materials = {"quality": quality, "ground": ground, "banks": banks, "timber": timber, "masonry": masonry}
+	roads.set_meta("connected_road_materials", materials)
+	return materials
 
 static func _route_style(edge: Dictionary) -> String:
 	var pair: Array = [str(edge.source),str(edge.target)]
@@ -337,7 +370,7 @@ static func open_gate(root: Node3D, target: String, instant: bool) -> void:
 	if instant:
 		var tween: Tween = gate.get_meta("opening_tween") if gate.has_meta("opening_tween") else null
 		if tween != null and tween.is_valid(): tween.kill()
-		hinge.rotation.y = PI*0.5
+		if not is_equal_approx(hinge.rotation.y, PI*0.5): hinge.rotation.y = PI*0.5
 		_gate_collision(gate,true)
 	elif not gate.has_meta("opening_tween"):
 		_gate_collision(gate,false)
@@ -354,15 +387,17 @@ static func close_gate(root: Node3D, target: String, actor_position: Vector3) ->
 	var tween: Tween = gate.get_meta("opening_tween") if gate.has_meta("opening_tween") else null
 	if tween != null and tween.is_valid(): tween.kill()
 	gate.remove_meta("opening_tween")
-	gate.get_node("Hinge").rotation.y = 0.0
+	var hinge := gate.get_node("Hinge") as Node3D
+	if not is_zero_approx(hinge.rotation.y): hinge.rotation.y = 0.0
 	# Do not insert a closing collider through somebody standing at the leaf.
 	# The boundary owner still holds that crossing until preparation completes.
 	_gate_collision(gate,gate.global_position.distance_squared_to(actor_position) > 4.0)
 
 static func _gate_collision(gate: Node, enabled: bool) -> void:
+	var layer := 1 if enabled else 0
 	for body: CollisionObject3D in gate.find_children("*","CollisionObject3D",true,false):
-		body.collision_layer = 1 if enabled else 0
-		body.collision_mask = 1 if enabled else 0
+		if body.collision_layer != layer: body.collision_layer = layer
+		if body.collision_mask != layer: body.collision_mask = layer
 
 static func _strip(parent: Node3D, name: String, left: PackedVector3Array, right: PackedVector3Array, material: Material, collision: bool, profile: String = "") -> void:
 	var key := var_to_bytes([left,right,profile]).hex_encode()

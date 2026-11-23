@@ -55,11 +55,21 @@ static func encounter_record(speaker_id: String, zone_id: String) -> Dictionary:
 
 static func sections(campaign: Dictionary, quests, state, zone_id: String) -> Array[Dictionary]:
 	var recap: Dictionary = recap_model(campaign, quests, state, zone_id)
+	var next_parts: Array[String] = [str(recap.next_action)]
+	if str(recap.destination_name) != "":
+		next_parts.append("Where: " + str(recap.destination_name))
+	var hint: String = str(recap.get("route_hint", ""))
+	if hint != "":
+		next_parts.append(hint)
+	next_parts.append(str(recap.reason))
 	var returns: Array[Dictionary] = [
 		{"id": "promise", "title": "Current purpose" if _flag_text(state, "kael_pledge") == "" else "The promise", "body": str(recap.promise)},
 		{"id": "last_commitment", "title": "What Kael last committed to", "body": str(recap.last_commitment)},
-		{"id": "next_action", "title": "The next known step", "body": "%s\n%s%s" % [str(recap.next_action), "Where: " + str(recap.destination_name) + "\n" if str(recap.destination_name) != "" else "", str(recap.reason)]}
+		{"id": "next_action", "title": "The next known step", "body": "\n".join(next_parts)}
 	]
+	var report: String = _road_report_summary(state)
+	if report != "":
+		returns.append({"id": "road_report", "title": "The Greyfen road report", "body": report})
 	var covenant: Dictionary = _covenant_entry(campaign, state)
 	if not covenant.is_empty():
 		returns.append(covenant)
@@ -123,8 +133,8 @@ static func recap_model(campaign: Dictionary, quests, state, zone_id: String) ->
 				last += "\n" + result
 	else:
 		var known_outcomes: Array[Dictionary] = _resolved_outcomes(campaign, state)
-		if not known_outcomes.is_empty():
-			last = "Earlier choices survive in this save, but their order was not recorded. People & Promises preserves each known outcome without inventing which happened last."
+		if not known_outcomes.is_empty() or _flag_text(state, "evidence_report") in ["private", "public", "retained"]:
+			last = "The journal keeps the earlier choices that survive in this save. Their order is unknown."
 	var recap: Dictionary = {"heading": "The road ahead", "promise": promise, "last_commitment": last, "next_action": "Read Greyfen's notice or speak with Anwen about the missing travelers.", "destination_zone": "greyfen", "destination_name": "Greyfen", "reason": "Begin with the people asking for an account; no new promise has been made for you."}
 	var continuation: Dictionary = Routes.ending_continuation(state, zone_id) if state != null else {}
 	if not continuation.is_empty():
@@ -132,7 +142,8 @@ static func recap_model(campaign: Dictionary, quests, state, zone_id: String) ->
 		recap["next_action"] = str(continuation.get("action", continuation.get("next_action", "Return to the people waiting in Greyfen.")))
 		recap["destination_zone"] = str(continuation.get("destination_zone", "greyfen"))
 		recap["destination_name"] = str(continuation.get("destination_name", "Greyfen"))
-		recap["reason"] = str(continuation.get("purpose", continuation.get("route_hint", "The covenant's consequences need ordinary work.")))
+		recap["reason"] = str(continuation.get("purpose", "The covenant's consequences need ordinary work."))
+		recap["route_hint"] = str(continuation.get("route_hint", ""))
 		if _flag_bool(state, "final_choice_completed"):
 			recap["promise"] = "The covenant's outcome stands. Keep the surviving account and return to the people who must live with what comes next."
 		return _finish_recap(recap)
@@ -142,6 +153,14 @@ static func recap_model(campaign: Dictionary, quests, state, zone_id: String) ->
 		return _finish_recap(recap)
 	if _flag_bool(state, "final_choice_completed") and tracked_escort:
 		recap["promise"] = "The covenant and the existing homecoming stand. Kael has chosen to continue the relief work; Nera's cooperation is not an unrecorded promise of forgiveness."
+	var guidance: Dictionary = preload("res://scripts/greyfen_guidance.gd").view(state, zone_id)
+	if not guidance.is_empty():
+		recap.merge({"heading": str(guidance.title), "next_action": str(guidance.action), "destination_zone": str(guidance.destination_zone), "destination_name": str(guidance.destination_name), "reason": "Take this practice step whenever you choose. You can return to the main story at any time."}, true)
+		return _finish_recap(recap)
+	var report_route: Dictionary = Routes.legacy_road_report_guidance(state, quests, zone_id)
+	if not report_route.is_empty():
+		recap.merge({"heading": str(report_route.title), "next_action": str(report_route.next_action), "destination_zone": str(report_route.destination_zone), "destination_name": str(report_route.destination_name), "route_hint": str(report_route.route_hint), "reason": str(report_route.purpose)}, true)
+		return _finish_recap(recap)
 	var quest_id: String = str(quests.get_tracked_quest()) if quests != null else ""
 	if quest_id == "" and quests != null:
 		for chapter in campaign.get("chapters", []):
@@ -160,18 +179,28 @@ static func recap_model(campaign: Dictionary, quests, state, zone_id: String) ->
 		var route: Dictionary = Routes.for_objective(quest_id, objective_id, state, quests, zone_id)
 		recap["destination_zone"] = str(route.get("destination_zone", ""))
 		recap["destination_name"] = str(route.get("destination_name", ""))
+		recap["route_hint"] = str(route.get("route_hint", ""))
 		recap["reason"] = str(route.get("purpose", "Follow the lead already recorded; further conclusions belong to what Kael discovers there."))
 		if str(route.get("next_action", "")) != "":
 			recap["next_action"] = str(route.next_action)
-		for chapter in campaign.get("chapters", []):
-			if str(chapter.get("quest_id", "")) == quest_id:
-				recap["reason"] = str(chapter.get("question", recap.reason))
-				break
 	return _finish_recap(recap)
 
 static func _finish_recap(recap: Dictionary) -> Dictionary:
-	recap["body"] = "%s\nLast commitment: %s\nNext: %s%s\n%s" % [str(recap.promise), str(recap.last_commitment), str(recap.next_action), " (" + str(recap.destination_name) + ")" if str(recap.destination_name) != "" else "", str(recap.reason)]
+	var hint: String = str(recap.get("route_hint", ""))
+	recap["body"] = "%s\nLast commitment: %s\nNext: %s%s\n%s%s" % [str(recap.promise), str(recap.last_commitment), str(recap.next_action), " (" + str(recap.destination_name) + ")" if str(recap.destination_name) != "" else "", hint + "\n" if hint != "" else "", str(recap.reason)]
 	return recap
+
+static func _road_report_summary(state) -> String:
+	match _flag_text(state, "evidence_report"):
+		"private":
+			return "Kael reported privately to Anwen. The sealed account stays with her at the north shrine."
+		"public":
+			return "Kael put the recovered evidence before Greyfen. The notice board carries the public account."
+		"retained":
+			return "Kael kept the original evidence and agreed to make protected copies. The village notice calls for a watch on the road."
+	if Routes.legacy_road_report_pending(state):
+		return "The investigation is recorded. Anwen and the village notice board still offer a choice about sharing the evidence."
+	return ""
 
 static func _people_entries(campaign: Dictionary, quests, state) -> Array[Dictionary]:
 	var entries: Array[Dictionary] = []

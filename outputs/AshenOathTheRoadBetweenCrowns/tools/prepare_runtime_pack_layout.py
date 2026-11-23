@@ -15,6 +15,8 @@ from runtime_pack_validation import require_valid_pack_graph
 from partition_actor_packs import partition_actor_packs
 from prepared_forest_tree_layout import load_prepared_forest_trees
 from partition_living_campaign_packs import partition_living_campaign_packs
+from story_voice_catalog import authored_dialogue_inventory, canonical_speaker
+from natural_story_voices import pages
 
 
 PROJECT = Path(__file__).resolve().parent.parent
@@ -45,6 +47,69 @@ CAMPAIGN_PREFIXES = (
 
 def selected_files(value):
     return json.loads("[" + value.removeprefix("PackedStringArray(").removesuffix(")") + "]")
+
+
+def partition_opening_dialogue(project, config, sections, manifest):
+    """Put the selected care and briefing recordings in Greyfen's pack."""
+    bindings = authored_dialogue_inventory(project, ("dialogue.json", "interaction_scenes.json"), pages)
+    selected = [row for row in bindings if row["selected_take_id"] and (
+        row["source_id"] == "sister_anwen" or row["source_id"].startswith("opening_care_"))]
+    if not selected:
+        return set()
+    delivery = json.loads((project / "voice_production_manifest.json").read_text(encoding="utf-8-sig"))
+    lines = delivery["lines"]
+    takes = lines if isinstance(lines, dict) else {take["id"]: take for take in lines}
+    voice_paths = set()
+    for binding in selected:
+        take = takes.get(binding["selected_take_id"], {})
+        if (take.get("scene") != binding["source_id"]
+                or canonical_speaker(project, take.get("speaker_id", "")) != binding["speaker_id"]
+                or take.get("text_sha256") != binding["text_sha256"]):
+            raise ValueError("Missing matching opening performance: " + binding["line_id"])
+        source = str(take.get("path", ""))
+        relative = source.removeprefix("res://")
+        if (not source.startswith("res://assets_external/audio/voices/story/")
+                or Path(relative).suffix != ".ogg" or ".." in relative.split("/") or "\\" in relative):
+            raise ValueError("Invalid opening performance path: " + source)
+        recording = (project / relative).resolve()
+        if not recording.is_relative_to(project.resolve()) or not recording.is_file():
+            raise ValueError("Missing opening recording: " + source)
+        payload = recording.read_bytes()
+        if len(payload) != take.get("audio_bytes") or hashlib.sha256(payload).hexdigest() != take.get("audio_sha256"):
+            raise ValueError("Opening recording differs from its authored take: " + source)
+        voice_paths.add(source)
+
+    relative_paths = {path.removeprefix("res://") for path in voice_paths}
+    for name, section in sections.items():
+        preset = config[section]
+        prior_selection = set(selected_files(preset.get("export_files", "PackedStringArray()")))
+        prior_include = set(json.loads(preset.get("include_filter", '\"\"')).split(",")) - {""}
+        prior_exclude = set(json.loads(preset.get("exclude_filter", '\"\"')).split(",")) - {""}
+        selected_paths = prior_selection - voice_paths
+        included = prior_include - relative_paths
+        excluded = prior_exclude.copy()
+        if name == "Runtime Pack Opening":
+            selected_paths.update(voice_paths)
+            excluded = {pattern for pattern in excluded
+                        if not any(fnmatch.fnmatchcase(path, pattern) for path in relative_paths)}
+        else:
+            all_resources = json.loads(preset.get("export_filter", '\"all_resources\"')) == "all_resources"
+            for path in relative_paths:
+                included_by_pattern = any(fnmatch.fnmatchcase(path, pattern) for pattern in included)
+                if (all_resources or included_by_pattern) and not any(fnmatch.fnmatchcase(path, pattern) for pattern in excluded):
+                    excluded.add(path)
+        if selected_paths != prior_selection:
+            preset["export_files"] = "PackedStringArray(" + ", ".join(json.dumps(path) for path in sorted(selected_paths)) + ")"
+        if included != prior_include:
+            preset["include_filter"] = json.dumps(",".join(sorted(included)))
+        if excluded != prior_exclude:
+            preset["exclude_filter"] = json.dumps(",".join(sorted(excluded)))
+    for pack, record in manifest["packs"].items():
+        contents = set(record.get("contents", [])) - voice_paths - relative_paths
+        if pack == "opening":
+            contents.update(voice_paths)
+        record["contents"] = sorted(contents)
+    return voice_paths
 
 
 def retire_environment_export_roots(project, config, sections):
@@ -230,6 +295,7 @@ def compile_layout(defer_environment=False, require_prepared_forest=False):
             if name != "Runtime Pack Opening":
                 includes[name].discard(relative)
                 files[name].discard("res://" + relative)
+    includes["Runtime Pack Opening"].add("data/prepared_greyfen_social_collision.res")
     files["Runtime Pack Opening"].add("res://" + FORGE_HAMMER)
     files["Runtime Pack Opening"].add("res://" + HUNTING_ARROW)
     for layer in (PROJECT / SILHOUETTE_DIRECTORY).glob("*.obj"):
@@ -625,6 +691,7 @@ def compile_layout(defer_environment=False, require_prepared_forest=False):
     # Apply after actor partitioning too: it creates presets and replaces some
     # inherited filters. No subsequent pass may resurrect these stale imports.
     retire_environment_export_roots(PROJECT, config, sections)
+    partition_opening_dialogue(PROJECT, config, sections, manifest)
     # Validate the complete generated graph before either tracked output changes.
     require_valid_pack_graph(manifest)
     with presets_path.open("w", encoding="utf-8", newline="\n") as output:

@@ -2,7 +2,7 @@ extends "res://scripts/hud/hud_component.gd"
 ## Menu panel: explicit view operations; requests leave through typed signals.
 
 func show_main_menu() -> void:
-	if not new_game_ready and (not is_instance_valid(_game_owner) or not bool(_game_owner.get("game_started"))):
+	if not new_game_ready and str(_opening_preparation.state) != "idle" and (not is_instance_valid(_game_owner) or not bool(_game_owner.get("game_started"))):
 		show_startup_loading(str(_opening_preparation.get("message", "Loading Greyfen...")), float(_opening_preparation.get("progress", -1.0)), str(_opening_preparation.get("state", "")) == "failed")
 		return
 	active_menu = "main"
@@ -56,14 +56,14 @@ func set_new_game_status(text: String) -> void:
 
 func set_opening_preparation(state: String, message: String, progress: float = -1.0, requested: bool = false) -> void:
 	_opening_preparation = {"state": state, "message": message, "progress": progress, "requested": requested}
-	if state != "ready":
+	if state not in ["ready", "idle"]:
 		var phases := {"preparing":"Loading Greyfen...", "downloading":"Downloading opening content", "services":"Preparing the journey...", "resources":"Preparing characters and materials...", "building":"Building Greyfen", "finalizing":"Finishing the village...", "first_view":"Preparing the first view..."}
 		var phase: String = message if state == "failed" else str(phases.get(state, "Preparing the road..."))
 		if progress >= 0.0 and state != "failed":
 			phase += "  %d%%" % clampi(int(progress * 100.0), 0, 99)
 		show_startup_loading(phase, progress, state == "failed")
 		return
-	if active_menu == "startup" and new_game_ready:
+	if active_menu == "startup" and (new_game_ready or state == "idle"):
 		if input_source != null:
 			input_source.reset_transient_input("opening_menu_ready")
 		show_main_menu()
@@ -167,9 +167,15 @@ func show_companion_commands(travel: Dictionary) -> void:
 	_clear_menu()
 	menu_layer.visible = true
 	var place: String = str(travel.get("zone", "greyfen")).replace("_", " ").capitalize()
-	var box := _menu_box("Bracken", "Waiting in " + place if str(travel.get("command", "follow")) == "wait" else "Along the road with Kael")
-	for entry: Array in [["follow", "Walk with me"], ["wait", "Wait here" if bool(travel.get("present", false)) else "Keep waiting in " + place], ["recall", "Come, Bracken"]]:
+	var present: bool = bool(travel.get("present", false))
+	var status := "Along the road with Kael" if present else "Finding a safe path to Kael"
+	if str(travel.get("command", "follow")) == "wait":
+		status = "Waiting in " + place
+	var box := _menu_box("Bracken", status)
+	for entry: Array in [["follow", "Walk with me"], ["wait", "Wait here"], ["recall", "Come, Bracken"]]:
 		var command: String = str(entry[0])
+		if command == "wait" and not present:
+			continue
 		_add_menu_button(box, str(entry[1]), func(selected: String = command): action_selected.emit({"type":"companion_command", "command":selected}), false, "companion:" + command)
 	_add_menu_button(box, "Return", func(): resume_requested.emit(), false, "resume")
 

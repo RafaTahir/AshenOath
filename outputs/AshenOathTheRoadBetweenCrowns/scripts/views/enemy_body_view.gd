@@ -1,6 +1,20 @@
 extends RefCounted
 ## enemy body view: scene-only responsibilities.
 
+const CREATURE_VISUAL_ROLES := {
+	"ghoulkin": "ghoulkin_creature",
+	"wychwood_stalker": "wychwood_stalker_creature",
+	"wychwood_raider": "wychwood_raider_creature",
+	"wychwood_brute": "wychwood_brute_creature",
+	"bog_wretch": "bog_wretch_creature",
+	"gravebound_knight": "gravebound_knight_creature",
+	"bell_eater": "bell_eater_boss",
+	"rootbound_colossus": "rootbound_colossus_boss",
+	"ashwing": "ashwing_boss",
+	"halvern_boss": "halvern_boss",
+	"white_hart_avatar": "white_hart_boss",
+}
+
 var _actor: CharacterBody3D
 
 func _init(actor: CharacterBody3D) -> void:
@@ -31,20 +45,8 @@ func _try_build_mapped_body() -> bool:
 		visual_source = "road_ranger_human"
 		mapped = _actor.asset_helper.spawn_visual_role(visual_source, "characters", "captain_senn")
 		uses_real_body = mapped != null
-	if _actor.enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bog_wretch", "gravebound_knight", "bell_eater", "rootbound_colossus", "ashwing", "halvern_boss", "white_hart_avatar"]:
-		visual_source = {
-			"ghoulkin": "ghoulkin_creature",
-			"wychwood_stalker": "wychwood_stalker_creature",
-			"wychwood_raider": "wychwood_raider_creature",
-			"wychwood_brute": "wychwood_brute_creature",
-			"bog_wretch": "bog_wretch_creature",
-			"gravebound_knight": "gravebound_knight_creature",
-			"bell_eater": "bell_eater_boss",
-			"rootbound_colossus": "rootbound_colossus_boss",
-			"ashwing": "ashwing_boss",
-			"halvern_boss": "halvern_boss",
-			"white_hart_avatar": "white_hart_boss",
-		}.get(_actor.enemy_id, "ghoulkin_creature")
+	if CREATURE_VISUAL_ROLES.has(_actor.enemy_id):
+		visual_source = CREATURE_VISUAL_ROLES[_actor.enemy_id]
 		if not _actor.visual_role_override.is_empty():
 			visual_source = _actor.visual_role_override
 		mapped = _actor.asset_helper.spawn_visual_role(visual_source, "enemies")

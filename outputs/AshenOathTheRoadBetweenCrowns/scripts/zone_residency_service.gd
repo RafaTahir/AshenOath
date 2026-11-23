@@ -359,18 +359,25 @@ func restore_runtime(root: Node) -> void:
 	root.remove_meta("resident_suspended_nodes")
 	preload("res://scripts/character_animation_driver.gd").zone_contract(root, true)
 
-func begin_preview(root: Node) -> void:
-	if root.has_meta("resident_visibility"): return
+func begin_preview(root: Node, source_zone: String) -> bool:
 	var roads := root.get_node_or_null("ConnectedRoads")
-	if roads != null:
-		root.set_meta("resident_road_mode",roads.process_mode)
-		# Disabled CollisionObject parents otherwise remove these shapes from
-		# physics. The adjoining half must still support feet and camera rays.
-		roads.process_mode = Node.PROCESS_MODE_PAUSABLE
+	var approach := roads.get_node_or_null("RoadTo_" + source_zone) if roads != null else null
+	if not is_instance_valid(approach): return false
+	if root.has_meta("resident_visibility"):
+		var previous: WeakRef = root.get_meta("resident_approach", null)
+		if previous != null and previous.get_ref() == approach: return true
+		end_preview(root)
+	root.set_meta("resident_approach", weakref(approach))
+	root.set_meta("resident_road_mode", approach.process_mode)
+	# Only the reciprocal road needs visible geometry and support. Its siblings
+	# stay in the cached world's disabled physics and process mode.
+	approach.process_mode = Node.PROCESS_MODE_PAUSABLE
 	var visibility: Array[Dictionary] = []
 	var pending: Array[Node] = []
 	for child: Node in root.get_children():
-		if str(child.name) != "ConnectedRoads": pending.append(child)
+		if child != roads: pending.append(child)
+	for child: Node in roads.get_children():
+		if child != approach: pending.append(child)
 	while not pending.is_empty():
 		var node: Node = pending.pop_back()
 		if node is Node3D:
@@ -379,16 +386,26 @@ func begin_preview(root: Node) -> void:
 		else:
 			for child: Node in node.get_children(): pending.append(child)
 	root.set_meta("resident_visibility",visibility)
+	return true
 
 func end_preview(root: Node) -> void:
 	for entry: Dictionary in root.get_meta("resident_visibility",[]):
 		var node: Node = entry.node.get_ref()
 		if is_instance_valid(node): node.visible = bool(entry.visible)
 	root.remove_meta("resident_visibility")
-	var roads := root.get_node_or_null("ConnectedRoads")
-	if roads != null and root.has_meta("resident_road_mode"):
-		roads.process_mode = int(root.get_meta("resident_road_mode"))
+	var reference: WeakRef = root.get_meta("resident_approach", null)
+	var approach: Node = reference.get_ref() if reference != null else null
+	if is_instance_valid(approach) and root.has_meta("resident_road_mode"):
+		approach.process_mode = int(root.get_meta("resident_road_mode"))
+	root.remove_meta("resident_approach")
 	root.remove_meta("resident_road_mode")
+
+func hide_cached_preview(root: Node3D) -> void:
+	if not is_instance_valid(root) or str(root.get_meta("zone_resource_owner", "")) != "cached":
+		return
+	root.visible = false
+	end_preview(root)
+	root.position = Vector3(0, -1000, 0)
 
 func _remove_root_from_route_cache(root: Node) -> void:
 	for raw_id in route_zone_cache.keys().duplicate():

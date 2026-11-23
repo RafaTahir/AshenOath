@@ -245,7 +245,7 @@ func _screen_key() -> String:
 func _screen_parent() -> String:
 	match active_menu:
 		"settings", "controls": return controls_back_target
-		"remap": return "controls"
+		"remap": return remap_back_target
 		"save_library": return library_back_target
 		"save_slot", "save_import", "chapter_replay": return "save_library:%d" % library_page
 		"text_history", "problem_report": return library_back_target

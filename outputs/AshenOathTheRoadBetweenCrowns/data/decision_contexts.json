@@ -7,9 +7,9 @@
       "uncertainty": "These traces do not establish every person's part in what happened.",
       "follow_through": "Kael stays with the investigation. A report does not promise anyone else's participation.",
       "options": [
-        {"when_flags": {"evidence_report": "private"}, "commitment": "Give Anwen the token privately and commit to protecting people who choose to speak.", "cost": "The wider village will not yet have the same account."},
+        {"when_flags": {"evidence_report": "private"}, "commitment": "Give Anwen the recovered evidence privately and commit to protecting people who choose to speak.", "cost": "The wider village will not yet have the same account."},
         {"when_flags": {"evidence_report": "public"}, "commitment": "Put the recovered evidence before Greyfen and commit to protecting its witnesses.", "cost": "Public disclosure makes the account harder to contain and may expose its bearers."},
-        {"when_flags": {"evidence_report": "retained"}, "commitment": "Keep the original token, make protected copies, and remain responsible for the investigation.", "cost": "Keeping the original with Kael delays a wider public account."}
+        {"when_flags": {"evidence_report": "retained"}, "commitment": "Keep the original evidence, make protected copies, and remain responsible for the investigation.", "cost": "Keeping the original with Kael delays a wider public account."}
       ]
     },
     "main_bell_beneath_greyfen:crow_shrine_choice": {

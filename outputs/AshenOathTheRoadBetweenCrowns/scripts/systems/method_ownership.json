@@ -4,11 +4,6 @@
     "source_line": 76,
     "entry": "_gameplay_script"
   },
-  "_opening_stage_required_before_control": {
-    "system": "startup",
-    "source_line": 376,
-    "entry": "_opening_stage_required_before_control"
-  },
   "_record_opening_stage": {
     "system": "startup",
     "source_line": 379,

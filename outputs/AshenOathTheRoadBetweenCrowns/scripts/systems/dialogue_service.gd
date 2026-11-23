@@ -349,8 +349,9 @@ func _prepare_dialogue_presence(content: Dictionary) -> Dictionary:
 	var result: Dictionary = content.duplicate(true)
 	var aliases := {"anwen":"sister_anwen", "senn":"captain_senn", "tor":"blacksmith_tor", "elna":"widow_elna", "edric":"edric_campaign", "record_keeper_vale":"vargan_record_keeper", "vale":"vargan_record_keeper", "guard":"vargan_steward", "merrow":"vargan_steward"}
 	for page: Dictionary in result.get("pages", []):
-		var id := str(page.get("speaker_id", "narrator"))
-		if id in ["player", "kael", "narrator", ""]:
+		var id := str(page.get("speaker_id", "narrator")).to_lower()
+		if id in DialogueRuntimeCoordinator.PLAYER_SPEAKERS or id in ["narrator", ""]:
+			page.erase("speaker_actor_id")
 			continue
 		var supplied := instance_from_id(int(page.get("speaker_actor_id", 0))) as Node3D
 		var actor: Node3D = supplied if is_instance_valid(supplied) and is_instance_valid(zone_root) and zone_root.is_ancestor_of(supplied) else null
@@ -362,12 +363,14 @@ func _prepare_dialogue_presence(content: Dictionary) -> Dictionary:
 			var witness: String = {"mira":"witness_-7", "rook":"witness_-3", "anwen":"witness_3"}.get(id, "")
 			if witness != "":
 				actor = zone_root.find_child(witness, true, false) as Node3D
-		if actor != null and actor.is_visible_in_tree() and (player == null or actor.global_position.distance_to(player.global_position) <= 12.0):
+		var driver := actor.find_child("CharacterAnimationDriver", true, false) if is_instance_valid(actor) else null
+		if is_instance_valid(actor) and not actor.is_queued_for_deletion() and actor.is_visible_in_tree() and (driver == null or not bool(driver.get("dead"))) and (player == null or actor.global_position.distance_to(player.global_position) <= 12.0):
 			page["speaker_actor_id"] = actor.get_instance_id()
 		else:
 			page["speaker"] = str(page.get("speaker", id.capitalize())) + " - recorded account"
 			page["speaker_id"] = "narrator"
 			page["voice"] = ""
+			page.erase("speaker_actor_id")
 	return result
 
 func _stage_dialogue_moment(area) -> void:
@@ -392,9 +395,8 @@ func _on_dialogue_page_changed(_speaker: String, _speaker_id: String, _page_inde
 			story_save_pending = true
 	dialogue_runtime_coordinator.refresh_page(player, camera_rig, page)
 	if audio != null:
-		audio.set_dialogue_active(true)
 		audio.play_dialogue_page(page)
-	preload("res://scripts/story_performance.gd").page(dialogue_runtime_coordinator.get_page_actor(), page, audio)
+	dialogue_runtime_coordinator.present_page(player, page, audio)
 
 func _on_dialogue_topic_requested(context_id: String, topic_id: String, revision_key: String) -> void:
 	# A reading request never re-enters interaction or action dispatch. Resolve
@@ -414,9 +416,7 @@ func _face_npc_toward_player(npc: Node3D) -> void:
 	dialogue_runtime_coordinator.face_actor(npc, player)
 
 func _release_dialogue_facing() -> void:
-	audio.stop_voice()
 	audio.set_dialogue_active(false)
-	preload("res://scripts/story_performance.gd").finish(dialogue_runtime_coordinator.get_focus_actor())
 	interaction_input_block_until_usec = Time.get_ticks_usec() + int(DIALOGUE_INTERACTION_GUARD_SECONDS * 1000000.0)
 	dialogue_runtime_coordinator.release(player)
 	if zone_root == null:

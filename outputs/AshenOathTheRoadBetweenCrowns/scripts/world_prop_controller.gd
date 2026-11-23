@@ -10,6 +10,9 @@ var quality := "balanced"
 var story_state: Node
 var audio: Node
 var entries: Array[Dictionary] = []
+var _registered_nodes: Dictionary = {}
+var _components: Array[InteractiveWorldProp] = []
+var _reduced_motion := false
 var player: Node3D
 var active_entries: Array[Dictionary] = []
 var _elapsed := 0.0
@@ -19,12 +22,16 @@ const TICK_INTERVAL := 1.0 / 10.0
 const ACTIVE_RADIUS := 24.0
 const ACTIVE_CAPS := {"potato": 14, "balanced": 28, "quality": 48}
 
-func configure(root: Node3D, id: String, quality_preset: String, state_owner: Node, audio_manager: Node = null) -> void:
+func configure(root: Node3D, id: String, quality_preset: String, state_owner: Node, audio_manager: Node = null, settings_owner: Node = null) -> void:
 	zone_root = root
 	zone_id = id
 	quality = quality_preset
 	story_state = state_owner
 	audio = audio_manager
+	if settings_owner != null:
+		_reduced_motion = bool(settings_owner.settings.get("reduced_motion", false))
+		if not settings_owner.is_connected("changed", _apply_motion_preference):
+			settings_owner.connect("changed", _apply_motion_preference)
 	player = get_tree().get_first_node_in_group("player") as Node3D
 	add_to_group("world_prop_controller")
 	_scan(zone_root)
@@ -35,6 +42,8 @@ func configure(root: Node3D, id: String, quality_preset: String, state_owner: No
 	_rebuild_active_entries()
 
 func _process(delta: float) -> void:
+	if _reduced_motion:
+		return
 	_accumulator += delta
 	if _accumulator < TICK_INTERVAL or get_tree().paused:
 		return
@@ -60,6 +69,8 @@ func _scan(node: Node) -> void:
 		_scan(child)
 
 func _rebuild_active_entries() -> void:
+	if _reduced_motion or not is_inside_tree():
+		return
 	if player == null or not is_instance_valid(player):
 		player = get_tree().get_first_node_in_group("player") as Node3D
 	if player != null and is_instance_valid(player):
@@ -104,17 +115,38 @@ func _bind_components() -> void:
 		return
 	for raw in get_tree().get_nodes_in_group("interactive_world_prop"):
 		var component := raw as InteractiveWorldProp
-		if component == null or not is_instance_valid(component):
+		if not is_instance_valid(component) or (component != zone_root and not zone_root.is_ancestor_of(component)):
 			continue
-		if not zone_root.is_ancestor_of(component) and component != zone_root:
-			continue
+		_components.append(component)
+		component.set_reduced_motion(_reduced_motion)
 		component.bind_story_state(story_state)
 		component.state_changed.connect(_on_component_state_changed)
 
+func _apply_motion_preference(settings: Dictionary) -> void:
+	var enabled: bool = bool(settings.get("reduced_motion", false))
+	if enabled == _reduced_motion:
+		return
+	_reduced_motion = enabled
+	for component in _components:
+		if is_instance_valid(component):
+			component.set_reduced_motion(enabled)
+	if not enabled:
+		_last_player_position = Vector3.INF
+		_rebuild_active_entries()
+		return
+	_accumulator = 0.0
+	active_entries.clear()
+	for entry in entries:
+		if str(entry.kind) in ["bell", "clapper"]:
+			entry.ring_remaining = 0.0
+			var node := entry.get("node") as Node3D
+			if is_instance_valid(node):
+				node.rotation = entry.base_rotation
+
 func _register(node: Node3D, id: String, kind: String, persistent_key: String) -> void:
-	for existing in entries:
-		if existing.get("node") == node:
-			return
+	var instance := node.get_instance_id()
+	if _registered_nodes.has(instance): return
+	_registered_nodes[instance] = true
 	# Legacy lantern tags referred to the glow mesh. Housing stays fixed and
 	# visible when the light is extinguished; only a verified flame is animated.
 	if kind == "lantern" and (str(node.get_meta("visual_name", "")) == "LanternGlow" or bool(node.get_meta("world_prop_moving_part", false))):
@@ -213,7 +245,8 @@ func _sync_story_states(animate_change: bool = false) -> void:
 			var saved: Variant = story_state.get_flag(key, null)
 			if saved != null and str(saved) != "":
 				entry.state = ("rung" if saved else "silent") if typeof(saved) == TYPE_BOOL and str(entry.kind) in ["bell", "clapper"] else str(saved)
-		if animate_change and previous != str(entry.state) and str(entry.state) == "rung": entry.ring_remaining = 4.0
+		if not _reduced_motion and animate_change and previous != str(entry.state) and str(entry.state) == "rung":
+			entry.ring_remaining = 4.0
 		_apply_entry_state(entry)
 
 func activate_prop(prop_id: String) -> bool:
@@ -299,7 +332,8 @@ func _on_component_state_changed(prop_id: String, state: String) -> void:
 	for entry in entries:
 		if str(entry.id) == prop_id and str(entry.state_key) not in ["evidence_report", "iron_fate"]:
 			entry.state = state
-			if state == "rung": entry.ring_remaining = 4.0
+			if not _reduced_motion and state == "rung":
+				entry.ring_remaining = 4.0
 			_apply_entry_state(entry)
 	_play_prop_audio("interaction")
 

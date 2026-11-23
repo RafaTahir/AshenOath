@@ -41,6 +41,7 @@ var web_preload_wait_started := 0
 var shell_poll_elapsed := 0.0
 var download_limit := MAX_CONCURRENT_DOWNLOADS
 var foreground_pack_ids: Array[String] = []
+var _bootstrap_downloads: Array[String] = []
 var background_work_allowed: Callable
 var _background_mount_frame := -1
 
@@ -142,16 +143,16 @@ func is_ready(pack_id: String) -> bool:
 	return bool(mounted.get(id, false)) or get_state(id) == "ready"
 
 func get_web_preloaded_state(pack_id: String) -> String:
-	var id := _normalise_id(pack_id)
+	return str(_web_preloaded_metadata(_normalise_id(pack_id)).get("state", ""))
+
+func _web_preloaded_metadata(id: String) -> Dictionary:
 	if not OS.has_feature("web"):
-		return ""
+		return {}
 	var raw_metadata := str(JavaScriptBridge.eval(
 		"JSON.stringify((window.__ashenOathPreloadedPacks || {})[%s] || null)" % JSON.stringify(id), true
 	))
 	var parsed: Variant = JSON.parse_string(raw_metadata)
-	if not parsed is Dictionary:
-		return ""
-	return str((parsed as Dictionary).get("state", ""))
+	return parsed if parsed is Dictionary else {}
 
 func has_embedded_content(pack_id: String) -> bool:
 	# Builder scripts can live in the root PCK even when the scene assets belong
@@ -174,12 +175,7 @@ func get_cache_path(pack_id: String) -> String:
 
 func request_startup_packs(retry_failed := false) -> bool:
 	startup_requested = true
-	var accepted := true
-	for id in required_startup_packs():
-		if retry_failed and get_state(id) == "failed":
-			requests.erase(id)
-		if not request_pack(id, 10):
-			accepted = false
+	var accepted := _request_required_packs(required_startup_packs(), 10, retry_failed)
 	_emit_startup_progress()
 	return accepted
 
@@ -226,16 +222,24 @@ func actor_pack(role: String) -> String:
 	return str(manifest.get("actor_packs", {}).get(role, "monsters"))
 
 func request_zone_packs(zone_id: String, encounter_packs: Array[String] = [], retry_failed: bool = false) -> bool:
+	return _request_required_packs(required_zone_packs(zone_id, encounter_packs), 0, retry_failed)
+
+func _request_required_packs(ids: Array[String], priority: int, retry_failed: bool) -> bool:
+	# Admit the whole set before scheduling so already-running shell downloads
+	# can claim their slots before the remaining network work starts.
+	var was_scheduling := scheduling_downloads
+	scheduling_downloads = true
 	var accepted := true
-	for id in required_zone_packs(zone_id, encounter_packs):
-		if retry_failed:
-			var dependencies: Array[String] = []
-			if _dependency_order(id, {}, dependencies).is_empty():
-				for dependency in dependencies:
-					if get_state(dependency) == "failed":
-						requests.erase(dependency)
-		if not request_pack(id, 0):
+	for id in ids:
+		if retry_failed and get_state(id) == "failed":
+			requests.erase(id)
+		if not request_pack(id, priority):
 			accepted = false
+	scheduling_downloads = was_scheduling
+	_start_pending_downloads()
+	for id in ids:
+		if get_state(id) == "failed":
+			return false
 	return accepted
 
 func zone_packs_ready(zone_id: String, encounter_packs: Array[String] = []) -> bool:
@@ -245,21 +249,32 @@ func zone_packs_ready(zone_id: String, encounter_packs: Array[String] = []) -> b
 	return true
 
 func zone_pack_progress(zone_id: String, encounter_packs: Array[String] = []) -> float:
+	return _required_pack_progress(required_zone_packs(zone_id, encounter_packs))
+
+func _required_pack_progress(ids: Array[String]) -> float:
 	var total_bytes := 0.0
 	var completed_bytes := 0.0
-	for id in required_zone_packs(zone_id, encounter_packs):
+	for id in ids:
 		var weight := maxf(float(get_pack(id).get("bytes", 0)), 1.0)
 		total_bytes += weight
 		completed_bytes += weight * (1.0 if is_ready(id) else get_progress(id))
 	return completed_bytes / maxf(total_bytes, 1.0)
 
 func prioritize_zone(zone_id: String, encounter_packs: Array[String] = []) -> void:
-	foreground_pack_ids.clear()
-	var marks: Dictionary = {}
-	for id in required_zone_packs(zone_id, encounter_packs):
-		_dependency_order(id, marks, foreground_pack_ids)
+	_prioritize_packs(required_zone_packs(zone_id, encounter_packs))
+
+func prioritize_startup() -> void:
+	_prioritize_packs(required_startup_packs())
+
+func _prioritize_packs(ids: Array[String]) -> void:
+	foreground_pack_ids.assign(ids)
+	_bootstrap_downloads.clear()
 	if OS.has_feature("web"):
-		JavaScriptBridge.eval("window.__ashenOathPrioritizePacks && window.__ashenOathPrioritizePacks(%s)" % JSON.stringify(foreground_pack_ids), true)
+		var result: Variant = JavaScriptBridge.eval("window.__ashenOathPrioritizePacks && window.__ashenOathPrioritizePacks(%s)" % JSON.stringify(foreground_pack_ids), true)
+		if result is String:
+			var active: Variant = JSON.parse_string(result)
+			if active is Array:
+				_bootstrap_downloads.assign(active)
 	var was_scheduling := scheduling_downloads
 	scheduling_downloads = true
 	for id in requests:
@@ -290,7 +305,7 @@ func startup_pack_failures() -> Array[String]:
 	return failures
 
 func startup_pack_progress() -> float:
-	return zone_pack_progress("greyfen")
+	return _required_pack_progress(required_startup_packs())
 
 func set_pack_source(pack_id: String, url: String) -> void:
 	var id := _normalise_id(pack_id)
@@ -476,6 +491,7 @@ func clear_requests() -> void:
 	startup_requested = false
 	background_requested = false
 	foreground_pack_ids.clear()
+	_bootstrap_downloads.clear()
 	scheduling_downloads = was_scheduling
 
 func retire_unneeded_packs(keep_ids: Array[String]) -> void:
@@ -525,6 +541,10 @@ func _start_pending_downloads() -> void:
 			var priority_b := int(requests[b].get("priority", 100))
 			if priority_a != priority_b:
 				return priority_a < priority_b
+			var boot_a := _bootstrap_downloads.has(str(a))
+			var boot_b := _bootstrap_downloads.has(str(b))
+			if boot_a != boot_b:
+				return boot_a
 			return int(get_pack(str(a)).get("preload_priority", 100)) < int(get_pack(str(b)).get("preload_priority", 100))
 		)
 		for value in ordered_ids:
@@ -571,6 +591,7 @@ func _first_active_download_id() -> String:
 	return ""
 
 func _start_download(id: String) -> void:
+	_bootstrap_downloads.erase(id)
 	var request: Dictionary = requests.get(id, {})
 	# Embedded content belongs to the running root, never to an old disk pack.
 	# Ignore any stale base cache rather than mounting extra obsolete resources.
@@ -646,13 +667,7 @@ func _start_download(id: String) -> void:
 	_emit_startup_progress()
 
 func _try_mount_web_preloaded_pack(id: String) -> bool:
-	var raw_metadata := str(JavaScriptBridge.eval(
-		"JSON.stringify((window.__ashenOathPreloadedPacks || {})[%s] || null)" % JSON.stringify(id), true
-	))
-	var parsed: Variant = JSON.parse_string(raw_metadata)
-	if not parsed is Dictionary:
-		return false
-	var metadata := parsed as Dictionary
+	var metadata := _web_preloaded_metadata(id)
 	if str(metadata.get("state", "")) != "preloaded":
 		return false
 	var pack := get_pack(id)
@@ -661,20 +676,24 @@ func _try_mount_web_preloaded_pack(id: String) -> bool:
 	if str(metadata.get("sha256", "")).to_lower() != expected_hash \
 			or int(metadata.get("bytes", 0)) != expected_bytes \
 			or str(metadata.get("version", "")) != str(pack.get("version", "")):
-		return false
+		_reject_web_preloaded_pack(id, "The browser pack identity did not match this release")
+		return true
 	var path := str(metadata.get("path", ""))
 	var file := FileAccess.open(path, FileAccess.READ)
 	if file == null:
-		return false
+		_reject_web_preloaded_pack(id, "The browser could not open the prepared pack")
+		return true
 	var magic := file.get_buffer(4)
 	var actual_bytes := file.get_length()
 	file.close()
 	if actual_bytes != expected_bytes or magic != PackedByteArray([71, 68, 80, 67]):
-		return false
+		_reject_web_preloaded_pack(id, "The browser pack file was incomplete or invalid")
+		return true
 	var request: Dictionary = requests.get(id, {})
 	request["state"] = "mounting"
 	request["progress"] = 0.97
 	request["path"] = path
+	request["browser_verified"] = true
 	requests[id] = request
 	if bool(request.get("cache_only",false)):
 		request["state"] = "cached"
@@ -684,12 +703,13 @@ func _try_mount_web_preloaded_pack(id: String) -> bool:
 	if not _dependencies_ready(id) or not _can_mount_now(id):
 		requests[id]["state"] = "verified"
 		return true
-	_note_background_mount(id)
-	if not ProjectSettings.load_resource_pack(path, false):
-		return false
-	print("LOADING: startup_pack preloaded id=%s bytes=%d" % [id, actual_bytes])
-	_mark_mounted(id, path)
+	if _mount_cached_pack(id, path):
+		print("LOADING: startup_pack preloaded id=%s bytes=%d" % [id, actual_bytes])
 	return true
+
+func _reject_web_preloaded_pack(id: String, message: String) -> void:
+	JavaScriptBridge.eval("window.__ashenOathRejectPreloadedPack && window.__ashenOathRejectPreloadedPack(%s)" % JSON.stringify(id), true)
+	_fail(id, message)
 
 func _resolve_url(raw_url: String) -> String:
 	var url := raw_url.strip_edges()
@@ -778,7 +798,10 @@ func _mount_cached_pack(id: String, path: String) -> bool:
 	request["path"] = path
 	requests[id] = request
 	if not ProjectSettings.load_resource_pack(path, false):
-		_fail(id, "Godot rejected cached resource pack: %s" % path)
+		if bool(request.get("browser_verified", false)):
+			_reject_web_preloaded_pack(id, "Godot rejected the browser pack")
+		else:
+			_fail(id, "Godot rejected cached resource pack: %s" % path)
 		return false
 	_mark_mounted(id, path)
 	return true
@@ -933,7 +956,8 @@ func _process(delta: float) -> void:
 			var id := str(value)
 			if not OS.has_feature("web") or get_state(id) != "shell_loading":
 				continue
-			var state := get_web_preloaded_state(id)
+			var metadata := _web_preloaded_metadata(id)
+			var state := str(metadata.get("state", ""))
 			if state == "cache_skipped":
 				active_downloads.erase(id)
 				requests[id]["state"] = "cache_skipped" if bool(requests[id].get("cache_only",false)) else "queued"
@@ -949,12 +973,9 @@ func _process(delta: float) -> void:
 					_fail(id, "Browser pack handoff identity or file mismatch")
 			elif state in ["failed", "cancelled"]:
 				active_downloads.erase(id)
-				_fail(id, "Browser pack download failed; retry this journey")
+				_fail(id, str(metadata.get("error", "Browser pack download failed; retry this journey")))
 			else:
-				var raw := str(JavaScriptBridge.eval("JSON.stringify((window.__ashenOathPreloadedPacks || {})[%s] || {})" % JSON.stringify(id), true))
-				var metadata: Variant = JSON.parse_string(raw)
-				if metadata is Dictionary:
-					requests[id]["progress"] = clampf(float(metadata.get("progress", 0.0)), 0.0, 0.99)
+				requests[id]["progress"] = clampf(float(metadata.get("progress", 0.0)), 0.0, 0.99)
 			if get_state(id) == "shell_loading" and Time.get_ticks_msec() - int(requests[id].get("started_msec", 0)) > 120000:
 				cancel_request(id)
 				_fail(id, "Pack download timed out; retry this journey")

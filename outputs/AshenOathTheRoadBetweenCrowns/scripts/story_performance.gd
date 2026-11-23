@@ -20,21 +20,21 @@ var page_speaker := ""
 var previous_attention: Dictionary = {}
 
 static func begin(target: Node3D, player: Node3D, _dialogue: Dictionary = {}, state = null) -> void:
-	if target == null or not is_instance_valid(target):
+	if not is_instance_valid(target):
 		return
+	begin_actor(target, player, state)
+	if is_instance_valid(player) and player != target:
+		begin_actor(player, target, state)
+
+static func begin_actor(target: Node3D, partner: Node3D, state = null) -> void:
 	var performance := target.get_node_or_null("StoryPerformance")
+	if performance != null and performance.active:
+		return
 	if performance == null:
 		performance = load("res://scripts/story_performance.gd").new()
 		performance.name = "StoryPerformance"
 		target.add_child(performance)
-	performance.start(target, player, state)
-	if player != null and is_instance_valid(player) and player != target:
-		var player_performance := player.get_node_or_null("StoryPerformance")
-		if player_performance == null:
-			player_performance = load("res://scripts/story_performance.gd").new()
-			player_performance.name = "StoryPerformance"
-			player.add_child(player_performance)
-		player_performance.start(player, target, state)
+	performance.start(target, partner, state)
 
 static func finish(target: Node3D) -> void:
 	if target == null or not is_instance_valid(target):
@@ -48,33 +48,32 @@ static func finish(target: Node3D) -> void:
 				partner_performance.stop()
 		performance.stop()
 
+static func finish_actor(target: Node3D) -> void:
+	if not is_instance_valid(target):
+		return
+	var performance := target.get_node_or_null("StoryPerformance")
+	if performance != null:
+		performance.stop()
+
 static func speaker_matches(identity: String, speaker_id: String) -> bool:
 	if speaker_id == "narrator" or identity.is_empty(): return false
 	var canonical := CastProfile.canonical_identity(identity)
 	if not canonical.is_empty(): return CastProfile.canonical_identity(speaker_id) == canonical
 	return identity == speaker_id
 
-static func page(target: Node3D, entry: Dictionary, audio: Node = null) -> void:
-	if target == null or not is_instance_valid(target):
-		return
+static func page(target: Node3D, entry: Dictionary, audio: Node, speaker: Node3D, eyeline: Node3D, reacts: bool) -> void:
 	var performance := target.get_node_or_null("StoryPerformance")
 	if performance != null:
 		performance.audio_source = audio
-		performance.present_page(entry)
-		var partner: Node3D = performance.listener
-		if is_instance_valid(partner):
-			var partner_performance := partner.get_node_or_null("StoryPerformance")
-			if partner_performance != null and partner_performance.listener == target:
-				partner_performance.audio_source = audio
-				partner_performance.present_page(entry)
+		performance.present_page(entry, target == speaker, eyeline, reacts)
 
-func present_page(entry: Dictionary) -> void:
-	var speaker := str(entry.get("speaker_id", "")).to_lower()
-	page_speaker = speaker
-	delivery_active = false
+func owns_speaker_identity(speaker: String) -> bool:
+	if not active or not is_instance_valid(actor):
+		return false
 	var id := str(profile.get("id", ""))
-	speaking = speaker_matches(id, speaker)
-	if not speaking and id != "kael" and actor.has_method("is_interaction_enabled"):
+	if speaker_matches(id, speaker):
+		return true
+	if id != "kael" and actor.has_method("is_interaction_enabled"):
 		var actor_id := str(actor.get("interaction_id"))
 		var supporting_speakers: Dictionary = {
 			"vargan_gate_guard":["vargan_steward", "merrow"],
@@ -85,15 +84,31 @@ func present_page(entry: Dictionary) -> void:
 			"returned_soldier":["the_returned_soldier", "len"],
 			"white_hart":["white_hart"]
 		}
-		speaking = speaker in supporting_speakers.get(actor_id, [])
+		return speaker in supporting_speakers.get(actor_id, [])
+	return false
+
+func present_page(entry: Dictionary, owns_voice: bool, eyeline: Node3D, reacts: bool) -> void:
+	if not active or not is_instance_valid(actor):
+		return
+	page_speaker = str(entry.get("speaker_id", "")).to_lower()
+	speaking = owns_voice
+	delivery_active = false
 	var direction: Dictionary = entry.get("performance", {})
-	if driver != null:
+	if is_instance_valid(driver):
 		driver.set_story_listening(true)
-	if face != null:
-		var emotion := str(direction.get("emotion" if speaking else "listener_emotion", entry.get("emotion", profile.get("expression", "neutral"))))
-		if emotion != "":
-			face.set_expression(emotion)
-	pending_gesture = str(direction.get("gesture", "")) if speaking else str(direction.get("listener_gesture", "remember" if str(direction.get("emotion", "")) == "grieving" else ""))
+	if is_instance_valid(face):
+		face.clear_story_gesture()
+		face.set_speech_amount(0.0)
+		if is_instance_valid(eyeline):
+			face.set_focus_target(eyeline)
+		var rest_expression := str(profile.get("expression", "neutral"))
+		var emotion := str(direction.get("emotion", entry.get("emotion", rest_expression))) if speaking else str(direction.get("listener_emotion", rest_expression))
+		face.set_expression(emotion if speaking or reacts else rest_expression)
+	pending_gesture = ""
+	if speaking:
+		pending_gesture = str(direction.get("gesture", ""))
+	elif reacts:
+		pending_gesture = str(direction.get("listener_gesture", "remember" if str(direction.get("emotion", "")) == "grieving" else ""))
 	next_beat = elapsed + float(direction.get("reaction_delay", 0.18))
 
 func start(target: Node3D, player: Node3D, state) -> void:
@@ -122,7 +137,7 @@ func start(target: Node3D, player: Node3D, state) -> void:
 	speaking = true
 	elapsed = 0.0
 	next_beat = 2.8
-	# Only the speaking actor's presentation continues through dialogue pause.
+	# Only staged participants' presentation continues through dialogue pause.
 	# Physics, NPC schedules, combat and all surrounding actors remain paused.
 	for node in actor.find_children("*", "", true, false):
 		if node is AnimationPlayer or node is Skeleton3D or node is SkeletonModifier3D or node == driver or node == face or node is Timer and node.get_parent() in [driver, face]:
@@ -148,20 +163,27 @@ func _process(delta: float) -> void:
 		stop()
 		return
 	var delivery: Dictionary = audio_source.get_dialogue_delivery() if is_instance_valid(audio_source) else {}
-	var delivering: bool = speaking and bool(delivery.get("playing", false)) and str(delivery.get("speaker_id", "")).to_lower() == page_speaker
-	if delivering != delivery_active:
+	if bool(delivery.get("paused", false)):
+		if is_instance_valid(face):
+			face.set_speech_amount(0.0)
+		return
+	var delivering: bool = speaking and bool(delivery.get("playing", false)) and speaker_matches(page_speaker, str(delivery.get("speaker_id", "")))
+	# A short line may end while the actor is still completing its gesture.
+	var gesture_finishing := is_instance_valid(driver) and float(driver.story_gesture_remaining) > 0.0
+	if delivering != delivery_active and (delivering or not gesture_finishing):
 		delivery_active = delivering
 		if is_instance_valid(driver): driver.set_story_listening(not delivering)
 	if is_instance_valid(face):
 		face.set_speech_amount(float(delivery.get("amplitude", 0.0)) if delivering else 0.0)
-	if bool(delivery.get("paused", false)): return
 	elapsed += delta
-	if pending_gesture != "" and elapsed >= next_beat:
+	# Listeners can react during a held beat. The speaker's gesture waits for
+	# the scheduled take, or uses the authored delay on a subtitle-only page.
+	if pending_gesture != "" and elapsed >= next_beat and not (speaking and bool(delivery.get("pending", false))):
 		var gesture := pending_gesture
 		pending_gesture = ""
-		if face != null:
+		if is_instance_valid(face):
 			face.play_story_gesture(gesture)
-		if driver != null and gesture in ["offer", "explain", "acknowledge", "disagree", "recall", "remember", "reassure", "guarded_listening"]:
+		if is_instance_valid(driver) and gesture in ["offer", "explain", "acknowledge", "disagree", "recall", "remember", "reassure", "guarded_listening"]:
 			driver.play_story_gesture(gesture, float(profile.get("pace", 0.9)))
 
 func stop() -> void:

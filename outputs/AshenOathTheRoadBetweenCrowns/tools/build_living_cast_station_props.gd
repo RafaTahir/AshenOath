@@ -2,6 +2,7 @@ extends SceneTree
 
 ## Compile only the reviewed, retained stationary satchel. No world is built.
 const OUTPUT := "res://assets_external/environment_prepared/living_cast/"
+const RETAINED_BAG := "res://assets_external/environment/props/Bag.obj"
 
 func _initialize() -> void:
 	call_deferred("_compile")
@@ -27,7 +28,10 @@ func _compile() -> void:
 	if not receipt is Dictionary or str(receipt.get("carrier_sha256", "")) != FileAccess.get_sha256(source):
 		_fail("Station satchel source no longer matches its authored receipt")
 		return
-	if FileAccess.get_sha256(str(receipt.source)) != str(receipt.source_sha256):
+	# The authoring receipt records its original workstation path. Verify the
+	# same Bag bytes inside the project that is compiling this carrier.
+	var retained_source_sha256 := FileAccess.get_sha256(RETAINED_BAG)
+	if retained_source_sha256.is_empty() or retained_source_sha256 != str(receipt.source_sha256):
 		_fail("Station satchel retained Bag source changed")
 		return
 	var document := GLTFDocument.new()
@@ -87,6 +91,7 @@ func _compile() -> void:
 		return
 	var report := {"status": "compiled", "path": output, "sha256": FileAccess.get_sha256(output),
 		"source_sha256": FileAccess.get_sha256(source), "resources": resources,
+		"retained_source": RETAINED_BAG, "retained_source_sha256": retained_source_sha256,
 		"body_bounds_verified": true, "attached_grips_verified": true, "runtime_verified": false, "user_accepted": false}
 	var report_file := FileAccess.open(folder.path_join("satchel_compile.json"), FileAccess.WRITE)
 	if report_file == null:

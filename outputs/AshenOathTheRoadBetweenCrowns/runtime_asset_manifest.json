@@ -10560,6 +10560,23 @@
       }
     },
     {
+      "id": "greyfen_social_collision",
+      "status": "compiled_exact_authored_mesh_collision",
+      "path": "res://data/prepared_greyfen_social_collision.res",
+      "bytes": 133184,
+      "sha256": "d900757b046883215557ad1d48d0e06b3f94f26b5b2f8f21133933195a5e6421",
+      "source_pack": "Quaternius Fantasy Props MegaKit",
+      "license": "CC0 1.0",
+      "license_file": "res://assets_external/licenses/quaternius_fantasy_props_megakit/License_Standard.txt",
+      "build_tool": "res://tools/build_greyfen_social.gd",
+      "pack_owner": "opening",
+      "source_mesh_sha256": {
+        "res://assets_external/environment/props/GreyfenSocial_common_table.res": "6c0322321bdc345430d7aa5373ed9d3908ca23532aa3551058bf26d44f43820a",
+        "res://assets_external/environment/props/GreyfenSocial_barrel_board.res": "3985471b41fd7e86712b849caa65346e7cb155f0516b7df0b20131581bd579d8",
+        "res://assets_external/environment/props/GreyfenSocial_mira_apothecary.res": "e7e0ccfcf7bc48d87aa666f8e0ed52b15d58c1540b2c04228c3769d972f28213"
+      }
+    },
+    {
       "id": "greyfen_social_common_table",
       "status": "refined_static_rebake_pending_regional_user_review",
       "path": "res://assets_external/environment/props/GreyfenSocial_common_table.res",

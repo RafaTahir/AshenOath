@@ -1,7 +1,5 @@
 extends RefCounted
 
-const Prepared = preload("res://scripts/prepared_zone_geometry.gd")
-
 static func integrate(root: Node3D) -> bool:
 	var ground_visuals: Array[MeshInstance3D] = []
 	for candidate in root.find_children("*", "MeshInstance3D", true, false):
@@ -13,13 +11,13 @@ static func integrate(root: Node3D) -> bool:
 		return false
 	for index in ground_visuals.size():
 		var visual := ground_visuals[index]
-		var size: Vector3 = visual.get_meta("split_ground_size")
-		var origin: Vector3 = visual.get_meta("split_ground_origin")
+		if visual.mesh == null:
+			push_error("Wychwood split ground lacks its prepared geometry")
+			return false
 		var source_material := visual.material_override as StandardMaterial3D
 		if source_material == null or source_material.albedo_texture == null:
 			push_error("Wychwood split ground lacks its authored forest material")
 			return false
-		visual.mesh = Prepared.mesh("wychwood_ground_" + Prepared.geometry_key(size, origin))
 		var material := source_material.duplicate() as StandardMaterial3D
 		material.resource_name = "WychwoodIntegratedTerrain"
 		material.vertex_color_use_as_albedo = true

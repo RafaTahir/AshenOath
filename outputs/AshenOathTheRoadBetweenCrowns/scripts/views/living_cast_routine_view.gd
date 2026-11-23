@@ -43,7 +43,33 @@ func _routine_route(entry: Dictionary, destination: Vector3) -> Array[Vector3]:
 	if first.is_empty() or last.is_empty():
 		return []
 	first.append_array(last.slice(1))
-	return first
+	return _fit_table_route(first)
+
+func _fit_table_route(route: Array[Vector3]) -> Array[Vector3]:
+	var spatial: Node = _life.spatial_service
+	var fitted: Array[Vector3] = [route[0]]
+	const CLEARANCE := 0.58
+	for point: Vector3 in route.slice(1):
+		var start := fitted.back() as Vector3
+		if not spatial.validate_runtime_segment(start, point, CLEARANCE):
+			var bank: int = spatial.bank_for(start)
+			if spatial.bank_for(point) != bank:
+				return []
+			var midpoint := (start + point) * 0.5
+			var side := (point - start).cross(Vector3.UP).normalized()
+			var bend := Vector3.INF
+			for offset: float in [-1.4, 1.4, -2.4, 2.4]:
+				var candidate := midpoint + side * offset
+				if spatial.bank_for(candidate) == bank and spatial.is_walkable_position(candidate, CLEARANCE, bank) \
+						and spatial.validate_runtime_segment(start, candidate, CLEARANCE) \
+						and spatial.validate_runtime_segment(candidate, point, CLEARANCE):
+					bend = candidate
+					break
+			if bend == Vector3.INF:
+				return []
+			fitted.append(bend)
+		fitted.append(point)
+	return fitted
 
 func _sync_story_state(force: bool) -> void:
 	if _life.host == null:

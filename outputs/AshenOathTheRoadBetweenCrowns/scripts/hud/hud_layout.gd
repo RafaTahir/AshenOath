@@ -24,6 +24,12 @@ func _hud_text_height(label: Label, reserved_lines: int = -1) -> float:
 	var padding: float = style.get_minimum_size().y if style != null else 0.0
 	return ceilf(lines * label.get_line_height() + maxi(0, lines - 1) * (spacing + paragraphs) + padding)
 
+func _fit_hud_lines(label: Label, height: float, max_lines: int) -> int:
+	var lines := maxi(1, max_lines)
+	while lines > 1 and _hud_text_height(label, lines) > height:
+		lines -= 1
+	return lines
+
 func set_display_metrics(metrics: Dictionary) -> void:
 	if metrics == _display_metrics:
 		return
@@ -407,6 +413,10 @@ func _apply_responsive_gameplay(policy: Dictionary) -> void:
 	var fonts: Dictionary = policy.fonts
 	var touch: bool = input_device == "touch"
 	prompt_label.max_lines_visible = 3 if touch else 2
+	hint_label.max_lines_visible = 2
+	status_label.max_lines_visible = -1
+	toast_label.max_lines_visible = 3
+	write_tag(notice_category_label, "fits_message", true)
 	var touch_model: Dictionary = MobileTouchLayout.build(Vector2(GAMEPLAY_SIZE), _display_metrics) if touch else {}
 	var reserved_bottom: float = float(touch_model.get("bottom_reserved_display", 0.0)) * unit
 	var margin: float = (12.0 if compact else 24.0) * unit
@@ -480,7 +490,12 @@ func _apply_responsive_gameplay(policy: Dictionary) -> void:
 	tracker_title_label.add_theme_font_size_override("font_size", int(fonts.body))
 	tracker_title_label.size.x = quest_width
 	var title_height: float = maxf((42.0 if not compact else 25.0) * unit, _hud_text_height(tracker_title_label, 2) + 2.0 * unit)
-	var show_title: bool = not compact or room_below >= 140.0 * unit
+	tracker_label.add_theme_font_size_override("font_size", int(fonts.body))
+	tracker_label.size.x = maxf(0.0, quest_width - 22.0 * unit)
+	tracker_label.max_lines_visible = -1
+	var minimum_line := _hud_text_height(tracker_label, 1)
+	var action_needed := _hud_text_height(tracker_label) + 2.0 * unit
+	var show_title := (not compact or room_below >= 140.0 * unit) and title_height + 13.0 * unit + action_needed <= room_below
 	tracker_title_label.visible = show_title
 	tracker_title_label.position = Vector2(quest_x, quest_y)
 	tracker_title_label.size = Vector2(quest_width, title_height)
@@ -489,10 +504,12 @@ func _apply_responsive_gameplay(policy: Dictionary) -> void:
 	_quest_rule.position = Vector2(quest_x, quest_y + title_height + 2.0 * unit)
 	_quest_rule.size = Vector2(minf(90.0 * unit, quest_width), maxf(1.0, unit))
 	var action_y: float = quest_y + title_height + 13.0 * unit if show_title else quest_y
-	tracker_label.add_theme_font_size_override("font_size", int(fonts.body))
-	tracker_label.size.x = maxf(0.0, quest_width - 22.0 * unit)
-	var action_needed: float = _hud_text_height(tracker_label) + 2.0 * unit
-	var action_height: float = minf(maxf((78.0 if not compact else 66.0) * unit, action_needed), maxf(32.0 * unit, room_below - (action_y - quest_y)))
+	var action_room := maxf(0.0, quest_y + room_below - action_y)
+	var action_lines := _fit_hud_lines(tracker_label, action_room, tracker_label.get_line_count())
+	var action_height := minf(action_room, _hud_text_height(tracker_label, action_lines) + 2.0 * unit)
+	tracker_label.visible = action_room >= minimum_line and tracker_label.text != ""
+	tracker_label.max_lines_visible = action_lines
+	_quest_marker.visible = tracker_label.visible
 	_quest_marker.position = Vector2(quest_x - 2.0 * unit, action_y + 2.0 * unit)
 	_quest_marker.size = Vector2(20.0 * unit, 24.0 * unit)
 	_quest_marker.add_theme_font_size_override("font_size", int(fonts.caption))
@@ -502,22 +519,29 @@ func _apply_responsive_gameplay(policy: Dictionary) -> void:
 	for label: Label in [tracker_route_label, tracker_work_label, tracker_footer_label]:
 		label.add_theme_font_size_override("font_size", int(fonts.caption))
 	# Reserve complete caption lines, including the active font's metrics and spacing.
-	var route_height: float = maxf(42.0 * unit, _hud_text_height(tracker_route_label, 2) + 2.0 * unit)
-	var work_height: float = maxf(38.0 * unit, _hud_text_height(tracker_work_label, 2) + 2.0 * unit)
-	var work_y: float = route_y + route_height + 2.0 * unit
-	var footer_y: float = work_y + work_height + 4.0 * unit
-	var footer_height: float = maxf(24.0 * unit, _hud_text_height(tracker_footer_label, 1) + 2.0 * unit)
+	tracker_route_label.text = view.quest_panel.route_caption(compact)
+	tracker_route_label.max_lines_visible = 1 if compact else 2
+	var route_height := _hud_text_height(tracker_route_label, tracker_route_label.max_lines_visible) + 2.0 * unit
+	var work_height := _hud_text_height(tracker_work_label, 2) + 2.0 * unit
+	var footer_height := _hud_text_height(tracker_footer_label, 1) + 2.0 * unit
+	var panel_end := action_y + action_height
 	tracker_route_label.position = Vector2(quest_x + 22.0 * unit, route_y)
 	tracker_route_label.size = Vector2(quest_width - 22.0 * unit, route_height)
-	tracker_route_label.visible = not compact and route_y + route_height <= quest_y + room_below
+	tracker_route_label.visible = tracker_label.visible and tracker_route_label.text != "" and route_y + route_height <= quest_y + room_below
+	if tracker_route_label.visible: panel_end = route_y + route_height
+	var work_y := panel_end + 2.0 * unit
 	tracker_work_label.position = Vector2(quest_x + 22.0 * unit, work_y)
 	tracker_work_label.size = Vector2(quest_width - 22.0 * unit, work_height)
-	tracker_work_label.visible = not compact and work_y + work_height <= quest_y + room_below
+	tracker_work_label.visible = tracker_label.visible and not compact and tracker_work_label.text != "" and work_y + work_height <= quest_y + room_below
+	if tracker_work_label.visible: panel_end = work_y + work_height
+	var footer_y := panel_end + 4.0 * unit
 	tracker_footer_label.position = Vector2(quest_x + 22.0 * unit, footer_y)
 	tracker_footer_label.size = Vector2(quest_width - 22.0 * unit, footer_height)
-	tracker_footer_label.visible = not compact and not touch and footer_y + footer_height <= quest_y + room_below
+	tracker_footer_label.visible = tracker_label.visible and not compact and not touch and footer_y + footer_height <= quest_y + room_below
+	if tracker_footer_label.visible: panel_end = footer_y + footer_height
 	tracker_back.position = Vector2(quest_x - 8.0 * unit, quest_y - 6.0 * unit)
-	tracker_back.size = Vector2(quest_width + 16.0 * unit, minf(room_below, (258.0 if not compact else 118.0) * unit))
+	tracker_back.size = Vector2(quest_width + 16.0 * unit, panel_end - quest_y + 6.0 * unit)
+	tracker_back.visible = tracker_label.visible
 	var slot_width: float = (86.0 if compact else 94.0) * unit
 	var slot_height: float = 116.0 * unit
 	var slots_visible: bool = not (touch and compact)
@@ -635,9 +659,16 @@ func _apply_touch_gameplay_regions(model: Dictionary, unit: float) -> void:
 	hint_label.position = messages.position
 	hint_label.size = messages.size
 	notice_category_label.position = messages.position
-	notice_category_label.size = Vector2(messages.size.x, 20.0 * unit)
-	toast_label.position = messages.position + Vector2(0, 22.0 * unit)
-	toast_label.size = Vector2(messages.size.x, maxf(0.0, messages.size.y - 22.0 * unit))
+	var header_height := _hud_text_height(notice_category_label, 1) + 2.0 * unit
+	var header_fits := messages.size.y >= header_height + _hud_text_height(toast_label, 1)
+	var body_offset := header_height if header_fits else 0.0
+	write_tag(notice_category_label, "fits_message", header_fits)
+	notice_category_label.size = Vector2(messages.size.x, header_height)
+	toast_label.position = messages.position + Vector2(0, body_offset)
+	toast_label.size = Vector2(messages.size.x, maxf(0.0, messages.size.y - body_offset))
+	toast_label.max_lines_visible = _fit_hud_lines(toast_label, toast_label.size.y, 3)
+	hint_label.max_lines_visible = _fit_hud_lines(hint_label, messages.size.y, 2)
+	status_label.max_lines_visible = _fit_hud_lines(status_label, messages.size.y, 2)
 	notice_back.position = messages.position - Vector2(4, 2) * unit
 	notice_back.size = messages.size + Vector2(8, 4) * unit
 	_refresh_touch_message_visibility()
@@ -645,13 +676,35 @@ func _apply_touch_gameplay_regions(model: Dictionary, unit: float) -> void:
 func _refresh_touch_message_visibility() -> void:
 	if hint_label == null or status_label == null:
 		return
-	var notice_visible := toast_label != null and toast_label.visible
 	var blocked := _gameplay_surface_blocked()
 	var shared: bool = input_device == "touch" or _touch_shared_prompt
-	hint_label.visible = not blocked and (not shared or not notice_visible) and _hint_remaining > 0.0 and raw_hint != ""
-	status_label.visible = not blocked and (not shared or (not notice_visible and not hint_label.visible)) and _status_remaining > 0.0
-	var message_visible: bool = notice_visible or hint_label.visible or status_label.visible
-	prompt_label.visible = not blocked and raw_prompt != "" and not (_touch_shared_prompt and message_visible)
+	var critical_notice := str(_notice_active.get("category", "")) in ["error", "unavailable"]
+	var show_notice := not blocked and not _notice_active.is_empty() and str(_notice_active.get("text", "")) != "" \
+		and (not toasts_suppressed or critical_notice)
+	var show_hint := not blocked and _hint_remaining > 0.0 and raw_hint != ""
+	var show_status := not blocked and _status_remaining > 0.0
+	var show_prompt := not blocked and raw_prompt != ""
+	if shared:
+		var immediate_cue := show_status and _status_kind in ["danger", "parry", "block", "hurt", "stamina", "victory"]
+		if _touch_shared_prompt and show_prompt:
+			show_notice = false
+			show_hint = false
+			show_status = false
+		elif immediate_cue or (show_notice and critical_notice):
+			show_notice = show_notice and critical_notice
+			show_status = immediate_cue and not show_notice
+			show_hint = false
+		else:
+			show_hint = show_hint and not show_notice
+			show_status = show_status and not show_notice and not show_hint
+	toast_label.visible = show_notice
+	if notice_category_label != null:
+		notice_category_label.visible = show_notice and bool(read_tag(notice_category_label, "fits_message", true))
+	if notice_back != null:
+		notice_back.visible = show_notice
+	hint_label.visible = show_hint
+	status_label.visible = show_status
+	prompt_label.visible = show_prompt
 	if prompt_back != null:
 		prompt_back.visible = prompt_label.visible
 

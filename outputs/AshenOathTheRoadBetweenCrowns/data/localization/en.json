@@ -6509,52 +6509,52 @@
       "context": "dialogue.sister_anwen.actions.4"
     },
     "dialogue.sister_anwen.greeting": {
-      "source": "Mind the cup on the step. The man from the south road needs it more than I need a clean floor.",
-      "text": "Mind the cup on the step. The man from the south road needs it more than I need a clean floor.",
+      "source": "Mind the cup on the step. Elna needs it more than I need a clean floor.",
+      "text": "Mind the cup on the step. Elna needs it more than I need a clean floor.",
       "speaker": "",
       "context": "dialogue.sister_anwen"
     },
-    "dialogue.sister_anwen.lines.0": {
-      "source": "Kael: Three people missing?",
-      "text": "Kael: Three people missing?",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.lines"
+    "dialogue.sister_anwen.lines.0.text": {
+      "source": "Three people missing?",
+      "text": "Three people missing?",
+      "speaker": "Kael",
+      "context": "dialogue.sister_anwen.lines.0"
     },
-    "dialogue.sister_anwen.lines.1": {
-      "source": "Anwen: Bram drove. Sella had Oren beside her. He left his coat here because the sun was out.",
-      "text": "Anwen: Bram drove. Sella had Oren beside her. He left his coat here because the sun was out.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.lines"
+    "dialogue.sister_anwen.lines.1.text": {
+      "source": "Bram drove. Sella had Oren beside her. He left his coat here because the sun was out.",
+      "text": "Bram drove. Sella had Oren beside her. He left his coat here because the sun was out.",
+      "speaker": "Anwen",
+      "context": "dialogue.sister_anwen.lines.1"
     },
-    "dialogue.sister_anwen.lines.2": {
-      "source": "Anwen: Take the north road into Wychwood. Look for their cart, then bring me what you find. They have people waiting here.",
-      "text": "Anwen: Take the north road into Wychwood. Look for their cart, then bring me what you find. They have people waiting here.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.lines"
+    "dialogue.sister_anwen.lines.2.text": {
+      "source": "Take the north road into Wychwood. Look for their cart, then bring me what you find. They have people waiting here.",
+      "text": "Take the north road into Wychwood. Look for their cart, then bring me what you find. They have people waiting here.",
+      "speaker": "Anwen",
+      "context": "dialogue.sister_anwen.lines.2"
     },
-    "dialogue.sister_anwen.lines.3": {
-      "source": "Anwen: They found old wooden tokens where the road was being repaired. Sella asked me to read one. I did.",
-      "text": "Anwen: They found old wooden tokens where the road was being repaired. Sella asked me to read one. I did.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.lines"
+    "dialogue.sister_anwen.lines.3.text": {
+      "source": "They found old wooden tokens where the road was being repaired. Sella asked me to read one. I did.",
+      "text": "They found old wooden tokens where the road was being repaired. Sella asked me to read one. I did.",
+      "speaker": "Anwen",
+      "context": "dialogue.sister_anwen.lines.3"
     },
-    "dialogue.sister_anwen.lines.4": {
-      "source": "Kael: What happened when you read it?",
-      "text": "Kael: What happened when you read it?",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.lines"
+    "dialogue.sister_anwen.lines.4.text": {
+      "source": "What happened when you read it?",
+      "text": "What happened when you read it?",
+      "speaker": "Kael",
+      "context": "dialogue.sister_anwen.lines.4"
     },
-    "dialogue.sister_anwen.lines.5": {
-      "source": "Anwen: The candles went out. I sent them away while I found a rite I thought would keep them safe.",
-      "text": "Anwen: The candles went out. I sent them away while I found a rite I thought would keep them safe.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.lines"
+    "dialogue.sister_anwen.lines.5.text": {
+      "source": "The candles went out. I sent them away while I found a rite I thought would keep them safe.",
+      "text": "The candles went out. I sent them away while I found a rite I thought would keep them safe.",
+      "speaker": "Anwen",
+      "context": "dialogue.sister_anwen.lines.5"
     },
-    "dialogue.sister_anwen.lines.6": {
-      "source": "Anwen: If you find red thread around black feathers, keep it intact. I tied it. I owe you that much before you go.",
-      "text": "Anwen: If you find red thread around black feathers, keep it intact. I tied it. I owe you that much before you go.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.lines"
+    "dialogue.sister_anwen.lines.6.text": {
+      "source": "If you find red thread around black feathers, keep it intact. I tied it. I owe you that much before you go.",
+      "text": "If you find red thread around black feathers, keep it intact. I tied it. I owe you that much before you go.",
+      "speaker": "Anwen",
+      "context": "dialogue.sister_anwen.lines.6"
     },
     "dialogue.sister_anwen.name": {
       "source": "Sister Anwen",
@@ -9238,23 +9238,23 @@
       "speaker": "Narrator",
       "context": "interaction_scenes.opening_care_coat.lines.0"
     },
-    "interaction_scenes.opening_care_coat.lines.1": {
-      "source": "Kael: Did you mend this?",
-      "text": "Kael: Did you mend this?",
-      "speaker": "",
-      "context": "interaction_scenes.opening_care_coat.lines"
+    "interaction_scenes.opening_care_coat.lines.1.text": {
+      "source": "Did you mend this?",
+      "text": "Did you mend this?",
+      "speaker": "Kael",
+      "context": "interaction_scenes.opening_care_coat.lines.1"
     },
-    "interaction_scenes.opening_care_coat.lines.2": {
-      "source": "Anwen: He did. I threaded the needle. He would not let me do the rest.",
-      "text": "Anwen: He did. I threaded the needle. He would not let me do the rest.",
-      "speaker": "",
-      "context": "interaction_scenes.opening_care_coat.lines"
+    "interaction_scenes.opening_care_coat.lines.2.text": {
+      "source": "He did. I threaded the needle. He would not let me do the rest.",
+      "text": "He did. I threaded the needle. He would not let me do the rest.",
+      "speaker": "Anwen",
+      "context": "interaction_scenes.opening_care_coat.lines.2"
     },
-    "interaction_scenes.opening_care_coat.lines.3": {
-      "source": "Anwen: Bram drove the cart. Sella took Oren beside her. He left this because the sun was out.",
-      "text": "Anwen: Bram drove the cart. Sella took Oren beside her. He left this because the sun was out.",
-      "speaker": "",
-      "context": "interaction_scenes.opening_care_coat.lines"
+    "interaction_scenes.opening_care_coat.lines.3.text": {
+      "source": "Bram drove the cart. Sella took Oren beside her. He left this because the sun was out.",
+      "text": "Bram drove the cart. Sella took Oren beside her. He left this because the sun was out.",
+      "speaker": "Anwen",
+      "context": "interaction_scenes.opening_care_coat.lines.3"
     },
     "interaction_scenes.opening_care_coat.lines.4.text": {
       "source": "Anwen leaves room on the bench beside the coat. She has not put it away.",
@@ -9286,17 +9286,17 @@
       "speaker": "",
       "context": "interaction_scenes.opening_care_invitation"
     },
-    "interaction_scenes.opening_care_invitation.lines.0": {
-      "source": "Anwen: The cup is on the step. Leave it on the linen by her hand, if you would.",
-      "text": "Anwen: The cup is on the step. Leave it on the linen by her hand, if you would.",
-      "speaker": "",
-      "context": "interaction_scenes.opening_care_invitation.lines"
+    "interaction_scenes.opening_care_invitation.lines.0.text": {
+      "source": "The cup is on the step. Leave it on the linen by her hand, if you would.",
+      "text": "The cup is on the step. Leave it on the linen by her hand, if you would.",
+      "speaker": "Anwen",
+      "context": "interaction_scenes.opening_care_invitation.lines.0"
     },
-    "interaction_scenes.opening_care_invitation.lines.1": {
-      "source": "Anwen: And that little coat on the bench belongs under the shelf. Oren will complain if I let the rain into his pockets.",
-      "text": "Anwen: And that little coat on the bench belongs under the shelf. Oren will complain if I let the rain into his pockets.",
-      "speaker": "",
-      "context": "interaction_scenes.opening_care_invitation.lines"
+    "interaction_scenes.opening_care_invitation.lines.1.text": {
+      "source": "And that little coat on the bench belongs under the shelf. Oren will complain if I let the rain into his pockets.",
+      "text": "And that little coat on the bench belongs under the shelf. Oren will complain if I let the rain into his pockets.",
+      "speaker": "Anwen",
+      "context": "interaction_scenes.opening_care_invitation.lines.1"
     },
     "interaction_scenes.opening_care_invitation.name": {
       "source": "Anwen",
@@ -9310,11 +9310,11 @@
       "speaker": "",
       "context": "interaction_scenes.opening_care_invitation.variants.0"
     },
-    "interaction_scenes.opening_care_invitation.variants.0.lines.0": {
-      "source": "Anwen: Would you move that little coat under the shelf? Oren left it here this morning. He said he would be too hot.",
-      "text": "Anwen: Would you move that little coat under the shelf? Oren left it here this morning. He said he would be too hot.",
-      "speaker": "",
-      "context": "interaction_scenes.opening_care_invitation.variants.0.lines"
+    "interaction_scenes.opening_care_invitation.variants.0.lines.0.text": {
+      "source": "Would you move that little coat under the shelf? Oren left it here this morning. He said he would be too hot.",
+      "text": "Would you move that little coat under the shelf? Oren left it here this morning. He said he would be too hot.",
+      "speaker": "Anwen",
+      "context": "interaction_scenes.opening_care_invitation.variants.0.lines.0"
     },
     "interaction_scenes.opening_care_invitation.variants.1.greeting": {
       "source": "You found a dry place for his coat. Thank you.",
@@ -9322,11 +9322,11 @@
       "speaker": "",
       "context": "interaction_scenes.opening_care_invitation.variants.1"
     },
-    "interaction_scenes.opening_care_invitation.variants.1.lines.0": {
-      "source": "Anwen: Elna needs the cup on the step. Leave it on the linen by her hand, if you would.",
-      "text": "Anwen: Elna needs the cup on the step. Leave it on the linen by her hand, if you would.",
-      "speaker": "",
-      "context": "interaction_scenes.opening_care_invitation.variants.1.lines"
+    "interaction_scenes.opening_care_invitation.variants.1.lines.0.text": {
+      "source": "Elna needs the cup on the step. Leave it on the linen by her hand, if you would.",
+      "text": "Elna needs the cup on the step. Leave it on the linen by her hand, if you would.",
+      "speaker": "Anwen",
+      "context": "interaction_scenes.opening_care_invitation.variants.1.lines.0"
     },
     "interaction_scenes.opening_care_water.greeting": {
       "source": "There. Close enough that she need not ask again.",
@@ -9340,17 +9340,17 @@
       "speaker": "Narrator",
       "context": "interaction_scenes.opening_care_water.lines.0"
     },
-    "interaction_scenes.opening_care_water.lines.1": {
-      "source": "Kael: Was Elna with the missing cart?",
-      "text": "Kael: Was Elna with the missing cart?",
-      "speaker": "",
-      "context": "interaction_scenes.opening_care_water.lines"
+    "interaction_scenes.opening_care_water.lines.1.text": {
+      "source": "Was Elna with the missing cart?",
+      "text": "Was Elna with the missing cart?",
+      "speaker": "Kael",
+      "context": "interaction_scenes.opening_care_water.lines.1"
     },
-    "interaction_scenes.opening_care_water.lines.2": {
-      "source": "Anwen: No. A fall on the south road. Not every hurt here is a sign, Kael. Some people only need water.",
-      "text": "Anwen: No. A fall on the south road. Not every hurt here is a sign, Kael. Some people only need water.",
-      "speaker": "",
-      "context": "interaction_scenes.opening_care_water.lines"
+    "interaction_scenes.opening_care_water.lines.2.text": {
+      "source": "No. A fall on the south road. Not every hurt here is a sign, Kael. Some people only need water.",
+      "text": "No. A fall on the south road. Not every hurt here is a sign, Kael. Some people only need water.",
+      "speaker": "Anwen",
+      "context": "interaction_scenes.opening_care_water.lines.2"
     },
     "interaction_scenes.opening_care_water.lines.3.text": {
       "source": "The cup comes back to the linen. For a moment, the breathing behind the screen is easier.",

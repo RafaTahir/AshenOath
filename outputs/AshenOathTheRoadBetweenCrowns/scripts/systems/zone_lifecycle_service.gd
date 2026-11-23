@@ -3,6 +3,8 @@ signal zone_changed(zone_id: String)
 
 const RuntimePacks = preload("res://scripts/runtime_pack_manager.gd")
 
+var _zone_audio_generation := 0
+
 func _request_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
 	if not world_transition.can_request_travel() or _journey_load_pending():
 		return
@@ -53,7 +55,7 @@ func request_seamless_boundary_transition(zone_id: String, spawn_pos: Vector3, e
 	requested_zone_spawn = spawn_pos
 	loading_started_usec = Time.get_ticks_usec()
 	zone_load_request_pending = false
-	if seamless_world != null and not seamless_world.uses_prepared_roads() and hud != null:
+	if hud != null and (seamless_world == null or seamless_world.crossing_for(target).is_empty()):
 		hud.arm_loading("Travelling to " + _zone_display_name(target) + "...")
 	player.set_transition_locked(true)
 	_perform_direct_zone_load(target, spawn_pos)
@@ -61,8 +63,8 @@ func request_seamless_boundary_transition(zone_id: String, spawn_pos: Vector3, e
 
 func _wait_for_playable_road(target: String, retry: bool = false) -> bool:
 	if not game_started or seamless_world == null or not is_instance_valid(zone_root): return false
-	if not seamless_world.uses_prepared_roads(): return false
-	if WorldSectorManifest.connection_between(current_zone_id,target).is_empty(): return false
+	var road := WorldSectorManifest.connection_between(current_zone_id,target)
+	if not seamless_world.requires_prepared_road(road): return false
 	if seamless_world.has_prepared(target): return false
 	seamless_world.request_road(target,retry)
 	return true
@@ -473,28 +475,33 @@ func _advance_zone_transition() -> void:
 	zone_runtime_coordinator.advance_transition()
 	_finish_gameplay_handoff()
 
-func _apply_zone_audio(zone_id: String) -> void:
+func _apply_zone_audio(zone_id: String, expected_music_request: int = -1) -> void:
 	if audio == null or zone_id == "":
 		return
+	_zone_audio_generation += 1
+	var deferred := expected_music_request >= 0
+	var preserve_music: bool = deferred and audio.music_request_generation != expected_music_request
 	audio.prepare_destination(zone_id, story_state)
-	audio.play_ambient(zone_id)
-	audio.set_music_state(audio.music_state_for_zone(zone_id))
-	audio.set_story_context(story_state, zone_id)
+	audio.play_ambient(zone_id, deferred)
+	audio.set_story_context(story_state, zone_id, preserve_music)
+	if not preserve_music:
+		audio.set_music_state(audio.music_state_for_zone(zone_id))
 	if zone_id == "greyfen":
 		audio.play_event("shrine_hum", 0.01)
 
 func _schedule_deferred_zone_audio(zone_id: String, root: Node3D) -> void:
-	if root == null or not is_instance_valid(root) or not bool(root.get_meta("zone_audio_pending", false)):
+	if audio == null or root == null or not is_instance_valid(root) or not bool(root.get_meta("zone_audio_pending", false)):
 		return
 	root.set_meta("zone_audio_pending", false)
-	_host.call_deferred("_finish_deferred_zone_audio", zone_id, root)
+	_zone_audio_generation += 1
+	_host.call_deferred("_finish_deferred_zone_audio", zone_id, root, _zone_audio_generation, audio.music_request_generation)
 
-func _finish_deferred_zone_audio(zone_id: String, root: Node3D) -> void:
+func _finish_deferred_zone_audio(zone_id: String, root: Node3D, generation: int, music_request: int) -> void:
 	var delay_timer := _create_owned_timer(0.45, true)
 	await delay_timer.timeout
-	if resource_shutdown_prepared or not game_started or current_zone_id != zone_id or zone_root != root:
+	if resource_shutdown_prepared or not game_started or generation != _zone_audio_generation or current_zone_id != zone_id or zone_root != root:
 		return
-	_apply_zone_audio(zone_id)
+	_apply_zone_audio(zone_id, music_request)
 
 func _activate_prewarmed_player_runtime() -> void:
 	if not game_started or current_zone_id != "greyfen" or player == null or not is_instance_valid(player):
@@ -540,6 +547,7 @@ func _publish_zone_arrival(zone_id: String, root: Node3D) -> void:
 	StoryWorldDirector.decorate(_host, root, zone_id)
 	CovenantResolution.restore(_host)
 	_persist_story_action()
+	_host.call_deferred("_finish_covenant_if_ready")
 
 func _finish_prewarmed_greyfen_runtime() -> void:
 	if not game_started or current_zone_id != "greyfen" or zone_root == null or not is_instance_valid(zone_root):
@@ -579,13 +587,14 @@ func _valid_cached_enemies(entries: Array) -> Array:
 	return zone_residency._valid_cached_enemies(entries)
 
 func _zone_state_signature(zone_id: String = current_zone_id) -> int:
-	var quest_world_state: Dictionary = quests.world_signature_state(zone_id).duplicate(true) if quests != null else {}
-	quest_world_state.erase("tracked_quest_id")
-	quest_world_state.erase("tracker_context_zone")
-	var story_world_state: Dictionary = story_state.world_signature_state(zone_id).duplicate(true) if story_state != null else {}
+	var quest_world_state: Dictionary = quests.world_signature_state(zone_id) if quests != null else {}
+	var story_world_state: Dictionary = story_state.world_signature_state(zone_id) if story_state != null else {}
 	if story_world_state.get("flags") is Dictionary:
-		# Companion position/command is reinstalled separately, not world geometry.
-		story_world_state.flags.erase("bracken_travel")
+		# Live companion movement and clothing wear do not change zone construction.
+		var zone_flags: Dictionary = story_world_state.flags.duplicate()
+		zone_flags.erase("bracken_travel")
+		zone_flags.erase("everyday_wear")
+		story_world_state.flags = zone_flags
 	var zone_removed: Dictionary = {}
 	for key: String in removed_interactions:
 		if key.begins_with(zone_id + ":"): zone_removed[key] = removed_interactions[key]
@@ -721,9 +730,18 @@ func _remove_root_from_route_cache(root: Node) -> void:
 
 func _trim_route_zone_cache(preferred_ids: Array) -> void:
 	zone_residency._trim_route_zone_cache(preferred_ids)
-	preload("res://scripts/prepared_zone_geometry.gd").retain_zone_scopes([current_zone_id] + route_zone_cache.keys())
+	_retain_zone_resource_scopes()
+
+func _retain_zone_resource_scopes() -> void:
+	if resource_shutdown_prepared:
+		return
+	var zones := [current_zone_id] + route_zone_cache.keys()
+	if is_instance_valid(seamless_world):
+		var preparing_zone: String = seamless_world.preparing_zone_id()
+		if not preparing_zone.is_empty(): zones.append(preparing_zone)
+	preload("res://scripts/prepared_zone_geometry.gd").retain_zone_scopes(zones)
 	if asset_helper != null:
-		asset_helper.retain_zone_scopes([current_zone_id] + route_zone_cache.keys())
+		asset_helper.retain_zone_scopes(zones)
 
 func _set_zone_collision_enabled(node: Node, enabled: bool) -> void:
 	zone_residency._set_zone_collision_enabled(node, enabled)

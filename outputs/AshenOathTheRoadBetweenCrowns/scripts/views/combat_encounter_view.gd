@@ -76,7 +76,7 @@ func _on_enemy_died(enemy: Variant) -> void:
 			_actor.quests.complete_objective("main_road_of_crows", "fight_ghoulkin")
 			_actor.story_state.set_flag("wychwood_pack_cleared", true)
 			_actor.audio.play_event("victory", 0.03)
-			_actor.audio.play_music_cue("victory_return_cue", "return_report")
+			_actor.audio.play_music_cue("victory_return_cue")
 			_actor.audio.set_music_state("return_report")
 			_actor.audio.play_voice("voice_player_ghoulkin_death_01")
 			_actor.hud.hide_enemy()

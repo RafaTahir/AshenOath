@@ -1,6 +1,7 @@
 extends "res://scripts/systems/game_bindings.gd"
 const CampaignRevision = preload("res://scripts/campaign_revision.gd")
 const EndingCatalog = preload("res://scripts/ending_catalog.gd")
+const StoryRoutes = preload("res://scripts/story_route_catalog.gd")
 ## Owns quest operations; configure() injects dependencies.
 signal quest_completed(quest_id: String)
 
@@ -29,11 +30,12 @@ func _handle_road_of_crows_clue(area) -> void:
 			story_state.set_flag("road_evidence_drag_marks", true)
 	if _road_evidence_count() >= 5 and not bool(story_state.get_flag("all_road_evidence", false)):
 		story_state.set_flag("all_road_evidence", true)
+		var inference := "Together, the five clues suggest the pack followed the names."
 		if quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
-			hud.toast("Every clue agrees: the pack followed the names, not the food.")
+			hud.toast(inference)
 		else:
 			_make_all_evidence_safe_edge()
-			hud.toast("Every clue agrees: the pack followed the names, not the food. A safer edge of the clearing reveals itself.")
+			hud.toast(inference + " The tracks show a safer edge of the clearing.")
 			hud.set_guidance_hint("Use the marked edge when the creatures emerge.", 5.0)
 
 func _road_evidence_count() -> int:
@@ -77,7 +79,7 @@ func _road_ready_to_report() -> bool:
 	return active_route or legacy_choice
 
 func _legacy_report_choice_required() -> bool:
-	return bool(story_state.get_flag("legacy_report_choice_required", false)) and str(story_state.get_flag("evidence_report", "")) == ""
+	return StoryRoutes.legacy_road_report_pending(story_state)
 
 func _crow_shrine_choice_ready() -> bool:
 	return quests.is_active("main_bell_beneath_greyfen") \

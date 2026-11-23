@@ -5,6 +5,7 @@ extends RefCounted
 const InteractableScript = preload("res://scripts/interactable.gd")
 const CompanionController = preload("res://scripts/companion_controller.gd")
 const LAYER_NAME := "StoryWorldLayer"
+const PRESENTATION_PHASE := 4
 const TIMBER := Color(0.24, 0.15, 0.08)
 const IRON := Color(0.18, 0.20, 0.21)
 const PAPER := Color(0.76, 0.67, 0.45)
@@ -30,16 +31,17 @@ static var _unit_sack: CylinderMesh
 static var _presentation_reads: Dictionary = {}
 static var _recording_presentation := false
 
-static func decorate(game, root: Node3D, zone_id: String) -> void:
-	if root == null or not is_instance_valid(root) or game.story_state == null:
-		return
-	# Destination construction may project outcomes but must not advance the
-	# live journey. Only the published game's arrival/choice path credits work.
-	if not game.has_method("retire_construction_host") and root == game.zone_root and bool(game.game_started):
-		game.quests.sync_story_objectives(game.story_state)
-	if zone_id == "greyfen" and (game.quests.is_active("main_crowns_without_mercy") or game.quests.is_completed("main_crowns_without_mercy")) and root.find_child("gate_assembly",true,false) == null:
-		game._make_zone_gate("Join the assembly at Greyfen's common table",Vector3(0,0,8),"assembly",Vector3(0,0.95,12))
-	load("res://scripts/story_activity_director.gd").install(game, root, zone_id)
+# Prepared construction projects state through its destination owner. The
+# active coordinator credits story objectives only after publication.
+static func decorate(game, root: Node3D, zone_id: String, phase: int = -1) -> void:
+	if not is_instance_valid(root) or game.story_state == null: return
+	if phase <= 0:
+		if not game.has_method("retire_construction_host") and root == game.zone_root and bool(game.game_started):
+			game.quests.sync_story_objectives(game.story_state)
+		if zone_id == "greyfen" and (game.quests.is_active("main_crowns_without_mercy") or game.quests.is_completed("main_crowns_without_mercy")) and root.find_child("gate_assembly",true,false) == null:
+			game._make_zone_gate("Join the assembly at Greyfen's common table",Vector3(0,0,8),"assembly",Vector3(0,0.95,12))
+	if phase < PRESENTATION_PHASE: load("res://scripts/story_activity_director.gd").install(game, root, zone_id, phase)
+	if phase >= 0 and phase < PRESENTATION_PHASE: return
 	load("res://scripts/journey_flow_director.gd").install(game, root, zone_id)
 	CompanionController.install(game, root, zone_id)
 	root.set_meta("living_road_reported", str(_flag(game, "evidence_report")) != "")
@@ -58,9 +60,7 @@ static func decorate(game, root: Node3D, zone_id: String) -> void:
 		layer.add_child(interactions)
 		_install_interactions(game, interactions, zone_id)
 	var keys: Array = layer.get_meta("presentation_dependencies", [])
-	var signature := _signature(game, zone_id, keys)
-	if layer.has_meta("state_signature") and str(layer.get_meta("state_signature")) == signature:
-		return
+	if str(layer.get_meta("state_signature", "")) == _signature(game, zone_id, keys): return
 	var old := layer.get_node_or_null("Presentation")
 	if old != null:
 		layer.remove_child(old)

@@ -1,5 +1,789 @@
 # A Cohesive Ashen Oath
 
+## First-Route Handoff - 2026-11-23
+
+The working checkout is `D:/Projects/AshenOath-Dev` on
+`codex/masterpiece-rebuild`, starting at `e6fc0e5`. The older checkout retains
+its own local deletions and unpublished work. The delivered Web baseline is
+`monster-vitality-20261118-86f8425afa9f-r1`, preserved in publication commit
+`4f5d628`. That commit includes the exported artifacts and generated pack
+manifest. The export records `86f8425` plus a dirty build. The artifact is
+available for baseline testing, with byte-for-byte reconstruction from source
+still unproven. The later CI commit changes only the workflow.
+
+| Handoff finding | Current status |
+| --- | --- |
+| Architecture refactor and direct road repair | Already integrated. The previous exact release's focused real-input round trip retains its own evidence. |
+| Prepared-road option and atomic construction | The local pilot has played both directions on supported ground. Several construction inputs now arrive before scene construction. Renderer draws and remaining individual build steps still miss frame and crossing budgets. The direct path remains the production fallback. |
+| Opening dependency cost | The retained release declared 96,841,959 transport bytes for Balanced/Potato and 103,996,923 for Quality. Local `road-review-20261123t185739z` declares 96,607,021 and 103,761,985 bytes respectively, including the selected opening voices. These are package byte totals. |
+| Voice identity and expressive acting | The local Anwen pilot selects stable contextual takes and uses subtitles for unmatched text. Other lines retain existing lookup behavior. Listening and in-game acting acceptance remain open. |
+| Campaign throughline and asset acceptance | The throughline now documents both saved campaign revisions and the expanded ending routes. Progression and endings still need runtime coverage. Monster inspection and prior art evidence remain scoped to the assets and views they exercised. |
+
+### First Journey - Road of Crows
+
+Start a fresh test journey at 1280×720 Balanced. Meet Anwen in Greyfen and
+learn who is missing and why Kael must take the north road. At the Wychwood
+cart and trail, separate identities from evidence of what happened. Bram's
+ledger, Sella's red-thread feathers and the binding wire form the repeatable
+comparison route. The retained group still accepts any valid three of five
+clues. Recover the travelers' belongings from the Ghoulkin encounter, return
+by the same road and give a private account to Anwen. Compare the actual
+village response with the public or retained report when qualifying choices.
+Save through the ordinary UI, reload and check that the response matches the
+evidence and disclosure choice. The board remains an available reporting path.
+Bracken's adoption and village side work stay optional. Kael, Anwen and the
+Ghoulkin are the first visual and performance exemplars.
+
+The comparison uses isolated fresh profiles and ordinary inputs. Record launch
+to usable menu, accepted New Game to first usable control, approach to
+destination control in each direction, frames during the handoffs, and memory
+after comparable resident revisits. Keep disk and browser-cache conditions
+visible. Measure local Web transfer separately from a declared 50 Mbps/50 ms
+run. For the prepared crossing, record p95, p99 and worst frame, with the
+handoff's 100 ms maximum freeze as a working target. The handoff's 60 FPS
+native and 30 FPS Web objectives are diagnostic targets on the stated hardware.
+The existing FINISH and publication thresholds continue to govern delivery.
+
+Initial verification is the native first route and the packaged Web
+Save/Continue route. The existing suite and exact release checks are retained.
+Milestone acceptance requires direct evidence across the whole journey. Record
+new results below before changing the prepared-road policy or claiming M1.
+
+### First Measurements
+
+- The committed Web package was served locally on a fresh isolated Chrome
+  profile at 1280×720 Balanced using hardware ANGLE on the i5-7200U and Intel
+  HD 620. The menu appeared at 60.74 seconds and the driver observed usable
+  control at 70.00 seconds from navigation, including its ordinary intro skip.
+  New Game activation to control observation took 8.60 seconds. The unshaped
+  localhost transfer is a machine baseline, separate from CDN delivery.
+- Required opening packs were mounted by 20.62 seconds. Greyfen preparation
+  began at 26.40 seconds and reported 34.36 seconds overall. The initial
+  construction accounted for 1.20 seconds of that span. New diagnostics report
+  individual covered detail stages, finalization, first draw, and the work
+  between the draw and menu readiness on the next candidate.
+- The Web route reached Anwen with zero console errors and no failed HTTP
+  requests. Its driver stopped advancing while the care scene was still
+  visible. The driver now keeps the confirmed opening observation and retries
+  missing dialogue samples before judging closure. No crossing, encounter or
+  save/reload conclusion follows from this run.
+- Native used the prepared import cache with the same tracked game source and
+  an isolated app-data profile. The first attempt requested New Game before
+  the button existed. The corrected menu wait observed it after 94.10 seconds
+  from verifier initialization. That run reached Greyfen, then attempted
+  movement during the introduction. The verifier now uses the visible Skip
+  through keyboard input and waits for consecutive frames of real control.
+- Raw reports remain in `.release-gate/first-route/`. The Web failure report
+  is under `web-local-baseline-20261123T100529Z`. The native driver attempts are
+  `native-baseline-20261123T100306Z` and `native-baseline-20261123T101108Z`.
+  None establishes M1 or player acceptance.
+- `web-warm-baseline-20261123T101659Z` reused the same isolated profile and
+  localhost origin. The driver observed the menu in 49.43 seconds and control
+  in 60.50 seconds from navigation. Shell timing reported 59.36 seconds to its
+  own first-control event. The driver passed both Anwen conversations and the
+  physical crossing, collected three clues and entered the Ghoulkin clearing.
+  The engine reported 3.40 seconds for Wychwood activation. The 52.59-second
+  route checkpoint includes walking and therefore cannot measure handoff cost.
+  The browser driver lost its Runtime observation during combat. The last
+  sampled Wychwood window was 15.59 FPS average and 10.64 FPS 1% low.
+- `native-baseline-20261123T102459Z` reached confirmed control in 8.96 seconds
+  after New Game. The driver walked both Greyfen bridge banks and completed
+  Anwen's briefing. A straight northward hold ended before the authored
+  dogleg and supplied no native crossing result. The driver now follows the
+  existing connector points in both directions. The warm Web evidence also
+  revealed that the driver's pointer-reacquisition click can strike the
+  speaker. The driver now uses the game's ordinary camera-key capture gesture.
+- `native-baseline-20261123T103244Z` followed the actual road in a fresh
+  isolated journey. It observed the menu in 109.69 seconds, control in 19.97
+  seconds after New Game, then crossed to Wychwood on foot, collected the
+  three specified clues and defeated five Ghoulkin with ordinary input. The
+  engine reported 20.76 seconds for the outward activation, with 19.94
+  seconds elapsed by the systems-synced point. The frame observer recorded a
+  39.65-second interval across the arrival wait, beyond the engine's reported
+  activation duration. These two clocks cover different points in the
+  handoff. Native Wychwood play before shutdown averaged 13.20 FPS in the
+  sampled window, with 85.30 ms p95 and 1,184.86 ms p99 frame intervals.
+  The test's camera steering missed its return bearing after the fight.
+- `native-return-20261123T104242Z` continued a copy of that earned Wychwood
+  autosave. It reached control 15.76 seconds after Continue and physically
+  returned to Greyfen. The cold return took 7.23 seconds against the 900 ms
+  gate. Continue exposed a freed cast-viewer reference and two player-null
+  errors in the destination's activity setup. The report driver missed the
+  visible `Commit: ` label prefix. The report and reload remained unproven
+  in that run. Godot reported an ObjectDB leak during teardown in both
+  baseline runs.
+- `native-return-20261123T104717Z` ran the runtime fixes with the same earned
+  Wychwood save. It reached Greyfen and chose the private Anwen report through
+  the rendered dialogue. The visible sealed evidence appeared at its authored
+  location, and the automatic save recorded the private choice and completed
+  quest. The earlier Continue script errors did not recur. The cold return
+  still took 7.22 seconds. The driver's first attempt to use the manual save
+  looked for an outdated button label.
+- `native-reload-20261123T105035Z` passed. A new process loaded the earned
+  private report through Continue. The evidence projection appeared again,
+  and the current Quick Save button produced a saved private report. This
+  establishes the native consequence and persistence for that earned route.
+  The startup diagnostics attributed 99.67 seconds to the first-draw wait in
+  this run. Covered construction and validation took 1.01 seconds, followed
+  by a further 1.17 seconds from the draw to menu readiness. Godot's teardown
+  still emitted the ObjectDB warning.
+- The saved-journey entry now shows the menu before it builds Greyfen. An
+  early native pilot observed the usable menu in 7.18 seconds with an earned
+  Wychwood save. The selected destination then began loading directly. That
+  attempt reached the verifier's 45-second observation deadline before
+  control. The wider diagnostic deadline preserves the actual wait in the
+  result, while the performance targets and existing journey gates remain.
+- `native-prepared-20261123T105854Z` observed the saved-journey menu in 6.83
+  seconds and Wychwood control 58.38 seconds after Continue. Background
+  Greyfen reached readiness after another 58.04 seconds, with sampled frame
+  intervals of 221 ms p95, 1,522 ms p99 and 3,038 ms worst. By the time Kael
+  reached the seam, the request used the direct fallback. The route and
+  Quick Save worked, while the 9.67-second return and background stalls
+  failed the prepared-road criteria. The next pilot checks the recorded
+  activation mode and reports the slowest construction unit.
+- `native-prepared-20261123T110851Z` reached Wychwood through ordinary
+  Continue. The prepared Greyfen return missed the 60-second observation
+  budget before reaching the entry draw. There were 208 individual warm-up
+  draws, with a 2.14-second recent draw interval. Destination music setup was
+  the slowest measured construction unit at 1.24 seconds. The next candidate
+  requests that music through the shared resource loader and groups warm-up
+  draws by material and vertex layout. The actual entry scene still draws as
+  authored. Relief from these two measured costs requires a new run.
+- `native-prepared-20261123T113828Z` stopped before Wychwood control. That
+  attempt shared the machine with the headless Web export, so it supplies
+  neither a comparable timing nor a handoff result. Qualification needs
+  the machine free of export work.
+- `native-prepared-20261123T121710Z` reached Wychwood control
+  84.25 seconds after choosing Continue. The background scheduler did not
+  select a destination while the verifier waited at the saved position.
+  The verifier now walks through the source side of the authored connector
+  before waiting and records combat, input and transition state if readiness
+  is still missing. The first run supplies no prepared-crossing evidence.
+- `native-prepared-20261123T122420Z` reached Wychwood control
+  120.68 seconds after Continue. Ordinary movement advanced onto the
+  continuous river bridge, with confirmed ground and a clear forward ray.
+  The driver hit its 30-second movement observation limit well before the
+  world boundary. During the interval from reported Wychwood playability
+  to the failure, 137 sampled frames included 608.49 ms p95 and an
+  11.93-second worst frame. This run supplies performance failure evidence
+  and no result at the seam. The next diagnostic keeps the performance
+  gates intact, allows each preparation-pilot walking leg up to 90 seconds,
+  and traces the scheduler step and control state against frame time.
+- `native-prepared-20261123T123050Z` reached the source side of the
+  reciprocal road under ordinary movement. Greyfen's Anwen construction
+  took 1.70 seconds in a single work unit and world-prop setup took 3.24
+  seconds. The entry render took 11.30 seconds after 178 warm-up draws.
+  The preparation observation ended before the destination became ready.
+- `native-prepared-20261123T124210Z` verified a continuous, reused
+  Wychwood-to-Greyfen activation. The warm handoff took 4.14 seconds with a
+  350 ms limit. Threaded preparation supplied Anwen's resource in 0.04 ms
+  at instantiation. Story activities, now separate from the world-prop
+  setup, were the largest remaining construction unit at 1.67 seconds.
+  173 individual draws preceded a 10.53-second entry render. The verifier
+  then took the wrong line from the seam and hit the authored boundary wall
+  before reaching Anwen. It now follows the reciprocal dogleg. This run
+  supplies a continuous crossing result and no private-report result.
+- `native-prepared-20261123T124909Z` recorded 0.04 ms for Kael's
+  resource lookup during player creation, versus the earlier 1.53 seconds.
+  The prepared cast likewise reused Anwen's resource. A surface-level
+  warm-up experiment hit a typed-array error and recorded 263 draws before
+  timing out. That experiment was removed. The previously qualified
+  whole-geometry grouping is in the working source, with the camera
+  transform calculated once per scan. There was no new crossing result.
+- `native-prepared-20261123T125449Z` verified a second supported,
+  continuous, reused Wychwood-to-Greyfen activation. The warm handoff took
+  3.234 seconds against 350 ms. Kael followed all reciprocal bends and
+  walked into Greyfen with ordinary movement. Its route autosave preserves
+  the unreported, completed Wychwood fight. The report verifier stopped on
+  its older seven-second walking deadline while input was held and the
+  forward ray was clear. The report-only continuation copies the earned
+  Greyfen save and keeps the same journey ID. The extended diagnostic
+  walking allowance does not alter the strict performance gates.
+- In that run, Greyfen completed 146 warm-up draws and recorded a
+  12.32-second full entry render. The 1.95-second slowest construction unit
+  was the common table. The current source requests the three existing
+  social meshes with the selected Greyfen assets and removes a duplicate
+  suspension walk during cache publication. The exact table collision is
+  still built from its authored mesh. Those new changes require a fresh
+  performance sample.
+- `native-report-20261123T130234Z` resumed the copied Greyfen autosave
+  with keyboard Continue, followed the reciprocal road and reached
+  Anwen's care area. Cold Continue took 130.25 seconds to control. The
+  nearby water cup held focus at the old fixed stopping point, so the
+  verifier now approaches within conversational reach and requires the
+  displayed Anwen action. This run leaves the current report and reload
+  outstanding. The optional cup remains available.
+- `native-report-20261123T130950Z` passed from the earned Greyfen
+  crossing save. The player walked the full arrival path, reached Anwen
+  and chose the private account through the displayed interaction. The
+  sealed envelope appeared at its authored location and Quick Save
+  recorded the outcome. A fresh-process reload of this exact save is a
+  separate check. Cold native Continue took 79.57 seconds to control,
+  and the historical engine ObjectDB warning was present at teardown.
+- `native-reload-20261123T131618Z` opened a fresh process with a copy
+  of that earned Quick Save. Keyboard Continue reached Greyfen control
+  in 63.229 seconds. The sealed envelope was present at its authored
+  location and Quick Save again recorded the private report. The run
+  exited successfully and retained the ObjectDB teardown warning. This
+  proves the specific report survives reload. A single fresh journey
+  through the current candidate remains outstanding.
+- The three Greyfen social meshes now share a 133,184-byte prepared
+  collision resource in the opening pack. Its three source hashes and
+  exact triangle faces passed the compiled-resource check. The furniture
+  verifier found all 32 table collision sweeps blocked as expected and
+  exposed three approach defects at Rook's table, Tor's bridge approach,
+  and the common bench. Graphical frame impact remains unmeasured.
+- The keepsake stand blocked Rook's old approach, Nera's worktable
+  overlapped the bench, and a batched village prop blocked Tor's northern
+  shortcut. Rook now approaches the open table corner, the bench sits
+  clear of Nera's station, and table invitations validate their walking
+  legs against live collision. A blocked leg can use a short, clear bend
+  on the same bank. The complete furniture fixture passed 32 shape sweeps,
+  both NPC arrivals, and chess at both tables. It emitted headless
+  material diagnostics and the ObjectDB teardown warning.
+- The unified source and headless gate passed after these changes.
+  All five deterministic suites passed 367 assertions total. The campaign
+  replay took 93.554 ms and the 600-tick combat/cast runs took 20.459 ms and
+  21.040 ms. These are headless model times.
+- `native-prepared-20261123T134313Z` reached Wychwood on supported ground
+  using the prepared world. That handoff took 8.882 seconds. The opening
+  renderer callback span was 57.558 seconds. Wychwood's complete offscreen
+  entry draw took 8.516 seconds and the subsequent active-world draw took
+  8.394 seconds. Three clues were recorded. The driver timed out 8 mm before
+  its north-bank predicate while Kael was still moving and the forward ray
+  was clear. A wider diagnostic walking allowance keeps the physical target
+  and the strict performance objectives unchanged.
+- `native-prepared-20261123T135255Z` passed a contiguous New Game route
+  through Anwen's briefing, three clues, five enemies, both supported road
+  handoffs and the visible private report with Quick Save. The isolated
+  profile and candidate's copied scripts/data were recorded. This is the
+  source version with compiled furniture collision and named encounter
+  prefetch. The actual four creature resources were cached at acquisition
+  (0.04–0.06 ms per lookup), and the slowest recorded Wychwood build step
+  shifted from the Raider's 3.426-second step to the 1.762-second terrain
+  integration step. The Greyfen return took 1.497 seconds and the outward
+  crossing took 8.933 seconds. Both exceed budget. The renderer still spent
+  50.361 seconds in the first Greyfen draw, 4.810 seconds in the complete
+  Wychwood preparation draw and 7.895 seconds in the outgoing activation
+  draw. Report-save reload from this exact run remains separate. Teardown
+  retained the ObjectDB warning.
+- The pack compiler now leaves Ghoulkin out of the fresh-start download set.
+  It remains required for Wychwood, the cemetery and saved/returning Greyfen
+  journeys. In-memory layout compilation confirmed this is the sole startup
+  dependency change, corresponding to 842,390 bytes in the prior package.
+  The updated package has not yet been exported.
+- Wychwood now requests all six prepared ground meshes for the selected road
+  and installs those meshes directly. The compiler and runtime use the same
+  geometry inputs. The exact-path check reproduced all six meshes' bounds and
+  faces from the current source and found them identical to the pre-existing
+  resources. Published actors and effects resolve the actual gameplay camera
+  through the retained viewport owner, so the disabled renderer no longer
+  needs a full-resolution target and mirrored camera.
+- `native-prepared-20261123T140240Z` passed the entire fresh route after
+  the ground and camera changes, including both supported prepared handoffs,
+  five enemies, the private report and Quick Save. The Wychwood terrain
+  stage was no longer the slowest. The worst Wychwood construction step was
+  story activities at 0.603 seconds, down from the 1.762-second terrain
+  maximum in the preceding sample. Handoffs still took 8.312 seconds outward
+  and 1.543 seconds on return. Across 2,033 gameplay-state frames, p95 was
+  122.319 ms, p99 was 767.318 ms and the longest frame was 25,624.327 ms.
+  Renderer callbacks attribute 25.606 seconds of that maximum to Greyfen's
+  isolated full entry draw. The 48.560-second opening draw is separate.
+  No ObjectDB warning appeared in this run.
+- `native-reload-20261123T140745Z` used the exact earned Quick Save from
+  that route in a fresh process. Continue again showed Anwen's envelope and
+  Quick Save persisted the outcome. Control took 74.395 seconds and the
+  historical ObjectDB warning returned. The same source also passed the
+  unified gate with 328 architecture-scanned files and all 367 assertions.
+- Checkout of the unused art archive for `first-route-20261123t140947z`
+  remained at 35% after 18 minutes. The owned copy process was stopped and
+  the partial checkout was preserved. The standard local build
+  `first-route-20261123t143100z` ran from the development worktree with
+  `-SkipWebCopy`. Its receipt includes the original modified input hashes
+  and the archival copy of those files. It stopped when Rook's satchel
+  compiler followed a historical absolute source path into the old checkout.
+  The compiler now resolves the canonical project-local `Bag.obj` and still
+  enforces the retained SHA-256. The focused satchel compile passed. The
+  replacement local build `first-route-20261123t143812z` exported all 46
+  runtime packs and passed exact Web package integrity across 55 files.
+  The complete export is 173,895,412 bytes. Its root PCK SHA-256 is
+  `84feb99f95e956c7ace963b38624110037c43cac95c9b331794775938a614f42`.
+  The packaged browser run started on this exact export at 1280×720,
+  Balanced, with the 50 Mbps / 50 ms profile and a new isolated Chrome
+  profile. A complete browser route and performance remain unverified.
+- The renderer change replaces a duplicate full-entry offscreen draw with
+  separate material groups from the entry camera's frustum. The actual
+  combined scene is still rendered by the gameplay viewport at the handoff.
+  The camera uses the gameplay aspect and field of view. The source change
+  passed the focused frustum check and standalone compilation. End-to-end
+  frame and handoff measurements for this revision remain open.
+- The browser comparison now primes the exact gzip startup-pack closure in
+  memory and records when the server flushes it to the socket. CDP records
+  browser receipt separately. A local HTTP check of the earlier package
+  reproduced the manifest hashes, lengths, encoding and immutable cache
+  headers for `opening.pck` and `actor_shared.pck`. The comparison will use
+  the same private Anwen report as the native route and check it on reload.
+- A focused ownership check reproduced a story refresh in a disabled
+  destination when a deferred observer was invoked. The proposed guard
+  compiled and kept preparing, cached and uncommitted destination owners
+  inert. A published owner refreshed during neighbor preparation, and a
+  queued refresh was discarded after travel. The patch and clean diagnostic
+  log are in `.release-gate/first-route/saga-refresh-ownership/`. The
+  ownership guard was integrated into source after the Web export finished.
+  That package is the exact comparison for the earlier renderer revision.
+  The integrated ownership change still needs the next native run and
+  a source-aligned export before release qualification.
+- All 44 existing acceptance-runner tests passed for campaign ending
+  receipts, community input requirements and exact artifact freezing.
+  Those tests qualify the runner's checks. Actual campaign paths and
+  ending consequences still require played evidence.
+- `web-shaped-baseline-20261123T110606Z` confirmed that Chromium applied the
+  network rule to the engine and opening requests on a fresh isolated profile.
+  The rule caps aggregate download at 50 Mbps and adds 50 ms request latency.
+  The observed transport ran well below the configured maximum. The opening
+  transfer was aborted by the old fixed deadline after 42,738,672 of
+  45,221,564 decoded bytes. The run reached neither menu nor control within
+  its 120-second observation budget. Its threshold miss remains recorded.
+
+- `web-shaped-candidate-20261123T121409Z` checked the completed local
+  package in fresh hardware Chrome at the same 50 Mbps cap and 50 ms delay.
+  The opening transfer completed in 83.64 seconds, and all startup pack
+  requests finished. The prior fixed-timeout failure did not recur.
+  Greyfen prepared its first rendered frame in 28.01 seconds after the
+  render wait began. Construction's covered phase was 1.44 seconds.
+  The enabled New Game menu appeared 122.91 seconds after navigation,
+  beyond the 120-second driver cutoff. It was visible in the final
+  observation and no console errors were recorded. There is no first
+  control result. Both startup targets remain unmet.
+- `web-shaped-first-route-20261123t143812z` reached an enabled menu in
+  137.067 seconds and confirmed explicit New Game control at 146.901
+  seconds on the exact 173,895,412-byte package. It recorded no console
+  errors. The opening pack reached Chromium in 77.106 seconds. The local
+  server flushed the exact compressed bytes from memory in 42.72 ms.
+  The game's opening first-draw wait was 47.145 seconds, with the covered
+  build at 3.133 seconds. These observations separate disk service from
+  browser transfer and rendering; all startup targets remain unmet.
+  The driver timed out waiting for the read-only route to Anwen before
+  moving Kael. His body and ordinary control were observed at the spawn.
+  The run left its profile and both captures intact. It provides no
+  browser crossing, report, or Continue evidence.
+- The read-only route lookup now skips the direct route to the center of
+  a speaker. That path was always discarded before checking proper
+  conversation standoff points. The change preserves ordinary input and
+  the existing route geometry and architecture rules. The exact frozen
+  Web export predates this fix; the timeout's residual cause still needs
+  observation with the corrected route and a sufficient diagnostic wait.
+- The first-control Web capture showed Kael, the starting bridge and the
+  north-shrine objective. The nearby shop prompt combined two verbs,
+  `Use Browse Nessa's Kitchen`. `Interactable` now recognizes the authored
+  `Browse` verb and retains the correct stock interaction and binding.
+- The unified gate passed on the saga ownership and observer changes before
+  the one-line prompt adjustment. It covered 328 architecture-scanned files
+  and 367 assertions in 79.601 seconds. The focused ownership check also
+  passed with the integrated zone-identity check. The native follow-up
+  `native-prepared-20261123T152413Z` is comparing the renderer and integrated
+  ownership changes on the same ordinary-input first route.
+- The Saga installer additionally avoids refreshing an existing owner a
+  second time after the activity director has already refreshed it. First
+  install still refreshes the new object. This change followed the native
+  input snapshot and needs validation on the combined next candidate.
+- The native fresh run ended before New Game because the verifier reached
+  its opening deadline. Its draw trace recorded one 70.567-second opening
+  render interval. It supplied no crossing comparison. The follow-up
+  `native-prepared-20261123T153022Z` uses a copy of the genuinely earned
+  Wychwood autosave from `native-baseline-20261123T103244Z`. The save has
+  the completed Ghoulkin encounter and an unreported road account. The
+  copied save reached Wychwood control in 75.760 seconds after Continue.
+  Ordinary inputs crossed the approach legs during Greyfen construction.
+  The preparation deadline expired at the gate with the source still
+  controllable and Greyfen in render preparation. It had drawn 306 unique
+  groups with eight pending geometry entries. The slowest recorded build
+  operation was story activities at 3.796 seconds. The two largest named
+  entry-draw intervals were 3.794 seconds at the quench bucket and 3.021
+  seconds at Anwen's hair. These identify the captured draw subjects. The
+  trace does not isolate which backend operation blocked each frame. No
+  Greyfen arrival was observed. The earlier return evidence and the new
+  failed preparation remain separate.
+- Compatibility's first real draw remains a measured bottleneck. The
+  retained WebGL startup probe was stopped when the developer reserved all
+  further testing and verification. Its partial output establishes no new
+  result. Further agent work is source implementation and local packaging.
+- Adjacent construction now schedules story owner setup, Saga activities,
+  everyday activities and Greyfen-specific activities separately before it
+  installs world props. The ordinary installation still completes the same
+  work in its existing order. The local build consumes the retained pack
+  layout and exports the current scripts through the production presets.
+  Local build `first-route-20261123t154039z` exited successfully after
+  exporting the 46 pack presets and assembling the Web package. The complete
+  173,895,944-byte export is in
+  `.release-gate/first-route/candidate-20261123t154039z/export/`.
+  Its receipt records the tracked source patch and the accompanying archive
+  preserves the nine untracked runtime inputs. The standard Web preset uses
+  direct travel. The existing native `--prepare-first-route` option enables
+  the staged Greyfen and Wychwood path where a destination is ready.
+  This is a local build. Final testing and release approval remain
+  developer-owned.
+- The separate Web review preset exposes the first-road pilot with
+  `?prepared-road=1`. Its physical gates, deliberate travel and adjacent
+  scheduler use the same Greyfen and Wychwood preparation policy in both
+  directions. While a destination prepares, the source owns control and
+  the existing road interaction offers preparation or retry. A journey
+  load releases any outstanding prepared neighbor. The standard Web preset
+  retains direct travel.
+- Entry warm-up groups now share the program identity for single-pass
+  custom shaders and use the effective material when a mesh has an
+  override. Materials, uniforms and surfaces remain attached to their
+  original instances. The review build compiles a new Web root and carries
+  forward the already built external packs, which do not own the edited
+  scripts. Runtime timing and readiness remain for the developer's review.
+- Local review build `road-review-20261123t165327z` exited successfully and
+  produced a complete 173,910,545-byte package under
+  `.release-gate/first-route/road-review-20261123t165327z/export/`.
+  Its receipt identifies the source delta and the earlier package that
+  supplied the external packs. Gameplay acceptance remains open.
+- Opening preparation now submits surface textures while the environment
+  catalog requests are still pending. Both consumers use the existing shared
+  request owner. Four opening albedo paths overlap, and the original per-use
+  resource and quality checks remain in place. Greyfen also skips a second
+  forced lighting update when its opening budget is already off.
+- Zone signatures still hash the same quest, story, removal and quality data.
+  The lifecycle now hashes the current snapshots directly and shallow-copies
+  only the flag map from which it removes live companion and clothing state.
+  Signature calculations retain no references to mutable data. Startup and
+  crossing timings remain for the developer's review.
+- Local review build `road-review-20261123t165903z` packaged these changes
+  successfully. Its complete export is 173,910,629 bytes at
+  `.release-gate/first-route/road-review-20261123t165903z/export/`.
+  The staged route is still opt-in with `?prepared-road=1` and the earlier
+  candidates and live deployment remain preserved.
+- The opening dialogue performance now waits for queued voice before starting
+  the speaker's gesture, retains timed gestures on subtitle-only pages and
+  clears the preceding page's facial gesture on advance. History pauses beat
+  timing. The authored Anwen close-up can return to the two-shot immediately
+  on quick advance, using the same opening composition and obstruction rules.
+- The first Wychwood encounter now omits contact feedback when Kael's dodge
+  absorbs the attempted strike. Stagger cancels the warning marker through
+  the existing strike owner. Strike reach, damage, recovery time and enemy
+  population keep their authored values.
+- Combined Web review build `road-review-20261123t170839z` compiled and
+  packaged successfully. The 173,910,608-byte export is in
+  `.release-gate/first-route/road-review-20261123t170839z/export/`. Its
+  adjacent receipt records the source delta and reused pack origin. In-game
+  dialogue presentation, listening and encounter acceptance remain with Rafa.
+- Dialogue pages now hand speaking ownership to one staged actor. Supporting
+  speakers join the performance without restarting Kael's animation clock.
+  Kael keeps the latest partner's eyeline when answering. The coordinator
+  clears prior-page speech poses and restores each active participant on
+  close, including Kael when the original speaker has left the scene.
+- Anwen's existing token and water exchanges now have distinct head beats for
+  hesitation and relief. The coat exchange returns from its close-up to both
+  participants as the conversation turns to the missing travelers. The
+  authored words, contextual take identities and story decisions are retained.
+- The dialogue compiler produced 91 base scenes and seven deferred projections.
+  The local combined Web build `road-review-20261123t171419z` compiled and
+  packaged to 173,912,150 bytes in
+  `.release-gate/first-route/road-review-20261123t171419z/export/`.
+  Runtime and creative acceptance remain with Rafa.
+- Greyfen now requests its environment resources, surface textures, opening
+  props and actor bodies in the same preparation phase. The shared owner
+  services overlapping paths and scans abandoned claims once per frame.
+  The loading barrier still requires every requested asset to resolve.
+- Opening scenery uses the adjacent-zone scheduler's resumable batch units.
+  House and prop groups publish by key, installed connectors skip duplicate
+  material setup, and a completed batch releases its queued callables.
+  Whole terrain and foliage groups still have indivisible work.
+- Local combined Web build `road-review-20261123t172155z` compiled and
+  packaged to 173,911,904 bytes in
+  `.release-gate/first-route/road-review-20261123t172155z/export/`.
+  Opening and crossing timings remain for Rafa's review. The historical
+  first-draw and transfer misses still apply to their recorded candidates.
+- Staged terrain now appends up to eight patches per work unit while retaining
+  one final mesh per material. Staged authored foliage prepares transforms and
+  camera collision in batches of up to sixteen trees and retains one final
+  MultiMesh per role. All authored sources resolve before emitting the first
+  tree, preventing partial authored scenery from overlapping the existing
+  procedural fallback when a source is unavailable.
+- The opening requests now belong to Greyfen. Helper caches retain scopes for
+  active, cached and preparing zones. Cancelling the neighbor schedules a
+  cache trim through the lifecycle owner after renderer retirement takes
+  ownership of the discarded root. Live roots keep their resource references.
+- Local combined Web build `road-review-20261123t172948z` compiled and
+  packaged to 173,914,772 bytes in
+  `.release-gate/first-route/road-review-20261123t172948z/export/`.
+  Frame timing, peak memory and visual acceptance remain with Rafa.
+- Staged and immediate connectors now share the same zone-owned road finishes
+  for a given quality preset, including the existing ground glow and culling
+  settings. During render preparation the entry frustum is reused, and each
+  shared base mesh is inspected once in the destination's resource pass.
+  Instance-specific fallback repairs remain available. The renderer resource
+  report is emitted once for the destination when that pass finishes.
+- Local combined Web build `road-review-20261123t173801z` compiled and
+  packaged to 173,916,062 bytes in
+  `.release-gate/first-route/road-review-20261123t173801z/export/`.
+  First-draw and crossing timings remain for Rafa's review.
+- Staged roads now request the exact destination scenes, builder, and current
+  encounter resources. A portal's earlier scene-only preload supplies any
+  matching assets while the streamer loads the rest. The streamer polls its
+  current resource, records missing inputs or timeouts, and releases only its
+  outstanding claim when the selected road is abandoned or published.
+  Retry state is tied to the source zone, journey generation and quality.
+- Local combined Web build `road-review-20261123t174537z` compiled and
+  packaged to 173,914,490 bytes in
+  `.release-gate/first-route/road-review-20261123t174537z/export/`.
+  The staged path remains available through `?prepared-road=1`. Runtime
+  crossing, failure recovery and acceptance remain with Rafa.
+- Cached previews now show and enable physics for the reciprocal road branch.
+  Moving away or selecting another road returns the preview to its hidden
+  cache once Kael has source-side support. If he still relies on the preview
+  for footing, the source gate stays open for retreat. Return to that route
+  still goes through normal readiness and arrival checks.
+- Road status reuses the connector's weak reference to its entrance marker
+  and updates gate transforms and collision layers when their values change.
+  Local combined Web build `road-review-20261123t175604z` compiled and
+  packaged to 173,916,722 bytes in
+  `.release-gate/first-route/road-review-20261123t175604z/export/`.
+  Preview behavior, crossings and timing remain for Rafa's review.
+- The short-display HUD reserves a shared message area for the current Use
+  prompt while a target is selected. Routine notices retain their reading
+  time when preempted. If messages have their own area, live combat cues and
+  error notices take priority there. Touch labels fit their existing safe
+  layout regions, including the reserved control areas.
+- The objective card fits its primary action before the title and supplemental
+  lines. Its compact direction comes from the route model, which uses Kael's
+  position when choosing between equally short exits. The detailed tracker
+  and Journal retain the longer guidance.
+- Local combined Web build `road-review-20261123t180448z` compiled and
+  packaged to 173,919,869 bytes in
+  `.release-gate/first-route/road-review-20261123t180448z/export/`.
+  Phone readability and actual input behavior remain for Rafa's review.
+- Visiting adopted Bracken now reaches his existing pet, feed and rest
+  choices alongside access to his travel commands. The command menu offers
+  Wait here only after he has reached supported ground in the current zone.
+  A following Bracken who needs an unseen arrival can use a supported point
+  near Kael when his saved point is blocked or in view. A waiting Bracken
+  retains his saved zone. The safe-home decision projects a water bowl beside
+  his perch at the north-road verge, using the existing choice and save fields.
+- The dialogue build compiled 91 base scenes and seven deferred projections.
+  Local combined Web build `road-review-20261123t181445z` compiled and
+  packaged to 173,920,952 bytes in
+  `.release-gate/first-route/road-review-20261123t181445z/export/`.
+  Bracken's care, travel, safe-home presentation and save behavior await
+  Rafa's runtime review.
+- Remapping records the displaced key, mouse or controller control even
+  when the affected action has no binding left in that input family. Older
+  preference files keep their existing fallback behavior. Switching controller
+  profiles uses the latest remap and starts from global sensitivity and
+  deadzone before applying the selected profile. Changing Controller Look
+  Sensitivity updates the global value and clears stale copies made by
+  older remaps. Customize Bindings returns to the Controls screen or the
+  exact Settings page that opened it, using the existing focus restore.
+- Local combined Web build `road-review-20261123t182134z` compiled and
+  packaged to 173,922,134 bytes in
+  `.release-gate/first-route/road-review-20261123t182134z/export/`.
+  This includes the preceding first-route changes. Controller behavior,
+  saved bindings and the full first route remain for Rafa's runtime review.
+- The opening now requests the authored gameplay layer, builder and three
+  required landmark meshes through the existing Greyfen resource owner.
+  Its construction stages share one builder and destination context. Actor
+  setup failures are surfaced during construction, and the complete actor
+  ownership check still runs before the first draw. Lighting binds once to
+  the completed opening scenery for that draw.
+- The environment work queue skips road branches and wildlife encounters
+  already present in the destination. The construction owner retains the
+  decoded wildlife catalog and schedules only pending environment work.
+  Greyfen's opening navigation service is reused only when it belongs to the
+  exact prepared root being activated with a matching signature.
+- Local combined Web build `road-review-20261123t183213z` compiled and
+  packaged to 173,924,485 bytes in
+  `.release-gate/first-route/road-review-20261123t183213z/export/`.
+  Loading time, first-view presentation and travel remain for Rafa's review.
+- Godot now takes over the browser's startup download queue and joins the
+  active transfers its request needs before starting new work. The saved
+  journey menu leaves the shared opening download active and suspends its
+  Greyfen actor queue. A selected Continue includes its saved encounter
+  dependencies and retires unrelated, unmounted requests from the menu.
+  Opening progress is weighted by the exact startup set. A rejected browser
+  handoff now surfaces its failure and makes Retry fetch a fresh copy.
+- Local combined Web build `road-review-20261123t184003z` compiled and
+  packaged to 173,926,505 bytes in
+  `.release-gate/first-route/road-review-20261123t184003z/export/`.
+  Browser loading, Retry, Continue and timing remain for Rafa's review.
+- First-route speech selects exact matching recordings from the packs that
+  supply them. The published voice catalog is loaded independently of the
+  general audio pack. Missing speech stays subtitled, with no replay when a
+  later pack mounts. History and pause retain the playing voice position.
+- Delayed regional ambience preserves foreground speech and a newer score
+  request. A newer regional publication replaces an older queued handoff.
+  The Wychwood victory keeps the cue and its immediate score transition,
+  removing the duplicate delayed change. Startup cue preparation leaves the
+  active playback pool alone, and a story score can adopt its authored stream
+  once available.
+- Local combined Web build `road-review-20261123t184807z` compiled and
+  packaged to 173,927,081 bytes in
+  `.release-gate/first-route/road-review-20261123t184807z/export/`.
+  Dialogue, listening, pause and area audio remain for Rafa's runtime review.
+- The asset layout derives the opening voice selection from the authored
+  care and Anwen briefing pages. It resolves each selected take against its
+  existing scene, speaker, subtitle and clip identity. It assigns those 14
+  existing recordings to the opening pack and excludes them from the general
+  audio pack. The take catalog and subtitle-only pages retain their authored
+  identities. The remaining campaign audio uses its existing packs.
+- Godot rebuilt the Web root, opening pack and general audio pack for
+  `road-review-20261123t185739z`. The complete local package is 173,933,602
+  bytes in `.release-gate/first-route/road-review-20261123t185739z/export/`.
+  The opening and audio packs transferred 509,096 decoded bytes between
+  them. Initial transport is 454,116 bytes higher than the preceding local
+  candidate at each preset. The recorded takes, playback and loading time
+  await Rafa's review.
+- Road of Crows shows the current step and recovered evidence in Stories.
+  On Return uses the purpose and directions for the selected step. The arrival
+  recap includes the relevant route hint on New Game and Continue. The five-clue
+  message presents its conclusion as an inference.
+- The Greyfen road report summarizes the private, public or retained outcome
+  from the recorded flag. The public board and retained dialogue mention the
+  token only when Kael recovered it. For older journeys with an open report,
+  Anwen and the notice board offer the existing choices. Local guidance keeps
+  the report discoverable alongside the optional tour and manual tracking.
+  The three-of-five evidence threshold, quest IDs and rewards are preserved.
+- Godot exported and packaged the combined changes as
+  `road-review-20261123t194106z`, totaling 173,936,213 bytes. The local export
+  is in `.release-gate/first-route/road-review-20261123t194106z/export/`, with
+  its exact source delta and build receipt in the parent directory. Rafa owns
+  gameplay, presentation and performance review of this build.
+- Reduced Motion now updates the existing prop controller when Settings changes.
+  It stops ambient prop motion and finishes a moving interactive prop in its
+  current state. The setting applies when returning to a prepared or cached
+  world. Prop visibility, bell audio and saved decisions still use the
+  existing state and sound owners.
+- The Web export and packaging finished for `road-review-20261123t195304z`,
+  totaling 173,937,093 bytes. The local build is in
+  `.release-gate/first-route/road-review-20261123t195304z/export/`. Review of the
+  setting during play and after travel remains with Rafa.
+- The exact review package is served on this computer at
+  `http://127.0.0.1:9413/?prepared-road=1`. The same origin without the query
+  uses direct travel. The local server reads the export manifest for transport
+  headers and serves the exported files. Its sibling `serve-review.py` accepts
+  `--port 9413` when resuming this browser save origin. The player review
+  covers the complete route, Anwen's performance, the Ghoulkin encounter
+  and the saved village aftermath.
+- The authorized production package is `first-road-20261123t201045z`
+  at 173,918,554 bytes. It uses Godot's `Web Browser` export preset and
+  the retained external asset packs. Standard visits use direct travel.
+  The `?prepared-road=1` link enables the Greyfen–Wychwood pilot without
+  requiring the QA export. Player acceptance remains pending.
+
+
+### Local Implementation and Remaining Evidence
+
+- Continue-safe activity construction now enumerates destination-owned
+  interactables for work stations and wildlife. The two old lookups each
+  scanned 251,001 cells at a 500 m radius and depended on a live player.
+  Player wear is bound on the first playable update. The pose modifier checks
+  the viewer reference before reading it.
+- The prepared-road coordinator requires the actual committing epoch and
+  a completed destination scope for new cache admission. A separately cached
+  root cannot validate an incomplete scope. Road previews use cached roots.
+  The local native pilot additionally checks navigation, a completed entry
+  draw and collision across the reciprocal seam in the isolated physics
+  world. The production direct-travel policy stays in place during
+  qualification. In the pilot, cold roads can still use direct travel.
+- Clothing weathering remains saved appearance state. It no longer invalidates
+  zone construction as Kael walks. The preparation queue keeps only the
+  selected road's downloads in scope. A fresh opening now waits for one
+  eligible rendered frame with an actionable deadline.
+- The browser shell now distinguishes an active transfer from a stalled one,
+  retains a hard deadline, and passes the specific error through the runtime
+  pack manager. A focused shell check exercised a transfer past 90 seconds,
+  the inactivity deadline and the absolute deadline. This verifies those
+  rules in isolation. Exported browser behavior still requires a candidate run.
+- Local Web export `first-route-20261123t111559z` completed under
+  `.release-gate/first-route/`. The source base is `e6fc0e5` plus the local
+  startup and travel changes. Import, 24-service compilation, all 33 packed
+  prepared-actor checks and community resource ownership passed. The
+  read-only integrity check verified the transport and decoded identities
+  of 54 artifacts. The full directory is 173,775,744 bytes, including the
+  manifest, and below the 256 MiB ceiling. Balanced opening requirements are
+  96,844,033 transfer bytes, a theoretical 15.50 seconds at 50 Mbps before
+  request latency, loading and rendering. Root PCK transport SHA-256 is
+  `bbfcc2c251b1818d79c99c8a6ca3aaad88cdaf1614d040d5142bbd17259b32d8`.
+  Actual browser control and current prepared travel remain separate checks.
+- The unified architecture, data, archive and five Godot suites passed after
+  the prepared-road guard and opening timing changes. The later Continue
+  source repairs passed the architecture ratchet. Candidate return and reload,
+  exact Web packaging and the 50 Mbps/50 ms comparison remain separate checks.
+- Current priorities are the measured construction and first-frame stalls,
+  the large opening transfer and resource materialization, and return
+  readiness across a resident revisit. The native earned-save return and Web
+  report run cannot certify a contiguous fresh route. Performance and
+  creative acceptance remain open.
+- Pilot inputs are available in the current worktree. The editable Kael,
+  Anwen and Ghoulkin sources include the retained lower-face, tailored and
+  fitted-motion work. The voice collector now follows the living-cast model
+  and Saga dialogue view extracted in Phase 4, with older snapshots using
+  their original owners. Collection against `e6fc0e5` produced 1,556 runtime
+  utterance records, and the 12 catalog tests passed. The two full inference
+  fixture cases remained skipped. No new recording was generated. The
+  directed pilot can build on the optional care exchange and Anwen's existing
+  road briefing while retaining both cup/coat orders and the option to leave.
+- Static inspection of the authored GLBs found weighted skin primitives for
+  Kael, Anwen and the Ghoulkin, with 19,711, 51,066 and 14,550 triangles
+  respectively. These are export-source totals across mesh nodes. In-level
+  prepared geometry, LOD, equipment and deformation still need separate
+  inspection. Anwen's raw count is the first place to check actual cost
+  before changing her clothing or silhouette.
+
+- The new preparation batch reuses the existing background loader for
+  the named Greyfen cast and uses the same prepared Kael resource on
+  Continue as the player body builder. The native comparison recorded
+  a 1.53-second synchronous Kael load before this change. The retained
+  renderer grouping still draws the complete entry view. A Continue and
+  crossing performance pass remains open.
+- Removed the earlier redundant audio preparation and moved authored
+  arrival reactions and covenant completion to the supported-arrival
+  publication. The north-road music tutorial now checks travel direction,
+  so walking into Greyfen cannot trigger the outbound cue. This batch
+  still needs rendered arrival and listening evidence.
+- The exact local package includes 37,017,624 decoded texture bytes in
+  `opening.pck`. The initial pack set has no byte-identical duplicate
+  texture, mesh or prepared-scene paths across different packs. The
+  opening texture budget reflects actual art dependencies. Reducing launch
+  latency still requires tracing which surfaces the player needs first.
+
+
+### Opening Performance Pilot
+
+- Inspected the editable Kael, Anwen and Ghoulkin sources in Blender and the
+  corresponding prepared Godot resources. The visible meshes have UVs and
+  rig weights. Kael and Anwen have prepared LODs on every skinned surface.
+  Ghoulkin body and eyes have LODs. Its small mouth and teeth remain intact.
+  This evidence covers resource construction. Motion, actual LOD selection
+  and frame cost still need an in-level check.
+- Rendered Anwen's retained Blender source from the front, quarter and rear
+  under neutral lighting. The straight front composition crops the hands.
+  The quarter view includes them, and the rear shows the attached coat strip.
+  The historical browser invitation screenshot places both people low in the
+  frame, with the lower poses behind the dialogue panel. Current animations
+  and the reported rear artifact still require actual game inspection.
+- The local first-route audition has 18 spoken lines in the selected
+  invitation, water, coat and briefing exchange. Twelve have byte-checked
+  retained takes matching scene, canonical speaker and current text. Six
+  use subtitles. The four narrator pages intentionally use subtitles.
+  The optional care variants are included for comparison. All retained
+  recordings still await listening approval.
+- Contextual delivery now attaches stable authored IDs and
+  selects exact takes for these scenes through the existing dialogue and
+  audio owners. It adds a few authored framing cues and corrects the
+  first briefing's older reference to the person Anwen is helping.
+  The integrated dialogue and runtime owners passed 18 focused assertions in
+  isolated Godot 4.6.3, covering both optional care orders, later greeting
+  isolation, exact scheduling and rejection of wrong-scene or stale audio.
+  The current isolated run attached the manager normally and produced no
+  engine diagnostics. The architecture ratchet passed. The voice index
+  also records these contexts and preserves exact selected recordings
+  when a later generation batch deduplicates legacy lines.
+  The completed Web export predates this edit. Its player checks
+  remain distinct from the next integrated presentation check.
+
 ## Proximity-Driven Streaming - 2026-11-13
 
 ### All-Connection Travel Follow-Through - 2026-11-16

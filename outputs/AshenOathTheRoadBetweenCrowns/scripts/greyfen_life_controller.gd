@@ -204,7 +204,7 @@ func _physics_process(delta: float) -> void:
 			var was_distant: bool = bool(entry.get("distance_suspended", false))
 			var distance_limit: float = render_distance - 0.8 if was_distant else render_distance + 0.8
 			var distance_to_player: float = actor_node.global_position.distance_to(player.global_position)
-			var camera := get_viewport().get_camera_3d()
+			var camera := preload("res://scripts/core/scene_view_camera.gd").resolve(self)
 			var in_view := actor_node.is_visible_in_tree() and camera != null and camera.is_position_in_frustum(actor_node.global_position + Vector3.UP)
 			var distant: bool = distance_to_player > distance_limit and not in_view and not entry.has("table_restore")
 			if not entry.has("face") or not is_instance_valid(entry.face):

@@ -18,7 +18,7 @@ func _make_ground(pos: Vector3, size: Vector3, color: Color, collision_enabled: 
 		body.add_child(shape)
 		parent = body
 	var mesh: Variant = MeshInstance3D.new()
-	mesh.mesh = _host.world_materials.make_tiled_box(size, pos)
+	mesh.mesh = preload("res://scripts/core/wychwood_ground_geometry.gd").ground_mesh(size, pos) if _scope.zone_id == "wychwood" else _host.world_materials.make_tiled_box(size, pos)
 	mesh.position = Vector3.ZERO if collision_enabled else pos
 	mesh.material_override = _host._terrain_material("CampaignGround", color)
 	_host.write_construction_tag(mesh, "split_ground_size", size)

@@ -111,6 +111,9 @@ func _make_role_visual(role_name: String, category: String, scale_value: Vector3
 func _environment_role_scale(role_name: String, target_size: Vector3) -> Vector3: return _run_build(foliage_and_prop_builder._environment_role_scale.bind(role_name, target_size), Vector3.ZERO)
 func _make_deadfall(pos: Vector3) -> void: _run_build(foliage_and_prop_builder._make_deadfall.bind(pos))
 func _flush_authored_tree_assets() -> bool: return _run_build(foliage_and_prop_builder._flush_authored_tree_assets.bind(), false)
+func tree_publication_units(fallback: Callable) -> Array[Callable]:
+	if not context.scope.is_current(_epoch): return []
+	return foliage_and_prop_builder.tree_publication_units(fallback)
 func _make_crow_silhouettes() -> void: _run_build(foliage_and_prop_builder._make_crow_silhouettes.bind())
 func _make_fake_fog_bank(pos: Vector3) -> void: _run_build(foliage_and_prop_builder._make_fake_fog_bank.bind(pos))
 func _make_herb(id: String, pos: Vector3, color: Color) -> Variant: return _run_build(foliage_and_prop_builder._make_herb.bind(id, pos, color), null)
@@ -155,7 +158,7 @@ func _make_wychwood_road_of_crows_story_beats() -> void: _run_build(settlement_d
 func _make_quality_wychwood_overhaul() -> void: _run_build(settlement_detail_builder._make_quality_wychwood_overhaul.bind())
 func _make_gravestone(pos: Vector3) -> void: _run_build(settlement_detail_builder._make_gravestone.bind(pos))
 func _add_visual_100_layer(zone_id: String) -> void: _run_build(settlement_detail_builder._add_visual_100_layer.bind(zone_id))
-func _install_world_prop_controller(zone_id: String) -> void: _run_build(settlement_detail_builder._install_world_prop_controller.bind(zone_id))
+func _install_world_prop_controller(zone_id: String, phase: int = -1) -> void: _run_build(settlement_detail_builder._install_world_prop_controller.bind(zone_id, phase))
 func _apply_first_route_materials(root: Node) -> void: _run_build(settlement_detail_builder._apply_first_route_materials.bind(root))
 func _make_lantern_rhythm() -> void: _run_build(settlement_detail_builder._make_lantern_rhythm.bind())
 func _make_shrine_approach() -> void: _run_build(settlement_detail_builder._make_shrine_approach.bind())

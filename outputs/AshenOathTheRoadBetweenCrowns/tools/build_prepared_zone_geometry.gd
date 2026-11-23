@@ -79,26 +79,9 @@ func _compile() -> void:
 	quit(1 if failed else 0)
 
 func _compile_wychwood_ground() -> void:
-	# Same six visual extents as _make_split_ground; collision remains runtime-owned.
-	var contract = preload("res://scripts/bridge_surface_contract.gd")
-	var bridge_width: float = contract.DECK_WIDTH
-	var side_width := maxf((44.0 - bridge_width) * 0.5, 0.1)
-	var side_center := bridge_width * 0.5 + side_width * 0.5
-	var north_depth := -3.4 * 0.5 + 34.0 * 0.5
-	var south_edge := 3.4 * 0.5
-	var south_depth := 34.0 * 0.5 - south_edge
-	var support_half: float = contract.bridge_length(3.4) * 0.5 + contract.APPROACH_LENGTH
-	var corridor_depth := maxf(34.0 * 0.5 - support_half, 0.0)
-	var specs := [
-		[Vector3(-side_center,-0.08,-34.0*0.5+north_depth*0.5), Vector3(side_width,0.16,north_depth)],
-		[Vector3(side_center,-0.08,-34.0*0.5+north_depth*0.5), Vector3(side_width,0.16,north_depth)],
-		[Vector3(-side_center,-0.08,south_edge+south_depth*0.5), Vector3(side_width,0.16,south_depth)],
-		[Vector3(side_center,-0.08,south_edge+south_depth*0.5), Vector3(side_width,0.16,south_depth)],
-		[Vector3(0,-0.08,-34.0*0.5+corridor_depth*0.5), Vector3(bridge_width,0.16,corridor_depth)],
-		[Vector3(0,-0.08,support_half+corridor_depth*0.5), Vector3(bridge_width,0.16,corridor_depth)],
-	]
-	for spec in specs:
-		_save("wychwood_ground_" + preload("res://scripts/prepared_zone_geometry.gd").geometry_key(spec[1], spec[0]), Factory.wychwood_ground(spec[1], spec[0]))
+	const Terrain = preload("res://scripts/core/wychwood_ground_geometry.gd")
+	for spec: Array in Terrain.ground_specs():
+		_save(Terrain.ground_id(spec[1], spec[0]), Factory.wychwood_ground(spec[1], spec[0]))
 
 func _save_batch(id: String, transforms: Array[Transform3D]) -> void:
 	var source := load("res://assets_external/environment/forest/Bush_Common.obj") as ArrayMesh

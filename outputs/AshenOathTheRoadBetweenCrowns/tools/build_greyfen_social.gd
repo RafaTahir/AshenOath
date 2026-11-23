@@ -2,6 +2,7 @@ extends SceneTree
 
 const ROOT := "res://assets_external/environment/props/"
 const SOURCES := ["Table_Large.obj", "Chair_1.obj", "Stall_Empty.obj", "Potion_1.obj", "Potion_2.obj", "Bag.obj"]
+const CollisionCatalog = preload("res://scripts/core/prepared_greyfen_social_collision.gd")
 const WOOD := Color(0.38, 0.25, 0.16)
 const RECIPES := {
 	"common_table": Vector3(2.8, 0.85, 1.8),
@@ -11,6 +12,9 @@ const RECIPES := {
 var imported: Dictionary = {}
 
 func _initialize() -> void:
+	if "--collision-only" in OS.get_cmdline_user_args():
+		quit(0 if _bake_collisions() else 1)
+		return
 	for source in SOURCES:
 		var mesh := load(ROOT + source) as ArrayMesh
 		if mesh == null or mesh.get_surface_count() == 0:
@@ -72,8 +76,34 @@ func _initialize() -> void:
 			quit(1)
 			return
 		print("GREYFEN SOCIAL BAKE %s: surfaces=%d triangles=%d bytes=%d" % [id, mesh.get_surface_count(), mesh.get_faces().size() / 3, FileAccess.get_file_as_bytes(output).size()])
+	if not _bake_collisions():
+		quit(1)
+		return
 	print("GREYFEN SOCIAL BAKE: PASS")
 	quit(0)
+
+func _bake_collisions() -> bool:
+	var shapes := {}
+	var inputs := {}
+	for id: String in RECIPES:
+		var path := ROOT + "GreyfenSocial_%s.res" % id
+		var mesh := load(path) as Mesh
+		var fitted: ConcavePolygonShape3D = mesh.create_trimesh_shape() if mesh != null else null
+		if fitted == null or fitted.get_faces().is_empty():
+			push_error("Greyfen social collision needs the authored mesh: " + path)
+			return false
+		fitted.backface_collision = true
+		shapes[id] = fitted
+		inputs[path] = FileAccess.get_sha256(path)
+	var catalog := CollisionCatalog.new()
+	catalog.shapes.assign(shapes)
+	catalog.source_mesh_sha256.assign(inputs)
+	var error := ResourceSaver.save(catalog, CollisionCatalog.PATH, ResourceSaver.FLAG_COMPRESS)
+	if error != OK:
+		push_error("Greyfen social collision bake failed: " + error_string(error))
+		return false
+	print("GREYFEN SOCIAL COLLISION BAKE: PASS (%d exact mesh shapes, %d bytes)" % [shapes.size(), FileAccess.get_file_as_bytes(CollisionCatalog.PATH).size()])
+	return true
 
 func _append(target: SurfaceTool, id: String, size: Vector3, position: Vector3, yaw: float, tint: Color) -> void:
 	var mesh: ArrayMesh = imported[id]

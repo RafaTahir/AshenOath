@@ -179,7 +179,7 @@ static func rest_action(game, action: Dictionary) -> void:
 	if director != null:
 		director._choose_rest(action)
 
-static func install(game, root: Node3D, zone_id: String) -> void:
+static func install(game, root: Node3D, zone_id: String, phase: int = -1) -> void:
 	if root == null or root != game.zone_root:
 		return
 	var director = root.get_node_or_null(LAYER)
@@ -190,14 +190,14 @@ static func install(game, root: Node3D, zone_id: String) -> void:
 		director.zone = zone_id
 		root.add_child(director)
 		director._build(root)
-	if community_zone(zone_id) and director.community == null and preload("res://scripts/campaign_revision.gd").from_state(game.story_state) == 2:
+	if phase <= 0 and community_zone(zone_id) and director.community == null and preload("res://scripts/campaign_revision.gd").from_state(game.story_state) == 2:
 		# The destination pack has mounted before its published activity owner.
 		director.community = load("res://scripts/community_activity.gd").new()
 		director.community.configure(director)
-	director.refresh()
-	preload("res://scripts/saga_activities.gd").install(game, director, zone_id)
-	load("res://scripts/everyday_life.gd").install(game, director)
-	if zone_id == "greyfen":
+	if phase <= 0: director.refresh()
+	if phase in [-1, 1]: preload("res://scripts/saga_activities.gd").install(game, director, zone_id)
+	if phase in [-1, 2]: load("res://scripts/everyday_life.gd").install(game, director)
+	if phase in [-1, 3] and zone_id == "greyfen":
 		preload("res://scripts/opening_care_scene.gd").install(game, root)
 		preload("res://scripts/greyfen_archery_range.gd").install(game)
 		preload("res://scripts/bracken_field_trial.gd").install(game)

@@ -228,7 +228,7 @@ static func weapon_contact(parent: Node3D, base: Vector3, tip: Vector3, point: V
 			sweep_mesh = ImmediateMesh.new()
 		else:
 			sweep_mesh.clear_surfaces()
-		var camera := parent.get_viewport().get_camera_3d()
+		var camera := preload("res://scripts/core/scene_view_camera.gd").resolve(parent)
 		var width_axis := Vector3.UP
 		if camera != null:
 			width_axis = camera.global_transform.basis.x.normalized()

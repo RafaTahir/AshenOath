@@ -23,7 +23,7 @@ const PROMPT_VERBS := {
 	"Prepare road to ": "Prepare road",
 	"Keep ": "Keep", "Choose ": "Choose", "Report ": "Report", "Follow ": "Follow",
 	"Walk ": "Walk", "Visit ": "Visit", "Name ": "Name", "Lay down ": "Lay down", "Confess ": "Confess",
-	"Sit at ": "Sit at", "Draw from ": "Draw from", "Buy ": "Buy"
+	"Sit at ": "Sit at", "Draw from ": "Draw from", "Buy ": "Buy", "Browse ": "Browse"
 }
 
 var prompt = "Interact"

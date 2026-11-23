@@ -1,8 +1,6 @@
 extends Node
-
 const Cast = preload("res://scripts/story_cast_profile.gd")
 const Held = preload("res://scripts/held_prop_geometry.gd")
-const Surface = preload("res://scripts/spatial_surface_contract.gd")
 const WEAR_SHADER = preload("res://shaders/everyday_wear.gdshader")
 const TRAILS := {
 	"greyfen":{"name":"A loaded cart's passage","points":[Vector3(-4,0,12),Vector3(-4,0,10),Vector3(-3,0,8)],"text":"The parallel compressed marks lead to the kitchen's unloading place. They establish a load's approach, not who owned it."},
@@ -15,18 +13,17 @@ const TRAILS := {
 var service
 var host
 var wear: Array[Dictionary]=[]
+var player_wear: WeakRef
 var cursor := 0
 var accumulator := 0.0
 var stock: Array[Dictionary]=[]
 var keepsakes: Array[Node3D]=[]
 var active_seconds := 0.0
-
 func configure(owner_service) -> void:
 	service=owner_service
 	host=service.host
 	host.day_night.weather_changed.connect(weather_changed)
 	weather_changed(str(host.day_night.current_weather))
-	_collect_wear(host.player,"player")
 	var controller: Node=service.life()
 	if controller!=null:
 		for entry: Dictionary in controller.actors:
@@ -79,7 +76,7 @@ func vessel(parent:Node3D,point:Vector3,color:Color,size:float) -> MeshInstance3
 	return visual
 
 func _build_work_objects() -> void:
-	for area in host.interaction_focus.registered_nearby(host.player.global_position,host.zone_root,500.0):
+	for area: Node in host.zone_root.get_children():
 		var id:=str(area.get_meta("everyday_action",""))
 		if id.begins_with("work:"):
 			service.box(area,Vector3(0.5,0.3,0.35),Vector3(0,0.15,0),Color(0.29,0.24,0.16))
@@ -110,12 +107,15 @@ func _collect_wear(actor:Node3D,id:String) -> void:
 	wear.append(entry)
 
 func _process(delta:float) -> void:
-	if service.get_parent().get_parent()!=host.zone_root or not host.game_started or host.zone_transition_pending:return
+	if service.get_parent().get_parent()!=host.zone_root or not host.game_started or host.zone_transition_pending or not is_instance_valid(host.player):return
 	accumulator+=delta
 	active_seconds+=delta
 	if accumulator<0.5:return
 	accumulator=0
-	if wear.is_empty():return
+	if player_wear == null or player_wear.get_ref() != host.player:
+		wear = wear.filter(func(entry: Dictionary) -> bool: return entry.id != "player")
+		player_wear = weakref(host.player)
+		_collect_wear(host.player, "player")
 	cursor=cursor%wear.size()
 	var entry:Dictionary=wear[cursor]
 	cursor+=1

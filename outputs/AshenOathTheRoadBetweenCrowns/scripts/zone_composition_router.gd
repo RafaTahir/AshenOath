@@ -89,14 +89,28 @@ static func build_core_detail_stage(host: Node, zone_id: String, stage: String) 
 	var builder = builder_script.new()
 	if builder == null or not builder.has_method("build_detail_stage"):
 		return _failure(canonical_id, "core builder has no detail-stage contract")
+	var result := apply_core_detail_stage(host, context, builder, stage)
+	if not bool(result.ok):
+		return result
+	var actors: Dictionary = preload("res://scripts/character_animation_driver.gd").zone_contract(context.zone_root)
+	result.ok = actors.ok
+	result.errors = actors.errors
+	return result
+
+static func apply_core_detail_stage(host: Node, context: ZoneBuildContext, builder: RefCounted, stage: String) -> Dictionary:
+	var root := context.zone_root
+	if not is_instance_valid(root) or root != host.zone_root:
+		return _failure(context.zone_id, "detail-stage owner is no longer current")
 	var owns_reads: bool = host.story_state.world_reads.capturing.is_empty()
 	if owns_reads:
-		host._begin_zone_world_reads(canonical_id, false)
+		host._begin_zone_world_reads(context.zone_id, false)
 	builder.build_detail_stage(context, stage)
 	if owns_reads:
 		host._end_zone_world_reads()
-	var actors: Dictionary = preload("res://scripts/character_animation_driver.gd").zone_contract(host.zone_root)
-	return {"ok": bool(actors.ok), "errors": actors.errors, "zone": canonical_id, "stage": stage}
+	# Configuration failures are recorded as each actor is created. The covered
+	# opening has one full ownership pass just before the scene can draw.
+	var errors: Array = root.get_meta("actor_animation_errors", {}).values()
+	return {"ok": errors.is_empty(), "errors": errors, "zone": context.zone_id, "stage": stage}
 
 static func registered_zones() -> Array[String]:
 	var result: Array[String] = []

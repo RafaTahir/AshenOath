@@ -245,6 +245,8 @@ func get_dialogue(id: String) -> Dictionary:
 	candidates.sort_custom(func(a, b): return int(a.get("priority", 0)) > int(b.get("priority", 0)))
 	for variant in candidates:
 		if _conditions_match(variant.get("conditions", {})):
+			if variant.has("greeting"):
+				base.erase("greeting_delivery")
 			for key in variant:
 				if key not in ["conditions", "priority"]:
 					base[key] = variant[key]
@@ -261,6 +263,7 @@ func get_dialogue(id: String) -> Dictionary:
 	base["fallback_text"] = str(base.get("fallback_text", base.get("greeting", "...")))
 	base["subtitle_fallback"] = true
 	base["presentation"] = _presentation_contract(base.get("presentation", {}))
+	var recovering_road_report: bool = id == "report_decision" and preload("res://scripts/story_route_catalog.gd").legacy_road_report_pending(story_state)
 	var visible_actions: Array = []
 	for action in base.get("actions", []):
 		if str(action.get("type", "")) in ["ending", "final_choice"]:
@@ -271,7 +274,8 @@ func get_dialogue(id: String) -> Dictionary:
 		if str(action.get("type", "")) == "start_quest" and quest_manager != null and quest_manager.has_method("is_runtime_content_ready"):
 			if not quest_manager.is_runtime_content_ready(str(action.get("quest", ""))):
 				continue
-		if _conditions_match(action.get("conditions", {})):
+		var legacy_report_option: bool = recovering_road_report and str(action.get("quest", "")) == "main_road_of_crows" and str(action.get("objective", "")) == "return_village"
+		if legacy_report_option or _conditions_match(action.get("conditions", {})):
 			if StoryChoicePresenter.is_commitment(action):
 				action["decision_model"] = StoryChoicePresenter.describe(action, story_state, quest_manager, id)
 			visible_actions.append(action)
@@ -294,32 +298,26 @@ func _build_pages(data: Dictionary) -> Array:
 	var default_speaker := str(data.get("name", "Unknown"))
 	var greeting := str(data.get("greeting", "")).strip_edges()
 	if greeting != "":
-		pages.append({
+		var page := {
 			"speaker": default_speaker,
 			"speaker_id": _speaker_id(default_speaker),
 			"text": greeting,
 			"beat": "greeting"
-		})
+		}
+		var delivery: Variant = data.get("greeting_delivery", {})
+		if delivery is Dictionary: page.merge(delivery)
+		pages.append(page)
 	for raw_line in data.get("lines", []):
-		if raw_line is Dictionary and raw_line.has("conditions"):
-			# Conditional testimony must not reveal unobserved optional evidence.
-			if story_state == null or quest_manager == null or not _conditions_match(raw_line.conditions):
-				continue
-		var line := str(raw_line.get("text", "")) if typeof(raw_line) == TYPE_DICTIONARY else str(raw_line)
-		line = line.strip_edges()
-		if line == "":
+		var metadata: Dictionary = raw_line if raw_line is Dictionary else {}
+		# Conditional testimony must not reveal unobserved optional evidence.
+		if metadata.has("conditions") and (story_state == null or quest_manager == null or not _conditions_match(metadata.conditions)):
 			continue
-		var speaker := default_speaker
-		var speaker_id := _speaker_id(default_speaker)
-		var beat := "line"
-		var direction := ""
-		var pause_after := 0.0
-		if typeof(raw_line) == TYPE_DICTIONARY:
-			speaker = str(raw_line.get("speaker", default_speaker)).strip_edges()
-			speaker_id = str(raw_line.get("speaker_id", _speaker_id(speaker))).strip_edges()
-			beat = str(raw_line.get("beat", "line"))
-			direction = str(raw_line.get("direction", ""))
-			pause_after = maxf(float(raw_line.get("pause_after", 0.0)), 0.0)
+		var line := str(metadata.get("text", "") if raw_line is Dictionary else raw_line).strip_edges()
+		if line.is_empty(): continue
+		var speaker := str(metadata.get("speaker", default_speaker)).strip_edges()
+		var speaker_id := str(metadata.get("speaker_id", _speaker_id(speaker))).strip_edges()
+		var direction := str(metadata.get("direction", ""))
+		var pause_after := maxf(float(metadata.get("pause_after", 0.0)), 0.0)
 		var separator := line.find(": ")
 		if separator > 0 and separator < 32:
 			speaker = line.left(separator).strip_edges()
@@ -329,14 +327,12 @@ func _build_pages(data: Dictionary) -> Array:
 			"speaker": speaker,
 			"speaker_id": speaker_id,
 			"text": line,
-			"beat": beat
+			"beat": str(metadata.get("beat", "line"))
 		}
-		if direction != "":
-			page["direction"] = direction
-		if pause_after > 0.0:
-			page["pause_after"] = pause_after
-		if raw_line is Dictionary and raw_line.has("performance"):
-			page["performance"] = preload("res://scripts/story_scene_direction.gd").checked_performance(raw_line.performance)
+		if direction != "": page["direction"] = direction
+		if pause_after > 0.0: page["pause_after"] = pause_after
+		for field: String in ["line_id", "voice_take", "performance"]:
+			if metadata.has(field): page[field] = metadata[field]
 		pages.append(page)
 	return pages
 

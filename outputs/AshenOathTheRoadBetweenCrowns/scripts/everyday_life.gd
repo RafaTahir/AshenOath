@@ -76,8 +76,8 @@ func configure() -> void:
 		area.set_meta("interaction_collision_owner",NodePath(".."))
 		area.set_interaction_enabled(false)
 		surrender_targets.append({"enemy":weakref(enemy),"area":weakref(area)})
-	for area in host.interaction_focus.registered_nearby(host.player.global_position, host.zone_root, 500.0):
-		if area.has_meta("design_ecology"):
+	for area: Node in host.zone_root.get_children():
+		if area is Area3D and area.has_meta("design_ecology") and area.is_visible_in_tree():
 			ecology.append({"actor":weakref(area), "elapsed":0.0, "phase":-1, "visible_time":0.0, "event_clip":"", "event_phase":-1.0})
 			var ambient: Node = area.find_child("NpcAmbient", true, false)
 			if ambient != null: ambient.process_mode = Node.PROCESS_MODE_DISABLED

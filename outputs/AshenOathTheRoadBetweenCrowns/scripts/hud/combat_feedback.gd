@@ -158,7 +158,11 @@ func _advance_notices(delta: float) -> void:
 	if toasts_suppressed and not _notice_active.is_empty() and str(_notice_active.get("category", "")) not in ["error", "unavailable"]:
 		return
 	if not _notice_active.is_empty():
-		_notice_remaining -= delta
+		# Let the notice keep its reading time while a prompt or a combat cue
+		# occupies the shared gameplay space. Menus keep their own notice slot.
+		var shared := input_device == "touch" or _touch_shared_prompt
+		if not shared or _gameplay_surface_blocked() or not is_instance_valid(toast_label) or toast_label.visible:
+			_notice_remaining -= delta
 		if _notice_remaining <= 0.0:
 			_notice_active.clear()
 	if _notice_active.is_empty():
@@ -172,11 +176,9 @@ func _present_notice() -> void:
 	if toast_label == null:
 		return
 	var text := str(_notice_active.get("text", ""))
-	var menu_open := (menu_layer != null and menu_layer.visible) or (inventory_layer != null and inventory_layer.visible)
 	var reading := dialogue_layer != null and (dialogue_layer.visible or _dialogue_review_open)
-	var may_show := not toasts_suppressed or str(_notice_active.get("category", "")) in ["error", "unavailable"]
-	toast_label.visible = text != "" and not menu_open and not reading and may_show
 	toast_label.text = text
+	toast_label.tooltip_text = text
 	var notice_alpha := 1.0
 	if not reduced_motion and not flash_reduction and not _notice_active.is_empty():
 		var duration := float(_notice_active.get("duration", 2.2))
@@ -185,10 +187,8 @@ func _present_notice() -> void:
 	if notice_category_label != null:
 		var category := str(_notice_active.get("category", "info"))
 		notice_category_label.text = str({"story":"Story", "inventory":"Supplies", "save":"Saved", "error":"Unable to complete", "unavailable":"Unavailable", "combat":"In the fight", "info":"On the road"}.get(category, "On the road"))
-		notice_category_label.visible = toast_label.visible
 		notice_category_label.modulate.a = notice_alpha
 	if notice_back != null:
-		notice_back.visible = toast_label.visible
 		notice_back.modulate.a = notice_alpha
 	if inventory_notice_label != null:
 		inventory_notice_label.text = text if inventory_layer.visible and not reading else ""
@@ -398,8 +398,10 @@ func _build_hud() -> void:
 	_quest_marker.text = "◆"
 	tracker_label = _hud_label(hud_root, "QuestTrackerObjective", 20)
 	tracker_label.max_lines_visible = -1
+	tracker_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	tracker_route_label = _hud_label(hud_root, "StoryRouteHint", 16)
 	tracker_route_label.max_lines_visible = 2
+	tracker_route_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	tracker_work_label = _hud_label(hud_root, "NearbyStoryWork", 16)
 	tracker_work_label.max_lines_visible = 2
 	tracker_footer_label = _hud_label(hud_root, "JournalBinding", 16)

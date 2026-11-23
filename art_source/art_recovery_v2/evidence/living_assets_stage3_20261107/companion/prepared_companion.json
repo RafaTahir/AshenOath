@@ -13,8 +13,8 @@
 	"exact_roundtrip_verified": true,
 	"native_pose_equivalence_verified": false,
 	"output": "res://assets_external/characters_prepared/companions/bracken.scn",
-	"output_sha256": "384eb4c1d3a827272356b136c2481de8e97d135548d82ccc9ded26fd38b309ac",
-	"proof_archive": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/companion/proofs/ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26/384eb4c1d3a827272356b136c2481de8e97d135548d82ccc9ded26fd38b309ac",
+	"output_sha256": "158c1d9bf48671cefe2b82e142adc069a49e58cfb2c8af94c722464cdfa00e74",
+	"proof_archive": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/companion/proofs/ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26/158c1d9bf48671cefe2b82e142adc069a49e58cfb2c8af94c722464cdfa00e74",
 	"proof_stage": "authored_ambient_revision",
 	"raw_root_roundtrip_signature": "0c6953571e2eb6fc484293e0304619488bbef4f564d9e7dcf4aed53dd8669f3b",
 	"resource_dependencies": [

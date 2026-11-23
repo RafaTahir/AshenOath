@@ -140,7 +140,7 @@ func _refresh_screen_budget(step: float) -> void:
 	if screen_refresh_remaining > 0.0 and not conversation_active:
 		return
 	screen_refresh_remaining = 0.25
-	var camera := character_root.get_viewport().get_camera_3d()
+	var camera := preload("res://scripts/core/scene_view_camera.gd").resolve(character_root)
 	face_on_screen = conversation_active or camera == null
 	var distance := 0.0
 	if camera != null:
@@ -480,3 +480,7 @@ func play_story_gesture(kind: String) -> void:
 	_reconcile_face_eligibility()
 	if head_modifier != null and face_pose_eligible and attention_mode != "sleep":
 		head_modifier.gesture(kind)
+
+func clear_story_gesture() -> void:
+	if is_instance_valid(head_modifier):
+		head_modifier.gesture_time = 0.0

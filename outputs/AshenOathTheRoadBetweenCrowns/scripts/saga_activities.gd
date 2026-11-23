@@ -12,8 +12,6 @@ const CastProfile = preload("res://scripts/story_cast_profile.gd")
 var host
 var zone := ""
 var points: Dictionary = {}
-var _refresh_pending := false
-var _refreshing := false
 var _work: Dictionary = {}
 var _elapsed := 0.0
 var _escort: Node3D
@@ -42,16 +40,12 @@ static func install(game, director: Node, zone_id: String) -> void:
 		director.add_child(owner)
 		game.story_state.changed.connect(owner.queue_refresh)
 		game.quests.changed.connect(owner.queue_refresh)
-	owner.refresh()
+		owner.refresh()
 
 var saga_site_view = preload("res://scripts/views/saga_site_view.gd").new(self)
 var saga_dialogue_view = preload("res://scripts/views/saga_dialogue_view.gd").new(self)
 var saga_work_view = preload("res://scripts/views/saga_work_view.gd").new(self)
-func queue_refresh() -> void:
-	if _refresh_pending or not is_inside_tree():
-		return
-	_refresh_pending = true
-	call_deferred("refresh")
+func queue_refresh() -> void: saga_site_view.queue_refresh()
 
 func refresh() -> void: saga_site_view.refresh()
 func _point(id: String, prompt: String, site: String, kind: String) -> Node3D: return saga_site_view._point(id, prompt, site, kind)

@@ -2,6 +2,7 @@
   "schema_version": 1,
   "policy": "All possible actors for the destination, including conditional returns. Ecology sightings are added from design_pack_ecology; aliases retain their prepared source identity.",
   "fresh_start_exclusions": {
+    "M01": "The Ghoulkin is required for Wychwood travel and Greyfen's later cemetery ambush. Both destinations and saved journeys retain the full requirements.",
     "M05": "Bell-Eater can activate only after the first Wychwood encounter and return. Greyfen travel and Continue retain the full destination requirements."
   },
   "shared": ["P01", "M13"],

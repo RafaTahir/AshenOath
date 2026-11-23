@@ -1,6 +1,7 @@
 extends RefCounted
 const Api = preload("res://scripts/core/zone_construction_api.gd")
 const Scope = preload("res://scripts/core/zone_instance_scope.gd")
+const TREES_PER_UNIT := 16
 var _host: Api
 var _scope: Scope
 func _init(host: Api, scope: Scope) -> void:
@@ -307,56 +308,97 @@ func _make_deadfall(pos: Vector3) -> void:
 	var rotation: Variant = Vector3(deg_to_rad(88.0), deg_to_rad(_host._scene_randf_range(-20.0, 20.0)), deg_to_rad(_host._scene_randf_range(-8.0, 8.0)))
 	_scope.deadfall_batch_data.append(Transform3D(Basis.from_euler(rotation), pos + Vector3(0, 0.35, 0)))
 func _flush_authored_tree_assets() -> bool:
+	var plan := _authored_tree_plan()
+	for unit: Callable in _authored_tree_units(plan):
+		unit.call()
+	return bool(plan.authored)
+
+func tree_publication_units(fallback: Callable) -> Array[Callable]:
+	var plan := _authored_tree_plan()
+	var units := _authored_tree_units(plan)
+	units.append(_publish_tree_fallback.bind(plan, fallback))
+	return units
+
+func _authored_tree_plan() -> Dictionary:
+	var batches: Array[Dictionary] = []
+	var plan := {"authored": false, "batches": batches}
 	if _host.asset_helper == null or _host.settings == null:
-		return false
+		return plan
 	if str(_host.settings.settings.get("quality_preset", "balanced")) == "potato":
-		return false
+		return plan
 	var grouped_items: Dictionary = {}
 	for item in _scope.tree_batch_data:
-		var role: Variant = str(item.get("asset_role", "forest_tree"))
+		var role := str(item.get("asset_role", "forest_tree"))
 		if not grouped_items.has(role):
 			grouped_items[role] = []
 		grouped_items[role].append(item)
-	if grouped_items.is_empty():
-		return false
-	var created_batch: Variant = false
-	for role in grouped_items.keys():
-		var role_items: Array = grouped_items[role]
-		if role_items.is_empty():
-			continue
-		var source: Dictionary = _host.asset_helper.forest_tree_source(str(role))
-		if source.is_empty():
-			return false
-		var source_mesh: Mesh = source.mesh
-		var source_material: Material = source.material
-		var source_bounds: AABB = source.bounds
-		var source_scale: float = source.scale
-		var source_normalization: Transform3D = source.normalization
-		if source_material == null and source_mesh.get_surface_count() == 1:
-			source_material = _host.world_materials.get_material("forest_ground", str(_host.settings.settings.get("quality_preset", "balanced")), Color(0.08, 0.18, 0.09), 0.0, false)
-		var trees: Variant = _host._make_multimesh_batch("AuthoredTreeBatch_%s" % str(role).replace(":", "_"), source_mesh, role_items.size(), source_material)
-		var camera_clearance: Variant = StaticBody3D.new()
-		camera_clearance.name = "TreeCameraClearance_%s" % str(role).replace(":", "_")
-		camera_clearance.collision_layer = 1 << 6
-		camera_clearance.collision_mask = 0
-		_scope.zone_root.add_child(camera_clearance)
-		var tree_transforms: Array = []
-		for index in range(role_items.size()):
-			var item: Dictionary = role_items[index]
-			var tree_position: Vector3 = item.get("asset_position", Vector3.ZERO)
-			var tree_scale: Vector3 = item.get("asset_scale", Vector3.ONE)
-			var tree_yaw: float = float(item.get("asset_yaw", 0.0))
-			var basis: Variant = Basis.from_euler(Vector3(0.0, tree_yaw, 0.0)).scaled(tree_scale)
-			var tree_transform: Variant = Transform3D(basis, tree_position) * source_normalization
-			tree_transforms.append(tree_transform)
-			var clearance_shape: Variant = CollisionShape3D.new()
-			var clearance_box: Variant = preload("res://scripts/immutable_collision_shapes.gd").box(source_bounds.size * tree_scale * source_scale)
-			clearance_shape.shape = clearance_box
-			clearance_shape.transform = Transform3D(Basis(Vector3.UP, tree_yaw), tree_transform * source_bounds.get_center())
-			camera_clearance.add_child(clearance_shape)
-		_host._upload_static_batch(trees, tree_transforms)
-		created_batch = true
-	return created_batch
+	for role: String in grouped_items:
+		batches.append({"role": role, "items": grouped_items[role], "transforms": [], "clearance": null})
+	plan.authored = not batches.is_empty()
+	return plan
+
+func _authored_tree_units(plan: Dictionary) -> Array[Callable]:
+	var units: Array[Callable] = []
+	# Resolve every authored source before emitting either visual or collision
+	# nodes so a broken later role can use the original whole-zone fallback.
+	for batch: Dictionary in plan.batches:
+		units.append(_resolve_tree_source.bind(plan, batch))
+	for batch: Dictionary in plan.batches:
+		var items: Array = batch.items
+		for start in range(0, items.size(), TREES_PER_UNIT):
+			units.append(_append_tree_transforms.bind(plan, batch, start, mini(start + TREES_PER_UNIT, items.size())))
+		units.append(_publish_authored_tree_batch.bind(plan, batch))
+	return units
+
+func _resolve_tree_source(plan: Dictionary, batch: Dictionary) -> void:
+	if not bool(plan.authored):
+		return
+	var source: Dictionary = _host.asset_helper.forest_tree_source(str(batch.role))
+	batch.source = source
+	plan.authored = not source.is_empty()
+
+func _append_tree_transforms(plan: Dictionary, batch: Dictionary, start: int, end: int) -> void:
+	if not bool(plan.authored):
+		return
+	var clearance: StaticBody3D = batch.clearance
+	if clearance == null:
+		clearance = StaticBody3D.new()
+		clearance.name = "TreeCameraClearance_%s" % str(batch.role).replace(":", "_")
+		clearance.collision_layer = 1 << 6
+		clearance.collision_mask = 0
+		_scope.zone_root.add_child(clearance)
+		batch.clearance = clearance
+	var source: Dictionary = batch.source
+	var bounds: AABB = source.bounds
+	var normalization: Transform3D = source.normalization
+	for index in range(start, end):
+		var item: Dictionary = batch.items[index]
+		var position: Vector3 = item.get("asset_position", Vector3.ZERO)
+		var scale_value: Vector3 = item.get("asset_scale", Vector3.ONE)
+		var yaw := float(item.get("asset_yaw", 0.0))
+		var basis := Basis.from_euler(Vector3(0.0, yaw, 0.0)).scaled(scale_value)
+		var transform := Transform3D(basis, position) * normalization
+		batch.transforms.append(transform)
+		var shape := CollisionShape3D.new()
+		shape.shape = preload("res://scripts/immutable_collision_shapes.gd").box(bounds.size * scale_value * float(source.scale))
+		shape.transform = Transform3D(Basis(Vector3.UP, yaw), transform * bounds.get_center())
+		clearance.add_child(shape)
+
+func _publish_authored_tree_batch(plan: Dictionary, batch: Dictionary) -> void:
+	if not bool(plan.authored):
+		return
+	var source: Dictionary = batch.source
+	var mesh: Mesh = source.mesh
+	var material: Material = source.material
+	if material == null and mesh.get_surface_count() == 1:
+		material = _host.world_materials.get_material("forest_ground", str(_host.settings.settings.get("quality_preset", "balanced")), Color(0.08, 0.18, 0.09), 0.0, false)
+	var name := "AuthoredTreeBatch_%s" % str(batch.role).replace(":", "_")
+	var trees := _host._make_multimesh_batch(name, mesh, batch.transforms.size(), material)
+	_host._upload_static_batch(trees, batch.transforms)
+
+func _publish_tree_fallback(plan: Dictionary, fallback: Callable) -> void:
+	if not bool(plan.authored):
+		fallback.call()
 func _make_crow_silhouettes() -> void:
 	var silhouette_mesh: Variant = SphereMesh.new()
 	silhouette_mesh.radial_segments = 12

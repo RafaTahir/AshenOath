@@ -74,6 +74,11 @@ func bind_visual(node: Node3D, property: String, idle_value: Variant, active_val
 	_bindings.append({"node":weakref(node), "property":property, "idle":idle_value, "active":active_value})
 	_apply_state()
 
+func set_reduced_motion(enabled: bool) -> void:
+	set_meta("reduced_motion", enabled)
+	if enabled and _motion != null and _motion.is_valid():
+		_apply_state()
+
 func get_state() -> String:
 	return current_state
 

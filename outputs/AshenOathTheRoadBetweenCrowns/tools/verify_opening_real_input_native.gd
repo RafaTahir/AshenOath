@@ -1,7 +1,9 @@
 extends SceneTree
 
 const CemeterySection = preload("res://scripts/zones/cemetery_section.gd")
-const DEADLINE_MS := 15000
+const SectorManifest = preload("res://scripts/world_sector_manifest.gd")
+const STARTUP_MENU_DEADLINE_MS := 120000
+const CONTROL_DEADLINE_MS := 45000
 
 var failures: Array[String] = []
 var stabilize_route_bearing := false
@@ -9,6 +11,7 @@ var route_camera_yaw := 0.0
 var expected_ash_supply_arrows := 20
 
 func _initialize() -> void:
+	var startup_started := Time.get_ticks_msec()
 	if DisplayServer.get_name().to_lower() == "headless":
 		_fail("Real-input route requires a graphical viewport")
 		_finish()
@@ -89,14 +92,20 @@ func _initialize() -> void:
 	var continue_cemetery := OS.get_cmdline_user_args().has("--continue-cemetery") or continue_teeth
 	var anwen_only := OS.get_cmdline_user_args().has("--anwen-only")
 	var wychwood_only := OS.get_cmdline_user_args().has("--wychwood-only")
-	var menu_label := "Continue" if continue_cemetery or continue_bog or continue_names or continue_names_greyfen or continue_names_farmstead or continue_names_mill or continue_rootbound or continue_rootbound_fight or continue_rootbound_defeated or continue_ash_shop or continue_ash_mill or continue_ash_mill_clue or continue_ashwing or continue_soldier_road or continue_senn or continue_castle_road or continue_castle_evidence or continue_record_hall or continue_record_ledger or continue_record_haunting or continue_edric or continue_undercroft or continue_halvern or continue_halvern_choice or continue_assembly or continue_assembly_choice or continue_hart_glade or continue_hart_choice or continue_side_quest else "New Game"
-	var menu_button: Button = null
-	for node in game.hud.menu_layer.find_children("*", "Button", true, false):
-		if (node as Button).text == menu_label:
-			menu_button = node as Button
-			break
+	var first_route_return := OS.get_cmdline_user_args().has("--first-route-return")
+	var first_route_report := OS.get_cmdline_user_args().has("--first-route-report")
+	var first_route_reload := OS.get_cmdline_user_args().has("--first-route-reload")
+	var menu_label := "Continue" if first_route_return or first_route_report or first_route_reload or continue_cemetery or continue_bog or continue_names or continue_names_greyfen or continue_names_farmstead or continue_names_mill or continue_rootbound or continue_rootbound_fight or continue_rootbound_defeated or continue_ash_shop or continue_ash_mill or continue_ash_mill_clue or continue_ashwing or continue_soldier_road or continue_senn or continue_castle_road or continue_castle_evidence or continue_record_hall or continue_record_ledger or continue_record_haunting or continue_edric or continue_undercroft or continue_halvern or continue_halvern_choice or continue_assembly or continue_assembly_choice or continue_hart_glade or continue_hart_choice or continue_side_quest else "New Game"
+	var menu_button := await _wait_for_start_button(game.hud.menu_layer, menu_label)
+	if menu_button == null:
+		_fail("%s did not become available within %d ms; visible menu=%s" % [menu_label, STARTUP_MENU_DEADLINE_MS, game.hud.active_menu])
+		await _shutdown_game(game)
+		_finish()
+		return
+	print("REAL_INPUT usable_menu_ms=%d" % (Time.get_ticks_msec() - startup_started))
+	await process_frame
 	var focused := root.gui_get_focus_owner() as Button
-	for _index in range(8 if continue_cemetery or continue_bog or continue_names or continue_names_greyfen or continue_names_farmstead or continue_names_mill or continue_rootbound or continue_rootbound_fight or continue_rootbound_defeated or continue_ash_shop or continue_ash_mill or continue_ash_mill_clue or continue_ashwing or continue_soldier_road or continue_senn or continue_castle_road or continue_castle_evidence or continue_record_hall or continue_record_ledger or continue_record_haunting or continue_edric or continue_undercroft or continue_halvern or continue_halvern_choice or continue_assembly or continue_assembly_choice or continue_hart_glade or continue_hart_choice or continue_side_quest else 1):
+	for _index in range(8 if menu_label == "Continue" else 1):
 		if focused != null and focused.text == menu_label:
 			break
 		_key(KEY_TAB, true)
@@ -106,11 +115,13 @@ func _initialize() -> void:
 		focused = root.gui_get_focus_owner() as Button
 	if menu_button == null or menu_button.disabled or focused == null or focused.text != menu_label or focused.disabled:
 		_fail("%s was not keyboard-focusable; focused=%s" % [menu_label, focused.text if focused != null else "none"])
-	else:
-		_key(KEY_ENTER, true)
-		await _frames(3)
-		_key(KEY_ENTER, false)
-	var deadline := Time.get_ticks_msec() + DEADLINE_MS
+		await _shutdown_game(game)
+		_finish()
+		return
+	var accepted_at := Time.get_ticks_msec()
+	_key(KEY_ENTER, true)
+	await _frames(3)
+	_key(KEY_ENTER, false)
 	var expected_zone := "hart_glade" if continue_hart_choice else ("assembly" if continue_assembly_choice or continue_hart_glade else ("undercroft" if continue_halvern or continue_halvern_choice or continue_assembly else ("record_hall" if continue_record_ledger or continue_record_haunting or continue_edric or continue_undercroft else ("vargan_court" if continue_record_hall else ("vargan_approach" if continue_castle_evidence else ("bandit_road" if continue_senn or continue_castle_road else ("old_mill" if continue_names_mill or continue_ash_mill_clue or continue_ashwing or continue_soldier_road else ("burned_farmstead" if continue_names_farmstead else ("deep_wood" if continue_bog or continue_names or continue_rootbound or continue_rootbound_fight or continue_rootbound_defeated or continue_ash_mill else "greyfen")))))))))
 	if continue_side_banner or continue_side_banner_shield or continue_banner_assembly:
 		expected_zone = "bandit_road"
@@ -126,8 +137,15 @@ func _initialize() -> void:
 		expected_zone = "old_mill"
 	if continue_measure_halvern:
 		expected_zone = "undercroft"
-	while Time.get_ticks_msec() < deadline and not (game.game_started and game.current_zone_id == expected_zone and not game.zone_transition_pending):
-		await process_frame
+	if first_route_return:
+		expected_zone = "wychwood"
+	var reached_control := await _wait_for_journey_control(game, expected_zone, accepted_at)
+	if not reached_control:
+		_fail("Focused menu start did not reach controllable %s" % expected_zone)
+		await _shutdown_game(game)
+		_finish()
+		return
+	print("REAL_INPUT accepted_to_control_ms=%d zone=%s" % [Time.get_ticks_msec() - accepted_at, expected_zone])
 	if OS.get_cmdline_user_args().has("--audio-sync-combat") and expected_zone == "greyfen":
 		# This scope measures actual combat cue timing, not cold startup/travel.
 		# Preserve the ordinary route's deadlines and record the readiness wait.
@@ -140,6 +158,16 @@ func _initialize() -> void:
 			_fail("Combat audio scope did not reach the complete opening scene")
 	if not game.game_started or game.current_zone_id != expected_zone:
 		_fail("Focused menu start did not reach controllable %s" % expected_zone)
+	elif first_route_return:
+		await _return_wychwood_to_greyfen(game)
+		if failures.is_empty():
+			await _report_to_anwen(game)
+	elif first_route_report:
+		if await _exit_arrival_road(game, "wychwood", "greyfen", "earned_greyfen_arrival"):
+			await _report_to_anwen(game)
+	elif first_route_reload:
+		if _verify_private_road_report(game, "reload"):
+			await _save_private_road_report(game)
 	elif OS.get_cmdline_user_args().has("--audio-sync-only"):
 		await _verify_audio_input_sync(game)
 	elif continue_bog:
@@ -335,16 +363,7 @@ func _initialize() -> void:
 						return
 					await _move_until(game, KEY_A, "north_road_center", func(p: Vector3) -> bool: return p.x < 0.45, 4000)
 					if failures.is_empty():
-						_key(KEY_W, true)
-						var travel_deadline := Time.get_ticks_msec() + 12000
-						while Time.get_ticks_msec() < travel_deadline and game.current_zone_id != "wychwood":
-							await physics_frame
-						_key(KEY_W, false)
-						await _frames(5)
-						if game.current_zone_id != "wychwood" or game.zone_transition_pending or game.player.transition_locked:
-							_fail("Physical north-road travel did not reach playable Wychwood; zone=%s position=%s" % [game.current_zone_id, game.player.global_position])
-						else:
-							print("REAL_INPUT greyfen_to_wychwood=PASS position=%s" % game.player.global_position)
+						if await _walk_first_route_connector(game, "wychwood"):
 							await _move_until(game, KEY_W, "wychwood_first_layby", func(p: Vector3) -> bool: return p.z < 10.8, 4000)
 							await _move_until(game, KEY_A, "bram_ledger_offset", func(p: Vector3) -> bool: return p.x < -0.7, 3000)
 							if failures.is_empty():
@@ -367,7 +386,8 @@ func _initialize() -> void:
 							if failures.is_empty() and not game.quests.is_objective_done("main_road_of_crows", "evidence_ready"):
 								_fail("Three player-collected clues did not advance the evidence objective")
 							await _move_until(game, KEY_D, "wychwood_bridge_centerline", func(p: Vector3) -> bool: return p.x > -0.25, 3000)
-							await _move_until(game, KEY_W, "wychwood_north_bank", func(p: Vector3) -> bool: return p.z < -2.8, 7000)
+							var bridge_deadline := 12000 if OS.get_cmdline_user_args().has("--first-route-baseline") else 7000
+							await _move_until(game, KEY_W, "wychwood_north_bank", func(p: Vector3) -> bool: return p.z < -2.8, bridge_deadline)
 							if failures.is_empty() and (game.current_zone_id != "wychwood" or game.player.health_component.health <= 0.0):
 								_fail("Player did not survive a real-input Wychwood bridge crossing")
 							await _fight_wychwood_pack(game)
@@ -383,29 +403,119 @@ func _initialize() -> void:
 	await _shutdown_game(game)
 	_finish()
 
+func _wait_for_start_button(menu: Control, label: String) -> Button:
+	var deadline := Time.get_ticks_msec() + STARTUP_MENU_DEADLINE_MS
+	while Time.get_ticks_msec() < deadline:
+		for node: Node in menu.find_children("*", "Button", true, false):
+			var button := node as Button
+			if button.text == label and button.is_visible_in_tree() and not button.disabled:
+				return button
+		await process_frame
+	return null
+
+func _wait_for_journey_control(game: Node, zone_id: String, accepted_at: int) -> bool:
+	var skip_sent := false
+	var ready_frames := 0
+	var observation_limit := 150000 if OS.get_cmdline_user_args().has("--first-route-baseline") else CONTROL_DEADLINE_MS
+	while Time.get_ticks_msec() - accepted_at < observation_limit:
+		var focused := root.gui_get_focus_owner() as Button
+		if not skip_sent and focused != null and focused.name == &"OpeningSceneSkip" and not focused.disabled:
+			skip_sent = true
+			_key(KEY_ENTER, true)
+			await _frames(3)
+			_key(KEY_ENTER, false)
+			print("REAL_INPUT introduction_skipped_through_input=true")
+		var player: Node = game.get("player")
+		var can_play: bool = game.game_started and game.current_zone_id == zone_id and not game.zone_transition_pending \
+			and not paused and is_instance_valid(player) and player.can_control and not player.transition_locked
+		ready_frames = ready_frames + 1 if can_play else 0
+		if ready_frames >= 2:
+			return true
+		await process_frame
+	return false
+
 func _return_wychwood_to_greyfen(game: Node) -> void:
 	if not game.quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
 		_fail("Wychwood return requires the actual completed fight")
 		return
-	await _turn_camera_north(game)
-	if not failures.is_empty():
-		return
-	if game.player.global_position.x > 0.35:
-		await _move_until(game, KEY_A, "wychwood_return_centerline", func(p: Vector3) -> bool: return p.x < 0.35, 4000)
-	elif game.player.global_position.x < -0.35:
-		await _move_until(game, KEY_D, "wychwood_return_centerline", func(p: Vector3) -> bool: return p.x > -0.35, 4000)
-	if not failures.is_empty():
-		return
-	await _move_until(game, KEY_S, "wychwood_to_greyfen_boundary", func(_p: Vector3) -> bool: return game.current_zone_id == "greyfen", 12000)
-	if not await _await_playable_zone(game, "greyfen", "wychwood_to_greyfen"):
+	if not await _walk_first_route_connector(game, "greyfen"):
 		return
 	# Walking has its own bounded deadline. Loading owns the existing strict
 	# transition gate, measured from the runtime request, not this later await.
 	var elapsed_ms := float(game.last_loading_metrics.get("to_playable_ms", INF))
 	var reused := bool(game.zone_runtime_coordinator.last_activation.get("reused", false))
 	var budget_ms := 350.0 if reused else 900.0
-	if not is_finite(elapsed_ms) or elapsed_ms > budget_ms:
+	if OS.get_cmdline_user_args().has("--first-route-baseline") and is_finite(elapsed_ms):
+		print("REAL_INPUT greyfen_return_ms=%.1f budget_ms=%.1f budget_met=%s" % [elapsed_ms, budget_ms, elapsed_ms <= budget_ms])
+	elif not is_finite(elapsed_ms) or elapsed_ms > budget_ms:
 		_fail("Greyfen return transition exceeded %s budget: %.1f ms > %.1f ms" % ["warm" if reused else "cold", elapsed_ms, budget_ms])
+
+func _walk_first_route_connector(game: Node, target: String) -> bool:
+	var source: String = game.current_zone_id
+	var label := "%s_to_%s" % [source, target]
+	var edge := SectorManifest.connection_between(source, target)
+	var prepared_pilot := OS.get_cmdline_user_args().has("--prepare-first-route")
+	if edge.is_empty():
+		_fail("The first-route manifest has no connector for " + label)
+		return false
+	var preparation_started := Time.get_ticks_msec()
+	await _turn_camera_north(game)
+	var points := SectorManifest.connector_points(edge).duplicate()
+	# Enter the seam through ordinary movement. The final inward tolerance must
+	# not stop the key hold just short of the authored crossing plane.
+	points.append(points[-1] + SectorManifest.direction(str(edge.id)) * 2.0)
+	for index: int in range(points.size()):
+		# Qualify the destination from the source side of the dogleg. Waiting
+		# at the last save location can keep Kael in an unrelated encounter.
+		if prepared_pilot and index == points.size() - 2 and game.current_zone_id == source and failures.is_empty():
+			if not await _await_prepared_connector(game, target, preparation_started, label): return false
+		await _walk_road_waypoint(game, source, points[index], "%s_road_%d" % [label, index], 90000 if prepared_pilot else 30000)
+	if not await _await_playable_zone(game, target, label): return false
+	if not prepared_pilot: return true
+	var activation: Dictionary = game.zone_runtime_coordinator.last_activation
+	if not bool(activation.get("continuous", false)) or not bool(activation.get("reused", false)):
+		_fail("The pilot used direct travel at %s: %s" % [label, activation])
+		return false
+	print("REAL_INPUT %s_activation=%s" % [label, activation])
+	return await _exit_arrival_road(game, source, target, label)
+
+func _exit_arrival_road(game: Node, source: String, target: String, label: String) -> bool:
+	var reverse := SectorManifest.connection_between(target, source)
+	if reverse.is_empty():
+		_fail("The arrival has no reciprocal connector for " + label)
+		return false
+	await _turn_camera_north(game)
+	var exit_points := SectorManifest.connector_points(reverse)
+	# Continue can recover an already supported position inside the road mouth.
+	if (game.player.global_position - exit_points[0]).dot(SectorManifest.direction(str(reverse.id))) <= 0.0:
+		return true
+	# A continuous arrival is on the reciprocal seam. Follow the bends back
+	# to the destination's inner mouth before taking the village trail.
+	for index in range(exit_points.size() - 2, -1, -1):
+		await _walk_road_waypoint(game, target, exit_points[index], "%s_arrival_road_%d" % [label, index], 90000)
+	return failures.is_empty() and game.current_zone_id == target
+
+func _walk_road_waypoint(game: Node, zone: String, point: Vector3, label: String, timeout_ms: int) -> void:
+	for axis: int in [Vector3.AXIS_X, Vector3.AXIS_Z]:
+		if game.current_zone_id != zone or not failures.is_empty(): return
+		var difference: float = point[axis] - game.player.global_position[axis]
+		if absf(difference) <= 0.35: continue
+		var heading := signf(difference)
+		var key: Key = (KEY_D if heading > 0.0 else KEY_A) if axis == Vector3.AXIS_X else (KEY_S if heading > 0.0 else KEY_W)
+		await _move_until(game, key, "%s_%d" % [label, axis], func(p: Vector3) -> bool:
+			return game.current_zone_id != zone or (point[axis] - p[axis]) * heading <= 0.30, timeout_ms)
+
+func _await_prepared_connector(game: Node, target: String, approached_at_ms: int, label: String) -> bool:
+	var started := Time.get_ticks_msec()
+	while not game.seamless_world.has_prepared(target) and Time.get_ticks_msec() - started < 60000:
+		await process_frame
+	var snapshot: Dictionary = game.seamless_world.preparation_snapshot()
+	if not game.seamless_world.has_prepared(target):
+		_fail("The first-route pilot did not prepare %s at %s (combat=%s, control=%s, transition=%s): %s" % [
+			target, game.player.global_position, game._story_has_active_combat(), game.player.can_control, game.zone_transition_pending, snapshot])
+		return false
+	print("REAL_INPUT %s_prepared_before_crossing_ms=%d %s" % [label, Time.get_ticks_msec() - approached_at_ms, snapshot])
+	return true
 
 func _shutdown_game(game: Node) -> void:
 	for keycode in [KEY_W, KEY_A, KEY_S, KEY_D]:
@@ -430,9 +540,22 @@ func _move_until(game: Node, keycode: Key, label: String, arrived: Callable, tim
 		_key(KEY_SHIFT, true)
 	var deadline := Time.get_ticks_msec() + timeout_ms
 	var reached_in_time := false
+	var trace_preparation := OS.get_cmdline_user_args().has("--prepare-first-route") and label.contains("_road_")
+	var next_trace_ms := 0
 	while Time.get_ticks_msec() < deadline:
 		await physics_frame
-		if Time.get_ticks_msec() >= deadline:
+		var now := Time.get_ticks_msec()
+		if trace_preparation and now >= next_trace_ms:
+			next_trace_ms = now + 1000
+			var road: Dictionary = game.seamless_world.preparation_snapshot()
+			print("REAL_INPUT road_frame %s" % JSON.stringify({
+				"ms":now, "leg":label, "position":str(game.player.global_position),
+				"combat":game._story_has_active_combat(), "frame_ms":road.frame_ms,
+				"state":road.state, "target":road.selected_destination, "unit":road.slowest_unit,
+				"unit_usec":road.slowest_unit_usec, "step":road.step,
+				"render_groups":road.render_unique_groups,
+			}))
+		if now >= deadline:
 			break
 		if arrived.call(game.player.global_position):
 			reached_in_time = true
@@ -483,12 +606,19 @@ func _move_until(game: Node, keycode: Key, label: String, arrived: Callable, tim
 func _turn_camera_north(game: Node) -> void:
 	route_camera_yaw = 0.0
 	var deadline := Time.get_ticks_msec() + 3500
+	var route_observation := OS.get_cmdline_user_args().has("--first-route-baseline")
 	while Time.get_ticks_msec() < deadline:
 		var error := wrapf(float(game.camera_rig.yaw), -PI, PI)
 		if absf(error) <= 0.06:
 			break
-		_key(KEY_RIGHT, error > 0.0)
-		_key(KEY_LEFT, error < 0.0)
+		if route_observation and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			var motion := InputEventMouseMotion.new()
+			motion.relative.x = clampf(error / float(game.camera_rig.sensitivity), -240.0, 240.0)
+			motion.screen_relative = motion.relative
+			Input.parse_input_event(motion)
+		else:
+			_key(KEY_RIGHT, error > 0.0)
+			_key(KEY_LEFT, error < 0.0)
 		await process_frame
 	_key(KEY_LEFT, false)
 	_key(KEY_RIGHT, false)
@@ -686,9 +816,23 @@ func _report_to_anwen(game: Node) -> void:
 	if not game.quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
 		_fail("Returned before completing the five-enemy objective")
 		return
-	await _move_until(game, KEY_S, "anwen_report_north_approach", func(p: Vector3) -> bool: return p.z > -3.4, 7000)
-	await _move_until(game, KEY_D, "anwen_report_offset", func(p: Vector3) -> bool: return p.x > 1.55, 4000)
+	var diagnostic := OS.get_cmdline_user_args().has("--first-route-baseline")
+	await _move_until(game, KEY_S, "anwen_report_north_approach", func(p: Vector3) -> bool: return p.z > -3.4, 45000 if diagnostic else 7000)
+	await _move_until(game, KEY_D, "anwen_report_offset", func(p: Vector3) -> bool: return p.x > 1.55, 15000 if diagnostic else 4000)
 	if not failures.is_empty():
+		return
+	if diagnostic:
+		var anwen := game.zone_root.find_child("sister_anwen", true, false) as Node3D
+		if not is_instance_valid(anwen):
+			_fail("The returned journey cannot find Anwen")
+			return
+		var conversation_z := anwen.global_position.z + 0.80
+		await _move_until(game, KEY_W, "anwen_report_conversation_distance", func(p: Vector3) -> bool:
+			return p.z <= conversation_z or (game.active_interactable != null and game.active_interactable.interaction_id == "sister_anwen"), 15000)
+		await _choose_focused_dialogue_action(game, "sister_anwen", "Give Anwen the evidence privately", "private_anwen_report")
+		if not failures.is_empty() or not _verify_private_road_report(game, "after_choice"):
+			return
+		await _save_private_road_report(game)
 		return
 	var deadline := Time.get_ticks_msec() + 3000
 	while Time.get_ticks_msec() < deadline and (game.active_interactable == null or game.active_interactable.interaction_id != "sister_anwen"):
@@ -715,6 +859,23 @@ func _report_to_anwen(game: Node) -> void:
 	else:
 		var relocated_anwen := game.zone_root.find_child("sister_anwen", true, false) as Node3D
 		print("REAL_INPUT anwen_report=PASS road_complete=true bell_active=true anwen_position=%s pending_relocation=%s dialogue_visible=%s" % [relocated_anwen.global_position if relocated_anwen != null else Vector3.INF, game.pending_anwen_relocation, game.hud.dialogue_layer.visible])
+
+func _verify_private_road_report(game: Node, checkpoint: String) -> bool:
+	var envelope := game.zone_root.find_child("AnwenSealedRoadEvidence", true, false) as MeshInstance3D
+	if str(game.story_state.get_flag("evidence_report", "")) != "private" or not game.quests.is_completed("main_road_of_crows") or not game.quests.is_active("main_bell_beneath_greyfen") or envelope == null or not envelope.is_visible_in_tree():
+		_fail("Private report or its village projection was missing at " + checkpoint)
+		return false
+	print("REAL_INPUT private_road_report_%s=PASS envelope=%s" % [checkpoint, envelope.global_position])
+	return true
+
+func _save_private_road_report(game: Node) -> void:
+	var slot := await _save_campaign_checkpoint(game)
+	if not failures.is_empty():
+		return
+	if not bool(slot.get("ok", false)) or str(slot.get("data", {}).get("story_state", {}).get("flags", {}).get("evidence_report", "")) != "private":
+		_fail("Quick Save did not retain the private road report")
+	else:
+		print("REAL_INPUT private_road_report_save=PASS")
 
 func _verify_audio_input_sync(game: Node) -> void:
 	var ready_deadline := Time.get_ticks_msec() + 60000
@@ -1700,12 +1861,12 @@ func _save_campaign_checkpoint(game: Node) -> Dictionary:
 	_key(KEY_ESCAPE, false)
 	await _frames(5)
 	if not paused or game.hud.active_menu != "pause":
-		_fail("Pause input did not open the menu after Ashwing appeared")
+		_fail("Pause input did not open the Save menu")
 		return {}
 	var save_focused := false
 	for _index in range(10):
 		var focused := root.gui_get_focus_owner() as Button
-		if focused != null and focused.text == "Save":
+		if focused != null and not focused.disabled and focused.text == "Quick Save":
 			save_focused = true
 			break
 		_key(KEY_TAB, true)
@@ -3656,7 +3817,7 @@ func _choose_focused_dialogue_action(game: Node, interaction_id: String, action_
 	var found := false
 	for _choice in range(24):
 		var focused := root.gui_get_focus_owner() as Button
-		if focused != null and focused.text.begins_with(action_prefix):
+		if focused != null and not focused.disabled and focused.text.trim_prefix("Commit: ").begins_with(action_prefix.trim_prefix("Commit: ")):
 			found = true
 			break
 		_key(KEY_TAB, true)

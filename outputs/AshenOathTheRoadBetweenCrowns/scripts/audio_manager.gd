@@ -102,6 +102,7 @@ var ambient_players: Array[AudioStreamPlayer] = []
 var ambient_transition_tween: Tween
 var transient_pool_cursor := 0
 var music_transition_generation := 0
+var music_request_generation := 0
 var music_transition_tween: Tween
 var ambient_accents_enabled := true
 var game_paused := false
@@ -168,7 +169,7 @@ func _process(delta: float) -> void:
 	if music_player != null and music_player.stream != null and not music_player.playing:
 		if not game_paused or dialogue_active:
 			music_player.play()
-	if not dialogue_review_paused and voice_player != null and not voice_player.playing and not _voice_queue.is_empty():
+	if not _voice_playback_paused() and not _voice_queue.is_empty() and (not is_instance_valid(voice_player) or not voice_player.playing):
 		_play_next_voice()
 	if game_paused or current_ambient_zone == "" or not ambient_accents_enabled:
 		return
@@ -473,6 +474,8 @@ func _update_dialogue_mix() -> void:
 			AudioServer.set_bus_volume_db(index, linear_to_db(maxf(level, 0.001)) - dialogue_duck * float(entry[2]))
 
 func set_dialogue_active(active: bool) -> void:
+	if active and dialogue_active:
+		return
 	dialogue_active = active
 	if not active:
 		stop_voice()
@@ -482,23 +485,28 @@ func set_dialogue_review_paused(review_open: bool) -> void:
 	# Keep the same stream and playback position while the player consults
 	# earlier words. Closing History must not trigger a new page performance.
 	dialogue_review_paused = review_open and dialogue_active
-	if voice_player != null and is_instance_valid(voice_player):
-		voice_player.stream_paused = dialogue_review_paused
+	_sync_voice_pause()
+
+func _voice_playback_paused() -> bool:
+	return dialogue_review_paused or (game_paused and not dialogue_active)
+
+func _sync_voice_pause() -> void:
+	if is_instance_valid(voice_player):
+		voice_player.stream_paused = _voice_playback_paused()
 
 func play_dialogue_page(page: Dictionary) -> void:
 	stop_voice()
 	set_dialogue_active(true)
-	if not runtime_file_assets_available:
-		return
+	_build_voice_library()
 	var speaker := str(page.get("speaker_id", "")).strip_edges()
 	var text := str(page.get("text", "")).strip_edges()
-	if text.is_empty():
-		return
-	var key := _exact_voice_key(speaker, text)
-	var id := str(dialogue_voice_keys.get(key, ""))
-	if id == "" or not revised_voice_entries.has(id):
+	if text.is_empty() or speaker.is_empty(): return
+	var authored_line := not str(page.get("line_id", "")).is_empty()
+	var id := str(page.get("voice_take", "")) if authored_line else str(dialogue_voice_keys.get(_exact_voice_key(speaker, text), ""))
+	if id.is_empty() or not revised_voice_entries.has(id):
 		return
 	var entry: Dictionary = revised_voice_entries[id]
+	if authored_line and str(entry.get("scene", "")) != str(page.get("scene_id", "")): return
 	# Match current content exactly. A reused page/voice ID cannot play lines
 	# left over from the previous campaign or a different speaker.
 	if str(entry.get("text", "")).strip_edges() != text or not _same_voice_speaker(str(entry.get("speaker_id", "")), speaker):
@@ -512,7 +520,6 @@ func _prepare_revised_voice(id: String) -> bool:
 		return false
 	var entry: Dictionary = revised_voice_entries[id]
 	var path := str(entry.get("path", entry.get("audio_path", "")))
-	if not runtime_file_assets_available and _deferred_voice_pack(path).is_empty(): return false
 	if not voices.has(id):
 		if not ResourceLoader.exists(path):
 			_request_deferred_voice(path)
@@ -546,6 +553,7 @@ func _request_deferred_voice(path: String) -> void:
 func play_nearby_speech(speaker: String, text: String, actor: Node3D) -> float:
 	if dialogue_active or game_paused or is_instance_valid(nearby_voice_player) or (is_instance_valid(voice_player) and voice_player.playing) or not is_instance_valid(actor):
 		return 0.0
+	_build_voice_library()
 	var id := str(dialogue_voice_keys.get(_exact_voice_key(speaker, text.strip_edges()), ""))
 	if not _prepare_revised_voice(id): return 0.0
 	nearby_voice_entry = revised_voice_entries[id]
@@ -603,16 +611,20 @@ func _stop_nearby_voice(reset_face: bool = true) -> void:
 func set_narrative_revision(revision: String) -> void:
 	if narrative_revision != revision:
 		stop_voice()
+		for id: String in revised_voice_cache_order:
+			voices.erase(id)
+		revised_voice_cache_order.clear()
+		voice_library_ready = false
 	narrative_revision = revision
 	browser_voice_fallback_enabled = false
 
-func set_story_context(state, zone_id: String) -> void:
+func set_story_context(state, zone_id: String, preserve_foreground: bool = false) -> void:
 	if state == null:
 		return
 	var previous := story_music_override
 	story_music_override = _story_music_state(state, zone_id)
 	# Updating a relationship or quest must not replace an active combat cue.
-	if music_state.begins_with("boss_") or music_state == "ghoulkin_combat":
+	if preserve_foreground or music_state.begins_with("boss_") or music_state == "ghoulkin_combat":
 		return
 	if not story_music_override.is_empty():
 		set_music_state(story_music_override)
@@ -665,19 +677,8 @@ func _release_player(player: Node) -> void:
 	player.stream = null
 
 func _prewarm_common_cues() -> void:
-	var cue_ids := ["cloth_wind", "village_life", "village_crow", "ghoulkin_idle"]
-	var warmers: Array[AudioStreamPlayer] = []
-	for index in range(cue_ids.size()):
-		var player: AudioStreamPlayer = transient_players[index]
-		player.stream = _event_stream(cue_ids[index])
-		player.volume_db = -80.0
-		player.play()
-		warmers.append(player)
-	_create_owned_timer(0.12, true).timeout.connect(func():
-		for player in warmers:
-			if is_instance_valid(player):
-				player.stop()
-	)
+	for id: String in ["cloth_wind", "village_life", "village_crow", "ghoulkin_idle"]:
+		_prepare_event(id)
 
 func set_master_volume(linear_volume: float) -> void:
 	master_volume_linear = clamp(linear_volume, 0.0, 1.0)
@@ -695,8 +696,9 @@ func set_ambient_accents_enabled(enabled: bool) -> void:
 	ambient_accents_enabled = enabled
 
 func set_game_paused(paused: bool) -> void:
+	var entering_pause := paused and not game_paused
 	game_paused = paused
-	if paused:
+	if entering_pause:
 		# Environmental and combat one-shots belong to the world timeline. Stop
 		# them at the pause edge so a menu/dialogue cannot finish with a stale hit,
 		# forge, or river cue after the player resumes.
@@ -706,7 +708,8 @@ func set_game_paused(paused: bool) -> void:
 			player.stream_paused = paused and not dialogue_active
 	for player in get_tree().get_nodes_in_group(MUSIC_GROUP):
 		if is_instance_valid(player) and player.get_parent() == self:
-			player.stream_paused = (paused and not dialogue_active) or (player==music_player and is_instance_valid(nearby_performance))
+			player.stream_paused = not dialogue_active and (paused or (player == music_player and is_instance_valid(nearby_performance)))
+	_sync_voice_pause()
 	_publish_audio_status()
 
 func prewarm_opening_audio() -> void:
@@ -730,23 +733,24 @@ func refresh_runtime_assets() -> void:
 	# stable while newly mounted variants become available.
 	if not runtime_file_assets_available:
 		recorded_library_ready = true
-		voice_library_ready = true
 		return
 	var previously_requested: Array = recorded_requests.keys()
 	recorded_requests.clear()
 	recorded_library_ready = false
-	voice_library_ready = false
 	_build_recorded_library()
 	for event_name: String in previously_requested:
 		_prepare_recorded_event(event_name)
-	_build_voice_library()
+	if not voice_library_ready:
+		_build_voice_library()
+	elif narrative_revision.is_empty():
+		_load_scratch_voice_library()
 	for state_id in STORY_SCORE_STATES:
 		if music.has(state_id):
 			music.erase(state_id)
 	ambient_streams.clear()
 	if ambient_player != null and current_ambient_zone != "":
 		var active_stream := _ambient_stream(current_ambient_zone)
-		if active_stream != ambient_player.stream:
+		if active_stream != null and active_stream != ambient_player.stream:
 			_crossfade_ambient(current_ambient_zone, active_stream)
 
 func set_runtime_file_assets_available(available: bool) -> void:
@@ -1012,6 +1016,7 @@ func _play_voice_now(voice_id: String) -> void:
 	voice_player.set_meta("voice_id", voice_id)
 	voice_player.volume_db = _volume_for("voice")
 	voice_player.play()
+	_sync_voice_pause()
 
 func _acquire_voice_player() -> AudioStreamPlayer:
 	var player: AudioStreamPlayer
@@ -1031,7 +1036,7 @@ func _voice_finished(player: AudioStreamPlayer) -> void:
 		return
 	voice_player = null
 	_retire_voice_player(player)
-	if not _voice_queue.is_empty():
+	if not _voice_playback_paused() and not _voice_queue.is_empty():
 		_play_next_voice()
 
 func _retire_voice_player(player: AudioStreamPlayer) -> void:
@@ -1086,10 +1091,10 @@ func _has_production_voice(voice_id: String) -> bool:
 	return not bool(stream.get_meta("development_voice_stub", false)) and not bool(stream.get_meta("scratch_voice", false))
 
 func get_dialogue_delivery() -> Dictionary:
-	if dialogue_review_paused:
+	if _voice_playback_paused():
 		return {"playing": false, "paused": true, "amplitude": 0.0}
 	if not is_instance_valid(voice_player) or not voice_player.playing:
-		return {"playing": false, "amplitude": 0.0}
+		return {"playing": false, "pending": pending_dialogue_voice != "", "amplitude": 0.0}
 	var entry: Dictionary = revised_voice_entries.get(str(voice_player.get_meta("voice_id", "")), {})
 	return {"playing": true, "speaker_id": str(entry.get("speaker_id", "")), "amplitude": _speech_amplitude(entry, voice_player.get_playback_position())}
 
@@ -1129,14 +1134,16 @@ func set_music_state(state_id: String) -> void:
 		_prepare_event("record_page")
 	if story_music_override != "" and state_id in ["greyfen_explore", "shrine_anwen", "return_report", "castle_silence", "record_hall", "assembly", "hart_glade"]:
 		state_id = story_music_override
+	if state_id != requested_music_state:
+		music_request_generation += 1
 	requested_music_state = state_id
-	if state_id == music_state and is_instance_valid(music_player) and music_player.stream != null:
-		return
 	if music.has(state_id) and music[state_id] == null:
 		music.erase(state_id)
 	if not music.has(state_id):
 		_build_music_state(state_id)
 	if not music.has(state_id):
+		return
+	if state_id == music_state and is_instance_valid(music_player) and music_player.stream == music[state_id]:
 		return
 	if music_transition_tween != null and music_transition_tween.is_valid():
 		music_transition_tween.kill()
@@ -1211,8 +1218,13 @@ func play_music_cue(cue_id: String, next_state: String = "") -> void:
 	if sounds.has(cue_id):
 		play_event(cue_id, 0.015)
 	if next_state != "":
+		music_request_generation += 1
+		var request := music_request_generation
 		var timer := _create_owned_timer(0.7)
-		timer.timeout.connect(func(): set_music_state(next_state))
+		timer.timeout.connect(func():
+			if music_request_generation == request:
+				set_music_state(next_state)
+		)
 
 func play_footstep(zone_id: String, on_road: bool, surface: String = "") -> void:
 	var event_name := "step_road" if on_road else "step_forest"
@@ -1227,16 +1239,18 @@ func play_footstep(zone_id: String, on_road: bool, surface: String = "") -> void
 				event_name = "step_forest" if not on_road else "step_mud"
 	play_event_limited(event_name, 0.055, 0.11)
 
-func play_ambient(zone_id: String) -> void:
+func play_ambient(zone_id: String, preserve_foreground: bool = false) -> void:
+	var changing_zone := requested_ambient_zone != zone_id
 	requested_ambient_zone = zone_id
+	if changing_zone and not preserve_foreground:
+		_stop_transient_cues()
+		stop_voice()
 	var stream := _ambient_stream(zone_id)
 	if stream == null:
 		# Remember the requested region, but do not publish a null-stream player.
 		return
 	if current_ambient_zone == zone_id and is_instance_valid(ambient_player) and ambient_player.stream == stream:
 		return
-	_stop_transient_cues()
-	stop_voice()
 	_crossfade_ambient(zone_id, stream)
 
 func _crossfade_ambient(zone_id: String, stream: AudioStream) -> void:
@@ -1274,6 +1288,7 @@ func _crossfade_ambient(zone_id: String, stream: AudioStream) -> void:
 	_prune_inactive_region_streams()
 
 func stop_zone_audio() -> void:
+	music_request_generation += 1
 	_stop_transient_cues()
 	if ambient_transition_tween != null and ambient_transition_tween.is_valid():
 		ambient_transition_tween.kill()

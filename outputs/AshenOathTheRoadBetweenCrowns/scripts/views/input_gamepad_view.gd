@@ -89,6 +89,11 @@ func get_disconnect_state() -> Dictionary:
 
 func _apply_active_gamepad_profile() -> void:
 	_router._restore_default_gamepad_bindings()
+	var defaults: Dictionary = _router.settings_ref
+	_router.gamepad_deadzone = clampf(float(defaults.get("gamepad_deadzone", 0.16)), 0.05, 0.35)
+	_router.gamepad_invert_x = bool(defaults.get("gamepad_invert_x", false))
+	_router.gamepad_invert_y = bool(defaults.get("gamepad_invert_y", defaults.get("invert_y", false)))
+	_router.gamepad_look_sensitivity = clampf(float(defaults.get("gamepad_look_sensitivity", 1.0)), 0.55, 1.55)
 	var profile: Variant = _router.gamepad_profiles.get(_router._profile_key(), {})
 	if typeof(profile) != TYPE_DICTIONARY:
 		return

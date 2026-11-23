@@ -1,6 +1,7 @@
 extends RefCounted
 const Api = preload("res://scripts/core/zone_construction_api.gd")
 const Scope = preload("res://scripts/core/zone_instance_scope.gd")
+const TERRAIN_PATCHES_PER_UNIT := 8
 var _host: Api
 var _scope: Scope
 func _init(host: Api, scope: Scope) -> void:
@@ -131,54 +132,77 @@ func flush_environment_batch_step(phase: int) -> void:
 	if phase == 6:
 		_scope.environment_batches_flushed = true
 func flush_environment_next_unit() -> bool:
+	if _scope.environment_batches_flushed:
+		return true
 	if _scope.stream_environment_units.is_empty():
 		var routes: Array[Dictionary] = preload("res://scripts/world_sector_manifest.gd").connections(_scope.zone_id,_host.story_state)
+		var roads := _scope.zone_root.get_node_or_null("ConnectedRoads")
 		for index in routes.size():
-			_scope.stream_environment_units.append(_host._publish_connected_route.bind(index))
-		_scope.stream_environment_units.append(_host._publish_environment_0.bind(false))
-		_scope.stream_environment_units.append(_host._publish_environment_1)
+			if roads == null or not roads.has_node("RoadTo_" + str(routes[index].target)):
+				_scope.stream_environment_units.append(_host._publish_connected_route.bind(index))
+		var terrain_groups := _terrain_patch_groups()
+		for key: String in terrain_groups:
+			var group: Dictionary = terrain_groups[key]
+			var items: Array = group.items
+			var surface := SurfaceTool.new()
+			for start in range(0, items.size(), TERRAIN_PATCHES_PER_UNIT):
+				_scope.stream_environment_units.append(_append_terrain_patches.bind(surface, items, start, mini(start + TERRAIN_PATCHES_PER_UNIT, items.size())))
+			_scope.stream_environment_units.append(_publish_terrain_group.bind(surface, key, group.material))
+		if not _scope.visual_box_batch_data.is_empty():
+			_scope.stream_environment_units.append(_host._publish_environment_1)
 		for key in _scope.house_batch_data: _scope.stream_environment_units.append(_host._publish_environment_2.bind(str(key)))
 		for key in _scope.house_module_batch_data: _scope.stream_environment_units.append(_host._publish_environment_3.bind(str(key)))
 		for key in _scope.prop_batch_data: _scope.stream_environment_units.append(_host._publish_environment_4.bind(str(key)))
-		_scope.stream_environment_units.append(_host._publish_environment_5)
-		var ecology: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/design_pack_ecology.json"))
-		if ecology is Dictionary:
-			var sightings: Array = ecology.get("sightings",[])
-			for index in sightings.size():
-				if str(sightings[index].zone) == _scope.zone_id:
-					_scope.stream_environment_units.append(_host._build_design_pack_ecology.bind(index))
-		_scope.stream_environment_units.append(_host._publish_environment_6.bind(false))
+		if not _scope.tree_batch_data.is_empty():
+			_scope.stream_environment_units.append_array(_host.tree_publication_units(_publish_procedural_trees))
+		for index: int in _host.zone_actor_spawner.pending_ecology_indices():
+			_scope.stream_environment_units.append(_host._build_design_pack_ecology.bind(index))
+		if not _scope.deadfall_batch_data.is_empty():
+			_scope.stream_environment_units.append(_host._publish_environment_6.bind(false))
 	if _scope.stream_environment_cursor < _scope.stream_environment_units.size():
 		_scope.stream_environment_units[_scope.stream_environment_cursor].callv([])
 		_scope.stream_environment_cursor += 1
-	var complete: Variant = _scope.stream_environment_cursor >= _scope.stream_environment_units.size()
-	if complete: _scope.environment_batches_flushed = true
+	var complete := _scope.stream_environment_cursor >= _scope.stream_environment_units.size()
+	if complete:
+		_scope.environment_batches_flushed = true
+		_scope.stream_environment_units.clear()
+		_scope.stream_environment_cursor = 0
 	return complete
 func _publish_connected_route(index: int) -> void:
 	preload("res://scripts/connected_route_geometry.gd").install(_host.context,index)
 func _publish_environment_0(install_routes: bool = true) -> void:
 	if install_routes: preload("res://scripts/connected_route_geometry.gd").install(ZoneBuildContext.new(_host,_scope.zone_id))
+	var groups := _terrain_patch_groups()
+	for key: String in groups:
+		var group: Dictionary = groups[key]
+		var items: Array = group.items
+		var surface := SurfaceTool.new()
+		_append_terrain_patches(surface, items, 0, items.size())
+		_publish_terrain_group(surface, key, group.material)
+
+func _terrain_patch_groups() -> Dictionary:
 	var terrain_groups: Dictionary = {}
 	for item in _scope.terrain_patch_batch_data:
-		var terrain_key: Variant = str(item.material.get_instance_id())
+		var terrain_key := str(item.material.get_instance_id())
 		if not terrain_groups.has(terrain_key):
 			terrain_groups[terrain_key] = {"material":item.material,"items":[]}
 		terrain_groups[terrain_key].items.append(item)
-	for terrain_key in terrain_groups:
-		var terrain_group: Dictionary = terrain_groups[terrain_key]
-		var terrain_items: Array = terrain_group.items
-		var terrain_batch: Variant = MeshInstance3D.new()
-		terrain_batch.name = "TerrainPatchBatch_%s" % terrain_key
-		var surface: Variant = SurfaceTool.new()
-		for i in range(terrain_items.size()):
-			var marker: Node3D = terrain_items[i].node
-			var patch_size: Vector3 = terrain_items[i].size
-			var patch_mesh: ArrayMesh = _host.world_materials.make_organic_ground_patch(patch_size, marker.position, marker.basis) if _scope.zone_id == "wychwood" else _host.world_materials.make_tiled_ground_patch(patch_size, marker.position, marker.basis)
-			surface.append_from(patch_mesh, 0, marker.transform)
-			marker.queue_free()
-		terrain_batch.mesh = surface.commit()
-		terrain_batch.material_override = terrain_group.material
-		_scope.zone_root.add_child(terrain_batch)
+	return terrain_groups
+
+func _append_terrain_patches(surface: SurfaceTool, items: Array, start: int, end: int) -> void:
+	for index in range(start, end):
+		var marker: Node3D = items[index].node
+		var patch_size: Vector3 = items[index].size
+		var patch_mesh: ArrayMesh = _host.world_materials.make_organic_ground_patch(patch_size, marker.position, marker.basis) if _scope.zone_id == "wychwood" else _host.world_materials.make_tiled_ground_patch(patch_size, marker.position, marker.basis)
+		surface.append_from(patch_mesh, 0, marker.transform)
+		marker.queue_free()
+
+func _publish_terrain_group(surface: SurfaceTool, key: String, material: Material) -> void:
+	var terrain_batch := MeshInstance3D.new()
+	terrain_batch.name = "TerrainPatchBatch_%s" % key
+	terrain_batch.mesh = surface.commit()
+	terrain_batch.material_override = material
+	_scope.zone_root.add_child(terrain_batch)
 func _publish_environment_1() -> void:
 	var visual_groups: Dictionary = {}
 	var separate_alpha: Variant = preload("res://scripts/performance_comparison_options.gd").enabled("alpha_batches")
@@ -230,10 +254,10 @@ func _publish_environment_1() -> void:
 			marker.queue_free()
 		_host._upload_static_batch(detail_batch, detail_transforms, detail_colors)
 func _publish_environment_2(only_key: String = "") -> void:
-	for house_key in _scope.house_batch_data:
-		if not only_key.is_empty() and str(house_key) != only_key: continue
-		var house_group: Dictionary = _scope.house_batch_data[house_key]
-		var house_transforms: Array = house_group.transforms
+	var keys := _scope.house_batch_data.keys() if only_key.is_empty() else [only_key]
+	for house_key: String in keys:
+		var house_group: Dictionary = _scope.house_batch_data.get(house_key, {})
+		var house_transforms: Array = house_group.get("transforms", [])
 		if house_transforms.is_empty():
 			continue
 		var house_batch: Variant = _host._make_multimesh_batch(
@@ -248,10 +272,10 @@ func _publish_environment_2(only_key: String = "") -> void:
 			_host.write_construction_tag(house_batch, "night_window_color", house_group.material.albedo_color)
 		_host._upload_static_batch(house_batch, house_transforms, house_group.colors)
 func _publish_environment_3(only_key: String = "") -> void:
-	for batch_key in _scope.house_module_batch_data:
-		if not only_key.is_empty() and str(batch_key) != only_key: continue
-		var module_group: Dictionary = _scope.house_module_batch_data[batch_key]
-		var module_transforms: Array = module_group.transforms
+	var keys := _scope.house_module_batch_data.keys() if only_key.is_empty() else [only_key]
+	for batch_key: String in keys:
+		var module_group: Dictionary = _scope.house_module_batch_data.get(batch_key, {})
+		var module_transforms: Array = module_group.get("transforms", [])
 		if module_transforms.is_empty():
 			continue
 		var module_batch: Variant = _host._make_multimesh_batch(
@@ -263,9 +287,9 @@ func _publish_environment_3(only_key: String = "") -> void:
 		module_batch.material_override = null
 		_host._upload_static_batch(module_batch, module_transforms)
 func _publish_environment_4(only_key: String = "") -> void:
-	for batch_key in _scope.prop_batch_data:
-		if not only_key.is_empty() and str(batch_key) != only_key: continue
-		var entry: Dictionary = _scope.prop_batch_data[batch_key]
+	var keys := _scope.prop_batch_data.keys() if only_key.is_empty() else [only_key]
+	for batch_key: String in keys:
+		var entry: Dictionary = _scope.prop_batch_data.get(batch_key, {})
 		var transforms: Array = entry.get("transforms", [])
 		if transforms.is_empty():
 			continue
@@ -273,28 +297,30 @@ func _publish_environment_4(only_key: String = "") -> void:
 		_host._upload_static_batch(batch, transforms)
 func _publish_environment_5() -> void:
 	if not _scope.tree_batch_data.is_empty() and not _host._flush_authored_tree_assets():
-		var trunk_mesh: Variant = BoxMesh.new()
-		trunk_mesh.size = Vector3(0.42, 1.8, 0.42)
-		var trunks: Variant = _host._make_multimesh_batch("TreeTrunkBatch", trunk_mesh, _scope.tree_batch_data.size(), _host.world_materials.get_material("timber", str(_host.settings.settings.get("quality_preset", "balanced")), Color(0.42, 0.30, 0.20), 0.0, false))
-		var crown_mesh: Variant = SphereMesh.new()
-		crown_mesh.radius = 0.72
-		crown_mesh.height = 1.62
-		crown_mesh.radial_segments = 8
-		crown_mesh.rings = 4
-		var crown_material: Variant = _host._mat(Color.WHITE)
-		crown_material.vertex_color_use_as_albedo = true
-		var crowns: Variant = _host._make_multimesh_batch("TreeCrownBatch", crown_mesh, _scope.tree_batch_data.size(), crown_material, true)
-		var trunk_transforms: Array = []
-		var crown_transforms: Array = []
-		var crown_colors: Array = []
-		for i in range(_scope.tree_batch_data.size()):
-			trunk_transforms.append(_scope.tree_batch_data[i].trunk)
-			var crown_transform: Transform3D = _scope.tree_batch_data[i].crown
-			crown_transform.basis = crown_transform.basis.scaled(Vector3(1.10, 0.72, 1.10))
-			crown_transforms.append(crown_transform)
-			crown_colors.append(_scope.tree_batch_data[i].color)
-		_host._upload_static_batch(trunks, trunk_transforms)
-		_host._upload_static_batch(crowns, crown_transforms, crown_colors)
+		_publish_procedural_trees()
+func _publish_procedural_trees() -> void:
+	var trunk_mesh := BoxMesh.new()
+	trunk_mesh.size = Vector3(0.42, 1.8, 0.42)
+	var trunks := _host._make_multimesh_batch("TreeTrunkBatch", trunk_mesh, _scope.tree_batch_data.size(), _host.world_materials.get_material("timber", str(_host.settings.settings.get("quality_preset", "balanced")), Color(0.42, 0.30, 0.20), 0.0, false))
+	var crown_mesh := SphereMesh.new()
+	crown_mesh.radius = 0.72
+	crown_mesh.height = 1.62
+	crown_mesh.radial_segments = 8
+	crown_mesh.rings = 4
+	var crown_material := _host._mat(Color.WHITE)
+	crown_material.vertex_color_use_as_albedo = true
+	var crowns := _host._make_multimesh_batch("TreeCrownBatch", crown_mesh, _scope.tree_batch_data.size(), crown_material, true)
+	var trunk_transforms: Array = []
+	var crown_transforms: Array = []
+	var crown_colors: Array = []
+	for item: Dictionary in _scope.tree_batch_data:
+		trunk_transforms.append(item.trunk)
+		var crown_transform: Transform3D = item.crown
+		crown_transform.basis = crown_transform.basis.scaled(Vector3(1.10, 0.72, 1.10))
+		crown_transforms.append(crown_transform)
+		crown_colors.append(item.color)
+	_host._upload_static_batch(trunks, trunk_transforms)
+	_host._upload_static_batch(crowns, crown_transforms, crown_colors)
 func _publish_environment_6(include_ecology: bool = true) -> void:
 	if include_ecology: _host._build_design_pack_ecology()
 	if not _scope.deadfall_batch_data.is_empty():

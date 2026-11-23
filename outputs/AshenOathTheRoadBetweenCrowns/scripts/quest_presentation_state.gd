@@ -108,18 +108,14 @@ func _build_objective_view_model() -> Dictionary:
 	view.zone_id = zone_id
 	view.zone_name = get_zone_display_name()
 	var continuation: Dictionary = RouteCatalog.ending_continuation(story_state, zone_id)
-	var guidance: Dictionary = preload("res://scripts/greyfen_guidance.gd").view(story_state, zone_id)
-	if not guidance.is_empty() and continuation.is_empty():
-		view.objective_id = str(guidance.id)
-		view.quest_title = str(guidance.title)
-		view.objective_text = str(guidance.action)
-		view.next_action = view.objective_text
-		_apply_route(view, guidance)
-		view.tracker_text = "%s\n- %s" % [view.quest_title, view.next_action]
-	elif not continuation.is_empty():
+	if continuation.is_empty():
+		continuation = preload("res://scripts/greyfen_guidance.gd").view(story_state, zone_id)
+	if continuation.is_empty():
+		continuation = RouteCatalog.legacy_road_report_guidance(story_state, quest_manager, zone_id)
+	if not continuation.is_empty():
 		view.objective_id = str(continuation.get("id", ""))
 		view.quest_title = str(continuation.get("title", "THE ROAD HOME"))
-		view.objective_text = str(continuation.get("action", ""))
+		view.objective_text = str(continuation.get("next_action", continuation.get("action", "")))
 		view.next_action = view.objective_text
 		_apply_route(view, continuation)
 		view.tracker_text = "%s\n- %s" % [view.quest_title, view.next_action]

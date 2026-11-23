@@ -2,7 +2,7 @@ class_name ZoneRuntimeCoordinator
 extends RefCounted
 
 const ZoneCompositionRouter = preload("res://scripts/zone_composition_router.gd")
-
+const InstanceScope = preload("res://scripts/core/zone_instance_scope.gd")
 
 var host
 var quest_manager: Node
@@ -167,6 +167,7 @@ func activate(zone_id: String, root: Node3D, reused: bool) -> void:
 		"zone": zone_id,
 		"state": "active",
 		"reused": reused,
+		"continuous": not _continuous_arrival.is_empty(),
 		"node_count": node_count,
 	}
 
@@ -229,8 +230,8 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	_continuous_arrival = host.seamless_world.crossing_for(zone_id).duplicate() if host.seamless_world != null else {}
 	var previous_root: Node3D = host.zone_root
 	_previous_root = previous_root
+	if host.seamless_world != null: host.seamless_world.publish_prepared(zone_id, _transition_epoch)
 	if not _continuous_arrival.is_empty(): host.seamless_world.prepare_crossing_view()
-	if host.seamless_world != null: host.seamless_world.publish_prepared(zone_id)
 	if host.new_game_start_pending and not host.game_started:
 		host.new_game_start_pending = false
 	zone_id = zone_id.strip_edges().to_lower()
@@ -242,8 +243,6 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	host.loading_started_usec = host.loading_started_usec if host.loading_started_usec > 0 else Time.get_ticks_usec()
 	if host.player != null and host.player.has_method("set_transition_locked"):
 		host.player.set_transition_locked(true)
-	if host.audio != null:
-		host.audio.prepare_destination(zone_id, host.story_state)
 	if host.camera_rig != null and host.camera_rig.has_method("clear_target_lock"):
 		host.camera_rig.clear_target_lock()
 	if host.hud != null and host.hud.has_method("clear_target_lock_status"):
@@ -286,20 +285,23 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if zone_id != "greyfen":
 		host.opening_detail_pending = false
 		host.opening_detail_generation += 1
-	var using_prewarmed_spatial = zone_id == "greyfen" \
-		and host.greyfen_prewarm_spatial_service != null \
-		and is_instance_valid(host.greyfen_prewarm_spatial_service)
+	var cached_root: Variant = host.route_zone_cache.get(zone_id)
+	var cache_matches: bool = is_instance_valid(cached_root) and int(host.route_zone_signatures.get(zone_id, -1)) == requested_signature
+	var opening_spatial: Node = host.greyfen_prewarm_spatial_service if zone_id == "greyfen" else null
+	var using_prewarmed_spatial := is_instance_valid(opening_spatial) and cache_matches \
+		and bool(cached_root.get_meta("opening_presentation_ready", false)) \
+		and InstanceScope.for_root(cached_root).spatial_service == opening_spatial
 	var cached_spatial_service: Node = host.route_spatial_cache.get(zone_id)
-	var using_cached_spatial = cached_spatial_service != null \
-		and is_instance_valid(cached_spatial_service) \
-		and host.route_zone_cache.has(zone_id) \
-		and int(host.route_zone_signatures.get(zone_id, -1)) == requested_signature
+	var using_cached_spatial := is_instance_valid(cached_spatial_service) and cache_matches
 	print("LOADING: zone_begin id=%s prewarm=%s cached=%s" % [zone_id, using_prewarmed_spatial, using_cached_spatial])
 	host._release_active_spatial_service()
+	if is_instance_valid(opening_spatial):
+		host.greyfen_prewarm_spatial_service = null
+		if not using_prewarmed_spatial and opening_spatial != previous_spatial_service and opening_spatial != cached_spatial_service:
+			opening_spatial.queue_free()
 	var destination_spatial: Node
 	if using_prewarmed_spatial:
-		destination_spatial = host.greyfen_prewarm_spatial_service
-		host.greyfen_prewarm_spatial_service = null
+		destination_spatial = opening_spatial
 	elif using_cached_spatial:
 		destination_spatial = cached_spatial_service
 		host.route_spatial_cache.erase(zone_id)
@@ -316,8 +318,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if reused_zone:
 		host.spatial_service = destination_spatial
 		host.active_enemies = host._valid_cached_enemies(previous_enemies)
-	elif host.route_zone_cache.has(zone_id) and is_instance_valid(host.route_zone_cache[zone_id]) \
-			and int(host.route_zone_signatures.get(zone_id, -1)) == requested_signature:
+	elif cache_matches:
 		host.zone_root = host._activate_cached_zone(zone_id)
 		host.spatial_service = destination_spatial
 		print("LOADING: cached_zone_activated id=%s valid=%s" % [zone_id, host.zone_root != null])
@@ -532,7 +533,7 @@ func _complete_supported_arrival(grounded: Vector3) -> void:
 		_prewarmed_runtime_pending = false
 	if zone_id in ZoneCompositionRouter.CAMPAIGN_ZONES:
 		host._systems["quest"]._apply_campaign_arrival(zone_id)
-	var scope := preload("res://scripts/core/zone_instance_scope.gd").for_root(host.zone_root)
+	var scope := InstanceScope.for_root(host.zone_root)
 	for flag_id: String in scope.prepared_story_flags:
 		host.story_state.set_flag(flag_id, scope.prepared_story_flags[flag_id])
 	scope.prepared_story_flags.clear()

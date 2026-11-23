@@ -543,6 +543,7 @@
             if (received + value.byteLength > bytes) throw new Error(`${id} pack exceeds declared size`);
             payload.set(value, received);
             received += value.byteLength;
+            operation.lastProgressAt = performance.now();
             if (packOperations.get(id) === operation) {
               window.__ashenOathPreloadedPacks[id] = { state: 'loading', received_bytes: received, total_bytes: bytes, progress: received / bytes * 0.9 };
             }
@@ -559,7 +560,15 @@
       // Fetch operations share only metadata/promises, never retained PCK bodies.
       async function fetchPack(id, operation, expected) {
         const { controller } = operation;
-        const timeout = window.setTimeout(() => controller.abort(), 90000);
+        const startedAt = performance.now();
+        operation.lastProgressAt = startedAt;
+        let timeoutReason = '';
+        const timeout = window.setInterval(() => {
+          const now = performance.now();
+          if (now - startedAt >= 120000) timeoutReason = 'The pack exceeded its download and verification deadline.';
+          else if (now - operation.lastProgressAt >= 30000) timeoutReason = 'The pack download stopped making progress.';
+          if (timeoutReason) controller.abort(new Error(timeoutReason));
+        }, 1000);
         let packCache = null, packUrl = '';
         try {
           const manifest = await awaitWithAbort(getPackManifest(), controller.signal);
@@ -575,7 +584,7 @@
             try {
               const stored = await optionalPackCache(
                 caches.open('ashenoath-runtime-packs-content-v2').then(async cache =>
-                  ({ cache, response: await cache.match(packUrl) })), controller.signal);
+                  ({ cache, response: operation.reload ? null : await cache.match(packUrl) })), controller.signal);
               if (stored) { packCache = stored.cache; response = stored.response; }
             } catch (_) { packCache = null; }
           }
@@ -587,10 +596,13 @@
           const fromCache = Boolean(response);
           if (!response) response = await fetch(packUrl, { cache: operation.reload ? 'reload' : 'force-cache', signal: controller.signal });
           if (!response.ok) throw new Error(`${id} pack HTTP ${response.status}`);
+          operation.lastProgressAt = performance.now();
           const payload = await readPackBody(response, id, operation, pack.bytes);
           if (payload.byteLength !== pack.bytes) throw new Error(`${id} pack byte count mismatch`);
-          const digest = await sha256Hex(payload);
+          operation.lastProgressAt = performance.now();
+          const digest = await awaitWithAbort(sha256Hex(payload), controller.signal);
           if (digest !== pack.sha256) throw new Error(`${id} pack hash mismatch`);
+          operation.lastProgressAt = performance.now();
           const metadata = { state: 'verified', progress: 0.95, path: `/${id}-${digest.slice(0, 20)}.pck`, url: packUrl, version: pack.version, bytes: payload.byteLength, sha256: digest };
           if (controller.signal.aborted || packOperations.get(id) !== operation) return null;
           // Speculation owns HTTP-cache bytes, not a second in-memory game pack.
@@ -646,36 +658,43 @@
           }
           return detail;
         } catch (error) {
-          if (packCache && packUrl && !controller.signal.aborted && packOperations.get(id) === operation) await packCache.delete(packUrl).catch(() => {});
+          if (packCache && packUrl && !controller.signal.aborted && packOperations.get(id) === operation) {
+            void packCache.delete(packUrl).catch(() => {});
+          }
           if (packOperations.get(id) === operation) {
             if (!controller.signal.aborted) console.error(`Runtime pack ${id} failed:`, error);
-            window.__ashenOathPreloadedPacks[id] = { state: controller.signal.aborted ? 'cancelled' : 'failed', error: String(error) };
+            const failure = timeoutReason || String(error);
+            window.__ashenOathPreloadedPacks[id] = { state: controller.signal.aborted && !timeoutReason ? 'cancelled' : 'failed', error: failure };
             if (id === 'opening') {
               bootMetrics.opening_prefetch_state = 'failed';
-              bootMetrics.opening_prefetch_error = String(error);
+              bootMetrics.opening_prefetch_error = failure;
             }
           }
           return null;
         } finally {
-          window.clearTimeout(timeout);
+          window.clearInterval(timeout);
         }
       }
-      window.__ashenOathRequestPack = (id, sha256, bytes, version, cacheOnly = false) => {
+      function requestPack(id, expected, cacheOnly, bootstrap) {
         if (!/^[a-z0-9_]+$/.test(id) || failed) return false;
         const current = window.__ashenOathPreloadedPacks[id];
         if (current && ['loading', 'verified', 'preloaded'].includes(current.state)) {
           const running = packOperations.get(id);
-          if (running && !cacheOnly) running.cacheOnly = false;
+          if (running) {
+            if (!cacheOnly) running.cacheOnly = false;
+            if (!bootstrap) running.bootstrap = false;
+          }
           return true;
         }
         if (current?.state === 'cached' && cacheOnly) return true;
-        const operation = { controller: new AbortController(), promise: null, reload: current?.state === 'failed', cacheOnly };
+        const operation = { controller: new AbortController(), promise: null, reload: current?.state === 'failed', cacheOnly, bootstrap };
         packOperations.set(id, operation);
         window.__ashenOathPreloadedPacks[id] = { state: 'loading' };
-        const expected = sha256 ? { sha256, bytes, version } : null;
         operation.promise = fetchPack(id, operation, expected);
         return true;
-      };
+      }
+      window.__ashenOathRequestPack = (id, sha256, bytes, version, cacheOnly = false) =>
+        requestPack(id, sha256 ? { sha256, bytes, version } : null, cacheOnly, false);
       window.__ashenOathCancelPack = id => {
         const operation = packOperations.get(id);
         if (operation && window.__ashenOathPreloadedPacks[id]?.state !== 'preloaded') {
@@ -684,20 +703,39 @@
           window.__ashenOathPreloadedPacks[id] = { state: 'cancelled' };
         }
       };
+      window.__ashenOathRejectPreloadedPack = id => {
+        if (window.__ashenOathPreloadedPacks[id]?.state !== 'preloaded') return;
+        packOperations.delete(id);
+        window.__ashenOathPreloadedPacks[id] = { state: 'failed', error: 'The browser pack handoff was rejected.' };
+      };
       function mountOpeningPackAfterReady() {
         return packOperations.get('opening')?.promise || null;
       }
-      window.__ashenOathRequestPack('opening');
+      requestPack('opening', null, false, true);
       let openingPrefetchQueue = [];
-      let foregroundPrefetchIds = null;
+      let engineOwnsQueue = false;
       window.__ashenOathPrioritizePacks = ids => {
         const required = new Set(ids);
-        foregroundPrefetchIds = required;
-        openingPrefetchQueue = openingPrefetchQueue.filter(id => required.has(id));
-        // In-flight verified work remains useful after a change of road.
-        // The engine queue assigns the next available download slot.
+        engineOwnsQueue = true;
+        openingPrefetchQueue.length = 0;
+        const currentBootWork = [];
+        for (const [id, operation] of packOperations) {
+          if (!operation.bootstrap) continue;
+          const state = window.__ashenOathPreloadedPacks[id]?.state;
+          if (required.has(id) && ['loading', 'verified'].includes(state)) {
+            currentBootWork.push(id);
+          } else if (state === 'loading') {
+            window.__ashenOathCancelPack(id);
+          }
+        }
+        return JSON.stringify(currentBootWork);
       };
+      window.addEventListener('ashen-oath-menu-ready', () => {
+        // A saved-journey menu can be ready before any actor pack is needed.
+        if (!engineOwnsQueue) window.__ashenOathPrioritizePacks(['opening']);
+      });
       void getPackManifest().then(manifest => {
+        if (engineOwnsQueue) return;
         const required = new Set();
         const visit = id => {
           if (required.has(id)) return;
@@ -705,18 +743,18 @@
           for (const dependency of manifest.packs?.[id]?.dependencies || []) visit(dependency);
         };
         for (const id of manifest.startup_dependencies || ['opening', 'opening_materials']) visit(id);
-        openingPrefetchQueue = [...required].filter(id => id !== 'opening' && manifest.packs?.[id]?.url && (!foregroundPrefetchIds || foregroundPrefetchIds.has(id)));
-        // Opening already owns a download. Bound the remaining pre-init buffers
-        // to two consumers instead of retaining the entire decoded roster.
+        openingPrefetchQueue = [...required].filter(id => id !== 'opening' && manifest.packs?.[id]?.url);
+        // The common opening download takes one slot. Hand the other active
+        // slots to Godot as soon as it can prioritize the selected journey.
         const prefetch = async () => {
-          while (openingPrefetchQueue.length && !failed) {
+          while (openingPrefetchQueue.length && !failed && !engineOwnsQueue) {
             const id = openingPrefetchQueue.shift();
-            window.__ashenOathRequestPack(id);
+            requestPack(id, null, false, true);
             await packOperations.get(id)?.promise;
           }
         };
         void prefetch();
-        void prefetch();
+        if (!window.matchMedia('(pointer: coarse)').matches) void prefetch();
       }).catch(() => {});
       window.__ashenOathBeginOpeningPackMount = mountOpeningPackAfterReady;
       window.__ashenOathStart = async () => {

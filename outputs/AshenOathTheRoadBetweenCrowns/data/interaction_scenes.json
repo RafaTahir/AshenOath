@@ -1286,8 +1286,26 @@
     "name": "Anwen",
     "greeting": "A moment, hunter. Elna has hurt her ankle. She cannot reach the water behind that screen.",
     "lines": [
-      "Anwen: The cup is on the step. Leave it on the linen by her hand, if you would.",
-      "Anwen: And that little coat on the bench belongs under the shelf. Oren will complain if I let the rain into his pockets."
+      {
+        "speaker": "Anwen",
+        "text": "The cup is on the step. Leave it on the linen by her hand, if you would.",
+        "line_id": "opening_care_invitation.water_request",
+        "performance": {
+          "emotion": "concerned",
+          "gesture": "offer",
+          "listener_emotion": "concerned"
+        }
+      },
+      {
+        "speaker": "Anwen",
+        "text": "And that little coat on the bench belongs under the shelf. Oren will complain if I let the rain into his pockets.",
+        "line_id": "opening_care_invitation.coat_request",
+        "voice_take": "story_985c9e906145321a772d",
+        "performance": {
+          "emotion": "warmth",
+          "listener_emotion": "neutral"
+        }
+      }
     ],
     "variants": [
       {
@@ -1297,8 +1315,16 @@
         },
         "greeting": "Thank you for the water. Elna has agreed to rest a little longer.",
         "lines": [
-          "Anwen: Would you move that little coat under the shelf? Oren left it here this morning. He said he would be too hot."
-        ]
+          {
+            "speaker": "Anwen",
+            "text": "Would you move that little coat under the shelf? Oren left it here this morning. He said he would be too hot.",
+            "line_id": "opening_care_invitation.coat_after_water",
+            "voice_take": "story_5cfe634798c1ce8b77b0"
+          }
+        ],
+        "greeting_delivery": {
+          "line_id": "opening_care_invitation.elna_resting"
+        }
       },
       {
         "priority": 10,
@@ -1307,8 +1333,16 @@
         },
         "greeting": "You found a dry place for his coat. Thank you.",
         "lines": [
-          "Anwen: Elna needs the cup on the step. Leave it on the linen by her hand, if you would."
-        ]
+          {
+            "speaker": "Anwen",
+            "text": "Elna needs the cup on the step. Leave it on the linen by her hand, if you would.",
+            "line_id": "opening_care_invitation.water_after_coat"
+          }
+        ],
+        "greeting_delivery": {
+          "line_id": "opening_care_invitation.coat_thanks",
+          "voice_take": "story_7fd7816e4ed40d5d2315"
+        }
       }
     ],
     "actions": [
@@ -1320,7 +1354,15 @@
         "type": "opening_care_resume",
         "label": "I'll help here for a moment. (Optional)"
       }
-    ]
+    ],
+    "greeting_delivery": {
+      "line_id": "opening_care_invitation.elna_injury",
+      "performance": {
+        "emotion": "concerned",
+        "listener_emotion": "guarded",
+        "reaction_delay": 0.22
+      }
+    }
   },
   "opening_care_water": {
     "name": "Anwen",
@@ -1329,17 +1371,46 @@
       {
         "speaker": "Narrator",
         "speaker_id": "narrator",
-        "text": "A hand comes beneath the screen. It steadies the cup against the wood before lifting it."
+        "text": "A hand comes beneath the screen. It steadies the cup against the wood before lifting it.",
+        "line_id": "opening_care_water.cup_lift"
       },
-      "Kael: Was Elna with the missing cart?",
-      "Anwen: No. A fall on the south road. Not every hurt here is a sign, Kael. Some people only need water.",
+      {
+        "speaker": "Kael",
+        "text": "Was Elna with the missing cart?",
+        "line_id": "opening_care_water.elna_question",
+        "performance": {
+          "emotion": "guarded",
+          "listener_emotion": "concerned"
+        }
+      },
+      {
+        "speaker": "Anwen",
+        "text": "No. A fall on the south road. Not every hurt here is a sign, Kael. Some people only need water.",
+        "line_id": "opening_care_water.ordinary_hurt",
+        "voice_take": "story_3d27f12ca624cdfee91d",
+        "performance": {
+          "emotion": "warmth",
+          "gesture": "reassure",
+          "listener_emotion": "concerned"
+        }
+      },
       {
         "speaker": "Narrator",
         "speaker_id": "narrator",
-        "text": "The cup comes back to the linen. For a moment, the breathing behind the screen is easier."
+        "text": "The cup comes back to the linen. For a moment, the breathing behind the screen is easier.",
+        "line_id": "opening_care_water.cup_return"
       }
     ],
-    "actions": []
+    "actions": [],
+    "greeting_delivery": {
+      "line_id": "opening_care_water.water_delivered",
+      "performance": {
+        "emotion": "relieved",
+        "gesture": "relief",
+        "listener_emotion": "concerned",
+        "reaction_delay": 0.22
+      }
+    }
   },
   "opening_care_coat": {
     "name": "Anwen",
@@ -1348,18 +1419,58 @@
       {
         "speaker": "Narrator",
         "speaker_id": "narrator",
-        "text": "The small coat is heavier at one cuff. Three crooked red stitches hold a tear shut. Kael folds the sleeve beneath it, clear of the wet edge."
+        "text": "The small coat is heavier at one cuff. Three crooked red stitches hold a tear shut. Kael folds the sleeve beneath it, clear of the wet edge.",
+        "line_id": "opening_care_coat.red_stitches"
       },
-      "Kael: Did you mend this?",
-      "Anwen: He did. I threaded the needle. He would not let me do the rest.",
-      "Anwen: Bram drove the cart. Sella took Oren beside her. He left this because the sun was out.",
+      {
+        "speaker": "Kael",
+        "text": "Did you mend this?",
+        "line_id": "opening_care_coat.mending_question",
+        "voice_take": "story_abc7ee9e2af8948db076",
+        "performance": {
+          "emotion": "concerned",
+          "listener_emotion": "guarded"
+        }
+      },
+      {
+        "speaker": "Anwen",
+        "text": "He did. I threaded the needle. He would not let me do the rest.",
+        "line_id": "opening_care_coat.oren_mended",
+        "voice_take": "story_1b3e39c64e46a7ef52a4",
+        "performance": {
+          "emotion": "warmth",
+          "framing": "authored_close",
+          "reaction_delay": 0.28
+        }
+      },
+      {
+        "speaker": "Anwen",
+        "text": "Bram drove the cart. Sella took Oren beside her. He left this because the sun was out.",
+        "line_id": "opening_care_coat.why_coat_remained",
+        "voice_take": "story_f7ccea76efe329ea3ec4",
+        "performance": {
+          "emotion": "grieving",
+          "framing": "authored_two_shot",
+          "listener_emotion": "concerned",
+          "reaction_delay": 0.3
+        }
+      },
       {
         "speaker": "Narrator",
         "speaker_id": "narrator",
-        "text": "Anwen leaves room on the bench beside the coat. She has not put it away."
+        "text": "Anwen leaves room on the bench beside the coat. She has not put it away.",
+        "line_id": "opening_care_coat.bench_space"
       }
     ],
-    "actions": []
+    "actions": [],
+    "greeting_delivery": {
+      "line_id": "opening_care_coat.orens_coat",
+      "voice_take": "story_194d299bdcdb2bf468d3",
+      "performance": {
+        "emotion": "guarded",
+        "listener_emotion": "concerned"
+      }
+    }
   },
   "soldiers_stand_down": {
     "name": "The soldiers at the road",

@@ -70,15 +70,10 @@ func _refresh_story_focus() -> void:
 	tracker_label.tooltip_text = action
 	tracker_caption_label.text = "Next step"
 	tracker_footer_label.text = "%s  JOURNAL" % _action_label("open_inventory")
-	var route := str(_navigation_model.get("route_hint", ""))
-	var destination := str(_navigation_model.get("destination", ""))
-	if destination != "":
-		route = "To " + destination + ("\n" + route if route != "" else "")
-	var distance := int(_navigation_model.get("distance_m", -1))
-	var scope := str(_navigation_model.get("scope", "exploration"))
-	if distance >= 0 and scope in ["local", "aftermath"]:
-		route = "%d m%s" % [distance, " · " + route if route != "" else " to the next step"]
-	tracker_route_label.text = route
+	var route := route_caption(false)
+	var shown_route := route_caption(bool(_layout_policy.get("compact", false)))
+	var captions_changed := tracker_route_label.text.is_empty() != shown_route.is_empty()
+	tracker_route_label.text = shown_route
 	var purpose := str(_navigation_model.get("purpose", ""))
 	tracker_route_label.tooltip_text = route + ("\n" + purpose if purpose != "" else "")
 	var work_lines: Array[String] = []
@@ -88,13 +83,26 @@ func _refresh_story_focus() -> void:
 		var title := str(entry.get("title", ""))
 		if title != "":
 			work_lines.append(title)
+	captions_changed = captions_changed or tracker_work_label.text.is_empty() != work_lines.is_empty()
 	tracker_work_label.text = "Nearby: " + " · ".join(work_lines) if not work_lines.is_empty() else ""
 	var primary := str(_navigation_model.get("primary", ""))
 	if primary != "":
 		compass_label.text = primary
-	tracker_back.visible = action != ""
-	if changed_reading_size:
+	if changed_reading_size or captions_changed:
 		_queue_responsive_layout()
+
+func route_caption(compact: bool) -> String:
+	var route := str(_navigation_model.get("route_hint", ""))
+	var destination := str(_navigation_model.get("destination", ""))
+	if destination != "":
+		if compact: return str(_navigation_model.get("route_short", destination))
+		return "To " + destination + ("\n" + route if route != "" else "")
+	var distance := int(_navigation_model.get("distance_m", -1))
+	var scope := str(_navigation_model.get("scope", "exploration"))
+	if distance >= 0 and scope in ["local", "aftermath"]:
+		if compact: return "%d m" % distance
+		return "%d m%s" % [distance, " · " + route if route != "" else " to the next step"]
+	return route
 
 func _fit_tracker_height() -> void:
 	# Preserve primary reading text; secondary guidance uses the remaining room.

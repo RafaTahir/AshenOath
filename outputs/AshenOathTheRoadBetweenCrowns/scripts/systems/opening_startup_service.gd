@@ -1,8 +1,7 @@
 extends "res://scripts/systems/game_bindings.gd"
 signal opening_phase_changed(phase: String)
 
-func _opening_stage_required_before_control(stage: String) -> bool:
-	return stage in OPENING_DETAIL_STAGES
+const OPENING_WELL_MESH := "res://assets_external/environment/village/GreyfenWell_Authored.res"
 
 func _record_opening_stage(root: Node3D, stage: String) -> void:
 	var completed: Dictionary = root.get_meta("opening_completed_stages", {})
@@ -18,7 +17,7 @@ func _record_opening_stage(root: Node3D, stage: String) -> void:
 func _opening_presentation_present(root: Node3D) -> bool:
 	var completed: Dictionary = root.get_meta("opening_completed_stages", {})
 	for stage in OPENING_DETAIL_STAGES:
-		if _opening_stage_required_before_control(stage) and not completed.has(stage):
+		if not completed.has(stage):
 			return false
 	var river := root.find_child("LivingRiverSection", true, false)
 	return bool(root.get_meta("greyfen_architecture_complete", false)) \
@@ -216,7 +215,8 @@ func _on_launch_accepted() -> void:
 	if hud != null and hud.has_method("set_new_game_ready") and not route_zone_cache.has("greyfen"):
 		hud.set_new_game_ready(false)
 	if OS.has_feature("web") and runtime_packs != null and runtime_packs.has_method("request_startup_packs"):
-		runtime_packs.prioritize_zone("greyfen")
+		runtime_packs.prioritize_startup()
+		runtime_packs.retire_unneeded_packs(runtime_packs.required_startup_packs())
 		if runtime_packs.startup_packs_ready():
 			print("LOADING: startup_pack_ready source=launch")
 			_begin_opening_prewarm()
@@ -240,9 +240,9 @@ func _on_launch_accepted() -> void:
 	if not greyfen_prewarm_started and not game_started:
 		_begin_opening_prewarm()
 
-func _on_opening_pack_progress(_pack_id: String, _progress: float) -> void:
-	if startup_packs_waiting and not startup_prepare_failed and not game_started:
-		_publish_web_opening_state("downloading", "Loading opening content...", runtime_packs.startup_pack_progress())
+func _on_opening_pack_progress(pack_id: String, progress: float) -> void:
+	if pack_id == "__startup__" and startup_packs_waiting and not startup_prepare_failed and not game_started:
+		_publish_web_opening_state("downloading", "Loading opening content...", progress)
 
 func _on_startup_pack_ready(_pack_id: String) -> void:
 	if game_started or startup_prepare_failed or not startup_packs_waiting or runtime_packs == null:
@@ -311,26 +311,30 @@ func _prepare_opening_services(generation: int) -> void:
 	_publish_web_opening_state("resources", "Preparing characters and materials...")
 	world_materials.begin_prewarm_attempt()
 	asset_helper.begin_resource_attempt()
-	var environment_status: Error = asset_helper.request_environment_resources(["opening"])
-	while _opening_attempt_current(generation):
-		if environment_status in [OK, ERR_BUSY]:
-			environment_status = asset_helper.poll_role_resources(30000)
-		if environment_status == OK:
-			break
-		if environment_status != ERR_BUSY:
-			print("LOADING: opening_resource_failure environment=%s" % asset_helper.resource_prewarm_error)
-			_opening_prepare_failed("Greyfen's environment could not be prepared. %s Select Retry to try again." % asset_helper.resource_prewarm_error)
-			return
-		await _host.get_tree().process_frame
-	if not _opening_attempt_current(generation):
+	asset_helper.set_zone_scope("greyfen")
+	var scene_paths := ZoneSceneCatalog.resource_paths("greyfen", ["gameplay"])
+	scene_paths.append_array(ZoneCompositionRouter.resource_paths("greyfen"))
+	scene_paths.append_array([
+		OPENING_WELL_MESH,
+		"res://assets_external/environment/village/GreyfenShrine_Authored.res",
+		"res://assets_external/environment/village/GreyfenForge_Authored.res",
+	])
+	var scene_status: Error = asset_helper.request_resource_paths(scene_paths)
+	if scene_status != OK:
+		_opening_prepare_failed("Greyfen's authored scene could not be prepared. %s Select Retry to try again." % asset_helper.resource_prewarm_error)
 		return
+	var environment_status: Error = asset_helper.request_environment_resources(["opening"])
+	if environment_status != OK:
+		_opening_prepare_failed("Greyfen's environment could not be prepared. %s Select Retry to try again." % asset_helper.resource_prewarm_error)
+		return
+	# Actor bodies, props and surface textures are independent once the opening
+	# packs mount. Let the shared request owner overlap their materialization.
 	if DisplayServer.get_name().to_lower() != "headless":
-		world_materials.prewarm_surfaces(["forest_ground", "cobblestone", "wet_mud", "medieval_brick", "plaster", "timber", "roof_tiles"], str(settings.settings.get("quality_preset", "balanced")))
+		world_materials.prewarm_surfaces(world_materials.PBR_SURFACE_IDS, str(settings.settings.get("quality_preset", "balanced")))
 		var props_status: Error = asset_helper.request_resource_paths(CharacterPresentation.OPENING_OCCUPATION_PROP_PATHS)
 		if props_status != OK:
 			_opening_prepare_failed("Greyfen's opening props could not be prepared. Select New Game to retry.")
 			return
-	if DisplayServer.get_name().to_lower() != "headless":
 		var named_roles: Array[String] = ["player_kael", "sister_anwen"]
 		for actor_id in OPENING_NAMED_ACTOR_IDS:
 			named_roles.append(_role_for_interactable(actor_id))
@@ -359,19 +363,19 @@ func _opening_attempt_current(generation: int) -> bool:
 func _prepare_opening_resources(generation: int) -> void:
 	if not _opening_attempt_current(generation):
 		return
-	if DisplayServer.get_name().to_lower() != "headless":
-		var deadline := Time.get_ticks_msec() + 30000
-		while _opening_attempt_current(generation):
-			var surfaces: Error = world_materials.poll_prewarm()
-			var actors: Error = asset_helper.poll_role_resources(30000)
-			if surfaces == OK and actors == OK:
-				break
-			if surfaces not in [OK, ERR_BUSY] or actors not in [OK, ERR_BUSY] or Time.get_ticks_msec() >= deadline:
-				print("LOADING: opening_resource_failure materials=%s actors=%s" % [world_materials.prewarm_error, asset_helper.resource_prewarm_error])
-				var detail := str(world_materials.prewarm_error) + " " + str(asset_helper.resource_prewarm_error)
-				_opening_prepare_failed("Greyfen's authored resources could not be prepared. %s Select Retry to try again." % detail.strip_edges())
-				return
-			await _host.get_tree().process_frame
+	var graphical := DisplayServer.get_name().to_lower() != "headless"
+	var deadline := Time.get_ticks_msec() + 30000
+	while _opening_attempt_current(generation):
+		var surfaces: Error = world_materials.poll_prewarm() if graphical else OK
+		var assets: Error = asset_helper.poll_role_resources(30000)
+		if surfaces == OK and assets == OK:
+			break
+		if surfaces not in [OK, ERR_BUSY] or assets not in [OK, ERR_BUSY] or Time.get_ticks_msec() >= deadline:
+			print("LOADING: opening_resource_failure materials=%s assets=%s" % [world_materials.prewarm_error, asset_helper.resource_prewarm_error])
+			var detail := str(world_materials.prewarm_error) + " " + str(asset_helper.resource_prewarm_error)
+			_opening_prepare_failed("Greyfen's authored resources could not be prepared. %s Select Retry to try again." % detail.strip_edges())
+			return
+		await _host.get_tree().process_frame
 	if _opening_attempt_current(generation):
 		await _wait_for_opening_build_slot(generation)
 	if _opening_attempt_current(generation):
@@ -388,7 +392,7 @@ func _discard_menu_opening() -> void:
 	_host.get_viewport().disable_3d = true
 
 func _restart_menu_opening() -> void:
-	if game_started or _journey_load_pending():
+	if game_started or _journey_load_pending() or str(opening_startup_metrics.get("phase", "")) == "idle":
 		return
 	_discard_menu_opening()
 	if hud != null:
@@ -472,7 +476,6 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	var prewarm_started := Time.get_ticks_msec()
 	_publish_web_opening_state("building", "Building Greyfen's roads and scenery...")
 	print("LOADING: Greyfen prewarm build_begin")
-	var phase_started := prewarm_started
 	var prewarm_service := ZoneSpatialService.new()
 	prewarm_service.name = "GreyfenPrewarmSpatialService"
 	_host.add_child(prewarm_service)
@@ -496,16 +499,15 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	var authored_layers := ZoneSceneCatalog.attach("greyfen", zone_root, ["gameplay"])
 	if not bool(authored_layers.get("ok", false)):
 		push_error("Greyfen authored core failed during prewarm: %s" % ", ".join(authored_layers.get("errors", [])))
-		_retire_zone_root(zone_root)
-		zone_root = null
-		prewarm_service.queue_free()
-		spatial_service = null
-		_opening_prepare_failed("Greyfen could not be prepared. Select New Game to retry.")
+		_abort_opening_prewarm(zone_root, prewarm_service, "Greyfen could not be prepared. Select Retry to try again.")
 		return
 	var prewarm_root: Node3D = zone_root
 	var core_context := ZoneBuildContext.new(_host, "greyfen", "opening_boot")
-	var core_script: Script = load(ZoneCompositionRouter.CORE_BUILDER_PATHS.greyfen)
-	var core_builder = core_script.new()
+	var core_script := asset_helper.load_runtime_resource(ZoneCompositionRouter.builder_path("greyfen")) as Script
+	if core_script == null or not core_script.can_instantiate():
+		_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's builder could not be prepared. Select Retry to try again.")
+		return
+	var core_builder: RefCounted = core_script.new()
 	for step in range(core_builder.OPENING_CORE_STEPS):
 		await _host.get_tree().process_frame
 		await _wait_for_opening_build_slot(generation)
@@ -520,25 +522,26 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 			_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's opening step %d could not be prepared. Select Retry to try again." % step)
 			return
 	var prewarm_build := core_context.validate()
-	var build_ms := Time.get_ticks_msec() - phase_started
+	var build_ms := Time.get_ticks_msec() - prewarm_started
 	print("LOADING: Greyfen prewarm build_complete ms=%d ok=%s" % [build_ms, bool(prewarm_build.get("ok", false))])
 	if not bool(prewarm_build.get("ok", false)):
 		push_error("Greyfen prewarm composition failed: %s" % ", ".join(prewarm_build.get("errors", [])))
-		_retire_zone_root(zone_root)
-		zone_root = null
-		prewarm_service.queue_free()
-		spatial_service = null
-		_opening_prepare_failed("Greyfen could not be prepared. Select New Game to retry.")
+		_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen could not be prepared. Select Retry to try again.")
 		return
 	await _host.get_tree().process_frame
 	await _wait_for_opening_build_slot(generation)
 	if not _opening_attempt_current(generation):
 		return
-	phase_started = Time.get_ticks_msec()
+	var phase_started := Time.get_ticks_msec()
 	var slice_started := Time.get_ticks_usec()
+	core_context.build_profile = "opening_detail"
 	for visual_bucket in range(OPENING_GAMEPLAY_VISUAL_BUCKETS):
-		ZoneCompositionRouter.build_core_detail_stage(_host, "greyfen", "gameplay_visual_%d" % visual_bucket)
-		_record_opening_stage(zone_root, "gameplay_visual_%d" % visual_bucket)
+		var stage := "gameplay_visual_%d" % visual_bucket
+		var result := ZoneCompositionRouter.apply_core_detail_stage(_host, core_context, core_builder, stage)
+		if not bool(result.ok):
+			_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's opening scenery could not be prepared. Select Retry to try again.")
+			return
+		_record_opening_stage(prewarm_root, stage)
 		if Time.get_ticks_usec() - slice_started >= OPENING_BUILD_SLICE_USEC:
 			await _host.get_tree().process_frame
 			await _wait_for_opening_build_slot(generation)
@@ -574,26 +577,23 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		gameplay_camera.current = true
 	zone_root.process_mode = Node.PROCESS_MODE_PAUSABLE
 	zone_root.position = Vector3.ZERO
-	if visual_director != null:
-		visual_director.apply_zone("greyfen", prewarm_root)
-		visual_director.set_opening_boot_budget(false)
-		prewarm_root.set_meta("opening_visual_profile_prewarmed", true)
 	var was_paused := _host.get_tree().paused
-	opening_well_mesh = load("res://assets_external/environment/village/GreyfenWell_Authored.res") as ArrayMesh
+	opening_well_mesh = asset_helper.load_runtime_resource(OPENING_WELL_MESH) as ArrayMesh
 	if opening_well_mesh == null or opening_well_mesh.get_surface_count() != 6:
 		_host.get_tree().paused = was_paused
 		_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's authored well could not be prepared. Select New Game to retry.")
 		return
 	slice_started = Time.get_ticks_usec()
+	var detail_started_usec := slice_started
+	var detail_stages_ms: Dictionary = {}
 	for covered_stage in OPENING_DETAIL_STAGES:
 		if bool(prewarm_root.get_meta("opening_completed_stages", {}).get(covered_stage, false)):
 			continue
-		if not _opening_stage_required_before_control(covered_stage):
-			continue
 		if not _opening_attempt_current(generation) or not is_instance_valid(prewarm_root):
 			return
+		var covered_started_usec := Time.get_ticks_usec()
 		environment_batches_flushed = false
-		var covered_result := ZoneCompositionRouter.build_core_detail_stage(_host, "greyfen", covered_stage)
+		var covered_result := ZoneCompositionRouter.apply_core_detail_stage(_host, core_context, core_builder, covered_stage)
 		if not bool(covered_result.get("ok", false)):
 			_host.get_tree().paused = was_paused
 			_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's opening scene could not be prepared. Select New Game to retry.")
@@ -603,7 +603,9 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		_clear_environment_batch_buffers()
 		environment_batches_flushed = true
 		_record_opening_stage(prewarm_root, covered_stage)
-		if Time.get_ticks_usec() - slice_started >= OPENING_BUILD_SLICE_USEC:
+		var covered_finished_usec := Time.get_ticks_usec()
+		detail_stages_ms[covered_stage] = float(covered_finished_usec - covered_started_usec) / 1000.0
+		if covered_finished_usec - slice_started >= OPENING_BUILD_SLICE_USEC:
 			await _host.get_tree().process_frame
 			await _wait_for_opening_build_slot(generation)
 			if not _opening_attempt_current(generation):
@@ -611,6 +613,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 			slice_started = Time.get_ticks_usec()
 	if not _opening_attempt_current(generation):
 		return
+	opening_startup_metrics["covered_detail_stages_ms"] = detail_stages_ms
 	if not asset_helper.resource_prewarm_error.is_empty():
 		_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's environment could not be prepared. %s Select Retry to try again." % asset_helper.resource_prewarm_error)
 		return
@@ -624,27 +627,33 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's characters could not be animated. %s Select Retry to try again." % "; ".join(actors.errors))
 		return
 	_publish_web_opening_state("finalizing", "Finishing Greyfen's routes and characters...")
+	opening_startup_metrics["covered_detail_and_validation_ms"] = float(opening_phase_started_usec - detail_started_usec) / 1000.0
 	prewarm_service.build_navigation(prewarm_root)
 	prewarm_root.set_meta("prewarm_navigation_pending", false)
 	_validate_zone_render_resources(prewarm_root)
 	prewarm_root.set_meta("opening_detail_complete", true)
-	if visual_director != null:
-		visual_director.refresh_zone_lighting(prewarm_root)
 	camera_rig.prepare_view()
+	if visual_director != null:
+		if visual_director.is_opening_boot_budget_active():
+			visual_director.set_opening_boot_budget(false)
+		visual_director.apply_zone("greyfen", prewarm_root)
+		prewarm_root.set_meta("opening_visual_profile_prewarmed", true)
 	prewarm_root.visible = true
 	player.visible = true
 	_host.get_viewport().disable_3d = false
+	var first_draw_finished_usec := 0
 	if DisplayServer.get_name().to_lower() != "headless":
 		_publish_web_opening_state("first_view", "Preparing Greyfen's first view...")
-		# Evaluate the complete, transition-locked rig before its first draw.
-		await _host.get_tree().process_frame
-		if not _opening_attempt_current(generation):
-			return
-		await RenderingServer.frame_post_draw
-		if not _opening_attempt_current(generation):
-			return
-		prewarm_root.set_meta("opening_unpaused_frame_prewarmed", true)
-		prewarm_root.set_meta("opening_first_frame_rendered", true)
+		var previous_draw := Engine.get_frames_drawn()
+		while _opening_attempt_current(generation):
+			await _host.get_tree().process_frame
+			first_draw_finished_usec = Time.get_ticks_usec()
+			if Engine.get_frames_drawn() > previous_draw: break
+			if first_draw_finished_usec - opening_phase_started_usec >= 120_000_000:
+				_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's first view did not draw. Select Retry to try again.")
+				return
+		if not _opening_attempt_current(generation): return
+		opening_startup_metrics["opening_first_draw_ms"] = float(first_draw_finished_usec - opening_phase_started_usec) / 1000.0
 	if not world_transition.mark_prepared("greyfen", generation): return
 	prewarm_root.set_meta("opening_presentation_ready", true)
 	_host.get_tree().paused = was_paused
@@ -672,13 +681,17 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	if hud != null:
 		hud.set_new_game_ready(true)
 	_publish_web_opening_state("ready", "Greyfen is ready.", 1.0)
-	opening_startup_metrics["menu_ready_ms"] = Time.get_ticks_msec()
+	var menu_ready_ms := Time.get_ticks_msec()
+	opening_startup_metrics["menu_ready_ms"] = menu_ready_ms
+	if first_draw_finished_usec > 0:
+		opening_startup_metrics["opening_post_draw_to_menu_ms"] = maxf(float(menu_ready_ms * 1000 - first_draw_finished_usec) / 1000.0, 0.0)
 	if OS.has_feature("web"):
 		JavaScriptBridge.eval("window.dispatchEvent(new CustomEvent('ashen-oath-menu-ready'));", false)
-	print("LOADING: usable_menu_ready ms=%d" % Time.get_ticks_msec())
+	print("LOADING: usable_menu_ready ms=%d" % menu_ready_ms)
 	print("LOADING: opening_world_render_ready")
+	print("LOADING: opening_phase_metrics %s" % JSON.stringify(opening_startup_metrics))
 	print("LOADING: Greyfen prewarmed total=%dms build=%dms world=%dms player=%dms" % [
-		Time.get_ticks_msec() - prewarm_started, build_ms, world_finalize_ms, player_ms,
+		menu_ready_ms - prewarm_started, build_ms, world_finalize_ms, player_ms,
 	])
 	if new_game_start_pending:
 		_host.get_tree().paused = false

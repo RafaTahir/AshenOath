@@ -21,7 +21,6 @@ var interaction: Area3D
 var visual: Node3D
 var animation_player: AnimationPlayer
 var clips: Dictionary = {}
-var tether: MeshInstance3D
 var zone_id := ""
 var command := "wait"
 var adopted := false
@@ -87,11 +86,11 @@ static func install(host: Node, zone_root: Node3D, active_zone: String, unseen_a
 	if host.neighbor_building: return
 	if zone_root != host.zone_root:
 		return
-	var recruited: bool = str(host.story_state.get_flag("bracken_home", "")) == "adopted"
+	var home: String = str(host.story_state.get_flag("bracken_home", ""))
+	var recruited := home == "adopted"
 	host.input_router.companion_available = recruited
-	var strap := _rescue_tether(zone_root, active_zone)
-	if strap != null:
-		strap.visible = not bool(host.story_state.get_flag("bracken_rescued", false))
+	if active_zone == "greyfen":
+		_update_rescue_props(zone_root, bool(host.story_state.get_flag("bracken_rescued", false)), home == "safe")
 	var travel := saved_travel(host)
 	var companion := zone_root.get_node_or_null("Bracken")
 	var belongs_here: bool = (recruited and (str(travel.command) == "follow" or str(travel.zone) == active_zone)) or (not recruited and active_zone == "greyfen")
@@ -107,7 +106,6 @@ static func install(host: Node, zone_root: Node3D, active_zone: String, unseen_a
 		companion.zone_id = active_zone
 		companion.arrival_out_of_view = unseen_arrival
 		zone_root.add_child(companion)
-	companion.tether = strap
 	companion.refresh_presence()
 
 static func saved_travel(host: Node) -> Dictionary:
@@ -147,13 +145,17 @@ static func depart(host: Node) -> void:
 static func issue_command(host: Node, request: String) -> bool:
 	if request not in ["follow", "wait", "recall"] or str(host.story_state.get_flag("bracken_home", "")) != "adopted":
 		return false
-	if not host.game_started or host._journey_load_pending() or host.zone_transition_pending or not host.pending_player_restore.is_empty():
+	if not host.game_started or host._journey_load_pending() or host.zone_transition_pending or host.zone_load_request_pending or not host.pending_player_restore.is_empty() or not is_instance_valid(host.zone_root):
+		return false
+	var companion: Node3D = host.zone_root.get_node_or_null("Bracken") as Node3D
+	if request == "wait" and (companion == null or not companion.is_visible_in_tree()):
 		return false
 	preload("res://scripts/bracken_field_trial.gd").stop_activity(host)
 	capture(host)
-	var present: Node = host.zone_root.get_node_or_null("Bracken")
-	if present != null:
-		present.cancel_care()
+	if companion != null:
+		companion.cancel_care()
+		if companion.placement_pending:
+			companion.arrival_out_of_view = true
 	var data := saved_travel(host)
 	var point: Vector3 = data.position
 	data.command = "wait" if request == "wait" else "follow"
@@ -165,6 +167,8 @@ static func issue_command(host: Node, request: String) -> bool:
 	return true
 
 func _ready() -> void:
+	hide()
+	set_physics_process(false)
 	collision_layer = 0
 	collision_mask = 1
 	floor_snap_length = 0.3
@@ -212,8 +216,8 @@ func _ready() -> void:
 	interaction.set_meta("dialogue_focus_height", 0.55)
 	interaction.build_collision(1.15)
 	add_child(interaction)
-	hide()
 	refresh_presence()
+	set_physics_process(true)
 
 func _physics_process(delta: float) -> void:
 	delta = preload("res://scripts/systems/character_motion_step.gd").simulation_delta(delta)
@@ -281,12 +285,10 @@ func refresh_presence() -> void:
 		velocity = Vector3.ZERO
 	game.input_router.companion_available = adopted
 	interaction.set_meta("optional_companion_interaction", str(game.story_state.get_flag("bracken_home", "")) != "")
-	interaction.prompt = "Speak with Bracken" if adopted else "Approach Bracken"
+	interaction.prompt = "Visit Bracken" if adopted else "Approach Bracken"
 	interaction.state_label = ("Waiting" if command == "wait" else "Walking with Kael") if adopted else ("Safe beside the north road" if rescued else "Caught by a travelling strap")
 	route.clear()
 	route_refresh = 0.0
-	if tether != null:
-		tether.visible = not rescued
 	game.interaction_focus_dirty = true
 	_refresh_scent_targets()
 
@@ -309,7 +311,7 @@ func _place_on_arrival() -> bool:
 		point = _supported_anchor(safe)
 		if point == null:
 			point = _supported_anchor(game.spatial_service.nearest_safe(desired, game.spatial_service.bank_for(desired)))
-	else:
+	if adopted and command == "follow" and (point == null or (arrival_out_of_view and not _outside_camera(point))):
 		point = _arrival_behind_player(arrival_out_of_view)
 	if point == null or (arrival_out_of_view and not _outside_camera(point)):
 		return false
@@ -330,7 +332,7 @@ func _record_arrival() -> void:
 	if adopted and zone_id != "greyfen" and not bool(game.story_state.get_flag("bracken_left_home", false)):
 		game.story_state.set_flag("bracken_left_home", true)
 		changed = true
-	if adopted and zone_id == "greyfen" and bool(game.story_state.get_flag("bracken_left_home", false)):
+	if adopted and command == "follow" and zone_id == "greyfen" and bool(game.story_state.get_flag("bracken_left_home", false)):
 		if game.story_state.remember_companion_event("return_home", zone_id):
 			game.hud.toast("Bracken recognizes Greyfen's road. This time, you have come back together.")
 			changed = true
@@ -674,7 +676,7 @@ func _recover_out_of_view() -> void:
 	route_refresh = 0.0
 
 func _outside_camera(point: Vector3) -> bool:
-	var camera := get_viewport().get_camera_3d()
+	var camera := preload("res://scripts/core/scene_view_camera.gd").resolve(self)
 	if camera == null:
 		return false
 	for x: float in [-0.65, 0.0, 0.65]:
@@ -747,15 +749,22 @@ static func apply_choice(host: Node, action: Dictionary) -> bool:
 		host.hud.toast("Bracken accepts your hand. He can rest safely at Greyfen." if step == "adopt" else "Bracken stays safe by Greyfen. You can return to him later.")
 	return true
 
-static func _rescue_tether(parent: Node3D, active_zone: String) -> MeshInstance3D:
+static func _update_rescue_props(parent: Node3D, rescued: bool, safe_home: bool) -> void:
+	var props := parent.get_node_or_null("BrackenRescueProps") as Node3D
+	if props == null:
+		props = _make_rescue_props(parent)
+	var strap := props.get_node("CaughtStrap") as MeshInstance3D
+	strap.visible = not rescued
+	var bowl := props.get_node_or_null("BrackenWaterBowl") as MeshInstance3D
+	if safe_home and bowl == null:
+		bowl = _make_water_bowl(props)
+	if bowl != null:
+		bowl.visible = safe_home
+
+static func _make_rescue_props(parent: Node3D) -> Node3D:
 	# A ground prop, not anatomy attached to an unvalidated bone. The loose
 	# strap disappears on release; the discarded loops remain by the road.
-	if active_zone != "greyfen":
-		return null
-	var props := parent.get_node_or_null("BrackenRescueProps") as Node3D
-	if props != null:
-		return props.get_node_or_null("CaughtStrap") as MeshInstance3D
-	props = Node3D.new()
+	var props := Node3D.new()
 	props.name = "BrackenRescueProps"
 	props.position = RESCUE_POSITION
 	parent.add_child(props)
@@ -796,4 +805,36 @@ static func _rescue_tether(parent: Node3D, active_zone: String) -> MeshInstance3
 	caught_strap.position = Vector3(-0.23, 0.12, 0.38)
 	caught_strap.rotation_degrees = Vector3(-24, -50, 0)
 	props.add_child(caught_strap)
-	return caught_strap
+	return props
+
+static func _make_water_bowl(parent: Node3D) -> MeshInstance3D:
+	var wood := StandardMaterial3D.new()
+	wood.albedo_color = Color(0.26, 0.16, 0.09)
+	wood.roughness = 0.86
+	var rim := TorusMesh.new()
+	rim.inner_radius = 0.21
+	rim.outer_radius = 0.31
+	rim.rings = 20
+	rim.ring_segments = 10
+	var bowl := MeshInstance3D.new()
+	bowl.name = "BrackenWaterBowl"
+	bowl.mesh = rim
+	bowl.material_override = wood
+	bowl.position = Vector3(0.66, 0.045, 0.46)
+	parent.add_child(bowl)
+
+	var water := StandardMaterial3D.new()
+	water.albedo_color = Color(0.29, 0.39, 0.40)
+	water.roughness = 0.25
+	var surface := CylinderMesh.new()
+	surface.top_radius = 0.24
+	surface.bottom_radius = 0.22
+	surface.height = 0.04
+	surface.radial_segments = 20
+	var fill := MeshInstance3D.new()
+	fill.name = "Water"
+	fill.mesh = surface
+	fill.material_override = water
+	fill.position.y = -0.018
+	bowl.add_child(fill)
+	return bowl

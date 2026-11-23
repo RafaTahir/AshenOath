@@ -79,7 +79,7 @@ var _camera_probe := SphereShape3D.new()
 
 signal target_lock_changed(target: Node3D, locked: bool)
 
-static func install_visual_clearance(root: Node3D) -> void:
+static func install_visual_clearance(root: Node3D, prepared: ConcavePolygonShape3D = null) -> void:
 	var meshes := root.find_children("*", "MeshInstance3D", true, false)
 	if root is MeshInstance3D:
 		meshes.push_front(root)
@@ -87,7 +87,7 @@ static func install_visual_clearance(root: Node3D) -> void:
 		var visual := raw as MeshInstance3D
 		if visual.mesh == null or visual.skin != null or visual.has_node("CameraVisualClearance"):
 			continue
-		var triangles := preload("res://scripts/immutable_collision_shapes.gd").camera_mesh(visual.mesh)
+		var triangles := prepared if visual == root and prepared != null else preload("res://scripts/immutable_collision_shapes.gd").camera_mesh(visual.mesh)
 		if triangles == null:
 			continue
 		# Exact static surfaces keep arches open; only camera queries see them.
@@ -451,9 +451,14 @@ func frame_dialogue_beat(actor: Node3D, speaker_id: String, framing: String) -> 
 	# Only explicit authored emphasis may leave the established two-shot.
 	if framing not in ["authored_close", "authored_two_shot"]:
 		return
-	framing = "close" if framing == "authored_close" else "two_shot"
-	var frame_key := "%s:%s:%d" % [speaker_id, framing, actor.get_instance_id()]
 	var actor_changed: bool = _dialogue_actor == null or _dialogue_actor.get_ref() != actor
+	if framing == "authored_two_shot":
+		# Returning to the conversation must work even when a player skips
+		# through the close-up before its transition has finished.
+		if actor_changed or _dialogue_frame_key != "two_shot":
+			frame_dialogue_target(actor)
+		return
+	var frame_key := "close:%s" % speaker_id
 	var now := Time.get_ticks_msec()
 	# Hold an established composition across consecutive turns and rapid skips.
 	# Text/input never waits for a camera beat to complete.
@@ -465,24 +470,21 @@ func frame_dialogue_beat(actor: Node3D, speaker_id: String, framing: String) -> 
 	axis.y = 0.0
 	if axis.length_squared() < 0.04: return
 	axis = axis.normalized()
-	var side := axis.cross(Vector3.UP).normalized()
-	var player_speaks := speaker_id == "player"
+	var side := Vector3.UP.cross(axis).normalized()
+	if not actor_changed and side.dot(_cached_collision_position - target.global_position) < 0.0:
+		side = -side
+	var player_speaks := speaker_id in ["player", "kael"]
 	var actor_bounds := _dialogue_actor_bounds(actor)
 	var actor_focus := actor_bounds.position + actor_bounds.size * Vector3(0.5, 0.72, 0.5)
 	var focus := target.global_position + Vector3.UP * 1.30 if player_speaks else actor_focus
 	var view_axis := axis if player_speaks else -axis
-	var distance_to_face := 2.65 if framing == "close" else 3.10
-	distance_to_face = maxf(distance_to_face, actor_bounds.size.y * 1.5)
-	if framing == "two_shot":
-		focus = (target.global_position + Vector3.UP * 1.30 + actor_focus) * 0.5
-		view_axis = -axis
-		distance_to_face = maxf(3.6, actor_bounds.size.y * 1.65)
+	var distance_to_face := maxf(2.65, actor_bounds.size.y * 1.5)
 	# Both reverse angles stay on the same side of the line between actors.
 	var desired := _resolve_dialogue_camera(focus, focus + view_axis * distance_to_face + side * 0.90 + Vector3.UP * 0.40, actor)
 	_dialogue_actor = weakref(actor)
 	_dialogue_focus = focus
 	desired.y = maxf(desired.y, target.global_position.y + 0.55)
-	_transition_dialogue_camera(desired, focus, 51.0 if framing == "close" else 58.0)
+	_transition_dialogue_camera(desired, focus, 51.0)
 	_cached_collision_position = desired
 
 func frame_story_action(actor: Node3D) -> void:

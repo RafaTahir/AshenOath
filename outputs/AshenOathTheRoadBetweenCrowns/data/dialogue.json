@@ -16,7 +16,8 @@
         "actions": [
           {"label": "Offer your hand.", "type": "companion_choice", "companion_action": "pet"},
           {"label": "Share one travel bread.", "type": "companion_choice", "companion_action": "feed"},
-          {"label": "Rest beside him a moment.", "type": "companion_choice", "companion_action": "rest"}
+          {"label": "Rest beside him a moment.", "type": "companion_choice", "companion_action": "rest"},
+          {"label": "Give Bracken a travel command.", "type": "companion_menu"}
         ]
       },
       {
@@ -77,11 +78,23 @@
         "actions": []
       },
       {
+        "priority": 31,
+        "conditions": {
+          "evidence_report": "public",
+          "objectives_done": [{"quest": "main_road_of_crows", "id": "oren"}]
+        },
+        "greeting": "Oren's token hangs below the contract. Someone has tied a dry scrap of cloth over it.",
+        "lines": [
+          "Kael: They have not taken it down. Somebody is afraid enough to cover it and kind enough to keep it dry."
+        ],
+        "actions": []
+      },
+      {
         "priority": 30,
         "conditions": {
           "evidence_report": "public"
         },
-        "greeting": "Oren's token hangs below the contract. Someone has tied a dry scrap of cloth over it.",
+        "greeting": "The account hangs beneath the contract. Someone has tucked its lower edge under a dry strip of cloth.",
         "lines": [
           "Kael: They have not taken it down. Somebody is afraid enough to cover it and kind enough to keep it dry."
         ],
@@ -105,7 +118,14 @@
         },
         "greeting": "The payment remains unclaimed. Beneath it, three empty places for names.",
         "lines": [
-          "Kael: Keeping the token is not the same as keeping them safe."
+          {
+            "text": "Kael: Keeping the token is not the same as keeping them safe.",
+            "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "oren"}]}
+          },
+          {
+            "text": "Kael: I kept the evidence. I still have people to look after.",
+            "conditions": {"objectives_not_done": [{"quest": "main_road_of_crows", "id": "oren"}]}
+          }
         ],
         "actions": []
       }
@@ -122,21 +142,99 @@
   },
   "sister_anwen": {
     "name": "Sister Anwen",
-    "greeting": "Mind the cup on the step. The man from the south road needs it more than I need a clean floor.",
+    "greeting": "Mind the cup on the step. Elna needs it more than I need a clean floor.",
     "lines": [
-      "Kael: Three people missing?",
-      "Anwen: Bram drove. Sella had Oren beside her. He left his coat here because the sun was out.",
-      "Anwen: Take the north road into Wychwood. Look for their cart, then bring me what you find. They have people waiting here.",
-      "Anwen: They found old wooden tokens where the road was being repaired. Sella asked me to read one. I did.",
-      "Kael: What happened when you read it?",
-      "Anwen: The candles went out. I sent them away while I found a rite I thought would keep them safe.",
-      "Anwen: If you find red thread around black feathers, keep it intact. I tied it. I owe you that much before you go."
+      {
+        "speaker": "Kael",
+        "text": "Three people missing?",
+        "line_id": "sister_anwen.three_missing",
+        "performance": {
+          "emotion": "guarded",
+          "listener_emotion": "concerned"
+        }
+      },
+      {
+        "speaker": "Anwen",
+        "text": "Bram drove. Sella had Oren beside her. He left his coat here because the sun was out.",
+        "line_id": "sister_anwen.names",
+        "voice_take": "story_e8f1762de535c6f852f3",
+        "performance": {
+          "emotion": "grieving",
+          "listener_emotion": "concerned",
+          "reaction_delay": 0.28
+        }
+      },
+      {
+        "speaker": "Anwen",
+        "text": "Take the north road into Wychwood. Look for their cart, then bring me what you find. They have people waiting here.",
+        "line_id": "sister_anwen.north_road",
+        "performance": {
+          "emotion": "resolute",
+          "gesture": "explain",
+          "listener_emotion": "guarded"
+        }
+      },
+      {
+        "speaker": "Anwen",
+        "text": "They found old wooden tokens where the road was being repaired. Sella asked me to read one. I did.",
+        "line_id": "sister_anwen.read_token",
+        "voice_take": "story_4638b65170fc4cfe2f96",
+        "performance": {
+          "emotion": "guarded",
+          "gesture": "hesitate",
+          "listener_emotion": "concerned",
+          "reaction_delay": 0.22
+        }
+      },
+      {
+        "speaker": "Kael",
+        "text": "What happened when you read it?",
+        "line_id": "sister_anwen.token_question",
+        "voice_take": "story_0c3378905740e8928efe",
+        "performance": {
+          "emotion": "guarded",
+          "listener_emotion": "grieving"
+        }
+      },
+      {
+        "speaker": "Anwen",
+        "text": "The candles went out. I sent them away while I found a rite I thought would keep them safe.",
+        "line_id": "sister_anwen.candles",
+        "voice_take": "story_5708b2f2ac163131b37a",
+        "performance": {
+          "emotion": "grieving",
+          "framing": "authored_close",
+          "reaction_delay": 0.33
+        }
+      },
+      {
+        "speaker": "Anwen",
+        "text": "If you find red thread around black feathers, keep it intact. I tied it. I owe you that much before you go.",
+        "line_id": "sister_anwen.red_thread",
+        "voice_take": "story_9df63d0bb3c6c0ddc639",
+        "performance": {
+          "emotion": "resolute",
+          "framing": "authored_two_shot",
+          "listener_emotion": "guarded",
+          "reaction_delay": 0.25
+        }
+      }
     ],
     "variants": [
       {
         "priority": 1,
-        "conditions": {"opening_cup_delivered": true},
-        "greeting": "Thank you for the water. Now, the three who have not come home."
+        "conditions": {
+          "opening_cup_delivered": true
+        },
+        "greeting": "Thank you for the water. Now, the three who have not come home.",
+        "greeting_delivery": {
+          "line_id": "sister_anwen.water_thanks",
+          "voice_take": "story_3c4e67c050cb7a4f6729",
+          "performance": {
+            "emotion": "warmth",
+            "listener_emotion": "neutral"
+          }
+        }
       },
       {
         "priority": 90,
@@ -226,9 +324,39 @@
         },
         "greeting": "You brought the account to me. We can speak here without putting anyone's name on the board.",
         "lines": [
-          {"text": "Anwen: That is Oren's carving. Turn it over. The older name is beneath his paint.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "oren"}]}},
-          {"text": "Anwen: That burial thread is mine. I thought it would quiet what they were carrying.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "sella"}]}},
-          {"text": "Kael: Someone bound it again with Vargan wire. I found the binding on the road.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "vargan_wire"}]}},
+          {
+            "text": "Anwen: That is Oren's carving. Turn it over. The older name is beneath his paint.",
+            "conditions": {
+              "objectives_done": [
+                {
+                  "quest": "main_road_of_crows",
+                  "id": "oren"
+                }
+              ]
+            }
+          },
+          {
+            "text": "Anwen: That burial thread is mine. I thought it would quiet what they were carrying.",
+            "conditions": {
+              "objectives_done": [
+                {
+                  "quest": "main_road_of_crows",
+                  "id": "sella"
+                }
+              ]
+            }
+          },
+          {
+            "text": "Kael: Someone bound it again with Vargan wire. I found the binding on the road.",
+            "conditions": {
+              "objectives_done": [
+                {
+                  "quest": "main_road_of_crows",
+                  "id": "vargan_wire"
+                }
+              ]
+            }
+          },
           "Kael: The pack is dead. The people hiding this are alive.",
           "Anwen: Take your payment if you must. I need help I have no right to order."
         ],
@@ -322,8 +450,28 @@
         },
         "greeting": "Keep the originals if you need to. We can work from the account you choose to share.",
         "lines": [
-          {"text": "Anwen: Oren painted over a refugee's token. Sella wanted the first name restored.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "oren"}]}},
-          {"text": "Kael: Someone alive left drag marks beside the creatures' tracks.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "drag_marks"}]}},
+          {
+            "text": "Anwen: Oren painted over a refugee's token. Sella wanted the first name restored.",
+            "conditions": {
+              "objectives_done": [
+                {
+                  "quest": "main_road_of_crows",
+                  "id": "oren"
+                }
+              ]
+            }
+          },
+          {
+            "text": "Kael: Someone alive left drag marks beside the creatures' tracks.",
+            "conditions": {
+              "objectives_done": [
+                {
+                  "quest": "main_road_of_crows",
+                  "id": "drag_marks"
+                }
+              ]
+            }
+          },
           "Anwen: Then leaving now would leave a witness carrying something dangerous. I am asking you to stay."
         ],
         "actions": [
@@ -437,7 +585,14 @@
         "cost": "This records an explicit promise or practical action. A record cannot supply someone else's consent."
       }
     ],
-    "content_version": 2
+    "content_version": 2,
+    "greeting_delivery": {
+      "line_id": "sister_anwen.unoffered_water",
+      "performance": {
+        "emotion": "concerned",
+        "listener_emotion": "guarded"
+      }
+    }
   },
   "mira": {
     "name": "Mira Fen",

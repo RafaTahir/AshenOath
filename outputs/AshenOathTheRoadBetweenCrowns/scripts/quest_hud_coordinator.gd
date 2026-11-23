@@ -236,13 +236,16 @@ func build_navigation_model(player: Node3D, zone_id: String, candidates: Array) 
 	if action == "":
 		action = str(view.get("objective_text", "Explore the road and revisit known promises"))
 	var route_hint: String = str(view.get("route_hint", ""))
+	var destination_name := str(view.get("destination_name", RouteCatalog.zone_name(destination))) if distant else ""
+	var route_short := destination_name
 	if distant:
 		# The homecoming has a direct authored handoff from the ending screen.
 		# Do not turn it into a request to retrace the castle's interiors.
 		if scope != "aftermath":
-			var exit_hint: String = _next_exit_hint(zone_id, destination, candidates)
-			if exit_hint != "":
-				route_hint = exit_hint
+			var position := player.global_position if is_instance_valid(player) else Vector3.ZERO
+			var exit_info := _next_exit_guidance(zone_id, destination, candidates, position)
+			route_hint = str(exit_info.get("hint", route_hint))
+			route_short = str(exit_info.get("short", route_short))
 		if scope != "aftermath":
 			scope = "destination"
 	var nearby_work: Array[Dictionary] = []
@@ -253,9 +256,9 @@ func build_navigation_model(player: Node3D, zone_id: String, candidates: Array) 
 				break
 	return {
 		"primary":primary, "action":action, "scope":scope,
-		"destination": str(view.get("destination_name", "")) if distant else "",
+		"destination": destination_name,
 		"distance_m":-1 if distant else objective_distance(view, player, candidates),
-		"route_hint":route_hint, "purpose":str(view.get("purpose", "")),
+		"route_hint":route_hint, "route_short":route_short, "purpose":str(view.get("purpose", "")),
 		"nearby_work":nearby_work
 	}
 
@@ -308,12 +311,13 @@ func _eligible(candidate) -> bool:
 		return false
 	return candidate.has_method("get_context_prompt")
 
-func _next_exit_hint(zone_id: String, destination: String, candidates: Array) -> String:
-	var connection := _physical_connection(zone_id, destination, Vector3.ZERO)
+func _next_exit_guidance(zone_id: String, destination: String, candidates: Array, position: Vector3) -> Dictionary:
+	var connection := _physical_connection(zone_id, destination, position)
 	if not connection.is_empty():
-		return "Take the %s road toward %s" % [str(connection.id), RouteCatalog.zone_name(destination)]
+		return _road_guidance(str(connection.id), destination)
 	var best_gate = null
 	var best_steps := 999
+	var best_distance := INF
 	var available := SectorManifest.available_neighbors(zone_id, quests, story_state)
 	for candidate in candidates:
 		if not _eligible(candidate) or str(candidate.get("interaction_type")) != "zone":
@@ -322,17 +326,24 @@ func _next_exit_hint(zone_id: String, destination: String, candidates: Array) ->
 		if target == "" or target not in available:
 			continue
 		var steps: int = _steps_to(target, destination, zone_id)
-		if steps >= 0 and steps < best_steps:
+		var distance: float = candidate.global_position.distance_squared_to(position)
+		if steps >= 0 and (steps < best_steps or (steps == best_steps and distance < best_distance)):
 			best_steps = steps
+			best_distance = distance
 			best_gate = candidate
 	if best_gate == null:
-		return "No open route to %s yet" % RouteCatalog.zone_name(destination)
+		return {"hint": "No open route to %s yet" % RouteCatalog.zone_name(destination), "short": "Route closed"}
 	var next_zone: String = str(best_gate.get("zone_target"))
 	var edge: Dictionary = SectorManifest.edge_between(zone_id, next_zone)
 	if not edge.is_empty():
-		return "Take the %s road toward %s" % [str(edge.get("id", "")), RouteCatalog.zone_name(destination)]
+		return _road_guidance(str(edge.id), destination)
 	var prompt: String = str(best_gate.get("prompt"))
-	return prompt if prompt != "" else "Use the passage toward %s" % RouteCatalog.zone_name(destination)
+	return {"hint": prompt if prompt != "" else "Use the passage toward %s" % RouteCatalog.zone_name(destination),
+		"short": "Passage to %s" % RouteCatalog.zone_name(next_zone)}
+
+func _road_guidance(direction: String, destination: String) -> Dictionary:
+	var place := RouteCatalog.zone_name(destination)
+	return {"hint": "Take the %s road toward %s" % [direction, place], "short": "%s road · %s" % [direction.capitalize(), place]}
 
 func _steps_to(source: String, destination: String, excluded_zone: String) -> int:
 	# The manifest supplies adjacency, not a revealed map. Only the available

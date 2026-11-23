@@ -122,8 +122,11 @@ func _on_enemy_windup_started(enemy: Variant) -> void:
 		_actor.hud.set_guidance_hint(_actor._systems["hud"]._guard_tutorial_hint(), 4.2)
 
 func _on_enemy_attack_resolved(enemy: Variant, parried: bool, contact_position: Vector3) -> void:
+	var player: Node3D = _actor.player
+	if not is_instance_valid(player):
+		return
 	if parried:
-		var blade: Dictionary = _actor.player.get_blade_world_segment()
+		var blade: Dictionary = player.get_blade_world_segment()
 		contact_position = Geometry3D.get_closest_point_to_segment(contact_position, blade.base, blade.tip)
 		_actor.audio.play_event_limited("parry", 0.10, 0.03)
 		if _actor.input_router != null:
@@ -131,16 +134,18 @@ func _on_enemy_attack_resolved(enemy: Variant, parried: bool, contact_position: 
 		if _actor.camera_rig != null:
 			_actor.camera_rig.shake(0.18)
 		if _actor.zone_root != null:
-			_actor.CombatFeedback.block_flash(_actor.zone_root, _actor.player.global_position, true, contact_position)
+			_actor.CombatFeedback.block_flash(_actor.zone_root, player.global_position, true, contact_position)
 			_actor.CombatFeedback.impact_burst(_actor.zone_root, contact_position, true, Color(0.74, 0.88, 1.0))
-			_actor.CombatFeedback.ground_ring(_actor.zone_root, _actor.player.global_position, Color(0.22, 0.46, 0.72), 0.65, 0.16)
+			_actor.CombatFeedback.ground_ring(_actor.zone_root, player.global_position, Color(0.22, 0.46, 0.72), 0.65, 0.16)
 		_actor.hud.show_status_cue("Parry", "parry")
 		_actor.hud.toast("Parry breaks %s's guard." % enemy.display_name)
 		if enemy != null and enemy.enemy_id == "bog_wretch":
 			_actor._record_bog_stagger(enemy, "parries")
-	else:
+	elif float(player.get("dodge_time")) <= 0.0:
+		# The resolved sweep can overlap Kael during the dodge's immunity.
+		# Impact feedback follows the damage recipient's existing dodge clock.
 		if enemy != null:
-			_actor.audio.play_enemy_event(enemy.enemy_id, "attack", contact_position, _actor.player.global_position)
+			_actor.audio.play_enemy_event(enemy.enemy_id, "attack", contact_position, player.global_position)
 		if _actor.zone_root != null and enemy != null:
 			_actor.CombatFeedback.impact_burst(_actor.zone_root, contact_position, false, Color(0.85, 0.30, 0.12))
 	if enemy != null and enemy.health_component != null:

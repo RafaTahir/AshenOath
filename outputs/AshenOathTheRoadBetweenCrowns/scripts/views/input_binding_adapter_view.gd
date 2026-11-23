@@ -1,4 +1,7 @@
 extends RefCounted
+
+const UNBOUND := "unbound"
+
 var _router: Node
 func _init(router: Node) -> void:
 	_router = router
@@ -13,10 +16,6 @@ func apply_settings(current: Dictionary) -> void:
 	var migrated_weapon_defaults: Variant = _router._migrate_legacy_weapon_defaults()
 	if migrated_weapon_defaults:
 		_router.settings_ref["gamepad_profiles"] = _router.gamepad_profiles.duplicate(true)
-	_router.gamepad_look_sensitivity = clampf(float(current.get("gamepad_look_sensitivity", 1.0)), 0.55, 1.55)
-	_router.gamepad_deadzone = clampf(float(current.get("gamepad_deadzone", 0.16)), 0.05, 0.35)
-	_router.gamepad_invert_x = bool(current.get("gamepad_invert_x", false))
-	_router.gamepad_invert_y = bool(current.get("gamepad_invert_y", current.get("invert_y", false)))
 	_router.vibration_enabled = bool(current.get("gamepad_vibration", true))
 	_router.rumble_strength = clampf(float(current.get("gamepad_rumble_strength", 1.0)), 0.0, 1.0)
 	_router._restore_default_bindings()
@@ -44,15 +43,19 @@ func remap_action(action: String, event: InputEvent) -> Dictionary:
 		current[str(key)] = []
 		for existing: InputEvent in _router.get_action_bindings(str(key)): current[str(key)].append(_router._serialize_event(existing))
 	_router.binding_model.load_bindings(current)
-	var result: Dictionary = _router.binding_model.remap(action,_router._serialize_event(event))
+	var record := _serialize_event(event)
+	var result: Dictionary = _router.binding_model.remap(action, record)
 	if not bool(result.ok): return result
 	_router.reset_transient_input("binding_changed")
-	for key: String in [action,str(result.conflict)]:
-		if key == "": continue
+	var affected: Array[String] = [action]
+	if str(result.conflict) != "":
+		affected.append(str(result.conflict))
+	for key: String in affected:
 		_router._erase_all_bindings(key)
-		for record: Dictionary in _router.binding_model.bindings[key]: _router._add_event_once(key,_router._deserialize_event(record))
-	_router._persist_binding_change(_router._binding_type(event))
-	_router.bindings_changed.emit({"action":action,"event":_router._serialize_event(event),"conflict":str(result.conflict)})
+		for binding: Dictionary in _router.binding_model.bindings[key]:
+			_router._add_event_once(key, _router._deserialize_event(binding))
+	_persist_binding_change(_binding_type(event), affected)
+	_router.bindings_changed.emit({"action":action,"event":record,"conflict":str(result.conflict)})
 	return result
 
 func reset_bindings() -> void:
@@ -141,6 +144,12 @@ func _apply_saved_global_bindings(saved: Variant) -> void:
 			continue
 		var restored_types: Variant = {}
 		for record in records:
+			if record is Dictionary and str(record.get("type", "")) == UNBOUND:
+				var family := str(record.get("family", ""))
+				if family in ["key", "mouse"] and not restored_types.has(family):
+					_router._erase_bindings_of_type(str(action), family)
+					restored_types[family] = true
+				continue
 			var event: Variant = _router._deserialize_event(record)
 			if event == null or event is InputEventJoypadButton or event is InputEventJoypadMotion:
 				continue
@@ -155,26 +164,35 @@ func _apply_saved_global_bindings(saved: Variant) -> void:
 							InputMap.action_erase_event(added_action, added_event)
 			_router._add_event_once(str(action), event)
 
-func _persist_binding_change(event_type: String) -> void:
+func _persist_binding_change(event_type: String, affected: Array[String] = []) -> void:
 	if _router.settings_ref == null:
 		return
 	if event_type == "joy_button" or event_type == "joy_motion":
 		var profiles: Dictionary = _router.settings_ref.get("gamepad_profiles", {}).duplicate(true) if typeof(_router.settings_ref.get("gamepad_profiles", {})) == TYPE_DICTIONARY else {}
 		var profile: Dictionary = profiles.get(_router._profile_key(), {}) if typeof(profiles.get(_router._profile_key(), {})) == TYPE_DICTIONARY else {}
-		profile["deadzone"] = _router.gamepad_deadzone
-		profile["invert_x"] = _router.gamepad_invert_x
-		profile["invert_y"] = _router.gamepad_invert_y
-		profile["look_sensitivity"] = _router.gamepad_look_sensitivity
-		profile["bindings"] = _router._serialize_current_gamepad_bindings()
+		# An empty saved list clears the action's default controller bindings.
+		var prior_bindings: Variant = profile.get("bindings", {})
+		var remembered: Array = prior_bindings.keys() if prior_bindings is Dictionary else []
+		remembered.append_array(affected)
+		profile["bindings"] = _serialize_current_gamepad_bindings(remembered)
 		profiles[_router._profile_key()] = profile
 		_router.settings_ref["gamepad_profiles"] = profiles
+		_router.gamepad_profiles = profiles.duplicate(true)
 	else:
 		var custom: Dictionary = _router.settings_ref.get("custom_bindings", {}).duplicate(true) if typeof(_router.settings_ref.get("custom_bindings", {})) == TYPE_DICTIONARY else {}
 		custom = _router._serialize_current_global_bindings(custom)
+		for action: String in affected:
+			if _first_binding_of_type(action, event_type) == null:
+				# Older preferences inherit absent input families. An explicit
+				# removal preserves the swap while still loading those saves.
+				var records: Array = custom.get_or_add(action, [])
+				var removal := {"type": UNBOUND, "family": event_type}
+				if removal not in records:
+					records.append(removal)
 		_router.settings_ref["custom_bindings"] = custom
 	_router._persist_settings()
 
-func _serialize_current_gamepad_bindings() -> Dictionary:
+func _serialize_current_gamepad_bindings(remembered: Array = []) -> Dictionary:
 	var result: Variant = {}
 	for action in InputMap.get_actions():
 		var records: Array = []
@@ -183,7 +201,7 @@ func _serialize_current_gamepad_bindings() -> Dictionary:
 				var record: Variant = _router._serialize_event(event)
 				if not record.is_empty():
 					records.append(record)
-		if not records.is_empty():
+		if not records.is_empty() or str(action) in remembered:
 			result[str(action)] = records
 	return result
 
@@ -191,13 +209,22 @@ func _serialize_current_global_bindings(existing: Dictionary) -> Dictionary:
 	var result: Variant = existing.duplicate(true)
 	for action in InputMap.get_actions():
 		var records: Array = []
+		var saved: Variant = existing.get(str(action), [])
 		for event in InputMap.action_get_events(str(action)):
 			if event is InputEventKey or event is InputEventMouseButton:
 				var record: Variant = _router._serialize_event(event)
 				if not record.is_empty():
 					records.append(record)
+		if saved is Array:
+			for record: Variant in saved:
+				if record is Dictionary and str(record.get("type", "")) == UNBOUND:
+					var family := str(record.get("family", ""))
+					if family in ["key", "mouse"] and _first_binding_of_type(str(action), family) == null:
+						records.append(record.duplicate())
 		if not records.is_empty():
 			result[str(action)] = records
+		else:
+			result.erase(str(action))
 	return result
 
 func _persist_settings() -> void:
@@ -268,7 +295,11 @@ func _erase_all_bindings(action: String) -> void:
 
 func _serialize_event(event: InputEvent) -> Dictionary:
 	if event is InputEventKey:
-		return {"type": "key", "keycode": (event as InputEventKey).keycode}
+		var key := event as InputEventKey
+		# The Web input fallback may supply only a physical code. Store the same
+		# normalized key that the existing hardware fallback uses for dispatch.
+		var code := key.keycode if key.keycode != KEY_NONE else key.physical_keycode
+		return {"type": "key", "keycode": _router._normalize_browser_keycode(code)}
 	if event is InputEventMouseButton:
 		return {"type": "mouse", "button": (event as InputEventMouseButton).button_index}
 	if event is InputEventJoypadButton:
