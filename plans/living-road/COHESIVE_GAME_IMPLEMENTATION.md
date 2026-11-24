@@ -1,5 +1,11 @@
 # A Cohesive Ashen Oath
 
+## Regional travel and cast delivery, 2026-11-24
+
+Every available Atlas road shares the same approach scheduler. It downloads the likely destination, promotes its required packs near the road and prepares available scene resources in slices. A cold crossing keeps the current region and player controls active while its packs arrive. Deliberate travel takes priority and checks the journey, destination and story gate again before handoff. Full destination construction ahead of the boundary remains scoped to the prepared-road pilot. Construction and renderer cost at other boundaries still require measurement.
+
+The Web exporter indexes the existing 881 dialogue takes by speaker and text. Dialogue pages load the matching performance record on demand. Captioned speakers receive their authored pose and listeners keep their eyeline through a dialogue pause. Returning to play restores each participant's previous animation clock. Audio and picture review, cold and cached road timings, older journeys, endings and homecoming remain Rafa's gameplay checks.
+
 ## First-route release checkpoint, 2026-11-24
 
 The Web package pushed to development and main is `first-road-20261124t124304z`, release commit `18101bf`, from source `3d813e0`. The complete package is 173,937,386 bytes.

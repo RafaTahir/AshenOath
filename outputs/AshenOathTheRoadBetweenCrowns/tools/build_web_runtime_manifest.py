@@ -507,6 +507,7 @@ def main() -> int:
     parser.add_argument("--source-commit", default="")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--compress-wasm", action="store_true")
+    parser.add_argument("--index-voices", action="store_true", help="Index the complete voice catalog inside the Godot root pack")
     parser.add_argument("--pack-dir", type=Path, help="Copy and verify every external manifest pack and required shell assets before packaging")
     parser.add_argument("--check-existing", action="store_true", help="Read-only package identity/size inspection; no game execution")
     args = parser.parse_args()
@@ -534,6 +535,9 @@ def main() -> int:
         if args.pack_dir:
             copy_runtime_pack_artifacts(export_dir, runtime, args.pack_dir)
             copy_shell_assets(export_dir, Path(__file__).resolve().parents[1])
+        if args.index_voices:
+            from index_web_voice_takes import index_exported_voices
+            index_exported_voices(export_dir / 'index.pck')
         optimize_menu_png(export_dir)
         if args.compress_wasm:
             compress_wasm(export_dir / "index.wasm")

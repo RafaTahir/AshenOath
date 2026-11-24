@@ -82,7 +82,8 @@ func present_page(entry: Dictionary, owns_voice: bool, eyeline: Node3D, reacts: 
 	speaking = owns_voice
 	delivery_active = false
 	var direction: Dictionary = entry.get("performance", {})
-	preload("res://scripts/views/actor_dialogue_pose.gd").apply_pose(driver, face, eyeline, speaking, reacts, profile, entry, direction)
+	var delivery: Dictionary = audio_source.get_dialogue_delivery() if speaking and is_instance_valid(audio_source) else {}
+	preload("res://scripts/views/actor_dialogue_pose.gd").apply_pose(driver, face, eyeline, speaking, reacts, profile, entry, direction, bool(delivery.get("pending", false)))
 	pending_gesture = ""
 	if speaking:
 		pending_gesture = str(direction.get("gesture", ""))
@@ -113,12 +114,10 @@ func start(target: Node3D, player: Node3D, state: Variant) -> void:
 	speaking = true
 	elapsed = 0.0
 	next_beat = 2.8
-	# Only staged participants' presentation continues through dialogue pause.
-	# Physics, NPC schedules, combat and all surrounding actors remain paused.
+	# Capture the participants' presentation modes before claiming their clocks.
 	for node in actor.find_children("*", "", true, false):
-		if node is AnimationPlayer or node is Skeleton3D or node is SkeletonModifier3D or node == driver or node == face or node is Timer and node.get_parent() in [driver, face]:
+		if node is AnimationMixer or node is Skeleton3D or node is SkeletonModifier3D or node == driver or node == face or node is Timer and node.get_parent() in [driver, face]:
 			saved_modes[node] = node.process_mode
-			node.process_mode = Node.PROCESS_MODE_ALWAYS
 	if face != null:
 		previous_attention = face.capture_attention()
 	if driver != null:
@@ -132,13 +131,15 @@ func start(target: Node3D, player: Node3D, state: Variant) -> void:
 		face.set_distance_suspended(false)
 		face.set_focus_target(listener)
 		face.set_expression(CastProfile.expression_for(profile, state))
+	for node in saved_modes:
+		node.process_mode = Node.PROCESS_MODE_ALWAYS
 	set_process(true)
 
 func _process(delta: float) -> void:
 	if not active or not is_instance_valid(actor) or is_instance_valid(driver) and bool(driver.dead):
 		stop()
 		return
-	var delivery: Dictionary = audio_source.get_dialogue_delivery() if is_instance_valid(audio_source) else {}
+	var delivery: Dictionary = audio_source.get_dialogue_delivery(speaking) if is_instance_valid(audio_source) else {}
 	if bool(delivery.get("paused", false)):
 		if is_instance_valid(face):
 			face.set_speech_amount(0.0)

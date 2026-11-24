@@ -1,7 +1,6 @@
 extends RefCounted
 
-## Saved summaries use isolated value owners. Their signals have no listeners;
-## they never enter the scene tree or replace the active game's state.
+## Saved summaries project quest and story state outside the active scene.
 const QuestView = preload("res://scripts/quest_manager.gd")
 const StoryView = preload("res://scripts/story_state.gd")
 const Journal = preload("res://scripts/story_journal.gd")
@@ -9,8 +8,9 @@ const Routes = preload("res://scripts/story_route_catalog.gd")
 
 static func describe(data: Dictionary, recorded: Dictionary, quest_defs: Dictionary, item_defs: Dictionary) -> Dictionary:
 	var quests = QuestView.new()
-	quests.quest_defs = quest_defs.duplicate(true)
-	quests.configure_campaign_revision(preload("res://scripts/campaign_revision.gd").from_save(data))
+	quests.source_quest_defs = quest_defs
+	if not quests.configure_campaign_revision(preload("res://scripts/campaign_revision.gd").from_save(data)):
+		quests.quest_defs = quest_defs.duplicate(true)
 	quests.load_state(data.get("quests", {}))
 	var story = StoryView.new()
 	story.load_state(data.get("story_state", {}))

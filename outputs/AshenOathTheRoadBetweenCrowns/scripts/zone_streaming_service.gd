@@ -46,8 +46,6 @@ func neighbors(zone_id: String) -> Array[String]:
 	return WorldSectorManifest.neighbors(zone_id,owner_node.get("story_state") if is_instance_valid(owner_node) else null)
 
 func prewarm_neighbors(zone_id: String) -> void:
-	# Proximity scheduling owns decoded resources. Merely mounting a shared pack
-	# must not start importing every neighboring scene on the arrival frame.
 	var keep_ids: Array[String] = [zone_id.strip_edges().to_lower()]
 	keep_ids.append_array(neighbors(zone_id))
 	retire_unneeded_zones(keep_ids)
@@ -73,9 +71,8 @@ func request_zone(zone_id: String, resource_path: String = "", additional_paths:
 		desired.append_array(CompositionRouter.resource_paths(canonical) + additional_paths)
 	var previous: Dictionary = requests.get(id, {})
 	var reusable := str(previous.get("state", "")) in ["waiting_pack", "loading", "ready"]
-	# A portal request may reuse a broader preparation. An exact road request
-	# replaces obsolete encounter inputs and adds every missing dependency.
-	var paths: Array[String] = ResourceBatch.merged_paths(previous, desired, reusable and not exact_paths)
+	var paths: Array[String] = ResourceBatch.merged_paths(previous, desired, reusable and (not exact_paths or not previous.get("road_only", false)))
+	if reusable and not exact_paths: previous["road_only"] = false
 	if reusable and previous.paths == paths:
 		return
 	if paths.is_empty():
@@ -86,6 +83,7 @@ func request_zone(zone_id: String, resource_path: String = "", additional_paths:
 	var batch := ResourceBatch.prepare(paths, previous, reusable)
 	if str(batch.current_path).is_empty():
 		_release_request(id)
+	batch["road_only"] = exact_paths and (not reusable or bool(previous.get("road_only", false)))
 	requests[id] = batch
 	var packs = owner_node.get("runtime_packs") if is_instance_valid(owner_node) else null
 	if packs != null:
@@ -107,6 +105,7 @@ func _begin_request(id: String) -> void:
 		return
 	var request: Dictionary = requests[id]
 	if not str(request.get("current_path","")).is_empty(): return
+	if bool(request.get("road_only", false)) and is_instance_valid(owner_node) and is_instance_valid(owner_node.seamless_world) and not owner_node.seamless_world._background_work_allowed(): return
 	var path := ResourceBatch.next_path(request)
 	if not path.is_empty():
 		if not ResourceLoader.exists(path):
@@ -154,7 +153,11 @@ func cancel_request(zone_id: String) -> void:
 		_release_request(id)
 		requests.erase(id)
 
+func can_focus_road(zone_id: String) -> bool:
+	return focused_destination in ["", zone_id] or bool(requests.get(focused_destination, {}).get("road_only", false)) or get_state(focused_destination) not in ["loading", "waiting_pack"]
+
 func release_prepared_road(zone_id: String) -> void:
+	if requests.has(zone_id) and not bool(requests[zone_id].get("road_only", false)): return
 	cancel_request(zone_id)
 	if focused_destination == zone_id:
 		set_focus_destination("")
@@ -186,9 +189,6 @@ func retire_unneeded_zones(keep_ids: Array[String]) -> void:
 			requests.erase(id)
 
 func _process(delta: float) -> void:
-	# Threaded loading does not need a status query on every rendered frame. On
-	# Compatibility/ANGLE, polling and emitting progress each frame can compete
-	# with the active zone even though the loader itself runs off the main thread.
 	_status_poll_accumulator += delta
 	if _status_poll_accumulator < STATUS_POLL_INTERVAL:
 		return

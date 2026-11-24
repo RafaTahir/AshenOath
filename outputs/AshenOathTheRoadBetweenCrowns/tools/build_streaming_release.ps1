@@ -77,6 +77,6 @@ Invoke-Compiler $Python @((Join-Path $PSScriptRoot 'sync_runtime_pack_manifest.p
 Invoke-Compiler $Godot @('--headless','--path',$Project,'--export-release','Web Browser',(Join-Path $Export 'index.html')) 'web-production'
 Invoke-Compiler $Python @((Join-Path $PSScriptRoot 'compact_runtime_packs.py'),'--root-pack',(Join-Path $Export 'index.pck'),'--verify-authority',$Metadata) 'metadata-authority'
 Copy-Item -LiteralPath $Runtime -Destination (Join-Path $Export 'runtime_pack_manifest.json')
-Invoke-Compiler $Python @((Join-Path $PSScriptRoot 'build_web_runtime_manifest.py'),$Export,'--runtime-pack-manifest',$Runtime,'--pack-dir',$Transport,'--source-commit',$Source,'--compress-wasm') 'web-manifest'
+Invoke-Compiler $Python @((Join-Path $PSScriptRoot 'build_web_runtime_manifest.py'),$Export,'--runtime-pack-manifest',$Runtime,'--pack-dir',$Transport,'--source-commit',$Source,'--compress-wasm','--index-voices') 'web-manifest'
 Invoke-Compiler $Python @((Join-Path $PSScriptRoot 'verify_web_export.py'),$Export,'--json-report',(Join-Path $Out 'package-integrity.json')) 'package-integrity'
 Write-Host "Build-only candidate ready at $Export. No gameplay, browser, benchmark, push or deployment was run."

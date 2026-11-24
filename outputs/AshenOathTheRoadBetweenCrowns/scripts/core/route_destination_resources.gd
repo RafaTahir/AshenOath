@@ -53,3 +53,19 @@ static func layers(zone_id: String) -> Array[String]:
 	if zone_id != "greyfen":
 		selected.append("decoration")
 	return selected
+
+static func distance_to(edge: Dictionary, position: Vector3) -> float:
+	var points := WorldSectorManifest.connector_points(edge)
+	var point := Vector2(position.x,position.z)
+	var proximity := INF
+	for i in range(points.size()-1):
+		proximity = minf(proximity,point.distance_to(Geometry2D.get_closest_point_to_segment(point,Vector2(points[i].x,points[i].z),Vector2(points[i+1].x,points[i+1].z))))
+	return proximity
+
+static func current_job(jobs: Dictionary, target: String, host: Node) -> Dictionary:
+	var job: Dictionary = jobs.get(target,{})
+	if int(job.get("generation", -1)) != host.journey_arrival_generation or str(job.get("journey_id", "")) != str(host.save_manager.journey_id):
+		return {}
+	if str(job.get("source", "")) != str(host.current_zone_id) or str(job.get("quality", "")) != str(host.settings.settings.get("quality_preset", "balanced")):
+		return {}
+	return job

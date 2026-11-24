@@ -64,9 +64,8 @@ func request_seamless_boundary_transition(zone_id: String, spawn_pos: Vector3, e
 func _wait_for_playable_road(target: String, retry: bool = false) -> bool:
 	if not game_started or seamless_world == null or not is_instance_valid(zone_root): return false
 	var road := WorldSectorManifest.connection_between(current_zone_id,target)
-	if not seamless_world.requires_prepared_road(road): return false
-	if seamless_world.has_prepared(target): return false
-	seamless_world.request_road(target,retry)
+	if road.is_empty() or seamless_world.road_ready(road): return false
+	if not retry: seamless_world.request_road(target)
 	return true
 
 func _perform_direct_zone_load(zone_id: String, spawn_pos: Vector3) -> void:

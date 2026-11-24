@@ -333,7 +333,7 @@ Invoke-BuildProcess $GodotPath @("--headless", "--path", $ResourceCheckRoot, "--
 Copy-Item -LiteralPath $runtimeManifest -Destination (Join-Path $ExportRoot "runtime_pack_manifest.json") -Force
 # Existing hosting serves index.wasm with Content-Encoding: gzip. The builder
 # preserves that format, injects the shell build/cache identity and writes hashes.
-Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_web_runtime_manifest.py"), $ExportRoot, "--runtime-pack-manifest", $runtimeManifest, "--pack-dir", $PackRoot, "--source-commit", $SourceCommit, "--compress-wasm") "web-manifest"
+Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_web_runtime_manifest.py"), $ExportRoot, "--runtime-pack-manifest", $runtimeManifest, "--pack-dir", $PackRoot, "--source-commit", $SourceCommit, "--compress-wasm", "--index-voices") "web-manifest"
 if ($HasLivingCampaign) {
     Invoke-BuildProcess $PythonPath @($CommunityPackVerifier, "--export", $ExportRoot) "community-web-residency"
 }

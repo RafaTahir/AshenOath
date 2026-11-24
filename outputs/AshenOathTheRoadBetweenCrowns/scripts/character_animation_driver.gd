@@ -1262,11 +1262,11 @@ func _cache_ambient_morphs() -> void:
 
 func _reset_ambient_morphs(force: bool = false) -> void:
 	if not force and presentation_state=="ecology" and observation_clip!=StringName() and not dead and not distance_suspended and not action_active and not story_dialogue_active: return
-	# AnimationTree crossfades can still sample the outgoing ambient branch.
-	# Restore after every owned graph evaluation while its owner is inactive.
+	# Restore any outgoing crossfade contribution after evaluating the graph.
 	for binding: Dictionary in ambient_morph_bindings:
 		var mesh := binding.mesh.get_ref() as MeshInstance3D
-		if mesh!=null: mesh.set_blend_shape_value(int(binding.index),float(binding.neutral))
+		if mesh != null and mesh.get_blend_shape_value(int(binding.index)) != float(binding.neutral):
+			mesh.set_blend_shape_value(int(binding.index), float(binding.neutral))
 
 func _ensure_life_modifier() -> void:
 	if life_modifier == null and is_valid() and skeleton != null:

@@ -20,14 +20,13 @@ static func supporting_speaker(actor_id: String, speaker: String) -> bool:
 	}
 	return speaker in supporting_speakers.get(actor_id, [])
 
-static func apply_pose(driver: Node, face: Node, eyeline: Node3D, speaking: bool, reacts: bool, profile: Dictionary, entry: Dictionary, direction: Dictionary) -> void:
+static func apply_pose(driver: Node, face: Node, eyeline: Node3D, speaking: bool, reacts: bool, profile: Dictionary, entry: Dictionary, direction: Dictionary, waiting_for_take: bool = false) -> void:
 	if is_instance_valid(driver):
-		driver.set_story_listening(true)
+		driver.set_story_listening(not speaking or waiting_for_take)
 	if is_instance_valid(face):
 		face.play_story_gesture("")
 		face.set_speech_amount(0.0)
-		if is_instance_valid(eyeline):
-			face.set_focus_target(eyeline)
+		face.set_focus_target(eyeline if is_instance_valid(eyeline) else null)
 		var rest_expression := str(profile.get("expression", "neutral"))
 		var emotion := str(direction.get("emotion", entry.get("emotion", rest_expression))) if speaking else str(direction.get("listener_emotion", rest_expression))
 		face.set_expression(emotion if speaking or reacts else rest_expression)

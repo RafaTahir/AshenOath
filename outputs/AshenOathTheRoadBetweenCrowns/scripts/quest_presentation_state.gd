@@ -4,9 +4,7 @@ const ObjectiveViewModelContract = preload("res://scripts/objective_view_model.g
 const RouteCatalog = preload("res://scripts/story_route_catalog.gd")
 const StoryActivities = preload("res://scripts/story_activity_director.gd")
 
-## Single presentation-facing view of quest state.
-## QuestManager remains authoritative for progression; this node owns the
-## zone-aware selection and display labels consumed by the HUD and compass.
+## Selects zone-aware HUD and compass objectives from authoritative quest progress.
 
 const ZONE_LABELS := {
 	"greyfen": "Greyfen",
@@ -93,15 +91,20 @@ func get_active_objective_text(quest_id: String = "", objective_id: String = "")
 	return "Follow the road"
 
 func get_tracker_text() -> String:
-	return str(get_objective_view_model().get("tracker_text", "No objective in this area."))
+	return str(_objective().get("tracker_text", "No objective in this area."))
 
 func get_contextual_objective() -> String:
-	return str(get_objective_view_model().get("contextual_text", ""))
+	return str(_objective().get("contextual_text", ""))
+
+func get_destination_zone() -> String:
+	return str(_objective().get("destination_zone", ""))
+
+func _objective() -> Dictionary:
+	if _objective_cache.is_empty(): _objective_cache = _build_objective_view_model()
+	return _objective_cache
 
 func get_objective_view_model() -> Dictionary:
-	if _objective_cache.is_empty():
-		_objective_cache = _build_objective_view_model()
-	return _objective_cache.duplicate(true)
+	return _objective().duplicate(true)
 
 func _build_objective_view_model() -> Dictionary:
 	var view := ObjectiveViewModelContract.new()
@@ -155,8 +158,7 @@ func _presentation_quest_id() -> String:
 	var tracked: String = get_tracked_quest()
 	if tracked != "" or quest_manager == null:
 		return tracked
-	# Automatic zone tracking may clear its selection on a connecting road.
-	# Keep the ongoing promise visible without changing the player's selection.
+	# Fall back to the active chapter between tracked zones.
 	for id in quest_manager.active:
 		if str(quest_manager.quest_defs.get(id, {}).get("type", "")) == "main":
 			return str(id)

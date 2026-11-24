@@ -52,3 +52,16 @@ static func intersects(bounds: AABB, planes: Array[Plane]) -> bool:
 		if plane.is_point_over(nearest):
 			return false
 	return true
+
+static func preparation_snapshot(owner: Node) -> Dictionary:
+	var result: Dictionary = owner._neighbor_scope.step_result(owner._neighbor_state) if owner._neighbor_scope != null else {"state":owner._neighbor_state,"zone":"","generation":0,"next_step":owner._neighbor_step,"error":owner._neighbor_failure}
+	result.merge({"step":owner._neighbor_step,"failure":owner._neighbor_failure,"complete":owner._neighbor_state == "ready",
+		"selected_destination":str(owner._selected_connection.get("target","")),"selection_reason":owner._selection_reason,
+		"last_step_usec":owner._last_step_usec,"background_cooldown":owner._build_cooldown,
+		"slowest_unit":owner._slowest_unit,"slowest_unit_usec":owner._slowest_unit_usec,
+		"frame_ms":owner._frame_ms,"unit_overruns":owner._unit_overruns,"jobs":owner._jobs.duplicate(true),
+		"render_groups_remaining":owner._render_nodes.size(),"last_render_delay_usec":owner._last_render_delay_usec,
+		"render_unique_groups":owner._render_groups.size(),"entry_render_started":owner._entry_render_started},true)
+	result["requested_travel"] = str(owner._road_travel.get("target",""))
+	result["travel_mode"] = "prepared_road" if owner.uses_prepared_roads() else ("first_route_preparation" if owner._first_route_preparation else "direct")
+	return result

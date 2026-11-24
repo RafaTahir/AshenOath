@@ -300,6 +300,7 @@ static func _make_gate(parent: Node3D, edge: Dictionary, half: float, material: 
 	pieces.append(Transform3D(Basis(Quaternion(Vector3.UP,(brace_end-brace_start).normalized())).scaled(Vector3(0.15,brace_start.distance_to(brace_end),0.12)),(brace_start+brace_end)*0.5))
 	_add_box_batch(leaf,"GateJoinery",pieces,material)
 	var body := StaticBody3D.new()
+	body.name = "GateBody"
 	body.set_meta("walkable_support",false)
 	var shape := CollisionShape3D.new()
 	var box := preload("res://scripts/immutable_collision_shapes.gd").box(Vector3(half*2,4.5,0.18))
@@ -345,9 +346,9 @@ static func close_gate(root: Node3D, target: String, actor_position: Vector3) ->
 
 static func _gate_collision(gate: Node, enabled: bool) -> void:
 	var layer := 1 if enabled else 0
-	for body: CollisionObject3D in gate.find_children("*","CollisionObject3D",true,false):
-		if body.collision_layer != layer: body.collision_layer = layer
-		if body.collision_mask != layer: body.collision_mask = layer
+	var body := gate.get_node("Hinge/TimberLeaf/GateBody") as StaticBody3D
+	if body.collision_layer != layer: body.collision_layer = layer
+	if body.collision_mask != layer: body.collision_mask = layer
 
 static func _strip(parent: Node3D, name: String, left: PackedVector3Array, right: PackedVector3Array, material: Material, collision: bool, profile: String = "") -> void:
 	var key := var_to_bytes([left,right,profile]).hex_encode()

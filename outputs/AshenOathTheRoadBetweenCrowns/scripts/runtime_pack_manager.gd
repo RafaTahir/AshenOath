@@ -215,17 +215,26 @@ func actor_pack(role: String) -> String:
 func request_zone_packs(zone_id: String, encounter_packs: Array[String] = [], retry_failed: bool = false) -> bool:
 	return _request_required_packs(required_zone_packs(zone_id, encounter_packs), 0, retry_failed)
 
-func _request_required_packs(ids: Array[String], priority: int, retry_failed: bool) -> bool:
-	# Admit the whole set before scheduling so already-running shell downloads
-	# can claim their slots before the remaining network work starts.
+func _request_required_packs(ids: Array[String], priority: int, retry_failed: bool, cache_only: bool = false) -> bool:
+	# Validate the batch before starting a transfer. Shared dependencies enter once.
+	var marks: Dictionary = {}
+	var ordered: Array[String] = []
+	for id in ids:
+		var failure := _dependency_order(id, marks, ordered)
+		if not failure.is_empty():
+			_fail(id, failure)
+			return false
 	var was_scheduling := scheduling_downloads
 	scheduling_downloads = true
 	var accepted := true
-	for id in ids:
-		if retry_failed and get_state(id) == "failed":
-			requests.erase(id)
-		if not request_pack(id, priority):
+	for id in ordered:
+		var state := get_state(id)
+		if state == "ready" or (cache_only and state == "cache_skipped"): continue
+		if retry_failed and state in ["failed", "cancelled"]: requests.erase(id)
+		elif state == "failed":
 			accepted = false
+			continue
+		if not _queue_pack(id, priority, cache_only): accepted = false
 	scheduling_downloads = was_scheduling
 	_start_pending_downloads()
 	for id in ids:
@@ -272,7 +281,6 @@ func _prioritize_packs(ids: Array[String]) -> void:
 		if is_ready(id):
 			continue
 		requests[id]["priority"] = 0 if id in foreground_pack_ids else 1000
-	# Queue changes do not discard a partly downloaded content-addressed pack.
 	scheduling_downloads = was_scheduling
 
 func zone_pack_failures(zone_id: String, encounter_packs: Array[String] = []) -> Array[String]:
@@ -321,44 +329,34 @@ func request_pack(pack_id: String, priority: int = 100) -> bool:
 	return get_state(id) != "failed"
 
 func request_cached_pack(pack_id: String, priority: int = 1500) -> bool:
-	var id := _normalise_id(pack_id)
-	var order: Array[String] = []
-	if _dependency_order(id, {}, order) != "": return false
-	for dependency: String in order:
-		if get_state(dependency) == "cache_skipped": continue
-		if get_state(dependency) == "failed": return false
-		if not _queue_pack(dependency, priority, true): return false
-	_start_pending_downloads()
-	return get_state(id) != "failed"
+	var ids: Array[String] = []
+	if _dependency_order(_normalise_id(pack_id), {}, ids) != "": return false
+	return _request_required_packs(ids, priority, false, true)
+
+func prepare_road_packs(ids: Array[String], approach: bool, retry: bool, travel_requested: bool) -> void:
+	set_background_priorities(ids)
+	if travel_requested:
+		_request_required_packs(ids, 500, retry)
+		return
+	# Keep distant transports cache-only. Promote at most the next dependency
+	# per scheduling turn so changing roads cannot leave a whole region mounting.
+	var next_id := ""
+	for id in ids:
+		if not is_ready(id):
+			next_id = id
+			break
+	if next_id.is_empty(): return
+	_request_required_packs(ids, 1500, retry, true)
+	if approach and get_state(next_id) != "failed": request_pack(next_id, 500)
 
 func set_background_priorities(pack_ids: Array[String]) -> void:
-	# Only queued speculation changes priority; do not abort useful transfers.
 	for id: String in requests:
 		if int(requests[id].get("priority", 0)) >= 500:
 			var rank := pack_ids.find(id)
 			requests[id]["priority"] = 500 + rank if rank >= 0 else 2000
 
 func _dependency_order(id: String, marks: Dictionary, order: Array[String]) -> String:
-	if int(marks.get(id, 0)) == 1:
-		return "Runtime pack dependency cycle at %s" % id
-	if int(marks.get(id, 0)) == 2:
-		return ""
-	var pack := get_pack(id)
-	if pack.is_empty():
-		return "Unknown runtime pack dependency: %s" % id
-	var dependencies: Variant = pack.get("dependencies", [])
-	if not dependencies is Array:
-		return "Invalid dependencies for %s" % id
-	marks[id] = 1
-	for dependency in dependencies:
-		if not dependency is String or _normalise_id(dependency) == "":
-			return "Invalid dependency ID for %s" % id
-		var failure := _dependency_order(_normalise_id(dependency), marks, order)
-		if failure != "":
-			return failure
-	marks[id] = 2
-	order.append(id)
-	return ""
+	return preload("res://scripts/core/runtime_pack_queue.gd").dependencies(id, manifest.get("packs", {}), marks, order)
 
 func _dependencies_ready(id: String) -> bool:
 	for dependency in get_pack(id).get("dependencies", []):
@@ -520,13 +518,15 @@ func _start_pending_downloads() -> void:
 		var started := false
 		var foreground_pending := false
 		for id in foreground_pack_ids:
-			# A zone priority list can include optional encounter packs which the
-			# current operation never requested. Only an owned, outstanding request
-			# may reserve the queue; an absent pack cannot block all road downloads.
+			# Only an outstanding request can reserve a transfer slot.
 			if get_state(id) in ["queued", "shell_loading", "downloading", "verifying", "verified", "mounting"]:
 				foreground_pending = true
 				break
-		var ordered_ids: Array = requests.keys()
+		var ordered_ids: Array[String] = []
+		for id: String in requests:
+			if get_state(id) in ["queued", "shell_loading", "downloading", "verifying", "verified", "mounting"]:
+				ordered_ids.append(id)
+		if ordered_ids.is_empty(): break
 		ordered_ids.sort_custom(func(a, b):
 			var priority_a := int(requests[a].get("priority", 100))
 			var priority_b := int(requests[b].get("priority", 100))

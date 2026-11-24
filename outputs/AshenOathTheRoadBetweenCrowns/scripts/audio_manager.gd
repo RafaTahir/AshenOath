@@ -138,6 +138,8 @@ var dialogue_review_paused := false
 var dialogue_duck := 0.0
 var ambient_conversation := false
 var revised_voice_entries: Dictionary = {}
+var voice_index := preload("res://scripts/core/indexed_voice_takes.gd").new()
+var indexed_recent: Array[String] = []
 var dialogue_voice_keys: Dictionary = {}
 var generated_current_recordings_allowed := false
 var revised_voice_cache_order: Array[String] = []
@@ -502,8 +504,8 @@ func play_dialogue_page(page: Dictionary) -> void:
 	var text := str(page.get("text", "")).strip_edges()
 	if text.is_empty() or speaker.is_empty(): return
 	var authored_line := not str(page.get("line_id", "")).is_empty()
-	var id := str(page.get("voice_take", "")) if authored_line else str(dialogue_voice_keys.get(_exact_voice_key(speaker, text), ""))
-	if id.is_empty() or not revised_voice_entries.has(id):
+	var id := str(page.get("voice_take", "")) if authored_line else _find_voice_take(speaker, text, str(page.get("scene_id", "")))
+	if id.is_empty() or not _load_voice_entry(id):
 		return
 	var entry: Dictionary = revised_voice_entries[id]
 	if authored_line and str(entry.get("scene", "")) != str(page.get("scene_id", "")): return
@@ -515,8 +517,26 @@ func play_dialogue_page(page: Dictionary) -> void:
 		pending_dialogue_voice = id
 		pending_dialogue_delay = clampf(float(page.get("performance", {}).get("reaction_delay", 0.18)), 0.08, 0.45)
 
+func _find_voice_take(speaker: String, text: String, scene: String) -> String:
+	if voice_index.ranges.is_empty():
+		return str(dialogue_voice_keys.get(_exact_voice_key(speaker, text), ""))
+	for id: String in voice_index.candidates(_canonical_voice_speaker(speaker), text, scene):
+		if _load_voice_entry(id): return id
+	return ""
+
+func _load_voice_entry(id: String) -> bool:
+	if revised_voice_entries.has(id): return true
+	var entry := voice_index.read_take(id)
+	if entry.is_empty(): return false
+	_register_revised_voice_entry(id, entry)
+	if not revised_voice_entries.has(id): return false
+	indexed_recent.append(id)
+	if indexed_recent.size() > 8:
+		revised_voice_entries.erase(indexed_recent.pop_front())
+	return true
+
 func _prepare_revised_voice(id: String) -> bool:
-	if not revised_voice_entries.has(id):
+	if not _load_voice_entry(id):
 		return false
 	var entry: Dictionary = revised_voice_entries[id]
 	var path := str(entry.get("path", entry.get("audio_path", "")))
@@ -554,7 +574,7 @@ func play_nearby_speech(speaker: String, text: String, actor: Node3D) -> float:
 	if dialogue_active or game_paused or is_instance_valid(nearby_voice_player) or (is_instance_valid(voice_player) and voice_player.playing) or not is_instance_valid(actor):
 		return 0.0
 	_build_voice_library()
-	var id := str(dialogue_voice_keys.get(_exact_voice_key(speaker, text.strip_edges()), ""))
+	var id := _find_voice_take(speaker, text.strip_edges(), "")
 	if not _prepare_revised_voice(id): return 0.0
 	nearby_voice_entry = revised_voice_entries[id]
 	nearby_voice_actor = weakref(actor)
@@ -1025,10 +1045,10 @@ func _has_production_voice(voice_id: String) -> bool:
 	# not silently ship them as if they were finished acting.
 	return not bool(stream.get_meta("development_voice_stub", false)) and not bool(stream.get_meta("scratch_voice", false))
 
-func get_dialogue_delivery() -> Dictionary:
+func get_dialogue_delivery(measure_speech: bool = true) -> Dictionary:
 	if _voice_playback_paused():
 		return {"playing": false, "paused": true, "amplitude": 0.0}
-	if not is_instance_valid(voice_player) or not voice_player.playing:
+	if not measure_speech or not is_instance_valid(voice_player) or not voice_player.playing:
 		return {"playing": false, "pending": pending_dialogue_voice != "", "amplitude": 0.0}
 	var entry: Dictionary = revised_voice_entries.get(str(voice_player.get_meta("voice_id", "")), {})
 	return {"playing": true, "speaker_id": str(entry.get("speaker_id", "")), "amplitude": _speech_amplitude(entry, voice_player.get_playback_position())}
@@ -1378,6 +1398,9 @@ func _build_voice_library() -> void:
 	revised_voice_entries.clear()
 	dialogue_voice_keys.clear()
 	generated_current_recordings_allowed = false
+	if not narrative_revision.is_empty() and voice_index.open_index():
+		generated_current_recordings_allowed = voice_index.generated_allowed
+		return
 	if FileAccess.file_exists("res://voice_production_manifest.json"):
 		var manifest = JSON.parse_string(FileAccess.get_file_as_string("res://voice_production_manifest.json"))
 		if typeof(manifest) == TYPE_DICTIONARY:
@@ -1454,8 +1477,7 @@ func _load_scratch_voice_library() -> void:
 				voices[voice_id] = stream
 
 func _canonical_voice_speaker(speaker: String) -> String:
-	var identity: String = preload("res://scripts/story_cast_profile.gd").canonical_identity(speaker.strip_edges())
-	return identity if not identity.is_empty() else speaker.strip_edges()
+	return preload("res://scripts/core/indexed_voice_takes.gd").canonical_speaker(speaker)
 
 func _same_voice_speaker(first: String, second: String) -> bool:
 	return not first.strip_edges().is_empty() and _canonical_voice_speaker(first) == _canonical_voice_speaker(second)

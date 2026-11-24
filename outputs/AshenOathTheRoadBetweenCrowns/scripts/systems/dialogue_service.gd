@@ -347,24 +347,15 @@ func _finish_covenant_if_ready() -> void:
 
 func _prepare_dialogue_presence(content: Dictionary) -> Dictionary:
 	var result: Dictionary = content.duplicate(true)
-	var aliases := {"anwen":"sister_anwen", "senn":"captain_senn", "tor":"blacksmith_tor", "elna":"widow_elna", "edric":"edric_campaign", "record_keeper_vale":"vargan_record_keeper", "vale":"vargan_record_keeper", "guard":"vargan_steward", "merrow":"vargan_steward"}
+	var known_speakers: Dictionary = {}
 	for page: Dictionary in result.get("pages", []):
 		var id := str(page.get("speaker_id", "narrator")).to_lower()
-		if id in DialogueRuntimeCoordinator.PLAYER_SPEAKERS or id in ["narrator", ""]:
+		if id in DialogueRuntimeCoordinator.PLAYER_SPEAKERS or id in ["narrator", "system", ""]:
 			page.erase("speaker_actor_id")
+			if id == "system": page["speaker_id"] = "narrator"
 			continue
-		var supplied := instance_from_id(int(page.get("speaker_actor_id", 0))) as Node3D
-		var actor: Node3D = supplied if is_instance_valid(supplied) and is_instance_valid(zone_root) and zone_root.is_ancestor_of(supplied) else null
-		if actor == null:
-			actor = zone_root.find_child(str(aliases.get(id, id)), true, false) as Node3D if zone_root != null else null
-		if actor == null and zone_root != null and id == "edric":
-			actor = zone_root.find_child("edric_castle", true, false) as Node3D
-		if actor == null and zone_root != null:
-			var witness: String = {"mira":"witness_-7", "rook":"witness_-3", "anwen":"witness_3"}.get(id, "")
-			if witness != "":
-				actor = zone_root.find_child(witness, true, false) as Node3D
-		var driver := actor.find_child("CharacterAnimationDriver", true, false) if is_instance_valid(actor) else null
-		if is_instance_valid(actor) and not actor.is_queued_for_deletion() and actor.is_visible_in_tree() and (driver == null or not bool(driver.get("dead"))) and (player == null or actor.global_position.distance_to(player.global_position) <= 12.0):
+		var actor := preload("res://scripts/views/dialogue_page_performance.gd").resolve_actor(zone_root, player, page, id, known_speakers)
+		if is_instance_valid(actor):
 			page["speaker_actor_id"] = actor.get_instance_id()
 		else:
 			page["speaker"] = str(page.get("speaker", id.capitalize())) + " - recorded account"
