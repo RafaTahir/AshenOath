@@ -786,6 +786,12 @@
                   startupResourceError = message;
                   bootMetrics.resource_error = message;
                 }
+                // The audio and HUD scripts are loaded on demand before the menu exists.
+                if (!bootMetrics.ui_ready_ms && !failed &&
+                    (/Journey service .+ could not be (?:loaded|created)/.test(message) ||
+                     message.includes('Failed to load script "res://scripts/game.gd"'))) {
+                  window.setTimeout(() => showStartupError('The game menu could not start. Reload to try again.', message), 0);
+                }
                 console.error(...messages);
               },
             });

@@ -862,9 +862,9 @@ func _stop_transient_cues() -> void:
 	active_cue_order.clear()
 
 func has_opening_soundscape(zone_id: String) -> bool:
-	return not preload("res://scripts/core/regional_ambient_profile.gd").for_zone(zone_id).is_empty()
+	return not get_opening_soundscape_profile(zone_id).is_empty()
 
-func getpreload("res://scripts/core/regional_ambient_profile.gd").for_zone(zone_id: String) -> Array:
+func get_opening_soundscape_profile(zone_id: String) -> Array:
 	return preload("res://scripts/core/regional_ambient_profile.gd").for_zone(zone_id)
 
 func configure_opening_soundscape(zone_id: String, listener: Node3D, anchors: Dictionary, quality: String = "balanced") -> void:
@@ -878,7 +878,7 @@ func tick_opening_soundscape(zone_id: String, listener: Node3D, anchors: Diction
 		return
 	configure_opening_soundscape(zone_id, listener, anchors, quality)
 	var candidates: Array[Dictionary] = []
-	for entry in preload("res://scripts/core/regional_ambient_profile.gd").for_zone(zone_id):
+	for entry in get_opening_soundscape_profile(zone_id):
 		var source_key := str(entry.get("source", "listener"))
 		var source_value: Variant = anchors.get(source_key, listener.global_position)
 		if not source_value is Vector3:

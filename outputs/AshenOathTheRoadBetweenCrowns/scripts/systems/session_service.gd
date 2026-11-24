@@ -32,7 +32,13 @@ func start_session() -> void:
 	_host.get_viewport().disable_3d = true
 	var environment_ms := Time.get_ticks_msec() - phase_started
 	phase_started = Time.get_ticks_msec()
-	_setup_runtime()
+	runtime_services = RuntimeServiceRegistry.new()
+	runtime_services.name = "RuntimeServices"
+	_host.add_child(runtime_services)
+	_bind_runtime_services(runtime_services.create_services(true))
+	if not runtime_services.preparation_error.is_empty():
+		return
+	runtime_services.configure_menu(_host)
 	performance_budget_monitor = PerformanceBudgetMonitor.new()
 	performance_budget_monitor.name = "PerformanceBudgetMonitor"
 	_host.add_child(performance_budget_monitor)
@@ -307,13 +313,6 @@ func _play_voice_smoke_test(voice_id: String, label: String) -> void:
 	print(label)
 	if hud != null:
 		hud.toast(label)
-
-func _setup_runtime() -> void:
-	runtime_services = RuntimeServiceRegistry.new()
-	runtime_services.name = "RuntimeServices"
-	_host.add_child(runtime_services)
-	_bind_runtime_services(runtime_services.create_services(true))
-	runtime_services.configure_menu(_host)
 
 func _bind_runtime_services(services: Dictionary) -> void:
 	for id in services:
