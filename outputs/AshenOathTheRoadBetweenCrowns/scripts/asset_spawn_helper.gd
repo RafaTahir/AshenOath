@@ -106,7 +106,7 @@ func request_environment_resources(pack_ids: Array) -> Error:
 	var paths: Array[String] = []
 	for path: String in textures:
 		var entry: Variant = textures[path]
-		if not entry is Dictionary or str(entry.get("owner", "")) not in ["opening", "adjacent", "campaign"] or not entry.get("consumers") is Array:
+		if not entry is Dictionary or str(entry.get("owner", "")) not in ["opening", "adjacent", "campaign", "masonry"] or not entry.get("consumers") is Array:
 			return _fail_resource_prewarm(ERR_INVALID_DATA, "%s: invalid resource catalog entry for %s" % [ENVIRONMENT_RESOURCE_CATALOG, path])
 		var required: bool = entry["owner"] in pack_ids
 		for consumer in entry["consumers"]:

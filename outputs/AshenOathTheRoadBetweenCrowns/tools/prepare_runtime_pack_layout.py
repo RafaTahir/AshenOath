@@ -49,6 +49,67 @@ def selected_files(value):
     return json.loads("[" + value.removeprefix("PackedStringArray(").removesuffix(")") + "]")
 
 
+# Greyfen uses the authored houses and cemetery. Only later road and castle
+# builders request the modular masonry, while the shrine arch still uses wood trim.
+MASONRY_PRESET = "Runtime Pack Masonry"
+MASONRY_MODULES = {
+    "assets_external/environment/village/" + name + ".obj"
+    for name in ("Roof_2x4_RoundTile", "Roof_RoundTiles_8x10", "Wall_UnevenBrick_Straight")
+}
+MASONRY_ZONES = ("vargan_approach", "vargan_court")
+
+
+def ensure_masonry_preset(config, sections):
+    if MASONRY_PRESET in sections:
+        return
+    section = "preset." + str(max(int(s.split(".")[1]) for s in sections.values()) + 1)
+    campaign = sections["Runtime Pack Campaign"]
+    config[section] = dict(config[campaign])
+    config[section].update({"name": json.dumps(MASONRY_PRESET), "export_files": "PackedStringArray()", "include_filter": '""'})
+    config[section + ".options"] = dict(config[campaign + ".options"])
+    sections[MASONRY_PRESET] = section
+
+
+def partition_road_masonry(config, sections, manifest, environment):
+    # The import dependency compiler decides which textures still have earlier consumers.
+    owned = MASONRY_MODULES | {path.removeprefix("res://") for path, record in environment.items()
+                               if record["owner"] == "masonry"}
+    for name, section in sections.items():
+        fields = config[section]
+        files = set(selected_files(fields["export_files"]))
+        includes = set(json.loads(fields["include_filter"]).split(",")) - {""}
+        excludes = set(json.loads(fields["exclude_filter"]).split(",")) - {""}
+        includes.difference_update(owned)
+        sources = {"res://" + path for path in owned}
+        if name == MASONRY_PRESET:
+            # This dedicated preset has no other roots. Imported modules keep their material bindings.
+            files = sources
+            includes.clear()
+            excludes.difference_update(owned)
+            excludes.update(path.removeprefix("res://") for path, record in environment.items()
+                            if record["owner"] != "masonry")
+        else:
+            files.difference_update(sources)
+            excludes.update(owned)
+        fields["export_files"] = "PackedStringArray(" + ", ".join(map(json.dumps, sorted(files))) + ")"
+        fields["include_filter"] = json.dumps(",".join(sorted(includes)))
+        fields["exclude_filter"] = json.dumps(",".join(sorted(excludes)))
+    manifest["pack_presets"]["masonry"] = MASONRY_PRESET
+    pack = manifest["packs"].setdefault("masonry", {})
+    defaults = {
+        "id": "masonry", "filename": "masonry.pck", "url": "packs/masonry.pck",
+        "version": "pending-build", "sha256": "", "bytes": 0, "entry_scene": "",
+        "required_at_startup": False, "preload_priority": 20, "status": "awaiting_source_aligned_build",
+        "dependencies": ["base", "opening"]}
+    for field, value in defaults.items():
+        pack.setdefault(field, value)
+    pack["contents"] = sorted("res://" + path for path in owned)
+    for zone in MASONRY_ZONES:
+        requirements = manifest["zone_dependencies"][zone]
+        if "masonry" not in requirements:
+            requirements.append("masonry")
+
+
 def partition_opening_dialogue(project, config, sections, manifest):
     """Put the selected care and briefing recordings in Greyfen's pack."""
     bindings = authored_dialogue_inventory(project, ("dialogue.json", "interaction_scenes.json"), pages)
@@ -196,6 +257,7 @@ def compile_layout(defer_environment=False, require_prepared_forest=False):
     config.read(presets_path, encoding="utf-8-sig")
     sections = {json.loads(config[s]["name"]): s for s in config.sections()
                 if "name" in config[s]}
+    ensure_masonry_preset(config, sections)
     leisure = "Runtime Pack Leisure"
     if leisure not in sections:
         index = max(int(s.split(".")[1]) for s in config.sections() if "." in s) + 1
@@ -654,6 +716,8 @@ def compile_layout(defer_environment=False, require_prepared_forest=False):
     dependencies = manifest["packs"]["opening"].setdefault("dependencies", [])
     if "opening_materials" not in dependencies:
         dependencies.append("opening_materials")
+    # Register the new consumer before assigning shared texture dependencies.
+    manifest["packs"].setdefault("masonry", {"id": "masonry", "dependencies": ["base", "opening"]})
     for record in environment.values():
         for consumer in record["consumers"]:
             if consumer != record["owner"]:
@@ -691,6 +755,7 @@ def compile_layout(defer_environment=False, require_prepared_forest=False):
     # Apply after actor partitioning too: it creates presets and replaces some
     # inherited filters. No subsequent pass may resurrect these stale imports.
     retire_environment_export_roots(PROJECT, config, sections)
+    partition_road_masonry(config, sections, manifest, environment)
     partition_opening_dialogue(PROJECT, config, sections, manifest)
     # Validate the complete generated graph before either tracked output changes.
     require_valid_pack_graph(manifest)

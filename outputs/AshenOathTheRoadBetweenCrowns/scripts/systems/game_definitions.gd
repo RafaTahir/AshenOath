@@ -76,7 +76,7 @@ const CAMPAIGN_VISUAL_ROLES: Array[String] = [
 ]
 
 const PREDICTIVE_VISUAL_PREWARM_ROLES := {
-	"bandit_road": ["castle_wall", "castle_arch", "castle_roof", "castle_lantern"],
+	"bandit_road": ["castle_arch", "castle_lantern"],
 	"vargan_approach": ["castle_bookcase", "castle_chair", "castle_bench", "castle_table", "castle_weapon_stand"],
 }
 

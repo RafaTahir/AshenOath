@@ -50,7 +50,8 @@
     "leisure": "Runtime Pack Leisure",
     "community": "Runtime Pack community",
     "community_voice": "Runtime Pack community_voice",
-    "living_cast_voice": "Runtime Pack living_cast_voice"
+    "living_cast_voice": "Runtime Pack living_cast_voice",
+    "masonry": "Runtime Pack Masonry"
   },
   "max_deployment_bytes": 268435456,
   "packs": {
@@ -80,10 +81,10 @@
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "first-route-20261123t154039z",
-      "url": "packs/opening.pck?sha256=ff929a6c16b5d0ec73557fe18424a83e41ea33c47b81a507a9115f39f4487437",
-      "sha256": "ff929a6c16b5d0ec73557fe18424a83e41ea33c47b81a507a9115f39f4487437",
-      "bytes": 45355820,
+      "version": "masonry-791c02b9cd17",
+      "url": "packs/opening.pck?sha256=791c02b9cd1755188c222fb5a500cd6f586411c9f70003bf399b9bd53391e603",
+      "sha256": "791c02b9cd1755188c222fb5a500cd6f586411c9f70003bf399b9bd53391e603",
+      "bytes": 26919300,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
         "base"
@@ -91,8 +92,8 @@
       "preload_priority": 10,
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
-      "candidate_bytes": 45355820,
-      "candidate_sha256": "ff929a6c16b5d0ec73557fe18424a83e41ea33c47b81a507a9115f39f4487437",
+      "candidate_bytes": 26919300,
+      "candidate_sha256": "791c02b9cd1755188c222fb5a500cd6f586411c9f70003bf399b9bd53391e603",
       "contents": [
         "greyfen",
         "opening_audio",
@@ -112,7 +113,7 @@
         "res://assets_external/audio/voices/story/f7ccea76efe329ea3ec4d2394ffb6dd589b956340780717f9ce91523c38f277e.ogg",
         "shared_opening_scenery"
       ],
-      "cache_key": "ff929a6c16b5d0ec73557fe18424a83e41ea33c47b81a507a9115f39f4487437"
+      "cache_key": "791c02b9cd1755188c222fb5a500cd6f586411c9f70003bf399b9bd53391e603"
     },
     "campaign": {
       "version": "first-route-20261123t154039z",
@@ -1655,12 +1656,45 @@
       "candidate_bytes": 8545604,
       "candidate_sha256": "6e1eb5a58610dfd63996772fe7458d984b582494ba5a43f224447176aad8c072",
       "cache_key": "6e1eb5a58610dfd63996772fe7458d984b582494ba5a43f224447176aad8c072"
+    },
+    "masonry": {
+      "id": "masonry",
+      "filename": "masonry.pck",
+      "url": "packs/masonry.pck?sha256=1e7f7caec281f5bb612482d43c80288b46d4628c39c59f04741b1218329c3304",
+      "version": "masonry-1e7f7caec281",
+      "sha256": "1e7f7caec281f5bb612482d43c80288b46d4628c39c59f04741b1218329c3304",
+      "bytes": 18945732,
+      "entry_scene": "",
+      "required_at_startup": false,
+      "preload_priority": 20,
+      "status": "streamed_web_candidate",
+      "dependencies": [
+        "base",
+        "opening"
+      ],
+      "contents": [
+        "res://assets_external/environment/village/Roof_2x4_RoundTile.obj",
+        "res://assets_external/environment/village/Roof_RoundTiles_8x10.obj",
+        "res://assets_external/environment/village/T_Plaster_BaseColor.png",
+        "res://assets_external/environment/village/T_Plaster_Normal.png",
+        "res://assets_external/environment/village/T_RoundTiles_BaseColor.png",
+        "res://assets_external/environment/village/T_RoundTiles_Normal.png",
+        "res://assets_external/environment/village/T_RoundTiles_Roughness.png",
+        "res://assets_external/environment/village/T_UnevenBrick_BaseColor.png",
+        "res://assets_external/environment/village/T_UnevenBrick_Normal.png",
+        "res://assets_external/environment/village/T_UnevenBrick_Roughness.png",
+        "res://assets_external/environment/village/Wall_UnevenBrick_Straight.obj"
+      ],
+      "cache_key": "1e7f7caec281f5bb612482d43c80288b46d4628c39c59f04741b1218329c3304",
+      "candidate_artifact": "masonry.pck",
+      "candidate_sha256": "1e7f7caec281f5bb612482d43c80288b46d4628c39c59f04741b1218329c3304",
+      "candidate_bytes": 18945732
     }
   },
   "build_id": "first-route-20261123t154039z",
   "generated_from_commit": "e6fc0e5a3e1f0f588167e8c8bf647747ee780da9",
   "generated_at_utc": "2026-11-23T16:42:17.731476Z",
-  "total_bytes": 165182508,
+  "total_bytes": 165691720,
   "source_dirty": true,
   "deployment_policy_id": "vercel-git-256mib-v1",
   "zone_dependencies": {
@@ -1803,7 +1837,8 @@
       "actor_c12",
       "actor_m04",
       "actor_m13",
-      "actor_p01"
+      "actor_p01",
+      "masonry"
     ],
     "vargan_court": [
       "base",
@@ -1820,7 +1855,8 @@
       "actor_m02",
       "actor_m04",
       "actor_m13",
-      "actor_p01"
+      "actor_p01",
+      "masonry"
     ],
     "record_hall": [
       "base",

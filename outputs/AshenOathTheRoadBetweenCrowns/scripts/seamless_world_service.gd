@@ -48,6 +48,7 @@ var _added_nodes: Array[WeakRef] = []
 var _poll := 0.0
 var _foreground := false
 var _first_route_preparation := false
+var _forest_approach_target := ""
 var _cached_root: Node3D
 var _cached_epoch := -1
 var _cached_quality := ""
@@ -169,6 +170,9 @@ func _process(delta: float) -> void:
 	if _poll >= PRIORITY_INTERVAL:
 		_poll = 0.0
 		_selected_connection = _preparation_connection()
+		_forest_approach_target = ""
+		if _first_route_preparation and preload("res://scripts/core/route_destination_resources.gd").forest_road(_selected_connection) and _connection_distance(_selected_connection) <= APPROACH_RADIUS:
+			_forest_approach_target = str(_selected_connection.target)
 		if _road_travel_current() and not _road_commit_queued and road_ready(_selected_connection):
 			_road_commit_queued = true
 			_commit_road_travel.call_deferred(_road_travel_serial)
@@ -178,7 +182,7 @@ func _process(delta: float) -> void:
 			_cache_elapsed = 0.0
 			_cache_next_destination()
 	if host.opening_detail_pending: return
-	if not requires_prepared_road(_selected_connection):
+	if not requires_prepared_road(_selected_connection) and (_forest_approach_target.is_empty() or _forest_approach_target != _selected_connection.get("target")):
 		if _neighbor_scope != null: cancel_preparation()
 		elif not _road_resource_key.is_empty() and _road_resource_key[0] != _selected_connection.get("target", ""): _release_road_resources()
 		return
@@ -318,7 +322,7 @@ func request_road_travel(target: String, arrival: Vector3) -> bool:
 	if not host.game_started or not is_instance_valid(host.player) or host._journey_load_pending(): return false
 	if not requires_prepared_road(edge) and road_ready(edge):
 		_clear_road_travel()
-		if _neighbor_scope != null: cancel_preparation()
+		if _neighbor_scope != null and not has_prepared(target, false): cancel_preparation()
 		host._systems["zone_lifecycle"]._request_zone_load(str(edge.target),arrival if arrival != Vector3.ZERO else _road_arrival(edge))
 		return true
 	_road_travel_serial += 1
@@ -876,7 +880,8 @@ func update_player(actor: Node3D, zone_id: String, delta: float) -> bool:
 					point.z = -0.30; actor.global_position = frame*point
 					actor.velocity -= normal*maxf(0.0,actor.velocity.dot(normal))
 				continue
-			if not requires_preparation:
+			var continuous := requires_preparation or (_first_route_preparation and preload("res://scripts/core/route_destination_resources.gd").forest_road(connection) and has_prepared(str(connection.target)))
+			if not continuous:
 				_crossing.clear()
 				pending_transition = {"source":source,"target":str(connection.target),"edge":str(connection.id),"physical":true}
 				if host.request_seamless_boundary_transition(str(connection.target),_road_arrival(connection),str(connection.id)):
@@ -937,6 +942,7 @@ func on_zone_activated(zone_id: String, local_position: Vector3 = Vector3.ZERO) 
 		host.progression.record_saga_departure(current_sector, host.quests)
 	previous_sector = current_sector if current_sector != normalized else previous_sector
 	current_sector = normalized
+	_forest_approach_target = ""
 	_selected_connection = {}
 	_challenger = ""; _challenger_elapsed = 0.0
 	if is_instance_valid(host.audio): host.audio.release_streamed_destination(normalized)

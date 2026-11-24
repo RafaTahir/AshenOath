@@ -81,66 +81,69 @@
     },
     "res://assets_external/environment/village/T_Plaster_BaseColor.png": {
       "consumers": [
-        "opening"
+        "masonry"
       ],
-      "owner": "opening"
+      "owner": "masonry"
     },
     "res://assets_external/environment/village/T_Plaster_Normal.png": {
       "consumers": [
-        "opening"
+        "masonry"
       ],
-      "owner": "opening"
+      "owner": "masonry"
     },
     "res://assets_external/environment/village/T_RoundTiles_BaseColor.png": {
       "consumers": [
-        "opening"
+        "masonry"
       ],
-      "owner": "opening"
+      "owner": "masonry"
     },
     "res://assets_external/environment/village/T_RoundTiles_Normal.png": {
       "consumers": [
-        "opening"
+        "masonry"
       ],
-      "owner": "opening"
+      "owner": "masonry"
     },
     "res://assets_external/environment/village/T_RoundTiles_Roughness.png": {
       "consumers": [
-        "opening"
+        "masonry"
       ],
-      "owner": "opening"
+      "owner": "masonry"
     },
     "res://assets_external/environment/village/T_UnevenBrick_BaseColor.png": {
       "consumers": [
-        "opening"
+        "masonry"
       ],
-      "owner": "opening"
+      "owner": "masonry"
     },
     "res://assets_external/environment/village/T_UnevenBrick_Normal.png": {
       "consumers": [
-        "opening"
+        "masonry"
       ],
-      "owner": "opening"
+      "owner": "masonry"
     },
     "res://assets_external/environment/village/T_UnevenBrick_Roughness.png": {
       "consumers": [
-        "opening"
+        "masonry"
       ],
-      "owner": "opening"
+      "owner": "masonry"
     },
     "res://assets_external/environment/village/T_WoodTrim_BaseColor.png": {
       "consumers": [
+        "masonry",
         "opening"
       ],
       "owner": "opening"
     },
     "res://assets_external/environment/village/T_WoodTrim_Normal.png": {
       "consumers": [
+        "masonry",
         "opening"
       ],
       "owner": "opening"
     },
     "res://assets_external/environment/village/T_WoodTrim_Roughness.png": {
       "consumers": [
+        "masonry",
         "opening"
       ],
       "owner": "opening"

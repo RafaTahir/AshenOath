@@ -1,5 +1,11 @@
 # A Cohesive Ashen Oath
 
+## Opening download and the northern forest road, 2026-11-24
+
+The opening pack previously included modular roofs and a wall used by later castle scenery. Greyfen's houses use the four authored house meshes. Its shrine arch and other village pieces still use the shared wood trim. The environment dependency compiler assigns three modules and eight exclusive texture imports to the masonry pack. Their compiled payloads and bindings carry over intact. The castle approach and courtyard request this pack through ordinary travel and selected Continue. The road scheduler can prepare the wall mesh on approach without requesting it when entering Bandit Road.
+
+The opt-in prepared-road path also constructs the selected Wychwood–Deep Wood destination on approach. Crossing uses the continuous handoff when the destination is ready and falls back to ordinary pack-ready travel when construction is unfinished. Elapsed loading and crossing times remain player-side measurements.
+
 ## Regional travel and cast delivery, 2026-11-24
 
 Every available Atlas road shares the same approach scheduler. It downloads the likely destination, promotes its required packs near the road and prepares available scene resources in slices. A cold crossing keeps the current region and player controls active while its packs arrive. Deliberate travel takes priority and checks the journey, destination and story gate again before handoff. Full destination construction ahead of the boundary remains scoped to the prepared-road pilot. Construction and renderer cost at other boundaries still require measurement.
@@ -41,7 +47,7 @@ still unproven. The later CI commit changes only the workflow.
 
 ### First Journey - Road of Crows
 
-Start a fresh test journey at 1280×720 Balanced. Meet Anwen in Greyfen and
+Start a fresh test journey at 1280Ã—720 Balanced. Meet Anwen in Greyfen and
 learn who is missing and why Kael must take the north road. At the Wychwood
 cart and trail, separate identities from evidence of what happened. Bram's
 ledger, Sella's red-thread feathers and the binding wire form the repeatable
@@ -72,7 +78,7 @@ new results below before changing the prepared-road policy or claiming M1.
 ### First Measurements
 
 - The committed Web package was served locally on a fresh isolated Chrome
-  profile at 1280×720 Balanced using hardware ANGLE on the i5-7200U and Intel
+  profile at 1280Ã—720 Balanced using hardware ANGLE on the i5-7200U and Intel
   HD 620. The menu appeared at 60.74 seconds and the driver observed usable
   control at 70.00 seconds from navigation, including its ordinary intro skip.
   New Game activation to control observation took 8.60 seconds. The unshaped
@@ -279,7 +285,7 @@ new results below before changing the prepared-road policy or claiming M1.
   profile and candidate's copied scripts/data were recorded. This is the
   source version with compiled furniture collision and named encounter
   prefetch. The actual four creature resources were cached at acquisition
-  (0.04–0.06 ms per lookup), and the slowest recorded Wychwood build step
+  (0.04â€“0.06 ms per lookup), and the slowest recorded Wychwood build step
   shifted from the Raider's 3.426-second step to the 1.762-second terrain
   integration step. The Greyfen return took 1.497 seconds and the outward
   crossing took 8.933 seconds. Both exceed budget. The renderer still spent
@@ -328,7 +334,7 @@ new results below before changing the prepared-road policy or claiming M1.
   runtime packs and passed exact Web package integrity across 55 files.
   The complete export is 173,895,412 bytes. Its root PCK SHA-256 is
   `84feb99f95e956c7ace963b38624110037c43cac95c9b331794775938a614f42`.
-  The packaged browser run started on this exact export at 1280×720,
+  The packaged browser run started on this exact export at 1280Ã—720,
   Balanced, with the 50 Mbps / 50 ms profile and a new isolated Chrome
   profile. A complete browser route and performance remain unverified.
 - The renderer change replaces a duplicate full-entry offscreen draw with
@@ -689,7 +695,7 @@ new results below before changing the prepared-road policy or claiming M1.
 - The authorized production package is `first-road-20261123t201045z`
   at 173,918,554 bytes. It uses Godot's `Web Browser` export preset and
   the retained external asset packs. Standard visits use direct travel.
-  The `?prepared-road=1` link enables the Greyfen–Wychwood pilot without
+  The `?prepared-road=1` link enables the Greyfenâ€“Wychwood pilot without
   requiring the QA export. Player acceptance remains pending.
 
 

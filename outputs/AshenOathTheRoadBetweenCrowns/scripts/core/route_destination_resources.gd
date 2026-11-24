@@ -24,6 +24,8 @@ static func paths(host: Node, target: String) -> Array[String]:
 				var path: String = host.asset_helper.role_resource_path(roles[enemy_id], true)
 				if path not in required:
 					required.append(path)
+	elif target in ["vargan_approach", "vargan_court"]:
+		required.append("res://assets_external/environment/village/Wall_UnevenBrick_Straight.obj")
 	var music_id: String = host.audio.music_state_for_zone(target)
 	var music_path: String = host.audio.prepared_audio.entries.get("music", {}).get(music_id, "")
 	if not music_path.is_empty() and ResourceLoader.exists(music_path):
@@ -69,3 +71,7 @@ static func current_job(jobs: Dictionary, target: String, host: Node) -> Diction
 	if str(job.get("source", "")) != str(host.current_zone_id) or str(job.get("quality", "")) != str(host.settings.settings.get("quality_preset", "balanced")):
 		return {}
 	return job
+
+static func forest_road(edge: Dictionary) -> bool:
+	return (edge.get("source") == "wychwood" and edge.get("target") == "deep_wood") \
+		or (edge.get("source") == "deep_wood" and edge.get("target") == "wychwood")

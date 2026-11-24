@@ -23,7 +23,7 @@ func _initialize() -> void:
 	_inventory(PREFIX, inventory)
 	for section in config.get_sections():
 		var name: String = config.get_value(section, "name", "")
-		if name not in ["Runtime Pack Opening", "Runtime Pack Adjacent", "Runtime Pack Campaign"]:
+		if name not in ["Runtime Pack Opening", "Runtime Pack Adjacent", "Runtime Pack Campaign", "Runtime Pack Masonry"]:
 			continue
 		var owner := name.trim_prefix("Runtime Pack ").to_lower()
 		var selections: PackedStringArray = config.get_value(section, "export_files", PackedStringArray())
@@ -53,7 +53,7 @@ func _initialize() -> void:
 				consumers.append(actor_owner)
 		consumers.sort()
 		var owner := "campaign"
-		for preferred: String in ["opening", "characters", "monsters", "adjacent", "campaign"]:
+		for preferred: String in ["opening", "characters", "monsters", "adjacent", "campaign", "masonry"]:
 			if preferred in consumers:
 				owner = preferred
 				break
