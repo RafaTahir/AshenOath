@@ -82,6 +82,22 @@ Road needs the four chapters, a working route and a prepared refuge. It gives
 up territorial protection and access to the Hart's complete account, while
 preserving the human records and giving the households a place to go.
 
+### Returning to an unfinished chapter
+
+The journal opens on the active chapter's question when Kael has made no
+personal pledge. Its next action comes from the current objective. The
+following interruptions have additional guidance from the saved work itself.
+
+| Saved moment | What the player can pick up |
+| --- | --- |
+| One bank surveyed at Lantern Reach | The opposite landing remains marked. Both banks are reachable by the service footway. |
+| Food distribution agreed | Serve the first meal. The waiting table can recall the chosen arrangement once the meal has been served. |
+| First load collected | Walk it between the repaired bridge railings or board the agreed ferry. After the crossing, set the load down at the far landing. |
+| Custody of the records agreed | Welcome the first arrivals. The refuge table keeps the outcome of distributed copies or willing custodians after the welcome. |
+| Rota posted at Hearthward | Keep the first watch. Food and shelter stay available when a shift is vacant. |
+| A covenant chosen | Resume the selected ritual step or the Ash encounter. On Open Road, accompany the willing households through Lantern Reach to Hearthward. The journal records the outcome only when the ending owner completes it. |
+| Homecoming completed | A manually tracked unfinished task remains available in the return summary. Without a selection, Kael can explore. |
+
 ## Objective and Save Contract
 
 - Existing quest/objective IDs remain. The mill adds only two optional objectives:

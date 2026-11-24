@@ -14,9 +14,15 @@ static func covenant(campaign: Dictionary, state: Variant) -> Dictionary:
 			body += "\n\nWhat this leaves: " + str(ending.get("benefit", "")) + "\n\nWhat it costs: " + str(ending.get("cost", ""))
 			body += "\n\n" + "\n\n".join(preload("res://scripts/epilogue_resolver.gd").living_road_cards(state))
 		else:
-			body += "\n\nThis intention is recorded, but its resolution has not yet been completed. Follow the next known step in the glade."
-		return {"id": "covenant:" + ending_id, "title": str(ending.get("title", "Covenant")) + (" — carried out" if complete else " — intention chosen"), "body": body, "status": "completed" if complete else "pending"}
+			body += "\n\nKael has chosen this covenant. The road ahead in the journal shows where to carry it out."
+		return {"id": "covenant:" + ending_id, "title": str(ending.get("title", "Covenant")) + (" â€” carried out" if complete else " â€” intention chosen"), "body": body, "status": "completed" if complete else "pending"}
 	return {}
+
+static func current_purpose(campaign: Dictionary, quest_id: String, title: String) -> String:
+	for chapter: Dictionary in campaign.get("chapters", []):
+		if str(chapter.get("quest_id", "")) == quest_id and not str(chapter.get("question", "")).is_empty():
+			return str(chapter.question)
+	return "Kael's current task is %s." % title
 
 static func complete(recap: Dictionary) -> Dictionary:
 	var hint: String = str(recap.get("route_hint", ""))
@@ -39,7 +45,6 @@ static func arrival(context: Dictionary, objective_view: Dictionary, recap: Dict
 		var source_label: String = str(context.get("source_label", "")).strip_edges()
 		if source_label != "":
 			body_parts.append("Recorded source: " + source_label)
-		body_parts.append("This moment's recorded story state has been restored.")
 	var promise: String = str(recap.get("promise", "")).strip_edges()
 	if promise != "":
 		body_parts.append(promise)

@@ -147,13 +147,14 @@ func _open_board(area: Node3D) -> void:
 	var status := ""
 	var objective := Rules.current_objective(quest,game.quests)
 	if objective in ["hear_households","gather_cast"]:
-		pages.append({"speaker":"Public account","speaker_id":"narrator","text":_public_account(quest),"read_only":true})
-	if objective in ["choose_responsibilities","carry_promise"] or game.quests.is_completed("main_what_we_promise"):
+		pages.append({"speaker":"Public account","speaker_id":"narrator","text":str(Rules.data().get("public_accounts", {}).get(quest, "")),"read_only":true})
+	if objective in ["choose_responsibilities","carry_promise"] or (zone == "hearthward" and game.quests.is_completed("main_what_we_promise")):
 		status = _rota_text()
 	if objective in ["prepare_kitchen","secure_route","prepare_refuge","test_arrangements"]:
 		status = "Work still needed:"
 		for id: String in Rules.work_ids(quest,game.story_state):
 			if not Rules._true(game.story_state,"community_work:"+id): status += "\n• "+str(Rules.data().work[id].prompt)
+	pages.append_array(preload("res://scripts/core/community_route_details.gd").public_records(zone, Rules.data(), game.story_state))
 	if pages.is_empty() and status=="": status="The completed work remains open to anyone who needs it."
 	# Live checklists are a reading surface. Authored narration stays in separate
 	# exact-text pages so the voice collector never needs combinatorial variants.
@@ -172,11 +173,6 @@ func _shift_text() -> String:
 			if Rules.actor_available(id,game.story_state,game.quests): names.append(str(Rules.data().participant_lines[id].name))
 		lines.append(shift.capitalize()+": "+", ".join(names)+".")
 	return "\n".join(lines)
-
-func _public_account(quest: String) -> String:
-	# These are practical requests authored for public circulation, never private
-	# testimony attributed to an unavailable participant.
-	return str(Rules.data().get("public_accounts",{}).get(quest,""))
 
 func _rota_text() -> String:
 	var answers: Dictionary = game.story_state.get_flag("community_keeper_consent",{})

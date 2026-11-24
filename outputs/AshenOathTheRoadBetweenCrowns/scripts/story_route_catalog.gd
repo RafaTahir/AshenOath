@@ -175,11 +175,11 @@ static func for_objective(quest_id: String, objective_id: String, state = null, 
 			entry = _unfinished_group_route(quest_id, ["evidence_mile_marker", "evidence_supply_cart", "evidence_gate_notice", "evidence_iron_binding", "evidence_ledger_fragment"], quests, current_zone, entry)
 	if current_zone == "assembly" and (quest_id == "side_millers_measure" and objective_id == "ash_choice" or quest_id == "side_soldiers_debt" and objective_id == "debt_choice"):
 		entry = ["assembly", ["assembly_choice"], "Bring the recovered account to the assembly.", "Keep this record available without claiming anyone's consent."]
-	entry = preload("res://scripts/core/community_route_details.gd").progress(quest_id, objective_id, entry, state)
 	var ids: Array[String] = []
 	for id in entry[1]:
 		ids.append(str(id))
 	var result := {"destination_zone":str(entry[0]), "destination_name":zone_name(str(entry[0])), "target_ids":ids, "route_hint":str(entry[2]), "purpose":str(entry[3]), "pinpoint":not ids.is_empty()}
+	preload("res://scripts/core/community_route_details.gd").apply_progress(result, quest_id, objective_id, state)
 	if quest_id == "main_road_of_crows" and objective_id == "evidence_ready":
 		result["next_action"] = "Take the north road into Wychwood" if current_zone == "greyfen" else "Investigate the broken cart and roadside"
 		if current_zone == "wychwood":
@@ -229,20 +229,17 @@ static func ending_continuation(state, current_zone: String) -> Dictionary:
 	if not completed and covenant != "":
 		var ending: String = preload("res://scripts/ending_catalog.gd").normalize(covenant)
 		if preload("res://scripts/covenant_resolution.gd").relocation_pending(state):
-			var row: Dictionary=load("res://scripts/community_ending.gd").continuation(state)
-			var result := _continuation(str(row.id),str(row.title),str(row.action),str(row.zone),str(row.text),"The chosen relocation is unfinished until the willing households arrive.")
-			result["target_ids"]=row.get("target_ids",[])
-			result["pinpoint"]=true
-			return result
-		var steps: Dictionary = {}
-		for id: String in preload("res://scripts/ending_catalog.gd").IDS:
-			steps[id] = []
-			for entry: Array in preload("res://scripts/covenant_resolution.gd").steps_for(id,state):
-				steps[id].append(str(entry[0]))
-		if not steps.get(ending,[]).is_empty() and bool(state.get_flag("covenant_ritual_started", false)):
-			var step: int = clampi(int(state.get_flag("covenant_ritual_step", 0)), 0, 3)
-			var ritual_result := _continuation("covenant_resolution", "THE CHOSEN PROMISE", "Let the covenant settle" if step >= 3 else str(steps[ending][step]), "hart_glade", "The marked places carry the promise in order.", "Carry out the intention you chose.")
-			if step < 3:
+			var relocation := preload("res://scripts/core/community_route_details.gd").departure(state)
+			relocation["destination_name"] = zone_name(str(relocation.destination_zone))
+			return relocation
+		if ending != "kill" and ending != "" and bool(state.get_flag("covenant_ritual_started", false)):
+			var steps: Array = preload("res://scripts/covenant_resolution.gd").steps_for(ending, state)
+			if steps.is_empty():
+				return _continuation("covenant_resolution", "THE CHOSEN PROMISE", "Resume the chosen covenant in the glade", "hart_glade", "", "The intention is recorded. Its work is still underway.")
+			var step := clampi(int(state.get_flag("covenant_ritual_step", 0)), 0, steps.size())
+			var action := "Let the covenant settle" if step == steps.size() else str(steps[step][0])
+			var ritual_result := _continuation("covenant_resolution", "THE CHOSEN PROMISE", action, "hart_glade", "The marked places carry the promise in order.", "Carry out the intention you chose.")
+			if step < steps.size():
 				ritual_result["target_ids"] = ["covenant_%s_%d" % [ending, step]]
 				ritual_result["pinpoint"] = true
 			return ritual_result

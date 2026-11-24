@@ -120,24 +120,25 @@ static func recap_model(campaign: Dictionary, quests, state, zone_id: String) ->
 		recap["destination_name"] = str(continuation.get("destination_name", "Greyfen"))
 		recap["reason"] = str(continuation.get("purpose", "The covenant's consequences need ordinary work."))
 		recap["route_hint"] = str(continuation.get("route_hint", ""))
-		if _flag_bool(state, "final_choice_completed"):
+		if not _flag_bool(state, "final_choice_completed"):
+			recap["promise"] = "Kael has chosen the covenant of %s." % preload("res://scripts/ending_catalog.gd").title(_flag_text(state, "final_covenant"))
+		else:
 			recap["promise"] = "The covenant's outcome stands. Keep the surviving account and return to the people who must live with what comes next."
 		return RouteText.complete(recap)
-	var tracked_escort: bool = quests != null and str(quests.get_tracked_quest()).begins_with("side_escort_") and quests.is_active(str(quests.get_tracked_quest()))
-	if _flag_bool(state, "final_choice_completed") and not tracked_escort:
-		recap.merge({"heading": "The road remains open", "promise": "The final choice and the return to Greyfen are recorded. Their consequences remain part of this journey.", "next_action": "Visit a known place or take up an unfinished task in the journal.", "destination_zone": zone_id, "destination_name": _zone_name(zone_id), "reason": "There is no new covenant or unseen obligation waiting to be selected for you."}, true)
-		return RouteText.complete(recap)
-	if _flag_bool(state, "final_choice_completed") and tracked_escort:
-		recap["promise"] = "The covenant and the existing homecoming stand. Kael has chosen to continue the relief work; Nera's cooperation is not an unrecorded promise of forgiveness."
+	var quest_id: String = str(quests.get_tracked_quest()) if quests != null else ""
+	if _flag_bool(state, "final_choice_completed"):
+		recap["promise"] = "The covenant and Kael's return to Greyfen are recorded."
+		if quest_id == "" or (not quests.tracked_quest_is_manual and not quest_id.begins_with("side_escort_")):
+			recap.merge({"heading": "The road remains open", "next_action": "Visit a known place or take up an unfinished task in the journal.", "destination_zone": zone_id, "destination_name": _zone_name(zone_id), "reason": "Kael can choose where to go from here."}, true)
+			return RouteText.complete(recap)
 	var guidance: Dictionary = preload("res://scripts/greyfen_guidance.gd").view(state, zone_id)
-	if not guidance.is_empty():
+	if not guidance.is_empty() and not _flag_bool(state, "final_choice_completed"):
 		recap.merge({"heading": str(guidance.title), "next_action": str(guidance.action), "destination_zone": str(guidance.destination_zone), "destination_name": str(guidance.destination_name), "reason": "Take this practice step whenever you choose. You can return to the main story at any time."}, true)
 		return RouteText.complete(recap)
 	var report_route: Dictionary = preload("res://scripts/core/road_evidence_report.gd").guidance(state, quests, zone_id)
 	if not report_route.is_empty():
 		recap.merge({"heading": str(report_route.title), "next_action": str(report_route.next_action), "destination_zone": str(report_route.destination_zone), "destination_name": str(report_route.destination_name), "route_hint": str(report_route.route_hint), "reason": str(report_route.purpose)}, true)
 		return RouteText.complete(recap)
-	var quest_id: String = str(quests.get_tracked_quest()) if quests != null else ""
 	if quest_id == "" and quests != null:
 		for chapter in campaign.get("chapters", []):
 			var candidate: String = str(chapter.get("quest_id", ""))
@@ -148,6 +149,8 @@ static func recap_model(campaign: Dictionary, quests, state, zone_id: String) ->
 		var objective_id: String = str(quests.get_active_objective_id(quest_id))
 		var definition: Dictionary = quests.quest_defs.get(quest_id, {})
 		recap["heading"] = str(definition.get("title", "The current promise"))
+		if pledge == "" and quest_id != "main_road_of_crows" and not _flag_bool(state, "final_choice_completed"):
+			recap["promise"] = RouteText.current_purpose(campaign, quest_id, str(recap.heading))
 		for objective in definition.get("objectives", []):
 			if str(objective.get("id", "")) == objective_id:
 				recap["next_action"] = str(objective.get("text", "Follow the next known lead."))
@@ -213,7 +216,7 @@ static func _people_entries(campaign: Dictionary, quests, state) -> Array[Dictio
 		entries.append({"id": "person:" + id, "title": title, "body": "\n\n".join(lines), "identified": identified})
 	for resolved in _resolved_outcomes(campaign, state):
 		if not covered_flags.has(str(resolved.flag)):
-			entries.append({"id": "commitment:" + str(resolved.id), "title": "Recorded commitment — " + str(resolved.title), "body": str(resolved.body)})
+			entries.append({"id": "commitment:" + str(resolved.id), "title": "Recorded commitment â€” " + str(resolved.title), "body": str(resolved.body)})
 	# The same person can own several retained quest keys. Keep one portrait
 	# with earned chapter accounts, rather than presenting aliases as twins.
 	var merged: Array[Dictionary] = []
@@ -473,7 +476,7 @@ static func _evidence_known_lead(authored: Dictionary, quests, state, zone_id: S
 			body += "\nWhere: " + destination
 		if hint != "" and hint != body:
 			body += "\n" + hint
-		leads.append({"id": "quest:%s:%s" % [quest_id, objective_id], "title": "Current known lead — " + str(definition.get("title", "The current task")), "body": body})
+		leads.append({"id": "quest:%s:%s" % [quest_id, objective_id], "title": "Current known lead â€” " + str(definition.get("title", "The current task")), "body": body})
 		break
 	return leads
 

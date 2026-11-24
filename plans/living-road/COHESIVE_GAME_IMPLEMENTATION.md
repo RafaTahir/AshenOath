@@ -1,5 +1,19 @@
 # A Cohesive Ashen Oath
 
+## First-route release checkpoint, 2026-11-24
+
+The Web package pushed to development and main is `first-road-20261124t124304z`, release commit `18101bf`, from source `3d813e0`. The complete package is 173,937,386 bytes.
+
+The previous package failed to compile the audio manager while creating the menu. The repair restores its regional soundscape method and reports a menu service failure through the browser reload screen. All 24 registered runtime services compiled from the repaired production root pack. The local first-route export now uses that same compiler on future packages before compression.
+
+Rafa approved proceeding from the first route on November 24. The prepared-road pilot remains available with `?prepared-road=1`. Listening, character presentation and crossing timings have separate acceptance records.
+
+## Campaign handoff, 2026-11-24
+
+The return journal now follows the current chapter, the selected covenant and manually tracked work after homecoming. Lantern Reach and Hearthward read saved surveys, choices, passage and rota progress. Their public tables retain the local consequences of completed work. Both journey revisions use the existing quest and save owners. The [throughline](../../outputs/AshenOathTheRoadBetweenCrowns/docs/THROUGHLINE.md) records the chapter order, ending conditions and interruption points.
+
+Rafa owns runtime qualification of the campaign build, including older saves, the six supported endings across the two revisions, homecoming, visuals, audio and performance. Export and Git publication establish the bytes available for that review.
+
 ## First-Route Handoff - 2026-11-23
 
 The working checkout is `D:/Projects/AshenOath-Dev` on
