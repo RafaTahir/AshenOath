@@ -169,9 +169,9 @@
         if (total > 0) progressBar.value = Math.min(0.99, Math.max(0, current / total));
         else progressBar.removeAttribute('value');
       }
-      const SHELL_BUILD_ID = "first-road-20261123t212745z";
-      const RUNTIME_PACK_CONTRACT = "first-road-20261123t212745z";
-      const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"engine/7e1b339885c8301a383276e3/index","experimentalVK":false,"fileSizes":{"index.pck":13757400,"engine/7e1b339885c8301a383276e3/index.wasm":37700666},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4,"mainPack":"index.pck"};
+      const SHELL_BUILD_ID = "first-road-20261124t124304z";
+      const RUNTIME_PACK_CONTRACT = "first-road-20261124t124304z";
+      const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"engine/7e1b339885c8301a383276e3/index","experimentalVK":false,"fileSizes":{"index.pck":13757528,"engine/7e1b339885c8301a383276e3/index.wasm":37700666},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4,"mainPack":"index.pck"};
       let engine = null, engineBooted = false, started = false, failed = false;
       let startupResourceError = '';
       const audioNotice = document.getElementById('audio-notice');
@@ -785,6 +785,12 @@
                 if (message.includes('Preload file') || message.includes('Failed to load script')) {
                   startupResourceError = message;
                   bootMetrics.resource_error = message;
+                }
+                // The audio and HUD scripts are loaded on demand before the menu exists.
+                if (!bootMetrics.ui_ready_ms && !failed &&
+                    (/Journey service .+ could not be (?:loaded|created)/.test(message) ||
+                     message.includes('Failed to load script "res://scripts/game.gd"'))) {
+                  window.setTimeout(() => showStartupError('The game menu could not start. Reload to try again.', message), 0);
                 }
                 console.error(...messages);
               },
