@@ -9,6 +9,11 @@ class ErrorLog extends Logger:
 			errors.append("%s:%d %s %s" % [file, line, code, rationale])
 
 const ROLES := {"M01":"ghoulkin", "M02":"wychwood_stalker", "M19":"wychwood_raider", "M20":"wychwood_brute"}
+const DETAIL_BY_SURFACE := {
+	"M01_PeatSkin": 1, "Wychwood_Stalker_Main": 2,
+	"M19_CaughtTokenCord": 3, "M20_WornTusk": 4,
+	"M19_OliveGreyHide": 5, "M20_CharcoalOliveHide": 6
+}
 var options: Dictionary = {}
 var output := ""
 var preparation: Dictionary = {}
@@ -269,6 +274,7 @@ func _verify_materials() -> void:
 			continue
 		var source := str(data.assets[id].source)
 		var graded := 0
+		var active_details: Array[int] = []
 		var prepared := false
 		for node: Node in actor.find_children("*", "Node3D", true, false):
 			prepared = prepared or str(node.get_meta("prepared_actor_source", "")) == source
@@ -282,10 +288,17 @@ func _verify_materials() -> void:
 				_check(str(material.source_path) == source, "Wrong material source: " + id)
 				_check(str(material.palette_revision) == str(data.palette_revision), "Wrong material revision: " + id)
 				_check(material.native_material != null and material.native_material.albedo_texture != null, "Missing retained native atlas: " + id)
+				var expected := int(DETAIL_BY_SURFACE.get(material.resource_name, 0))
+				var actual: Variant = material.get_shader_parameter("anatomy_detail")
+				_check((int(actual) if actual != null else 0) == expected, "Wrong Wychwood detail binding: " + material.resource_name)
+				if expected > 0 and expected not in active_details: active_details.append(expected)
 				graded += 1
+		active_details.sort()
+		var expected_details: Array = {"M01":[1], "M02":[2], "M19":[3,5], "M20":[4,6]}[id]
+		_check(active_details == expected_details, "Missing authored detail on " + id)
 		_check(prepared, "Actor did not use prepared frozen scene: " + id)
 		_check(graded > 0, "Live Wychwood enemy lacks pigment bindings: " + id)
-		(report.materials as Array).append({"id":id, "source":source, "prepared":prepared, "pigment_surfaces":graded, "live_actor":str(actor.get_path())})
+		(report.materials as Array).append({"id":id, "source":source, "prepared":prepared, "pigment_surfaces":graded, "detail_ids":active_details, "live_actor":str(actor.get_path())})
 
 func _enemy(identity: String) -> Node3D:
 	for actor: Node in game.active_enemies:
@@ -358,6 +371,19 @@ func _capture_monsters() -> void:
 		var on_screen: bool = projected.is_finite() and root.get_visible_rect().has_point(projected) and camera.is_position_in_frustum(target)
 		_check(actor.is_visible_in_tree() and visible_mesh and on_screen, "Inspection subject is not visibly framed: " + id)
 		await _capture(id + "_inspection_camera")
+		var settings: Dictionary = {}
+		for mesh: MeshInstance3D in actor.find_children("*", "MeshInstance3D", true, false):
+			if mesh.mesh == null: continue
+			for surface in mesh.mesh.get_surface_count():
+				var material := mesh.get_active_material(surface) as ShaderMaterial
+				if material == null or settings.has(material): continue
+				var value: Variant = material.get_shader_parameter("anatomy_detail")
+				if value != null and int(value) > 0:
+					settings[material] = value
+					material.set_shader_parameter("anatomy_detail", 0)
+		await _capture(id + "_control_inspection_camera")
+		for material: ShaderMaterial in settings:
+			material.set_shader_parameter("anatomy_detail", settings[material])
 		actor.set_encounter_active(original_active)
 		actor.visible = original_visible
 		actor.process_mode = actor_mode

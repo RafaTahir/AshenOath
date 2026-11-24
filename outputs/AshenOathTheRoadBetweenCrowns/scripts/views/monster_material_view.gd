@@ -95,6 +95,20 @@ static func _variant(native: BaseMaterial3D, recipe: Dictionary, source: String)
 	for name in ["neutral_color", "warm_color", "cool_color"]:
 		material.set_shader_parameter(name, Color(str(recipe[name])))
 	material.set_shader_parameter("pigment_strength", float(recipe.strength))
+	# Each detail is authored against one named native surface's UV layout.
+	match native.resource_name:
+		"M01_PeatSkin":
+			material.set_shader_parameter("anatomy_detail", 1)
+		"Wychwood_Stalker_Main":
+			material.set_shader_parameter("anatomy_detail", 2)
+		"M19_CaughtTokenCord":
+			material.set_shader_parameter("anatomy_detail", 3)
+		"M20_WornTusk":
+			material.set_shader_parameter("anatomy_detail", 4)
+		"M19_OliveGreyHide":
+			material.set_shader_parameter("anatomy_detail", 5)
+		"M20_CharcoalOliveHide":
+			material.set_shader_parameter("anatomy_detail", 6)
 	for name in ["chroma_preservation", "highlight_preservation", "value_gain"]:
 		material.set_shader_parameter(name, float(recipe[name]))
 	material.set_shader_parameter("atlas_regions", str(recipe.method) == "atlas_regions")

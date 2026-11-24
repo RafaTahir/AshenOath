@@ -6,5 +6,5 @@ render_mode cull_disabled, diffuse_burley, specular_schlick_ggx;
 void fragment() {
 	#include "res://shaders/monster_pigment_surface.gdshaderinc"
 	CLEARCOAT = authored_clearcoat;
-	CLEARCOAT_GLOSS = 1.0 - authored_clearcoat_roughness;
+	CLEARCOAT_ROUGHNESS = authored_clearcoat_roughness;
 }
