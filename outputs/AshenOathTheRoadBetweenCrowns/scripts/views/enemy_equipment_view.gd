@@ -2,6 +2,9 @@ extends RefCounted
 ## enemy equipment view: scene-only responsibilities.
 
 var _actor: CharacterBody3D
+var _blade_rig: Skeleton3D
+var _blade_hand := -1
+var _blade_points := PackedVector3Array()
 
 func _init(actor: CharacterBody3D) -> void:
 	_actor = actor
@@ -86,6 +89,45 @@ func _configure_attack_contact_bone() -> void:
 					ancestor = ancestor.get_parent()
 				_actor.attack_contact_local_offset = rest_basis.inverse() * Vector3(0, 0, -0.58)
 				return
+
+func attach_grave_tithe() -> void:
+	var rig: Skeleton3D = _actor.animation_driver.get_skeleton()
+	var hand := rig.find_bone("hand_r")
+	var scene := load("res://assets/characters/grave_tithe_scythe.scn") as PackedScene
+	if hand < 0 or scene == null:
+		push_error("Gravebound knight requires its right hand and authored tithe scythe")
+		return
+	var socket := BoneAttachment3D.new()
+	socket.name = "GraveTitheGrip"
+	rig.add_child(socket)
+	socket.bone_name = rig.get_bone_name(hand)
+	var scythe := scene.instantiate() as Node3D
+	socket.add_child(scythe)
+	# Palm space measured from the retained M04 rig through Idle, Walk and Attack.
+	var blade_axis := Vector3(-0.947497, -0.120480, 0.296200)
+	var haft_axis := Vector3(0.277972, 0.147517, 0.949194)
+	scythe.transform = Transform3D(Basis(blade_axis, haft_axis, blade_axis.cross(haft_axis)).orthonormalized(), Vector3(0, 0.09, 0))
+	_blade_rig = rig
+	_blade_hand = hand
+	_blade_points.clear()
+	for marker_name: String in ["EdgeHeel", "EdgeTip"]:
+		var marker := scythe.find_child(marker_name, true, false) as Node3D
+		if marker == null:
+			push_error("Gravebound scythe missing cutting edge marker " + marker_name)
+			_blade_points.clear()
+			return
+		var point := Vector3.ZERO
+		while marker != socket:
+			point = marker.transform * point
+			marker = marker.get_parent_node_3d()
+		_blade_points.append(point)
+
+func weapon_edge() -> PackedVector3Array:
+	if not is_instance_valid(_blade_rig) or _blade_points.size() != 2:
+		return PackedVector3Array()
+	# BoneAttachment globals update later in the frame than manual combat animation.
+	var hand := _blade_rig.global_transform * _blade_rig.get_bone_global_pose(_blade_hand)
+	return PackedVector3Array([hand * _blade_points[0], hand * _blade_points[1]])
 
 func _attach_humanoid_sword(label: String) -> void:
 	var skeleton: Variant = _actor.visual_root.find_child("Skeleton3D", true, false) as Skeleton3D

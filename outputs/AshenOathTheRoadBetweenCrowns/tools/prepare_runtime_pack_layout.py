@@ -322,6 +322,8 @@ def compile_layout(defer_environment=False, require_prepared_forest=False):
             "res://scripts/views/monster_material_view.gd",
             "res://scripts/views/monster_pigment_material.gd",
             "res://scripts/views/character_material_budget_view.gd",
+            "res://scripts/models/ecology_response.gd",
+            "res://scripts/views/enemy_strike_contact.gd",
             "res://shaders/monster_pigment.gdshader",
             "res://shaders/monster_pigment_clearcoat.gdshader",
             "res://shaders/monster_pigment_common.gdshaderinc",
@@ -691,6 +693,7 @@ def compile_layout(defer_environment=False, require_prepared_forest=False):
         config[section]["exclude_filter"] = json.dumps(",".join(sorted(excluded)))
     manifest_path = PROJECT / "runtime_pack_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8-sig"))
+    published_actor_paths = list(manifest.get("actor_resource_owners", {}))
     manifest["packs"].setdefault("leisure", {
         "id":"leisure", "filename":"leisure.pck", "url":"packs/leisure.pck",
         "version":"pending-build", "sha256":"", "bytes":0, "entry_scene":"",
@@ -774,6 +777,12 @@ def compile_layout(defer_environment=False, require_prepared_forest=False):
     retire_environment_export_roots(PROJECT, config, sections)
     partition_road_masonry(config, sections, manifest, environment)
     partition_opening_dialogue(PROJECT, config, sections, manifest)
+    # Set traversal in the partitioners must not reorder the published manifest.
+    owners = manifest["actor_resource_owners"]
+    retained = [path for path in published_actor_paths if path in owners]
+    manifest["actor_resource_owners"] = {
+        path: owners[path] for path in retained + sorted(owners.keys() - set(retained))
+    }
     # Validate the complete generated graph before either tracked output changes.
     require_valid_pack_graph(manifest)
     with presets_path.open("w", encoding="utf-8", newline="\n") as output:

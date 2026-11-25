@@ -6,7 +6,12 @@ const PROFILES := {
 	"wing_blast": {"kind": "cone", "forward_dot": 0.32},
 	"ash_breath": {"kind": "cone", "forward_dot": 0.48},
 	"swoop": {"kind": "cone", "forward_dot": 0.48},
-	"counter_lunge": {"kind": "cone", "forward_dot": 0.48},
+	"counter_lunge": {"kind": "cone", "forward_dot": 0.809},
+	"senn_lunge": {"kind": "cone", "forward_dot": 0.78},
+	"senn_guard": {"kind": "cone", "forward_dot": 0.48},
+	"parry_test": {"kind": "cone", "forward_dot": 0.50},
+	"bog_reach": {"kind": "cone", "forward_dot": 0.60},
+	"antler_sweep": {"kind": "cone", "forward_dot": 0.035},
 	"root_lanes": {"kind": "lanes", "period": 2.35, "near_edge": 0.62, "far_edge": 1.72}
 }
 const ARC_SEGMENTS := 64

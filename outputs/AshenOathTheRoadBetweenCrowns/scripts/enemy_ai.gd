@@ -44,6 +44,7 @@ func _on_world_sound(position: Vector3, radius: float, _danger: bool) -> void:
 	navigation_refresh_time = 0.0
 
 func setup(id: String, definition: Dictionary, target: Node3D) -> void:
+	enemy_navigation_view.configure_stride(definition.get("locomotion", {}))
 	enemy_body_view.setup(id, definition, target)
 
 func setup_navigation(service: Variant) -> void:
@@ -64,6 +65,7 @@ func _simulate_tick(delta: float) -> void:
 	if dead or player == null:
 		return
 	if surrender_offer or resolved_nonlethal:
+		enemy_navigation_view.reset_stride()
 		_cancel_pending_strike()
 		velocity=Vector3.ZERO
 		if animation_driver!=null:
@@ -74,6 +76,7 @@ func _simulate_tick(delta: float) -> void:
 				animation_driver.set_life_activity("fear" if surrender_offer else "sit")
 		return
 	if bool(get_meta("story_surrender_protected", false)):
+		enemy_navigation_view.reset_stride()
 		_cancel_pending_strike()
 		velocity = Vector3.ZERO
 		if animation_driver != null:
@@ -129,13 +132,13 @@ func _simulate_tick(delta: float) -> void:
 	var pursuit_distance: Variant = global_position.distance_to(pursuit_position) if pursuit_position != Vector3.INF else INF
 	var home_distance: float = global_position.distance_to(home_position)
 	var tactical_mode: String = enemy_navigation_view.choose_tactical_mode()
+	if tactical_mode != "pursue":
+		enemy_navigation_view.reset_stride()
 	if tactical_mode == "return" and is_boss and player.global_position.distance_to(home_position) > leash_radius:
 		_cancel_pending_strike()
 		perception_memory_time = 0.0
 		_hide_windup_marker()
-		var home_dir: Variant = _navigation_direction(home_position) if home_distance > 0.35 else Vector3.ZERO
-		velocity.x = home_dir.x * move_speed
-		velocity.z = home_dir.z * move_speed
+		enemy_navigation_view.step_home(home_distance, delta)
 	elif tactical_mode == "windup":
 		_tick_pending_attack(delta)
 		velocity.x = 0.0
@@ -144,13 +147,7 @@ func _simulate_tick(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0.0, 12.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 12.0 * delta)
 	elif tactical_mode == "return":
-		var home_dir: Variant = _navigation_direction(home_position)
-		if home_distance > 0.35 and home_dir.length_squared() > 0.01:
-			velocity.x = home_dir.x * move_speed
-			velocity.z = home_dir.z * move_speed
-		else:
-			velocity.x = move_toward(velocity.x, 0.0, 8.0 * delta)
-			velocity.z = move_toward(velocity.z, 0.0, 8.0 * delta)
+		enemy_navigation_view.step_home(home_distance, delta)
 	elif tactical_mode == "ambient":
 		if is_boss and encounter_active:
 			_update_boss_presence(delta)
@@ -171,33 +168,12 @@ func _simulate_tick(delta: float) -> void:
 			velocity.x = 0.0
 			velocity.z = 0.0
 	elif tactical_mode == "pursue":
-		var speed_factor = 0.45 if slowed_time > 0.0 else 1.0
-		var engagement_target: Variant = _engagement_target(pursuit_position)
-		var dir: Variant = _navigation_direction(engagement_target)
-		if dir.length_squared() < 0.01:
-			velocity.x = 0.0
-			velocity.z = 0.0
-			speed_factor = 0.0
-		var lateral: Variant = Vector3(-dir.z, 0.0, dir.x)
-		if behavior_profile in ["feinter", "duelist"]:
-			dir = (dir + lateral * sin(anim_phase * 0.72) * 0.42).normalized()
-		elif behavior_profile == "brute":
-			speed_factor *= 0.84
-		elif behavior_profile == "lurker" and pursuit_distance > 5.0:
-			speed_factor *= 0.62
-		dir = (dir+_crowd_separation()*0.72).normalized()
-		dir = _validated_step_direction(dir, engagement_target, move_speed * speed_factor * delta)
-		velocity.x = dir.x * move_speed * speed_factor
-		velocity.z = dir.z * move_speed * speed_factor
-		if dir.length_squared() <= 0.01:
-			look_at(Vector3(player.global_position.x, global_position.y, player.global_position.z), Vector3.UP)
+		enemy_navigation_view.step_pursuit(pursuit_position, pursuit_distance, delta)
 	else:
 		velocity.x = 0.0
 		velocity.z = 0.0
-		if can_see_player and attack_cooldown <= 0.0 and player.has_method("take_damage") and _strike_presentation_ready() and _attack_lane_clear() and _claim_attack_token():
-			var attack_facing: Variant = Vector3(to_player.x, 0.0, to_player.z)
-			if attack_facing.length_squared() > 0.01:
-				look_at(global_position + attack_facing, Vector3.UP)
+		var facing_target: bool = enemy_navigation_view.turn_towards(to_player, delta)
+		if facing_target and can_see_player and attack_cooldown <= 0.0 and player.has_method("take_damage") and _strike_presentation_ready() and _attack_lane_clear() and _claim_attack_token():
 			_begin_attack()
 	_step_motion(motion_delta)
 
@@ -208,9 +184,10 @@ func _step_motion(delta: float) -> void:
 	else:
 		velocity.y = -0.1
 	_apply_peer_spacing(delta)
-	var facing_velocity: Variant = Vector3(velocity.x, 0.0, velocity.z)
+	var facing_velocity := Vector3(velocity.x, 0.0, velocity.z)
 	if facing_velocity.length_squared() > 0.01:
-		rotation.y = lerp_angle(rotation.y, atan2(-facing_velocity.x, -facing_velocity.z), 1.0 - exp(-12.0 * delta))
+		var heading: Vector3 = player.global_position - global_position if tactics.mode == "recover" and can_see_player else facing_velocity
+		enemy_navigation_view.turn_towards(heading, delta)
 	MotionStep.slide(self, delta)
 	if encounter_spatial_index != null:
 		encounter_spatial_index.update(self)
@@ -241,7 +218,7 @@ func _navigation_direction(target: Vector3, force_refresh: bool = false) -> Vect
 func _validated_step_direction(direction: Vector3, target: Vector3, step_distance: float) -> Vector3:
 	return enemy_navigation_view._validated_step_direction(direction, target, step_distance)
 
-func apply_damage(amount: float, source_tag: String = "") -> void:
+func apply_damage(amount: float, source_tag: String = "", light_blade: bool = false) -> void:
 	if dead or not encounter_active or bool(get_meta("story_surrender_protected", false)):
 		return
 	if surrender_offer:
@@ -259,6 +236,7 @@ func apply_damage(amount: float, source_tag: String = "") -> void:
 	if story_encounter != null and story_encounter.has_method("incoming_damage_multiplier"):
 		final_damage *= float(story_encounter.incoming_damage_multiplier(source_tag))
 	final_damage = Tactics.incoming_damage(final_damage, source_tag, weakness, tag, parry_exposed_time > 0.0, enemy_id, health_component.health)
+	var holds_stance: bool = light_blade and source_tag.is_empty() and parry_exposed_time <= 0.0 and enemy_strike_view.braced_for_impact()
 	parry_exposed_time = 0.0
 	health_component.damage(final_damage)
 	if enemy_id == "captain_senn" and health_component.health <= maxf(1.0, health_component.max_health * 0.25):
@@ -266,6 +244,8 @@ func apply_damage(amount: float, source_tag: String = "") -> void:
 		if controller != null:
 			preload("res://scripts/saga_encounters.gd").senn_yields(controller.host, self)
 	hit_flash_time = 0.12
+	if holds_stance or dead:
+		return
 	stagger_time = max(stagger_time, 0.16)
 	if bool(get_meta("ordinary_surrender_eligible",false)) and not surrender_declined and not dead and health_component.health>0.0 and health_component.health<=health_component.max_health*0.25:
 		surrender_offer=true
@@ -278,6 +258,7 @@ func slow(seconds: float) -> void:
 	enemy_strike_view.slow(seconds)
 
 func set_encounter_active(value: bool) -> void:
+	enemy_navigation_view.reset_stride()
 	enemy_strike_view.set_encounter_active(value)
 
 func is_encounter_active() -> bool:
@@ -382,12 +363,8 @@ func get_tactical_state() -> Dictionary:
 
 func _on_died() -> void:
 	dead = true
-	native_attack_tail_active = false
-	pending_attack_time = 0.0
-	windup_time = 0.0
+	_cancel_pending_strike(false)
 	death_pose_time = 1.0
-	_hide_windup_marker()
-	_release_attack_token()
 	collision_layer = 0
 	collision_mask = 0
 	if animation_driver != null and animation_driver.is_valid():

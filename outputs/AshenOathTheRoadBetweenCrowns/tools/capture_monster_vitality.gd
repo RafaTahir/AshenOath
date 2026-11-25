@@ -321,6 +321,15 @@ func _freeze_particle_speeds() -> Array:
 		particles.speed_scale = 0.0
 	return records
 
+func _authored_grave_weapon(mesh: MeshInstance3D, source_root: Node3D, surface: int) -> bool:
+	var ancestor: Node = mesh
+	while ancestor != null and ancestor != source_root:
+		if ancestor.scene_file_path == "res://assets/characters/grave_tithe_scythe.scn":
+			var socket := ancestor.get_parent() as BoneAttachment3D
+			return socket != null and socket.name == &"GraveTitheGrip" and socket.bone_name == &"hand_r" and mesh.get_active_material(surface) == mesh.mesh.surface_get_material(surface)
+		ancestor = ancestor.get_parent()
+	return false
+
 func _specimen(id: String, zone: String) -> void:
 	var selected := _select_actor(id)
 	if selected.is_empty():
@@ -354,7 +363,8 @@ func _specimen(id: String, zone: String) -> void:
 				# surface inventory and must stay exactly native in every mode.
 				original = variant
 				var recipes: Dictionary = profiles[id].materials
-				if not recipes.has(original.resource_name) or float(recipes[original.resource_name].strength) != 0.0:
+				var native_gear := id == "M04" and _authored_grave_weapon(mesh, source_root, surface)
+				if not native_gear and (not recipes.has(original.resource_name) or float(recipes[original.resource_name].strength) != 0.0):
 					_fail("Unexpected ungraded native material: %s [%s]" % [id,original.resource_name])
 					return
 				identity = original

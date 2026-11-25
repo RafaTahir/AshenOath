@@ -8,9 +8,112 @@ var _actor: CharacterBody3D
 var _watch_elapsed := 0.0
 var _stalker_circling := false
 const STALKER_WATCH_SECONDS := 1.15
+var _acceleration := 10.0
+var _braking := 12.0
+var _turn_rate := deg_to_rad(230.0)
+var _pace := 1.0
+var _weave := 0.0
+var _burst: Dictionary = {}
+var _burst_armed := true
+var _gather_left := 0.0
+var _surge_left := 0.0
+var _surge_heading := Vector3.ZERO
+var _surging_this_step := false
 
 func _init(actor: CharacterBody3D) -> void:
 	_actor = actor
+
+func configure_stride(profile: Dictionary) -> void:
+	_acceleration = float(profile.get("acceleration", 10.0))
+	_braking = float(profile.get("braking", 12.0))
+	_turn_rate = deg_to_rad(float(profile.get("turn_degrees", 230.0)))
+	_pace = float(profile.get("pace", 1.0))
+	_weave = float(profile.get("weave", 0.0))
+	_burst = profile.get("burst", {})
+	reset_stride()
+
+func reset_stride() -> void:
+	_burst_armed = true
+	_gather_left = 0.0
+	_surge_left = 0.0
+	_surge_heading = Vector3.ZERO
+	_surging_this_step = false
+
+func turn_towards(direction: Vector3, delta: float) -> bool:
+	direction.y = 0.0
+	if direction.length_squared() < 0.0001: return true
+	var yaw := atan2(-direction.x, -direction.z)
+	_actor.global_rotation.y = rotate_toward(_actor.global_rotation.y, yaw, _turn_rate * delta)
+	return absf(angle_difference(_actor.global_rotation.y, yaw)) < deg_to_rad(6.0)
+
+func step_home(distance: float, delta: float) -> void:
+	var direction := _navigation_direction(_actor.home_position) if distance > 0.35 else Vector3.ZERO
+	_move_with_stride(direction * _actor.move_speed * _pace, _actor.home_position, delta)
+
+func step_pursuit(focus: Vector3, distance: float, delta: float) -> void:
+	_surging_this_step = false
+	var target := _engagement_target(focus)
+	var direction := _navigation_direction(target)
+	if direction == Vector3.ZERO:
+		_gather_left = 0.0
+		_surge_left = 0.0
+		_actor.velocity.x = 0.0
+		_actor.velocity.z = 0.0
+		turn_towards(focus - _actor.global_position, delta)
+		return
+	var lateral := Vector3(-direction.z, 0.0, direction.x)
+	direction = (direction + lateral * sin(_actor.anim_phase * 0.72) * _weave + _crowd_separation() * 0.72).normalized()
+	var pace := _pursuit_pace(distance, direction, delta)
+	if _surging_this_step:
+		direction = _surge_heading
+	if _actor.behavior_profile == "lurker" and distance > 5.0: pace *= 0.62
+	if _actor.slowed_time > 0.0: pace *= 0.45
+	# A creature stepping around from a bad angle has to turn its weight first.
+	var alignment := clampf((-_actor.global_basis.z).dot(direction), 0.0, 1.0)
+	pace *= lerpf(0.42, 1.0, alignment)
+	_move_with_stride(direction * _actor.move_speed * pace, target, delta)
+
+func _pursuit_pace(distance: float, direction: Vector3, delta: float) -> float:
+	if _burst.is_empty() or delta <= 0.0: return _pace
+	var trigger_range := float(_burst.range)
+	if distance > trigger_range + 0.6:
+		_burst_armed = true
+	var ready: bool = _actor.can_see_player and _actor.attack_cooldown <= 0.0 and _actor.slowed_time <= 0.0 and not _stalker_circling
+	if not ready:
+		_gather_left = 0.0
+		_surge_left = 0.0
+		return _pace
+	if _surge_left <= 0.0 and _gather_left <= 0.0:
+		if not _burst_armed or distance > trigger_range or (-_actor.global_basis.z).dot(direction) <= 0.78:
+			return _pace
+		_burst_armed = false
+		_gather_left = float(_burst.gather)
+		_surge_heading = direction
+	var gathering := minf(delta, _gather_left)
+	if gathering > 0.0:
+		_gather_left -= gathering
+		if _gather_left <= 0.0:
+			_surge_left = float(_burst.duration)
+	var surging := minf(delta - gathering, _surge_left)
+	_surge_left -= surging
+	_surging_this_step = surging > 0.000001
+	# Honor both phase boundaries inside the tick, including its last fraction.
+	var ordinary := delta - gathering - surging
+	return (_pace * 0.28 * gathering + float(_burst.speed) * surging + _pace * ordinary) / delta
+
+func _move_with_stride(desired: Vector3, target: Vector3, delta: float) -> void:
+	var current := Vector3(_actor.velocity.x, 0.0, _actor.velocity.z)
+	var braking := desired.length_squared() < current.length_squared() or desired.dot(current) < 0.0
+	var next := current.move_toward(desired, (_braking if braking else _acceleration) * delta)
+	var speed := next.length()
+	var safe := _validated_step_direction(next.normalized(), target, speed * delta)
+	if _surging_this_step and safe.dot(_surge_heading) < 0.65:
+		# A body committed to a straight surge cannot take a routed corner at speed.
+		_surge_left = 0.0
+		_surging_this_step = false
+		safe = Vector3.ZERO
+	_actor.velocity.x = safe.x * speed
+	_actor.velocity.z = safe.z * speed
 
 func setup_navigation(service: Variant) -> void:
 	_actor.spatial_service = service
@@ -113,13 +216,13 @@ func _apply_peer_spacing(delta: float) -> void:
 	velocity avoids the old post-slide global-position correction, which could
 	teleport an enemy through a wall, tree, river barrier, or another actor.
 	"""
-	if _actor.dead or _actor.pending_attack_time > 0.0 or _actor.stagger_time > 0.0:
+	if _surging_this_step or _actor.dead or _actor.pending_attack_time > 0.0 or _actor.stagger_time > 0.0 or _actor.tactics.mode in ["attack", "windup", "recover"]:
 		return
 	var separation: Variant = _actor._crowd_separation()
 	if separation.length_squared() < 0.01:
 		return
 	var current: Variant = Vector3(_actor.velocity.x, 0.0, _actor.velocity.z)
-	var speed: Variant = clampf(current.length(), _actor.move_speed * 0.45, _actor.move_speed)
+	var speed: float = current.length()
 	var desired: Variant = separation * speed
 	if current.length_squared() > 0.01:
 		desired = current.normalized().lerp(separation, 0.45).normalized() * speed

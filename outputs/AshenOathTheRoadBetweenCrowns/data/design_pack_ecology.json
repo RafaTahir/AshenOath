@@ -4,6 +4,7 @@
   "sightings": [
     {
       "role": "reed_choir",
+      "response": {"radius": 2.9, "alert_clip": "Investigate", "return_clip": "Idle", "calm": [8.0, 3.6], "alert": 2.5, "commit": 0.18, "settle": 1.4, "offset": [0, -0.045, 0.06], "yaw": 4},
       "design": "M15",
       "name": "Reed Choir",
       "zone": "greyfen",
@@ -38,6 +39,7 @@
     },
     {
       "role": "glassmoth",
+      "response": {"radius": 3.1, "alert_clip": "Investigate", "return_clip": "Idle", "calm": [5.4, 2.7], "alert": 1.05, "commit": 0.52, "settle": 1.75, "offset": [0.4, 0.16, 0.13], "yaw": 32, "arc": 0.2, "bank": 18},
       "design": "M11",
       "name": "Glassmoth",
       "zone": "wychwood",
@@ -58,6 +60,7 @@
     },
     {
       "role": "gallows_weaver",
+      "response": {"radius": 3.5, "step_speed": 0.75, "alert_clip": "Investigate", "return_clip": "Idle", "calm": [4.8, 7.4], "alert": 2.65, "commit": 0.6, "settle": 1.85, "offset": [0.24, 0, 0.02], "yaw": 14},
       "design": "M14",
       "name": "Gallows Weaver",
       "zone": "deep_wood",
@@ -78,6 +81,7 @@
     },
     {
       "role": "silt_maw",
+      "response": {"radius": 2.7, "step_speed": 0.55, "alert_clip": "Idle", "return_clip": "Investigate", "calm": [6.8, 3.5], "alert": 2.1, "commit": 0.48, "settle": 2.2, "offset": [0, -0.06, 0.11], "yaw": 0},
       "design": "M09",
       "name": "Silt Maw",
       "zone": "old_mill",
@@ -98,6 +102,7 @@
     },
     {
       "role": "millback",
+      "response": {"radius": 3.0, "alert_clip": "Investigate", "return_clip": "Feed", "calm": [3.2, 5.9], "alert": 2.3, "commit": 0.88, "settle": 2.1, "offset": [0.31, 0, 0.05], "yaw": 10},
       "design": "M10",
       "name": "Millback",
       "zone": "old_mill",
@@ -118,6 +123,7 @@
     },
     {
       "role": "shroud_swimmer",
+      "response": {"radius": 3.7, "alert_clip": "Investigate", "return_clip": "Idle", "calm": [6.2, 4.5], "alert": 1.65, "commit": 1.55, "settle": 2.8, "offset": [0.46, -0.025, 0.1], "yaw": 21, "bank": 8},
       "design": "M18",
       "name": "Shroud Swimmer",
       "zone": "marsh_crossing",
@@ -143,6 +149,7 @@
     },
     {
       "role": "hearthscale",
+      "response": {"radius": 2.2, "alert_clip": "Investigate", "return_clip": "Sleep", "calm": [11.0, 4.4], "alert": 1.85, "commit": 0.95, "settle": 2.6, "offset": [0, 0, 0], "yaw": 4},
       "design": "M13",
       "name": "Hearthscale",
       "zone": "burned_farmstead",
@@ -163,6 +170,7 @@
     },
     {
       "role": "inkblind",
+      "response": {"radius": 3.15, "step_speed": 0.5, "alert_clip": "Investigate", "return_clip": "Feed", "calm": [5.7, 2.4], "alert": 1.6, "commit": 0.72, "settle": 1.95, "offset": [0.09, 0, 0.16], "yaw": 19},
       "design": "M16",
       "name": "Inkblind",
       "zone": "record_hall",
@@ -191,6 +199,7 @@
     },
     {
       "role": "knell_leech",
+      "response": {"radius": 2.6, "step_speed": 0.9, "alert_clip": "Investigate", "return_clip": "Feed", "calm": [4.9, 8.2], "alert": 1.55, "commit": 0.28, "settle": 2.7, "offset": [0, 0, 0.045], "yaw": 0},
       "design": "M12",
       "name": "Knell Leech",
       "zone": "undercroft",
@@ -211,6 +220,7 @@
     },
     {
       "role": "cairn_mother",
+      "response": {"radius": 3.4, "step_speed": 0.65, "alert_clip": "Sleep", "return_clip": "Investigate", "calm": [9.5, 5.2], "alert": 4.7, "commit": 1.35, "settle": 3.6, "offset": [0, -0.018, 0], "yaw": 2},
       "design": "M17",
       "name": "Cairn Mother",
       "zone": "hart_glade",

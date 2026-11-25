@@ -7,7 +7,7 @@ class ArrowTarget extends Node3D:
 	var dead := false
 	var display_name := "Rootbound aim fixture"
 	var damage_received := 0.0
-	func apply_damage(amount: float, _source: String) -> void:
+	func apply_damage(amount: float, _source: String, _light_blade: bool = false) -> void:
 		damage_received += amount
 
 var failures := 0

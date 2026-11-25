@@ -15,7 +15,28 @@
     "perception_memory": 2.2,
     "color": "#6d6f4a",
     "memory_rule": "In Wychwood it follows running footfalls around cover. Walk behind the trees to leave it searching where it last heard you.",
-    "motivation": "A denied name is the only thing holding its borrowed body together."
+    "motivation": "A denied name is the only thing holding its borrowed body together.",
+    "locomotion": {
+      "acceleration": 14,
+      "braking": 16,
+      "turn_degrees": 290,
+      "pace": 0.91,
+      "burst": {
+        "range": 4.4,
+        "speed": 1.34,
+        "gather": 0.12,
+        "duration": 0.4
+      }
+    },
+    "strike": {
+      "windup": 0.42,
+      "recovery": 0.36,
+      "cooldown": 1.18,
+      "tracking_fraction": 0.55,
+      "turn_rate": 2.8,
+      "half_arc_deg": 52,
+      "damage_scale": 1
+    }
   },
   "bog_wretch": {
     "boss": true,
@@ -32,7 +53,28 @@
     "perception_memory": 3.0,
     "color": "#425f47",
     "memory_rule": "It keeps to the watercourse. Ash Bombs, Moon Oil, heavy blows and clean parries can expose its carried core.",
-    "motivation": "It protects the last frightened memory absorbed by the marsh."
+    "motivation": "It protects the last frightened memory absorbed by the marsh.",
+    "locomotion": {
+      "acceleration": 7.8,
+      "braking": 8.4,
+      "turn_degrees": 155,
+      "pace": 0.96,
+      "burst": {
+        "range": 3.6,
+        "speed": 1.54,
+        "gather": 0.28,
+        "duration": 0.52
+      }
+    },
+    "strike": {
+      "windup": 0.7,
+      "recovery": 0.62,
+      "cooldown": 1.62,
+      "tracking_fraction": 0.48,
+      "turn_rate": 1.55,
+      "half_arc_deg": 52,
+      "damage_scale": 1.08
+    }
   },
   "gravebound_knight": {
     "name": "Gravebound Knight",
@@ -47,7 +89,23 @@
     "perception_memory": 4.0,
     "color": "#4a4d56",
     "memory_rule": "It advances slowly from a sealed threshold. Parry its committed blow; Rot Oil suits the undead body.",
-    "motivation": "It believes keeping the order is the only way to keep the dead contained."
+    "motivation": "It believes keeping the order is the only way to keep the dead contained.",
+    "locomotion": {
+      "acceleration": 2.5,
+      "braking": 6.3,
+      "turn_degrees": 94,
+      "pace": 0.95
+    },
+    "strike": {
+      "windup": 1.02,
+      "recovery": 1.02,
+      "cooldown": 2.25,
+      "tracking_fraction": 0.23,
+      "turn_rate": 1.12,
+      "half_arc_deg": 82,
+      "damage_scale": 1.24,
+      "planted_armour": true
+    }
   },
   "wychwood_stalker": {
     "name": "Wychwood Stalker",
@@ -65,7 +123,28 @@
     "perception_memory": 2.8,
     "color": "#2f5738",
     "memory_rule": "On the forest road it circles under a steady gaze, then commits. Turn away and it closes at once. An Iron Trap catches its approach.",
-    "motivation": "It hunts the hands that moved the evidence after the road attack."
+    "motivation": "It hunts the hands that moved the evidence after the road attack.",
+    "locomotion": {
+      "acceleration": 18,
+      "braking": 17,
+      "turn_degrees": 350,
+      "pace": 0.88,
+      "burst": {
+        "range": 4.2,
+        "speed": 1.43,
+        "gather": 0.1,
+        "duration": 0.43
+      }
+    },
+    "strike": {
+      "windup": 0.36,
+      "recovery": 0.4,
+      "cooldown": 1.26,
+      "tracking_fraction": 0.32,
+      "turn_rate": 2.7,
+      "half_arc_deg": 38,
+      "damage_scale": 1
+    }
   },
   "wychwood_raider": {
     "name": "Wychwood Raider",
@@ -83,7 +162,29 @@
     "perception_memory": 2.4,
     "color": "#52633f",
     "memory_rule": "It weaves before committing. The cord at its wrist keeps the rhythm of a carter’s road call.",
-    "motivation": "It is pulled toward the objects that still carry a living person's name."
+    "motivation": "It is pulled toward the objects that still carry a living person's name.",
+    "locomotion": {
+      "acceleration": 11,
+      "braking": 13,
+      "turn_degrees": 240,
+      "pace": 0.96,
+      "weave": 0.49,
+      "burst": {
+        "range": 3.1,
+        "speed": 1.22,
+        "gather": 0.2,
+        "duration": 0.28
+      }
+    },
+    "strike": {
+      "windup": 0.54,
+      "recovery": 0.48,
+      "cooldown": 1.41,
+      "tracking_fraction": 0.65,
+      "turn_rate": 2.35,
+      "half_arc_deg": 64,
+      "damage_scale": 1.08
+    }
   },
   "wychwood_brute": {
     "name": "Wychwood Brute",
@@ -101,7 +202,22 @@
     "perception_memory": 1.8,
     "color": "#3f4932",
     "memory_rule": "In the wheel ruts it plants both feet before swinging. Step across the line of its tusks and answer while it recovers.",
-    "motivation": "It carries the weight of many bodies but only one unfinished command."
+    "motivation": "It carries the weight of many bodies but only one unfinished command.",
+    "locomotion": {
+      "acceleration": 2.65,
+      "braking": 5.2,
+      "turn_degrees": 85,
+      "pace": 0.84
+    },
+    "strike": {
+      "windup": 0.9,
+      "recovery": 0.91,
+      "cooldown": 2.12,
+      "tracking_fraction": 0.15,
+      "turn_rate": 0.92,
+      "half_arc_deg": 56,
+      "damage_scale": 1.28
+    }
   },
   "white_hart_avatar": {
     "name": "White Hart Avatar",
@@ -118,7 +234,44 @@
     "memory_rule": "It answers names with memory echoes and cannot be forced to accept a false oath.",
     "motivation": "It is the witness bound beneath the road, not a benevolent forest god.",
     "boss": true,
-    "peaceful_resolution": true
+    "peaceful_resolution": true,
+    "locomotion": {
+      "acceleration": 9,
+      "braking": 10.2,
+      "turn_degrees": 180,
+      "pace": 1,
+      "burst": {
+        "range": 6.6,
+        "speed": 1.52,
+        "gather": 0.3,
+        "duration": 0.68
+      }
+    },
+    "strike": {
+      "windup": 0.68,
+      "recovery": 0.56,
+      "cooldown": 1.55,
+      "tracking_fraction": 0.42,
+      "turn_rate": 1.55,
+      "half_arc_deg": 68,
+      "damage_scale": 1,
+      "moves": {
+        "antler_sweep": {
+          "windup": 0.86,
+          "recovery": 0.84,
+          "cooldown": 1.89,
+          "tracking_fraction": 0.22,
+          "half_arc_deg": 88,
+          "damage_scale": 1.16
+        },
+        "road_reopening": {
+          "windup": 0.94,
+          "recovery": 0.75,
+          "cooldown": 1.85,
+          "damage_scale": 0.92
+        }
+      }
+    }
   },
   "bell_eater": {
     "name": "The Bell-Eater",
@@ -137,7 +290,37 @@
     "peaceful_resolution": false,
     "color": "#5e5147",
     "memory_rule": "Its marked wave reaches around it. Mourning stones provide shelter; freeing the named rope gives more warning before each strike.",
-    "motivation": "It consumes the names Greyfen buried because the bell is the only witness left."
+    "motivation": "It consumes the names Greyfen buried because the bell is the only witness left.",
+    "locomotion": {
+      "acceleration": 3.1,
+      "braking": 6,
+      "turn_degrees": 101,
+      "pace": 0.9
+    },
+    "strike": {
+      "windup": 0.86,
+      "recovery": 0.79,
+      "cooldown": 1.89,
+      "tracking_fraction": 0.22,
+      "turn_rate": 0.98,
+      "half_arc_deg": 78,
+      "damage_scale": 1,
+      "moves": {
+        "grave_slam": {
+          "windup": 1.08,
+          "recovery": 1.04,
+          "cooldown": 2.22,
+          "tracking_fraction": 0.14,
+          "damage_scale": 1.22
+        },
+        "ghoulkin_call": {
+          "windup": 0.88,
+          "recovery": 0.58,
+          "cooldown": 1.58,
+          "damage_scale": 0.72
+        }
+      }
+    }
   },
   "rootbound_colossus": {
     "name": "Rootbound Colossus",
@@ -156,7 +339,38 @@
     "peaceful_resolution": false,
     "color": "#405844",
     "memory_rule": "Its root lanes leave gaps beside the central band. Redirected channels provide shelter; two loosen the heart's armour.",
-    "motivation": "It defends the soil fed by the ash of people Greyfen refused to name."
+    "motivation": "It defends the soil fed by the ash of people Greyfen refused to name.",
+    "locomotion": {
+      "acceleration": 1.15,
+      "braking": 3.5,
+      "turn_degrees": 63,
+      "pace": 0.91
+    },
+    "strike": {
+      "windup": 1,
+      "recovery": 0.94,
+      "cooldown": 2.16,
+      "tracking_fraction": 0.18,
+      "turn_rate": 0.72,
+      "half_arc_deg": 72,
+      "damage_scale": 1,
+      "moves": {
+        "ground_rupture": {
+          "windup": 1.18,
+          "recovery": 1.12,
+          "cooldown": 2.43,
+          "tracking_fraction": 0.08,
+          "damage_scale": 1.18
+        },
+        "heart_stagger": {
+          "windup": 0.72,
+          "recovery": 0.88,
+          "cooldown": 1.73,
+          "damage_scale": 0.82
+        }
+      },
+      "planted_armour": true
+    }
   },
   "ashwing": {
     "name": "Ashwing Carrion Drake",
@@ -175,7 +389,44 @@
     "peaceful_resolution": false,
     "color": "#665447",
     "memory_rule": "Its breath and wing pressure are directional; breaking its perch exposes it.",
-    "motivation": "It nests above the mill where refugee ash became part of the harvest."
+    "motivation": "It nests above the mill where refugee ash became part of the harvest.",
+    "locomotion": {
+      "acceleration": 12,
+      "braking": 8.3,
+      "turn_degrees": 154,
+      "pace": 0.98,
+      "burst": {
+        "range": 6,
+        "speed": 1.61,
+        "gather": 0.26,
+        "duration": 0.56
+      }
+    },
+    "strike": {
+      "windup": 0.7,
+      "recovery": 0.54,
+      "cooldown": 1.62,
+      "tracking_fraction": 0.48,
+      "turn_rate": 1.9,
+      "half_arc_deg": 62,
+      "damage_scale": 1,
+      "moves": {
+        "ash_breath": {
+          "windup": 0.9,
+          "recovery": 0.78,
+          "cooldown": 1.84,
+          "tracking_fraction": 0.33,
+          "damage_scale": 1.12
+        },
+        "swoop": {
+          "windup": 0.47,
+          "recovery": 0.76,
+          "cooldown": 1.43,
+          "tracking_fraction": 0.16,
+          "damage_scale": 0.93
+        }
+      }
+    }
   },
   "halvern_boss": {
     "name": "Halvern, Gravebound Knight",
@@ -194,15 +445,78 @@
     "peaceful_resolution": true,
     "color": "#4c505a",
     "memory_rule": "Its guard can be broken by a clean parry, opening a testimony window.",
-    "motivation": "It stayed loyal until obedience became murder, then chose the grave as punishment."
+    "motivation": "It stayed loyal until obedience became murder, then chose the grave as punishment.",
+    "locomotion": {
+      "acceleration": 6.5,
+      "braking": 10,
+      "turn_degrees": 173,
+      "pace": 1,
+      "weave": 0.21
+    },
+    "strike": {
+      "windup": 0.6,
+      "recovery": 0.51,
+      "cooldown": 1.43,
+      "tracking_fraction": 0.48,
+      "turn_rate": 2.1,
+      "half_arc_deg": 59,
+      "damage_scale": 1,
+      "moves": {
+        "counter_lunge": {
+          "windup": 0.49,
+          "recovery": 0.71,
+          "cooldown": 1.4,
+          "tracking_fraction": 0.2,
+          "half_arc_deg": 36,
+          "damage_scale": 1.13
+        }
+      }
+    }
   },
   "captain_senn": {
-    "name":"Captain Senn", "health":160, "damage":18, "speed":2.0,
-    "attack_range":1.6, "sense_range":10.0, "tag":"human", "weakness":"iron_trap",
-    "behavior_profile":"duelist", "preferred_distance":1.9, "contact_radius":0.64,
-    "perception_memory":4.0, "boss":true, "peaceful_resolution":true, "color":"#5a5947",
-    "memory_rule":"A clean parry or a broken guard ends the duel without deciding the captain's fate.",
-    "motivation":"He calls control protection, even when the road's travelers pay for it."
+    "name": "Captain Senn",
+    "health": 160,
+    "damage": 18,
+    "speed": 2.0,
+    "attack_range": 1.6,
+    "sense_range": 10.0,
+    "tag": "human",
+    "weakness": "iron_trap",
+    "behavior_profile": "duelist",
+    "preferred_distance": 1.9,
+    "contact_radius": 0.64,
+    "perception_memory": 4.0,
+    "boss": true,
+    "peaceful_resolution": true,
+    "color": "#5a5947",
+    "memory_rule": "A clean parry or a broken guard ends the duel without deciding the captain's fate.",
+    "motivation": "He calls control protection, even when the road's travelers pay for it.",
+    "locomotion": {
+      "acceleration": 7.8,
+      "braking": 11.5,
+      "turn_degrees": 202,
+      "pace": 0.97,
+      "weave": 0.27
+    },
+    "strike": {
+      "windup": 0.55,
+      "recovery": 0.52,
+      "cooldown": 1.39,
+      "tracking_fraction": 0.55,
+      "turn_rate": 2.15,
+      "half_arc_deg": 57,
+      "damage_scale": 1,
+      "moves": {
+        "senn_lunge": {
+          "windup": 0.47,
+          "recovery": 0.65,
+          "cooldown": 1.33,
+          "tracking_fraction": 0.23,
+          "half_arc_deg": 39,
+          "damage_scale": 1.08
+        }
+      }
+    }
   },
   "bandit": {
     "name": "Roadbound Retainer",
@@ -215,6 +529,22 @@
     "weakness": "iron_trap",
     "behavior_profile": "duelist",
     "perception_memory": 3.5,
-    "color": "#5a4031"
+    "color": "#5a4031",
+    "locomotion": {
+      "acceleration": 9.4,
+      "braking": 12.5,
+      "turn_degrees": 230,
+      "pace": 1,
+      "weave": 0.39
+    },
+    "strike": {
+      "windup": 0.49,
+      "recovery": 0.44,
+      "cooldown": 1.3,
+      "tracking_fraction": 0.56,
+      "turn_rate": 2.35,
+      "half_arc_deg": 57,
+      "damage_scale": 1
+    }
   }
 }

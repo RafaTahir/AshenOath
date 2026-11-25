@@ -27,7 +27,7 @@ class Target extends StaticBody3D:
 	var tag := "beast"
 	var received := 0.0
 	var hits := 0
-	func apply_damage(amount: float, _source: String) -> void:
+	func apply_damage(amount: float, _source: String, _light_blade: bool = false) -> void:
 		received += amount
 		hits += 1
 

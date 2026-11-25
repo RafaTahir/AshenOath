@@ -56,6 +56,108 @@ func _check(value: bool, label: String) -> void:
 	checks += 1
 	if not value: failures.append(label)
 
+func _check_locomotion(world: Node3D, definitions: Dictionary) -> void:
+	var target := Node3D.new()
+	world.add_child(target)
+	for identity: String in definitions:
+		var definition: Dictionary = definitions[identity]
+		var profile: Dictionary = definition.get("locomotion", {})
+		_check(not profile.is_empty(), identity + " has an authored stride")
+		if profile.is_empty(): continue
+		var actor := EnemyProbe.new(false)
+		world.add_child(actor)
+		actor.setup(identity, definition, target)
+		actor.set_physics_process(false)
+		var nav: RefCounted = actor.enemy_navigation_view
+		var service := NavigationStub.new()
+		service.blocked = false
+		actor.spatial_service = service
+		actor.navigation_agent = NavigationAgent3D.new()
+		actor.add_child(actor.navigation_agent)
+		actor.can_see_player = true
+		actor.approach_angle_degrees = 0.0
+		target.position = Vector3.FORWARD * 9.0
+		var dt := 1.0 / 30.0
+		nav.step_pursuit(target.position, 9.0, dt)
+		_check(is_equal_approx(actor.velocity.length(), float(profile.acceleration) * dt), identity + " uses first-step acceleration")
+		_check(not nav.turn_towards(Vector3.BACK, dt) and is_equal_approx(absf(actor.rotation.y), deg_to_rad(float(profile.turn_degrees)) * dt), identity + " cannot pivot instantly to strike")
+		actor.rotation.y = 0.0
+		service.blocked = true
+		nav.step_pursuit(target.position, 9.0, dt)
+		_check(actor.velocity == Vector3.ZERO, identity + " cannot carry momentum into a blocked route")
+		service.blocked = false
+		if profile.has("burst"):
+			var burst: Dictionary = profile.burst
+			var distance := float(burst.range) - 0.15
+			target.position = Vector3.FORWARD * distance
+			actor.last_known_player_position = target.position
+			actor.can_see_player = false
+			nav.step_pursuit(target.position, distance, dt)
+			_check(nav._gather_left == 0.0 and nav._surge_left == 0.0, identity + " never bursts on a remembered position")
+			actor.can_see_player = true
+			nav.step_pursuit(target.position, distance, dt)
+			_check(nav._gather_left > 0.0 and nav._surge_left == 0.0, identity + " gathers before a burst")
+			for _tick: int in ceili(float(burst.gather) / dt) + 1:
+				nav.step_pursuit(target.position, distance, dt)
+			_check(nav._surge_left > 0.0, identity + " launches after the gather")
+			var heading: Vector3 = nav._surge_heading
+			target.position.x += 1.25
+			var peer := EnemyProbe.new(false)
+			world.add_child(peer)
+			peer.position = Vector3.LEFT * 0.9
+			peer.set_physics_process(false)
+			actor.encounter_peers = [peer]
+			var checked_final_step := false
+			var peak := 0.0
+			for _tick: int in ceili(float(burst.duration) / dt) + 2:
+				var remaining: float = nav._surge_left
+				nav.step_pursuit(target.position, distance, dt)
+				peak = maxf(peak, actor.velocity.length())
+				if remaining > 0.000001:
+					var before_spacing := actor.velocity
+					nav._apply_peer_spacing(dt * 0.5)
+					nav._apply_peer_spacing(dt * 0.5)
+					_check(actor.velocity.is_equal_approx(before_spacing) and actor.velocity.normalized().dot(heading) > 0.98, identity + " keeps its launch line past a nearby peer")
+					if nav._surge_left <= 0.000001:
+						checked_final_step = true
+			_check(checked_final_step, identity + " keeps commitment through the final fractional decision")
+			actor.encounter_peers = []
+			peer.free()
+			_check(peak > actor.move_speed * float(profile.pace) * 1.08, identity + " achieves a distinct burst speed")
+			_check(not nav._burst_armed and nav._surge_left == 0.0 and nav._gather_left == 0.0, identity + " cannot cycle bursts at a stationary target")
+			nav.reset_stride()
+			actor.slowed_time = 1.0
+			nav.step_pursuit(target.position, distance, dt)
+			_check(nav._gather_left == 0.0 and nav._surge_left == 0.0, identity + " slow prevents a fresh burst")
+			actor.slowed_time = 0.0
+			target.position.x = 0.0
+			nav.step_pursuit(target.position, distance, dt)
+			actor.set_encounter_active(false)
+			_check(actor.velocity == Vector3.ZERO and nav._surge_left == 0.0 and nav._gather_left == 0.0, identity + " suspension clears momentum and commitment")
+		actor.free()
+	target.free()
+
+func _check_planted_armour(world: Node3D, definitions: Dictionary) -> void:
+	for identity: String in ["gravebound_knight", "rootbound_colossus", "ghoulkin"]:
+		for impact: String in ["early cut", "planted cut", "heavy", "coated", "recovery"]:
+			var actor := EnemyProbe.new(false)
+			world.add_child(actor)
+			actor.set_physics_process(false)
+			actor.enemy_id = identity
+			actor.health_component = HealthStub.new()
+			actor.animation_driver = DriverStub.new()
+			var profile: Dictionary = definitions[identity].strike
+			actor.enemy_strike_view._strike = profile
+			actor.attack_windup_total = float(profile.windup)
+			actor.pending_attack_time = actor.attack_windup_total if impact == "early cut" else 0.1
+			if impact == "recovery": actor.pending_attack_time = 0.0
+			actor.apply_damage(6.0, "undead" if impact == "coated" else "", impact != "heavy")
+			var should_hold := impact == "planted cut" and identity != "ghoulkin"
+			_check(actor.health_component.health < 100.0, identity + " takes damage from " + impact)
+			_check((actor.animation_driver.current_state == "attack") == should_hold, identity + " reaction to " + impact)
+			_check((actor.pending_attack_time > 0.0) == should_hold, identity + " swing ownership after " + impact)
+			actor.free()
+
 func _run() -> void:
 	var world := Node3D.new()
 	root.add_child(world)
@@ -71,6 +173,8 @@ func _run() -> void:
 		gate["claims" if claim else "releases"] += 1
 		return true
 	var definitions: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/enemies.json"))
+	_check_locomotion(world, definitions)
+	_check_planted_armour(world, definitions)
 	enemy.health_component = HealthStub.new()
 	enemy.perception_memory_time = 1.0
 	for identity: String in definitions:
@@ -174,7 +278,7 @@ func _run() -> void:
 	enemy.animation_driver = null
 
 	for attack in ["wing_blast", "ash_breath", "swoop", "counter_lunge"]:
-		var threshold := 0.32 if attack == "wing_blast" else 0.48
+		var threshold := 0.32 if attack == "wing_blast" else (0.809 if attack == "counter_lunge" else 0.48)
 		for dot in [threshold - 0.01, threshold + 0.01]:
 			var offset := Vector3(sqrt(1.0 - dot * dot), 0, -dot) * 3.0
 			_check(Shape.contains(attack, offset) == (dot >= threshold), attack + " retains angular boundary")

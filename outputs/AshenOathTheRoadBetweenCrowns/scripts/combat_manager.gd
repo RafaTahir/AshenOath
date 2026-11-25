@@ -296,7 +296,7 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 	# Reserve before damage: death/phase signals can re-enter the resolver.
 	_blade_hit_ids[struck_enemy.get_instance_id()] = true
 	if not civilian:
-		struck_enemy.apply_damage(damage, source_tag)
+		struck_enemy.apply_damage(damage, source_tag, not heavy)
 		enemy_hit.emit(struck_enemy.display_name, damage)
 	var hit_result := {
 		"hit": true,
@@ -532,11 +532,4 @@ func _resolve_environment_contact(player: Node3D, contact: Dictionary, actors: A
 	return {}
 
 func _body_segment(enemy: Node3D) -> Dictionary:
-	for raw in enemy.get_children():
-		if raw is CollisionShape3D and raw.shape is CapsuleShape3D:
-			var capsule: CapsuleShape3D = raw.shape
-			var extent := maxf(0.0, capsule.height * 0.5 - capsule.radius)
-			var scale: Vector3 = raw.global_basis.get_scale()
-			return {"start": raw.global_transform * Vector3(0, -extent, 0), "end": raw.global_transform * Vector3(0, extent, 0), "radius": capsule.radius * maxf(absf(scale.x), absf(scale.z))}
-	var point := enemy.global_position + Vector3.UP * 0.92
-	return {"start": point, "end": point, "radius": 0.0}
+	return preload("res://scripts/views/combat_capsule_view.gd").body_segment(enemy)

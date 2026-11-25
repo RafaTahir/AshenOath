@@ -1,6 +1,7 @@
 extends Node
 
 ## Optional presentation owned by StoryActivities. StoryState retains durable facts.
+const EcologyResponse = preload("res://scripts/models/ecology_response.gd")
 const Cast = preload("res://scripts/story_cast_profile.gd")
 const Presence = preload("res://scripts/character_presence.gd")
 const Scenes = preload("res://scripts/story_world_scenes.gd")
@@ -71,9 +72,16 @@ func configure() -> void:
 	preload("res://scripts/views/wychwood_pack_encounter.gd").install_targets(self)
 	for area: Node in host.zone_root.get_children():
 		if area is Area3D and area.has_meta("design_ecology") and area.is_visible_in_tree():
-			ecology.append({"actor":weakref(area), "elapsed":0.0, "phase":-1, "visible_time":0.0, "event_clip":"", "event_phase":-1.0})
-			var ambient: Node = area.find_child("NpcAmbient", true, false)
-			if ambient != null: ambient.process_mode = Node.PROCESS_MODE_DISABLED
+			register_ecology(area)
+
+func register_ecology(area: Area3D) -> void:
+	var driver = area.find_child("CharacterAnimationDriver", true, false)
+	if driver == null or not is_instance_valid(driver.character_root): return
+	var sighting: Dictionary = area.get_meta("design_ecology")
+	ecology.append({"actor":weakref(area), "driver":weakref(driver), "motion":EcologyResponse.new(sighting, driver.character_root.transform),
+		"phase":-1, "visible_time":0.0, "event_clip":"", "event_phase":-1.0})
+	var ambient: Node = area.find_child("NpcAmbient", true, false)
+	if ambient != null: ambient.process_mode = Node.PROCESS_MODE_DISABLED
 
 func life() -> Node:
 	var zone: Variant = host.zone_root if is_instance_valid(host) else null
@@ -521,51 +529,48 @@ func _physics_process(delta: float) -> void:
 	if host.day_night != null: host.day_night.active_play_seconds += delta
 	tick_work(delta)
 	tick_meal(delta)
-	# The existing activity owner cancels wildlife presentation on the first
-	# combat frame, without waiting for the low-frequency ambient decision.
 	var combat: bool = host._story_has_active_combat()
-	if combat:
-		for entry: Dictionary in ecology:
-			if int(entry.phase) == -2: continue
-			var actor := entry.actor.get_ref() as Node3D
-			if not is_instance_valid(actor): continue
-			var driver := actor.find_child("CharacterAnimationDriver", true, false)
-			if driver != null:
-				driver.clear_observation_clip()
-				driver.set_creature_presence("", "", 0.0)
-			entry.phase = -2
-			entry.event_phase = -1.0
-			entry.visible_time = 0.0
+	var ground_speed := 0.0
+	if host.player.is_on_floor():
+		ground_speed = Vector2(host.player.velocity.x, host.player.velocity.z).length()
 	decision_elapsed += delta
-	if decision_elapsed < 0.25: return
+	var sample_due := decision_elapsed >= 0.25
 	var step := decision_elapsed
-	decision_elapsed = 0.0
-	preload("res://scripts/views/wychwood_pack_encounter.gd").tick_targets(self)
+	if sample_due:
+		decision_elapsed = 0.0
+		preload("res://scripts/views/wychwood_pack_encounter.gd").tick_targets(self)
 	for entry: Dictionary in ecology:
 		var actor := entry.actor.get_ref() as Node3D
-		if not is_instance_valid(actor): continue
-		var sighting: Dictionary = actor.get_meta("design_ecology", {})
-		var driver := actor.find_child("CharacterAnimationDriver", true, false)
-		if driver == null: continue
+		var driver = entry.driver.get_ref()
+		if not is_instance_valid(actor) or not is_instance_valid(driver): continue
 		var distant: bool = actor.global_position.distance_squared_to(host.player.global_position) > 225.0 or not actor.is_visible_in_tree()
-		driver.set_distance_suspended(distant)
-		if distant or combat:
-			entry.event_phase = -1.0
-			entry.visible_time = 0.0
+		if driver.distance_suspended != distant: driver.set_distance_suspended(distant)
+		var motion: EcologyResponse = entry.motion
+		if distant or combat or driver.dead or driver.action_active or driver.story_dialogue_active:
+			if int(entry.phase) != -2:
+				driver.clear_observation_clip()
+				driver.set_creature_presence("", "", 0.0)
+				motion.reset()
+				driver.character_root.transform = motion.pose
+				entry.phase = -2
+				entry.event_phase = -1.0
+				entry.visible_time = 0.0
 			continue
-		entry.elapsed = float(entry.elapsed) + step
+		var sighting: Dictionary = actor.get_meta("design_ecology")
+		motion.update(delta, actor.to_local(host.player.global_position), ground_speed)
+		if driver.character_root.transform != motion.pose: driver.character_root.transform = motion.pose
+		if int(entry.phase) != motion.state:
+			var selected := motion.selected_clip()
+			if not driver.set_observation_clip(selected): continue
+			entry.phase = motion.state
+			entry.event_phase = -1.0
+			driver.set_creature_presence(str(sighting.role), "feeding" if selected == "Feed" else "attentive", 0.65)
+		if not sample_due: continue
 		var near := actor.global_position.distance_to(host.player.global_position) < 3.0
-		var phase := 0 if near else (1 if fmod(float(entry.elapsed), 14.0) < 7.0 else 2)
-		if int(entry.phase) != phase:
-			entry.phase = phase
-			var clips: Array = sighting.get("ambient_clips", [str(sighting.get("clip", "Idle")), "Idle"])
-			var selected := "Investigate" if near else str(clips[(phase - 1) % clips.size()])
-			if not driver.set_observation_clip(selected): driver.set_observation_clip("Idle")
-			driver.set_creature_presence(str(sighting.role), "attentive" if phase == 0 else ("feeding" if phase == 1 else "watching"), 0.65)
 		var camera: Camera3D = host.get_viewport().get_camera_3d()
 		var visible: bool = camera != null and actor.is_visible_in_tree() and not camera.is_position_behind(actor.global_position) and host.get_viewport().get_visible_rect().has_point(camera.unproject_position(actor.global_position)) and Presence.can_see(host.player, actor, 12.0)
-		_tick_ecology_contact(entry, sighting, actor, driver, visible and not near)
-		entry.visible_time = float(entry.visible_time) + step if visible and phase != 0 else 0.0
+		_tick_ecology_contact(entry, sighting, actor, driver, visible and motion.state < EcologyResponse.State.ALERT)
+		entry.visible_time = float(entry.visible_time) + step if visible and not near else 0.0
 		if float(entry.visible_time) >= 4.0 and not host.story_state.evidence.has(str(actor.interaction_id)):
 			host.story_state.record_evidence(str(actor.interaction_id), {"zone":host.current_zone_id, "kind":"observed", "title":sighting.title, "text":sighting.observation})
 			host.hud.toast("Observed: " + str(sighting.name))

@@ -187,7 +187,9 @@ func _try_build_mapped_body() -> bool:
 	_actor.animation_driver.set_update_rate_hz(12.0)
 	_actor._ground_mapped_visual(mapped)
 	mapped.position.y += _actor.CharacterRoleSpec.ground_offset(visual_source)
-	if _actor.enemy_id in ["halvern_boss", "bandit", "captain_senn"] and not native_design:
+	if _actor.enemy_id == "gravebound_knight" and native_design:
+		_actor.enemy_equipment_view.attach_grave_tithe()
+	elif _actor.enemy_id in ["halvern_boss", "bandit", "captain_senn"]:
 		_actor._attach_humanoid_sword("Halvern" if _actor.enemy_id == "halvern_boss" else "Bandit")
 		if _actor.enemy_id == "bandit" and visual_source == "bandit_tracker":
 			_actor._attach_bandit_shield()
@@ -324,6 +326,7 @@ func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	_actor.floor_stop_on_slope = true
 	_actor.display_name = definition.get("name", id)
 	_actor.damage = float(definition.get("damage", 10.0))
+	_actor.strike_profile = definition.get("strike", {})
 	_actor.move_speed = float(definition.get("speed", 2.0))
 	_actor.base_damage = _actor.damage
 	_actor.base_move_speed = _actor.move_speed

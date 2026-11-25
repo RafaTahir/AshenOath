@@ -2,6 +2,17 @@ extends RefCounted
 ## Collision belongs to the scene even when a dedicated server omits rendering.
 const Roles = preload("res://scripts/character_role_spec.gd")
 
+static func body_segment(actor: Node3D) -> Dictionary:
+	for raw: Node in actor.get_children():
+		if raw is CollisionShape3D and raw.shape is CapsuleShape3D:
+			var capsule: CapsuleShape3D = raw.shape
+			var extent := maxf(0.0, capsule.height * 0.5 - capsule.radius)
+			var scale: Vector3 = raw.global_basis.get_scale()
+			return {"start": raw.global_transform * (Vector3.DOWN * extent),
+				"end": raw.global_transform * (Vector3.UP * extent), "radius": capsule.radius * maxf(absf(scale.x), absf(scale.z))}
+	var point := actor.global_position + Vector3.UP * 0.92
+	return {"start": point, "end": point, "radius": 0.0}
+
 static func install_player(actor: CharacterBody3D) -> void:
 	var shape: CapsuleShape3D = CapsuleShape3D.new()
 	shape.height = Roles.collision_height("player_human", 1.65)

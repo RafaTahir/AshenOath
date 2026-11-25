@@ -86,6 +86,7 @@ var encounter_slot := 0
 var preferred_distance := 2.15
 var approach_angle_degrees := 0.0
 var contact_radius := 0.72
+var strike_profile: Dictionary = {}
 var attack_contact_bone := -1
 var attack_contact_local_offset := Vector3.ZERO
 var attack_trace_start := Vector3.ZERO
