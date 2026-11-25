@@ -31,7 +31,7 @@ static func _road_raider(game: Node) -> Node3D:
 	return null
 
 static func _road_sign_in_reach(game: Node, area: Node3D) -> bool:
-	return str(game.current_zone_id) == "wychwood" and is_instance_valid(game.zone_root) and is_instance_valid(area) and game.zone_root.is_ancestor_of(area) and str(area.get("interaction_id")) == ROAD_SIGN and area.is_visible_in_tree() and area.is_interaction_enabled() and is_instance_valid(game.player) and game.player.can_control and game.player.global_position.distance_to(area.global_position) <= 3.2 and not game.zone_transition_in_progress
+	return str(game.current_zone_id) == "wychwood" and is_instance_valid(game.zone_root) and is_instance_valid(area) and game.zone_root.is_ancestor_of(area) and str(area.get("interaction_id")) == ROAD_SIGN and area.is_visible_in_tree() and area.is_interaction_enabled() and is_instance_valid(game.player) and game.player.can_control and game.player.global_position.distance_to(area.global_position) <= 3.2 and not game.zone_transition_pending and not game.zone_load_request_pending
 
 static func _knows_token(game: Node) -> bool:
 	return bool(game.story_state.get_flag("road_evidence_oren", false)) or game.quests.is_objective_done("main_road_of_crows", "oren")

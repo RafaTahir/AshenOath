@@ -219,6 +219,9 @@ static func choose_community(game, action: Dictionary) -> void:
 	else: game._resume_game()
 
 static func handle(game, area) -> void:
+	if str(area.interaction_id) == "wychwood_axle_ring":
+		preload("res://scripts/views/monster_road_signs_view.gd").open_road_sign(game, area)
+		return
 	if handle_community(game, area): return
 	if area.has_meta("everyday_action"):
 		var everyday: Node = game.zone_root.get_node_or_null("StoryActivities/EverydayLife")
@@ -439,10 +442,6 @@ func refresh() -> void:
 	if community != null: community.refresh()
 
 func activate(id: String) -> void:
-	if id == "wychwood_axle_ring":
-		var ring := host.zone_root.find_child(id, true, false) as Node3D
-		preload("res://scripts/views/monster_road_signs_view.gd").open_road_sign(host, ring)
-		return
 	if id.begins_with("approach_"):
 		var creature := id.trim_prefix("approach_")
 		var sign: Dictionary = APPROACH_SIGNS.get(creature, {})

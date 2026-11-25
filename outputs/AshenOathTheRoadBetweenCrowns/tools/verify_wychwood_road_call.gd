@@ -40,7 +40,8 @@ class Hud extends RefCounted:
 
 class Game extends Node3D:
 	var current_zone_id := "wychwood"
-	var zone_transition_in_progress := false
+	var zone_transition_pending := false
+	var zone_load_request_pending := false
 	var wychwood_pack_kills := 0
 	var zone_root := Node3D.new()
 	var active_enemies: Array = []
@@ -114,6 +115,12 @@ func _run() -> void:
 		game.player.position.x = 12
 		Road.answer_road_sign(game, reply)
 		game.player.position.x = 0
+		game.zone_transition_pending = true
+		Road.answer_road_sign(game, reply)
+		game.zone_transition_pending = false
+		game.zone_load_request_pending = true
+		Road.answer_road_sign(game, reply)
+		game.zone_load_request_pending = false
 		game.current_zone_id = "greyfen"
 		Road.answer_road_sign(game, reply)
 		game.current_zone_id = "wychwood"

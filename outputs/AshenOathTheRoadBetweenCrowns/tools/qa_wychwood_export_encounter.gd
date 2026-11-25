@@ -251,11 +251,12 @@ func run(q) -> void:
 		q._fail("Brute failed to enter the final opening wave")
 		return
 	# Probe the genuine opening windup against a lateral target displacement.
-	# Seed a pending swing without firing its impact or granting combat rewards.
+	# Start a native swing without resolving its impact or granting rewards.
 	var player_position: Vector3 = game.player.global_position
+	if not brute.enemy_strike_view._begin_attack():
+		q._fail("Mounted Brute could not start its native windup")
+		return
 	var start_yaw := brute.rotation.y
-	brute.pending_attack_time = brute.windup_time
-	brute.attack_windup_total = brute.windup_time
 	game.player.global_position = brute.global_position + brute.global_basis.x * 1.4
 	brute.enemy_strike_view._tick_pending_attack(0.05)
 	receipt["brute_planted_windup"] = is_equal_approx(brute.rotation.y, start_yaw) and brute.pending_attack_time > 0.0
