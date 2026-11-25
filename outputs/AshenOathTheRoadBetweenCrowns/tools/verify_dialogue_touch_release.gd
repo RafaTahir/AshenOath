@@ -1,7 +1,7 @@
 extends SceneTree
 ## Exercise Godot's real touch and emulated mouse dispatch against replacing
 ## dialogue choices. Removing a pressed control synchronously trips Node.can_process.
-const Dispatch = preload("res://scripts/hud/dialogue_button_dispatch.gd")
+const Dispatch = preload("res://scripts/views/dialogue_button_dispatch.gd")
 class ErrorLog extends Logger:
 	var errors: Array[String] = []
 	func _log_error(_function: String, path: String, line: int, code: String, _rationale: String, _notify: bool, kind: int, _traces: Array[ScriptBacktrace]) -> void:

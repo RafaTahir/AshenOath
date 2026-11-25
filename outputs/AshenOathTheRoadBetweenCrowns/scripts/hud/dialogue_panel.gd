@@ -248,7 +248,7 @@ func _add_topic_navigation_button(label: String, key: String, callback: Callable
 	button.focus_mode = Control.FOCUS_ALL
 	button.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
 	_style_button(button)
-	preload("res://scripts/hud/dialogue_button_dispatch.gd").bind_pressed(button, callback)
+	preload("res://scripts/views/dialogue_button_dispatch.gd").bind_pressed(button, callback)
 	dialogue_actions.add_child(button)
 	return button
 
@@ -376,7 +376,7 @@ func _render_dialogue_page(record_history: bool = true, announce_page: bool = tr
 		if committing:
 			button.focus_entered.connect(func(detail: Dictionary = model): _show_decision_detail(detail))
 			button.mouse_entered.connect(func(detail: Dictionary = model): _show_decision_detail(detail))
-		preload("res://scripts/hud/dialogue_button_dispatch.gd").bind_pressed(button, func(action_data: Dictionary = action, is_commitment: bool = committing):
+		preload("res://scripts/views/dialogue_button_dispatch.gd").bind_pressed(button, func(action_data: Dictionary = action, is_commitment: bool = committing):
 			if not _close_dialogue_surface(false):
 				return
 			if not is_commitment:
@@ -531,7 +531,7 @@ func _add_dialogue_close() -> void:
 	close.focus_mode = Control.FOCUS_ALL
 	close.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
 	_style_button(close)
-	preload("res://scripts/hud/dialogue_button_dispatch.gd").bind_pressed(close, func():
+	preload("res://scripts/views/dialogue_button_dispatch.gd").bind_pressed(close, func():
 		if not _close_dialogue_surface():
 			return
 		dialogue_closed.emit()
