@@ -35,11 +35,9 @@ func _initialize() -> void:
 		# visibility manager otherwise reactivates Halvern during camera settling.
 		game.process_mode = Node.PROCESS_MODE_PAUSABLE
 		paused = true
-		var socket := boss.find_child("HalvernSwordSocket", true, false) as BoneAttachment3D
-		var sword := boss.find_child("HalvernAuthoredSword", true, false) as Node3D
-		if socket == null or sword == null or not socket.is_ancestor_of(sword) or socket.bone_name != "hand_r":
+		if not has_single_halvern_sword(boss):
 			failures += 1
-			push_error("Halvern sword is not attached to the required hand bone")
+			push_error("Halvern must carry his single authored right-hand sword")
 		boss.set_physics_process(false)
 		boss.global_position = _floor_position(game, boss, Vector3(0, 0, -5.5))
 		await _capture(game, boss, "BOSS-006_01_Halvern_TheGate", Vector3(0, 1.0, -3.2), 0.0)
@@ -64,6 +62,20 @@ func _initialize() -> void:
 	game.queue_free()
 	await _frames(8)
 	quit(0 if failures == 0 else 1)
+
+static func has_single_halvern_sword(boss: Node) -> bool:
+	var socket := boss.find_child("HalvernSwordSocket", true, false) as BoneAttachment3D
+	var sword := boss.find_child("HalvernAuthoredSword", true, false) as Node3D
+	var model := boss.animation_driver.character_root as Node3D
+	if model.get_meta("character_animation_family", "") != "design_pack_native":
+		return socket != null and sword != null and socket.is_ancestor_of(sword) and socket.bone_name == &"hand_r"
+	# The straight blade is skinned into the original M04 iron surface.
+	# The Gravebound's alternate mesh removes its 532 blade triangles.
+	if socket != null or sword != null or boss.find_child("GraveTitheGrip", true, false) != null: return false
+	var plate := model.find_child("M04_FittedArmourAssembly", true, false) as MeshInstance3D
+	if plate == null or not plate.is_visible_in_tree() or plate.skin == null or plate.mesh == null: return false
+	var rig := plate.get_node_or_null(plate.skeleton) as Skeleton3D
+	return rig != null and rig.find_bone("hand_r") >= 0 and plate.mesh.get_surface_count() > 0 and plate.mesh.surface_get_array_index_len(0) == 18705 * 3
 
 func _find_boss(game: Node, id: String) -> Node:
 	for enemy in game.active_enemies:

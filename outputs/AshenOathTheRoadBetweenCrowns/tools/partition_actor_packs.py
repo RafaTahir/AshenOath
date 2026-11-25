@@ -94,8 +94,9 @@ def partition_actor_packs(project, config, sections, manifest, catalog, standalo
             path = resource["path"]
             if path.removeprefix("res://") not in standalone:
                 resources.setdefault(path, set()).add("actor_" + asset.lower())
-    # The knight attaches this scene at runtime after its actor pack mounts.
-    resources.setdefault("res://assets/characters/grave_tithe_scythe.scn", set()).add("actor_m04")
+    # The knight equips the scythe and its sword-free body after its actor pack mounts.
+    for name in ("grave_tithe_scythe.scn", "gravebound_reaped_armour.res"):
+        resources.setdefault("res://assets/characters/" + name, set()).add("actor_m04")
     # Pigment atlases are loaded after their actor mounts, so they do not
     # appear among the prepared scene's native PBR dependencies.
     pigments = json.loads((project / "data/monster_material_profiles.json").read_text(encoding="utf-8-sig"))

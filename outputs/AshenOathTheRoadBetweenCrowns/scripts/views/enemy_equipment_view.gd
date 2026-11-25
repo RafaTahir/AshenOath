@@ -97,6 +97,16 @@ func attach_grave_tithe() -> void:
 	if hand < 0 or scene == null:
 		push_error("Gravebound knight requires its right hand and authored tithe scythe")
 		return
+	var plate := _actor.visual_root.find_child("M04_FittedArmourAssembly", true, false) as MeshInstance3D
+	var reaped_armour := load("res://assets/characters/gravebound_reaped_armour.res") as ArrayMesh
+	if plate == null or reaped_armour == null:
+		push_error("Missing Gravebound scythe armour variant")
+		return
+	var iron := plate.get_active_material(0)
+	var linen := plate.get_active_material(1)
+	plate.mesh = reaped_armour
+	plate.set_surface_override_material(0, iron)
+	plate.set_surface_override_material(1, linen)
 	var socket := BoneAttachment3D.new()
 	socket.name = "GraveTitheGrip"
 	rig.add_child(socket)

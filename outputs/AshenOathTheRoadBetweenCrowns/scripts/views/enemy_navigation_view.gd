@@ -106,7 +106,7 @@ func _move_with_stride(desired: Vector3, target: Vector3, delta: float) -> void:
 	var braking := desired.length_squared() < current.length_squared() or desired.dot(current) < 0.0
 	var next := current.move_toward(desired, (_braking if braking else _acceleration) * delta)
 	var speed := next.length()
-	var safe := _validated_step_direction(next.normalized(), target, speed * delta)
+	var safe := _validated_step_direction(next.normalized(), target, speed * delta, not _surging_this_step)
 	if _surging_this_step and safe.dot(_surge_heading) < 0.65:
 		# A body committed to a straight surge cannot take a routed corner at speed.
 		_surge_left = 0.0
@@ -165,7 +165,7 @@ func _navigation_direction(target: Vector3, force_refresh: bool = false) -> Vect
 		direction.y = 0.0
 	return direction.normalized() if direction.length_squared() > FINAL_ROUTE_STOP_SQUARED else Vector3.ZERO
 
-func _validated_step_direction(direction: Vector3, target: Vector3, step_distance: float) -> Vector3:
+func _validated_step_direction(direction: Vector3, target: Vector3, step_distance: float, allow_reroute: bool = true) -> Vector3:
 	var candidate: Variant = direction
 	candidate.y = 0.0
 	if candidate.length_squared() < 0.002:
@@ -176,6 +176,8 @@ func _validated_step_direction(direction: Vector3, target: Vector3, step_distanc
 	var proposed: Variant = _actor.global_position + candidate * maxf(step_distance, 0.02)
 	if _actor.spatial_service.validate_segment(_actor.global_position, proposed, 0.50):
 		return candidate
+	if not allow_reroute:
+		return Vector3.ZERO
 	var rerouted: Variant = _actor._navigation_direction(target, true)
 	if rerouted.length_squared() < 0.002:
 		return Vector3.ZERO

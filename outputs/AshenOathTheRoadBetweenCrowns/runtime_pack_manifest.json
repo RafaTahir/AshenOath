@@ -701,6 +701,7 @@
       ],
       "contents": [
         "res://assets/characters/grave_tithe_scythe.scn",
+        "res://assets/characters/gravebound_reaped_armour.res",
         "res://assets_external/characters_prepared/monsters/5da1537a47b82ffbd14adf0d.scn",
         "res://assets_external/design_pack_v1/creatures/textures/color_c6d138d3203fddf6f4d66ff610deaefed0fef2a3fd25aa160165d11cc84b1653.png",
         "res://assets_external/design_pack_v1/creatures/textures/color_d0be7380365a214d7761dd80b21cb72fedc317b091acae9a724530e4c137fc8a.png",
@@ -2377,7 +2378,8 @@
     "res://assets_external/design_pack_v1/creatures/textures/M01_ghoulkin_peat_albedo.png": "actor_m01",
     "res://assets_external/design_pack_v1/creatures/textures/M19_raider_woad_albedo.png": "actor_m19",
     "res://assets_external/design_pack_v1/creatures/textures/M20_brute_scar_albedo.png": "actor_m20",
-    "res://assets/characters/grave_tithe_scythe.scn": "actor_m04"
+    "res://assets/characters/grave_tithe_scythe.scn": "actor_m04",
+    "res://assets/characters/gravebound_reaped_armour.res": "actor_m04"
   },
   "startup_dependencies": [
     "base",

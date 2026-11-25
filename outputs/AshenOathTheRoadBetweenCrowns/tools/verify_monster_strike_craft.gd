@@ -53,6 +53,7 @@ func _run() -> void:
 		enemy.free()
 	_lunge()
 	if "--skip-weapon" not in OS.get_cmdline_user_args():
+		_weapon_variants()
 		for fps: float in [24.0, 60.0, 120.0]:
 			for defense: String in ["open", "block", "parry", "rear", "overhead"]:
 				_scythe(fps, defense)
@@ -95,6 +96,22 @@ func _lunge() -> void:
 	var expected: float = float(definitions.halvern_boss.damage) * float(definitions.halvern_boss.strike.moves.counter_lunge.damage_scale) * 0.72
 	check(is_equal_approx(125.0 - player.health_component.health, expected), "mid-windup phase change preserves announced lunge damage")
 	enemy.free()
+
+func _weapon_variants() -> void:
+	var knight := _spawn("gravebound_knight", true)
+	var halvern := _spawn("halvern_boss", true)
+	var plate := knight.find_child("M04_FittedArmourAssembly", true, false) as MeshInstance3D
+	var original := halvern.find_child("M04_FittedArmourAssembly", true, false) as MeshInstance3D
+	check(plate != null and original != null, "Both equipped knights retain the native skinned plate")
+	if plate != null and original != null:
+		var source_faces: int = original.mesh.surface_get_array_index_len(0) / 3
+		check(source_faces == 18705 and plate.mesh.surface_get_array_index_len(0) == 3 * (source_faces - 532), "Only the scythe-bearing knight relinquishes the original sword")
+		check(original.mesh.surface_get_array_index_len(1) == plate.mesh.surface_get_array_index_len(1), "Funerary linen topology retained")
+		for i in 2:
+			check(plate.get_active_material(i) != null and plate.get_active_material(i).resource_name == original.get_active_material(i).resource_name, "Original equipped armour material %d" % i)
+	check(halvern.find_child("GraveTitheGrip", true, false) == null and halvern.find_child("*AuthoredSword", true, false) == null, "Halvern carries the one sword embedded in his rig")
+	knight.free()
+	halvern.free()
 
 func _scythe(fps: float, defense: String) -> void:
 	var enemy := _spawn("gravebound_knight", true)

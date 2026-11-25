@@ -189,7 +189,7 @@ func _try_build_mapped_body() -> bool:
 	mapped.position.y += _actor.CharacterRoleSpec.ground_offset(visual_source)
 	if _actor.enemy_id == "gravebound_knight" and native_design:
 		_actor.enemy_equipment_view.attach_grave_tithe()
-	elif _actor.enemy_id in ["halvern_boss", "bandit", "captain_senn"]:
+	elif _actor.enemy_id in ["halvern_boss", "bandit", "captain_senn"] and not native_design:
 		_actor._attach_humanoid_sword("Halvern" if _actor.enemy_id == "halvern_boss" else "Bandit")
 		if _actor.enemy_id == "bandit" and visual_source == "bandit_tracker":
 			_actor._attach_bandit_shield()

@@ -23,7 +23,7 @@ func _initialize() -> void:
 		quit(1)
 		return
 	await settle(3)
-	game.call("_complete_ending", "kill")
+	game._handle_dialogue_action({"type": "ending", "ending": "kill"})
 	await settle(3)
 	var boss = game.zone_root.find_child("WhiteHartFinalEncounter", true, false)
 	check(boss != null, "Ash ending did not create the White Hart encounter")

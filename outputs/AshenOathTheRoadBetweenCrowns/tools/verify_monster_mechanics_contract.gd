@@ -46,6 +46,12 @@ class BossStub extends Node:
 	func phase_definition() -> Dictionary:
 		return {"telegraph": "root_lanes"}
 
+class WallCorner extends NavigationStub:
+	func build_route(start: Vector3, finish: Vector3, _clearance: float, _ignore_body: CollisionObject3D = null) -> Array[Vector3]:
+		return [start, start + Vector3(0.45, 0, -1), finish]
+	func validate_segment(start: Vector3, finish: Vector3, _clearance: float) -> bool:
+		return (finish - start).normalized().x > 0.25
+
 var failures: Array[String] = []
 var checks := 0
 
@@ -123,6 +129,18 @@ func _check_locomotion(world: Node3D, definitions: Dictionary) -> void:
 			_check(checked_final_step, identity + " keeps commitment through the final fractional decision")
 			actor.encounter_peers = []
 			peer.free()
+			actor.spatial_service = WallCorner.new()
+			var straight := Vector3.FORWARD * 2.0
+			actor.velocity = straight
+			nav._move_with_stride(straight, target.position, dt)
+			_check(actor.velocity.x > 0.1, identity + " ordinary pursuit can round the shallow corner")
+			actor.velocity = straight
+			nav._surge_heading = Vector3.FORWARD
+			nav._surge_left = dt
+			nav._surging_this_step = true
+			nav._move_with_stride(straight, target.position, dt)
+			_check(actor.velocity == Vector3.ZERO and not nav._surging_this_step and nav._surge_left == 0.0, identity + " committed surge stops at the same wall")
+			actor.spatial_service = service
 			_check(peak > actor.move_speed * float(profile.pace) * 1.08, identity + " achieves a distinct burst speed")
 			_check(not nav._burst_armed and nav._surge_left == 0.0 and nav._gather_left == 0.0, identity + " cannot cycle bursts at a stationary target")
 			nav.reset_stride()

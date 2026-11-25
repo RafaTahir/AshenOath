@@ -906,7 +906,7 @@ func _material_records(entries: Array[Dictionary]) -> Array:
 			"retained_native":bool(entry.retained_native), "active_matches_native_resource":current == native,
 			"material_policy":"retained_native" if bool(entry.retained_native) else "graded_opaque_shader",
 			"active_class":current.get_class(), "shader":current.shader.resource_path if current is ShaderMaterial else "",
-			"atlas":native.albedo_texture.resource_path, "normal":native.normal_texture.resource_path if native.normal_texture != null else "",
+			"atlas":native.albedo_texture.resource_path if native.albedo_texture != null else "", "normal":native.normal_texture.resource_path if native.normal_texture != null else "",
 			"normal_scale":native.normal_scale, "roughness":native.roughness, "metallic":native.metallic,
 			"specular":native.metallic_specular, "clearcoat":native.clearcoat if native.clearcoat_enabled else 0.0,
 			"alpha":native.albedo_color.a, "transparency":native.transparency, "cull":native.cull_mode,
