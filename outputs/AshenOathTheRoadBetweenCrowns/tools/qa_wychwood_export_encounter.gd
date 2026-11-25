@@ -85,9 +85,9 @@ func inspect_tally(q, actor: Node3D, camera: Camera3D) -> void:
 		hand_points.append(wrist)
 		samples.append({"clip":str(clip), "time":time, "socket_error_m":binding_error, "wrist_to_tally_m":wrist_distance, "head_to_tally_m":head_distance})
 		if state == "idle":
-			var outward := marker - actor.global_position
-			outward.y = 0.0
-			await _photograph(q, mesh, camera, outward.normalized() - actor.global_basis.z * 0.65 + Vector3.UP * 0.23, "RaiderWristTally")
+			# The tally hangs behind the forearm from the player's frontal view.
+			# This measured three-quarter view exposes its notches on the native Idle.
+			await _photograph(q, mesh, camera, actor.global_basis * Vector3(-0.470, 0.342, 0.814), "RaiderWristTally")
 	q._check(hand_points[0].distance_to(hand_points[1]) > 0.001, "Native Idle/Attack did not produce distinct live wrist poses")
 	q.report["raider_tally"] = {"native_samples":samples, "wrist_pose_displacement_m":hand_points[0].distance_to(hand_points[1]), "mesh":mesh.mesh.resource_path}
 	player.stop()
