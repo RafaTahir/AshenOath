@@ -97,6 +97,10 @@ func _try_build_mapped_body() -> bool:
 	_actor.animation_driver.name = "CharacterAnimationDriver"
 	mapped.add_child(_actor.animation_driver)
 	if native_design:
+		if visual_source in ["ghoulkin_creature", "wychwood_stalker_creature"] and visual_source == str(_actor.enemy_id) + "_creature":
+			_actor.enemy_presence_view.has_hunt_performance = preload("res://scripts/views/wychwood_hunter_wardrobe.gd").install(mapped, _actor.enemy_id)
+		elif visual_source in ["wychwood_raider_creature", "wychwood_brute_creature"] and visual_source == str(_actor.enemy_id) + "_creature":
+			_actor.enemy_presence_view.has_hunt_performance = preload("res://scripts/views/wychwood_burden_view.gd").install(_actor, mapped)
 		_actor.native_ambient_authored = bool(_actor.read_presentation_tag(mapped, "authored_creature_ambient", false))
 		_actor.animation_driver.configure(mapped, {
 			"idle":"Idle", "walk":"Walking", "run":"Running", "windup":"Windup",
@@ -181,9 +185,7 @@ func _try_build_mapped_body() -> bool:
 		push_error("Enemy visual role '%s' has no valid idle animation: %s" % [_actor.enemy_id, animation_report.get("errors", [])])
 		mapped.queue_free()
 		return false
-	# One active combat skeleton is sufficient for the 720p presentation;
-	# keeping its updates off the crowded 60 Hz path avoids isolated attack
-	# evaluation spikes on Intel/ANGLE without changing hit timing.
+	# Nearby fitted hunters switch to 30 Hz once their distance is known.
 	_actor.animation_driver.set_update_rate_hz(12.0)
 	_actor._ground_mapped_visual(mapped)
 	mapped.position.y += _actor.CharacterRoleSpec.ground_offset(visual_source)

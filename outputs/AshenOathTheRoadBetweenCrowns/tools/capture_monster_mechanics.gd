@@ -417,7 +417,7 @@ func _parry_case() -> void:
 
 func _interrupt_case(idle_hit: bool) -> void:
 	if _safety_stopped: return
-	var actor: Variant = _actor("wychwood_brute")
+	var actor: Variant = _actor("wychwood_brute" if idle_hit else "ghoulkin")
 	if actor == null: return
 	_phase = "idle_hit_protects_reaction_priority" if idle_hit else "blade_hit_cancels_pending_strike"
 	var heavy := idle_hit

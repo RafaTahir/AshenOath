@@ -97,6 +97,14 @@ def partition_actor_packs(project, config, sections, manifest, catalog, standalo
     # The knight equips the scythe and its sword-free body after its actor pack mounts.
     for name in ("grave_tithe_scythe.scn", "gravebound_reaped_armour.res"):
         resources.setdefault("res://assets/characters/" + name, set()).add("actor_m04")
+    for owner, wardrobe, motion in (
+        ("actor_m01", "wychwood_hunters/m01_shroud", "wychwood_hunters/m01_motion"),
+        ("actor_m02", "wychwood_hunters/m02_vanes", "wychwood_hunters/m02_motion"),
+        ("actor_m19", "wychwood_raider_regalia", "wychwood_raider_motion"),
+        ("actor_m20", "wychwood_brute_regalia", "wychwood_brute_motion"),
+    ):
+        for asset in (wardrobe, motion):
+            resources.setdefault("res://assets/characters/" + asset + ".res", set()).add(owner)
     # Pigment atlases are loaded after their actor mounts, so they do not
     # appear among the prepared scene's native PBR dependencies.
     pigments = json.loads((project / "data/monster_material_profiles.json").read_text(encoding="utf-8-sig"))

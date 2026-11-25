@@ -321,6 +321,21 @@ func _freeze_particle_speeds() -> Array:
 		particles.speed_scale = 0.0
 	return records
 
+const HUNT_GEAR := {
+	"M01":"res://assets/characters/wychwood_hunters/m01_shroud.res",
+	"M02":"res://assets/characters/wychwood_hunters/m02_vanes.res",
+	"M19":"res://assets/characters/wychwood_raider_regalia.res",
+	"M20":"res://assets/characters/wychwood_brute_regalia.res",
+}
+
+func _authored_hunt_gear(id: String, mesh: MeshInstance3D, surface: int) -> bool:
+	if mesh.get_active_material(surface) != mesh.mesh.surface_get_material(surface):
+		return false
+	if id == "M19" and mesh.mesh.resource_path == "res://assets_external/environment/forest/Wychwood_RaiderTally.res":
+		var socket := mesh.get_parent() as BoneAttachment3D
+		return socket != null and socket.name == &"CartersWristCord"
+	return HUNT_GEAR.has(id) and mesh.skin != null and mesh.mesh.resource_path == HUNT_GEAR[id]
+
 func _authored_grave_weapon(mesh: MeshInstance3D, source_root: Node3D, surface: int) -> bool:
 	var ancestor: Node = mesh
 	while ancestor != null and ancestor != source_root:
@@ -345,6 +360,7 @@ func _specimen(id: String, zone: String) -> void:
 	_isolate_actor(actor, source_root)
 	var geometry_report: Dictionary = geometry.build(game.zone_root, game.player)
 	var entries: Array[Dictionary] = []
+	var hunt_gear_surfaces := 0
 	for mesh: MeshInstance3D in source_root.find_children("*", "MeshInstance3D", true, false):
 		if mesh.mesh == null: continue
 		for surface in mesh.mesh.get_surface_count():
@@ -363,7 +379,10 @@ func _specimen(id: String, zone: String) -> void:
 				# surface inventory and must stay exactly native in every mode.
 				original = variant
 				var recipes: Dictionary = profiles[id].materials
-				var native_gear := id == "M04" and _authored_grave_weapon(mesh, source_root, surface)
+				var hunt_gear := _authored_hunt_gear(id, mesh, surface)
+				if hunt_gear and mesh.skin != null and mesh.mesh.resource_path == HUNT_GEAR.get(id, ""):
+					hunt_gear_surfaces += 1
+				var native_gear := (id == "M04" and _authored_grave_weapon(mesh, source_root, surface)) or hunt_gear
 				if not native_gear and (not recipes.has(original.resource_name) or float(recipes[original.resource_name].strength) != 0.0):
 					_fail("Unexpected ungraded native material: %s [%s]" % [id,original.resource_name])
 					return
@@ -374,6 +393,15 @@ func _specimen(id: String, zone: String) -> void:
 				return
 			entries.append({"mesh":mesh, "surface":surface, "variant":variant, "original":original, "identity":identity,
 				"retained_native":retained_native})
+	if str(options.get("require-hunt-gear", "false")) == "true" and HUNT_GEAR.has(id):
+		if hunt_gear_surfaces == 0 or not actor.enemy_presence_view.has_hunt_performance:
+			_fail("Missing fitted rig on live actor: " + id)
+			return
+		for sample: Array in [[7.9, 30.0], [9.0, 30.0], [10.0, 12.0], [9.0, 12.0]]:
+			actor.enemy_presence_view.update_hunt_pose_rate(sample[0])
+			if not is_equal_approx(actor.animation_driver.manual_update_interval, 1.0 / float(sample[1])):
+				_fail("Incorrect live hunter pose rate: " + id)
+				return
 	var retained_surfaces := 0
 	for entry: Dictionary in entries:
 		if bool(entry.retained_native): retained_surfaces += 1
@@ -384,7 +412,7 @@ func _specimen(id: String, zone: String) -> void:
 		"fixture_spawn":selected.get("fixture_spawn", {}),
 		"geometry_validation":geometry_report, "visible_skeletons":_visible_skeletons(), "collision_shapes":_collision_records(actor),
 		"material_policy":{"total_surfaces":entries.size(), "graded_opaque_surfaces":entries.size()-retained_surfaces,
-			"retained_native_surfaces":retained_surfaces, "retained_surface_modes":"exact original material in all modes; no replacement shader"},
+			"retained_native_surfaces":retained_surfaces, "fitted_gear_surfaces":hunt_gear_surfaces, "retained_surface_modes":"exact original material in all modes; no replacement shader"},
 		"frames":[], "poses":[]}
 	if int(specimen.visible_skeletons) > 10: _fail("Visible skeleton budget exceeded: " + id)
 	for pose_name: String in str(options.get("poses", "idle")).split(","):
@@ -449,6 +477,8 @@ func _specimen(id: String, zone: String) -> void:
 					"background_motion":"shader TIME/temporal noise may still differ; measured separately"}}
 			(report.frames as Array).append(frame)
 			(specimen.frames as Array).append(name)
+		if pose_name == "action" and ENEMIES.has(id) and str(options.get("motion-reels", "false")) == "true":
+			pose["strike_reel"] = await _strike_reel(actor, id, zone, pose)
 		(specimen.poses as Array).append(pose)
 		if str(options.get("performance", "false")) == "true" and id in IDENTITY and pose_name == "idle":
 			specimen["paired_render_cost"] = await _render_cost(entries)
@@ -583,6 +613,31 @@ func _isolate_actor(actor: Node3D, source_root: Node3D) -> void:
 	actor.process_mode = Node.PROCESS_MODE_DISABLED
 	game.process_mode = Node.PROCESS_MODE_DISABLED
 	Engine.time_scale = 0.0
+
+# Fixed camera and native game lighting. Each timestamp is on the AI strike clock.
+func _strike_reel(actor: Node3D, id: String, zone: String, pose: Dictionary) -> Dictionary:
+	var player: AnimationPlayer = actor.animation_driver.get_animation_player()
+	var windup: float = actor._windup_duration()
+	var recovery: float = actor._strike_recovery()
+	var contact: float = float(pose.fraction)
+	var folder := output.path_join("reels").path_join("%s_%s_%s" % [id, zone, current_environment])
+	var frame_count := ceili((windup + recovery) * 24.0) + 1
+	if DirAccess.make_dir_recursive_absolute(folder) != OK:
+		_fail("Could not create strike reel directory: " + id)
+		return {}
+	for i in frame_count:
+		var seconds := minf(float(i) / 24.0, windup + recovery)
+		var fraction := contact * seconds / windup if seconds <= windup else contact + (1.0 - contact) * (seconds - windup) / recovery
+		player.seek(fraction * float(pose.duration), true)
+		await process_frame
+		await RenderingServer.frame_post_draw
+		var shot := root.get_texture().get_image()
+		shot.resize(640, 360, Image.INTERPOLATE_LANCZOS)
+		if shot.save_jpg(folder.path_join("%03d.jpg" % i), 0.92) != OK:
+			_fail("Could not save strike reel: " + id)
+			return {}
+	return {"directory":folder,"frames":frame_count,"fps":24,"windup":windup,"recovery":recovery,"contact":contact}
+
 
 func _stage_pose(actor: Node3D, requested: String, combat: bool) -> Dictionary:
 	var driver := actor.find_child("CharacterAnimationDriver", true, false)

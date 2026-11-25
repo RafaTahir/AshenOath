@@ -15,7 +15,8 @@ func _on_arrow_impact(result: Dictionary, arrow_id: String, damage: float, zone_
 	if bool(result.get("hit", false)):
 		_actor._present_surface_contact(result, true)
 		if str(result.get("kind", "")) == "scenery": return
-		_actor.hud.show_status_cue("Arrow struck a person" if str(result.get("kind", "")) == "civilian" else "Arrow hit: %d" % int(damage), "item")
+		if str(result.get("counter_cue", "")).is_empty():
+			_actor.hud.show_status_cue("Arrow struck a person" if str(result.get("kind", "")) == "civilian" else "Arrow hit: %d" % int(result.get("damage", damage)), "item")
 		var target = result.get("enemy")
 		if target != null and is_instance_valid(target):
 			_actor.hud.show_enemy(target.display_name, target.health_component.health, target.health_component.max_health)
@@ -26,6 +27,8 @@ func _on_arrow_impact(result: Dictionary, arrow_id: String, damage: float, zone_
 
 func _present_surface_contact(result: Dictionary, arrow: bool) -> void:
 	var surface: Variant = str(result.get("surface", "metal"))
+	var cue := str(result.get("counter_cue", ""))
+	if not cue.is_empty(): _actor.hud.show_status_cue(cue, "item")
 	var event: Variant = ("arrow_contact" if arrow else "flesh_contact") if surface == "flesh" else str({"wood":"wood_contact","stone":"stone_contact","foliage":"foliage_contact"}.get(surface,"light_hit"))
 	_actor.audio.play_spatial_event(event,result.get("point",_actor.player.global_position),_actor.player.global_position,14.0,0.06,0.06)
 	_actor.combat_vfx_coordinator.surface_contact(_actor.zone_root,result,bool(_actor.settings.settings.get("blood_effects",true)),bool(_actor.settings.settings.get("flash_reduction",false)))

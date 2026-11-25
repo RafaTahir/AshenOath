@@ -65,13 +65,13 @@ func _on_enemy_died(enemy: Variant) -> void:
 	elif _actor.current_zone_id == "wychwood" and int(_actor.read_presentation_tag(enemy, "wychwood_wave", -1)) == _actor.wychwood_pack_kills:
 		_actor.wychwood_pack_kills += 1
 		if _actor.wychwood_pack_kills == 1:
-			_actor._activate_wychwood_wave(["ghoulkin"], "A second Ghoulkin cocks its head toward the sound of boots.")
+			_actor._activate_wychwood_wave(["ghoulkin"], "Burial wood knocks beneath a second shroud. The hooked hand opens at the sound of boots.")
 		elif _actor.wychwood_pack_kills == 2:
-			_actor._activate_wychwood_wave(["wychwood_stalker"], "The Stalker skirts the wheel ruts, keeping one barred shoulder turned toward Kael.")
+			_actor._activate_wychwood_wave(["wychwood_stalker"], "The Stalker skirts the wheel ruts. Its vanes fold low before it springs.")
 		elif _actor.wychwood_pack_kills == 3:
-			_actor._activate_wychwood_wave(["wychwood_raider"], "A raider cuts across the clearing.")
+			_actor._activate_wychwood_wave(["wychwood_raider"], "The Raider lifts a gate board across its chest. The tally still hangs from its wrist.")
 		elif _actor.wychwood_pack_kills == 4:
-			_actor._activate_wychwood_wave(["wychwood_brute"], "The Brute plants both feet in the wheel ruts. Its tusks point down the cut.")
+			_actor._activate_wychwood_wave(["wychwood_brute"], "Iron creaks on the Brute’s timber yoke. Both feet plant in the wheel ruts.")
 		if _actor.wychwood_pack_kills >= 5:
 			_actor.quests.complete_objective("main_road_of_crows", "fight_ghoulkin")
 			_actor.story_state.set_flag("wychwood_pack_cleared", true)

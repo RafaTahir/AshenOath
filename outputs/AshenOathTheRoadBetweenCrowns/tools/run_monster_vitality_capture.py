@@ -156,6 +156,17 @@ def prepare(args: argparse.Namespace) -> tuple[dict, Path]:
         if digest(path) != asset["source_sha256"]:
             raise ValueError("native source differs from reviewed material profile: " + name)
         pins.append(path)
+    hunt_files = {
+        "M01": ("wychwood_hunters/m01_shroud", "wychwood_hunters/m01_motion"),
+        "M02": ("wychwood_hunters/m02_vanes", "wychwood_hunters/m02_motion"),
+        "M19": ("wychwood_raider_regalia", "wychwood_raider_motion"),
+        "M20": ("wychwood_brute_regalia", "wychwood_brute_motion"),
+    }
+    for asset in species:
+        for stem in hunt_files.get(asset, ()):
+            source = project / "assets/characters" / (stem + ".res")
+            if source.is_file():
+                pins.append(source)
     mechanics = None
     if args.mechanics_script:
         mechanics = args.mechanics_script.resolve(strict=True)
@@ -172,6 +183,8 @@ def prepare(args: argparse.Namespace) -> tuple[dict, Path]:
                "--lit-clearing=" + args.lit_clearing,
                "--dry-floor-seat=" + args.dry_floor_seat,
                "--isolate-m11=" + str(args.isolate_m11).lower(),
+               "--require-hunt-gear=" + str(args.require_hunt_gear).lower(),
+               "--motion-reels=" + str(args.motion_reels).lower(),
                "--performance=" + str(args.performance).lower()]
     if mechanics:
         command.append("--mechanics-script=res://" + mechanics.relative_to(project).as_posix())
@@ -454,6 +467,8 @@ def main() -> int:
     parser.add_argument("--poses", default="idle", help="idle and/or action; action is native attack reference for enemies, Feed/Investigate for wildlife")
     parser.add_argument("--environments", default="day", help="day,night,rain")
     parser.add_argument("--mechanics-script", type=Path)
+    parser.add_argument("--require-hunt-gear", action="store_true", help="require live fitted gear and verify near/distant animation rates")
+    parser.add_argument("--motion-reels", action="store_true", help="capture fixed-camera strike phases in real encounter time for each requested enemy action")
     parser.add_argument("--performance", action="store_true", help="paired frozen-level shader-cost diagnostic; not a representative route benchmark")
     parser.add_argument("--framing-policy", choices=("authored-only", "clearing-fallback"), default="clearing-fallback",
                         help="attempt authored placement first; optional explicit floor-verified QA restage, never hide environment geometry")

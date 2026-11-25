@@ -2,9 +2,20 @@ extends RefCounted
 ## enemy presence view: scene-only responsibilities.
 
 var _actor: CharacterBody3D
+var has_hunt_performance := false
+var _close_pose := false
 
 func _init(actor: CharacterBody3D) -> void:
 	_actor = actor
+
+func update_hunt_pose_rate(distance: float) -> void:
+	if not has_hunt_performance:
+		return
+	# Two thresholds keep a hunter pacing at the edge from restarting its timer.
+	var close := distance < (10.0 if _close_pose else 8.0)
+	if close != _close_pose:
+		_close_pose = close
+		_actor.animation_driver.set_update_rate_hz(30.0 if close else 12.0)
 
 func _update_native_ambient(delta: float, achieved: Vector3) -> void:
 	if not _actor.native_ambient_authored: return

@@ -132,7 +132,7 @@ func _resolve_attack() -> void:
 			_actor.special_attack_resolved.emit(_actor, boss_attack, _actor.attack_trace_end, special_radius, 0.0, false)
 		return
 	var applied_damage: float = attempted_damage * (0.72 if special_contact and not melee_contact else 1.0)
-	var parried: bool = bool(_actor.player.take_damage(applied_damage))
+	var parried: bool = bool(preload("res://scripts/views/wychwood_counterplay.gd").strike_player(_actor, applied_damage))
 	var contact_position: Vector3 = _actor.last_attack_contact if melee_contact else _actor.player.global_position
 	_actor.attack_resolved.emit(_actor, parried, contact_position)
 	if _actor.is_boss and boss_attack != "":

@@ -132,7 +132,7 @@
       "burst": {
         "range": 4.2,
         "speed": 1.43,
-        "gather": 0.1,
+        "gather": 0.48,
         "duration": 0.43
       }
     },
@@ -161,7 +161,7 @@
     "behavior_profile": "feinter",
     "perception_memory": 2.4,
     "color": "#52633f",
-    "memory_rule": "It weaves before committing. The cord at its wrist keeps the rhythm of a carter’s road call.",
+    "memory_rule": "It weaves before committing. The cord at its wrist keeps the rhythm of a carterâ€™s road call.",
     "motivation": "It is pulled toward the objects that still carry a living person's name.",
     "locomotion": {
       "acceleration": 11,

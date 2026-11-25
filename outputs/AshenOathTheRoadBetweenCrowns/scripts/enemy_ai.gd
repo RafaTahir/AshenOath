@@ -83,6 +83,7 @@ func _simulate_tick(delta: float) -> void:
 			animation_driver.set_locomotion(0.0, Vector3.ZERO, true)
 		return
 	var early_distance: float = player.global_position.distance_to(global_position)
+	enemy_presence_view.update_hunt_pose_rate(early_distance)
 	if early_distance > sense_range + 1.0 and pending_attack_time <= 0.0 and stagger_time <= 0.0 and is_on_floor():
 		far_tick_accumulator += delta
 		if far_tick_accumulator < 0.20:
@@ -218,7 +219,10 @@ func _navigation_direction(target: Vector3, force_refresh: bool = false) -> Vect
 func _validated_step_direction(direction: Vector3, target: Vector3, step_distance: float) -> Vector3:
 	return enemy_navigation_view._validated_step_direction(direction, target, step_distance)
 
-func apply_damage(amount: float, source_tag: String = "", light_blade: bool = false) -> void:
+func wood_guard_raised() -> bool:
+	return preload("res://scripts/views/wychwood_counterplay.gd").guard_raised(self)
+
+func apply_damage(amount: float, source_tag: String = "", light_blade: bool = false, glancing: bool = false) -> void:
 	if dead or not encounter_active or bool(get_meta("story_surrender_protected", false)):
 		return
 	if surrender_offer:
@@ -246,11 +250,11 @@ func apply_damage(amount: float, source_tag: String = "", light_blade: bool = fa
 	hit_flash_time = 0.12
 	if holds_stance or dead:
 		return
-	stagger_time = max(stagger_time, 0.16)
+	if not glancing: stagger_time = max(stagger_time, 0.16)
 	if bool(get_meta("ordinary_surrender_eligible",false)) and not surrender_declined and not dead and health_component.health>0.0 and health_component.health<=health_component.max_health*0.25:
 		surrender_offer=true
 		_cancel_pending_strike()
-	if animation_driver != null and animation_driver.trigger_action("hit"):
+	if not glancing and animation_driver != null and animation_driver.trigger_action("hit"):
 		native_attack_tail_active = false
 		_cancel_pending_strike(false)
 

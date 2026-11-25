@@ -1,7 +1,7 @@
 extends Node
 
+const Woodland = preload("res://scripts/views/wychwood_counterplay.gd")
 const BodyQuery = preload("res://scripts/combat_body_query.gd")
-
 var _query_scratch = preload("res://scripts/physics_query_scratch.gd").new()
 
 signal enemy_hit(name: String, amount: float)
@@ -151,7 +151,7 @@ func try_trigger_trap(device: Node3D) -> void:
 		if support.is_empty() or support.normal.dot(Vector3.UP) < 0.85 or support.collider is CharacterBody3D: return
 		device.set_meta("support_pending", false)
 	for enemy in host.active_enemies:
-		if not is_instance_valid(enemy) or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()): continue
+		if not is_instance_valid(enemy) or enemy.dead or Woodland.has_story_protection(enemy) or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()): continue
 		if enemy.global_position.distance_to(device.global_position) > 0.8: continue
 		var query := PhysicsRayQueryParameters3D.create(device.global_position + Vector3.UP * 0.15, enemy.global_position + Vector3.UP * 0.25, 1)
 		query.exclude = device_exclusions()
@@ -162,6 +162,7 @@ func try_trigger_trap(device: Node3D) -> void:
 		for index in range(records.size() - 1, -1, -1):
 			if str(records[index].id) == device.device_id: records.remove_at(index)
 		enemy.slow(4.0)
+		if enemy is Woodland.EnemyState: Woodland.trap_closed(enemy)
 		host.audio.play_spatial_event("block", device.global_position, host.player.global_position, 14.0, 0.0, 0.0)
 		message.emit("%s is caught in the iron trap." % enemy.display_name)
 		host.story_save_pending = true
@@ -295,15 +296,18 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 	damage *= affinity
 	# Reserve before damage: death/phase signals can re-enter the resolver.
 	_blade_hit_ids[struck_enemy.get_instance_id()] = true
+	var response := {}
 	if not civilian:
-		struck_enemy.apply_damage(damage, source_tag, not heavy)
+		response = Woodland.weapon_contact(struck_enemy, damage, source_tag, blade_id, heavy, player.global_position - struck_enemy.global_position)
+		damage = response.damage
 		enemy_hit.emit(struck_enemy.display_name, damage)
 	var hit_result := {
 		"hit": true,
 		"enemy": null if civilian else struck_enemy,
 		"actor": struck_enemy,
 		"kind": "civilian" if civilian else "enemy",
-		"surface": _actor_surface(struck_enemy),
+		"surface": response.get("surface", _actor_surface(struck_enemy)),
+		"counter_cue": response.get("cue", ""),
 		"direction": (blade_tip - previous_tip).normalized(),
 		"point": resolved.point,
 		"contact_point": resolved.point,
@@ -423,7 +427,7 @@ func resolve_arrow_shot(enemies: Array, cast: Dictionary) -> Dictionary:
 	if length <= 0.05 or forward.length_squared() < 0.5:
 		return {"hit": false, "endpoint": endpoint, "enemy": null, "point": endpoint}
 	for enemy in enemies:
-		if not is_instance_valid(enemy) or enemy.get("dead") == true or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
+		if not is_instance_valid(enemy) or enemy.get("dead") == true or Woodland.has_story_protection(enemy) or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
 			continue
 		var cylinder := BodyQuery.cylinder_for(enemy)
 		var target: Vector3
@@ -460,8 +464,11 @@ func resolve_arrow_shot(enemies: Array, cast: Dictionary) -> Dictionary:
 		var reaction: Callable = best_enemy.get_meta("civilian_contact")
 		if reaction.is_valid(): reaction.call(result)
 	else:
-		best_enemy.apply_damage(damage, str(cast.get("source_tag", "arrow")))
-		enemy_hit.emit(best_enemy.display_name, damage)
+		var response := Woodland.weapon_contact(best_enemy, damage, result.source_tag, "bow", false, -forward)
+		result.damage = response.damage
+		result.surface = response.get("surface", result.surface)
+		result.counter_cue = response.get("cue", "")
+		enemy_hit.emit(best_enemy.display_name, result.damage)
 	return result
 
 func _actor_surface(actor: Node) -> String:

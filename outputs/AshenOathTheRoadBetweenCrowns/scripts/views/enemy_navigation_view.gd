@@ -23,6 +23,11 @@ var _surging_this_step := false
 func _init(actor: CharacterBody3D) -> void:
 	_actor = actor
 
+func rush_phase() -> StringName:
+	if _gather_left > 0.0: return &"gather"
+	if _surge_left > 0.0 or _surging_this_step: return &"rush"
+	return &""
+
 func configure_stride(profile: Dictionary) -> void:
 	_acceleration = float(profile.get("acceleration", 10.0))
 	_braking = float(profile.get("braking", 12.0))

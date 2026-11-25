@@ -614,6 +614,8 @@
         "actor_shared"
       ],
       "contents": [
+        "res://assets/characters/wychwood_hunters/m01_motion.res",
+        "res://assets/characters/wychwood_hunters/m01_shroud.res",
         "res://assets_external/characters_prepared/monsters/167225684a08f30a29e2ea17.scn",
         "res://assets_external/design_pack_v1/creatures/textures/M01_ghoulkin_peat_albedo.png",
         "res://assets_external/design_pack_v1/creatures/textures/color_f000cf478ca45fa2cf626e83290e5862749f495b5f0dee728873ac7bc90bcef3.png",
@@ -643,6 +645,8 @@
         "base"
       ],
       "contents": [
+        "res://assets/characters/wychwood_hunters/m02_motion.res",
+        "res://assets/characters/wychwood_hunters/m02_vanes.res",
         "res://assets_external/characters_prepared/monsters/9b917237c5f1da73cb1ee634.scn",
         "res://assets_external/design_pack_v1/creatures/textures/color_76f32f9413ee56694f841a85523b6540c259ffa2a9c8a1cdbc5585d6cab15b70.png",
         "res://assets_external/design_pack_v1/creatures/textures/linear_21edcbf6c6e724bcbc812b2f90da20b5443358db90a62542b9c57da7536bfb62.png",
@@ -1028,6 +1032,8 @@
         "actor_shared"
       ],
       "contents": [
+        "res://assets/characters/wychwood_raider_motion.res",
+        "res://assets/characters/wychwood_raider_regalia.res",
         "res://assets_external/characters_prepared/monsters/6402484f7fbcf29644f7b96f.scn",
         "res://assets_external/design_pack_v1/creatures/textures/M19_raider_woad_albedo.png",
         "res://assets_external/design_pack_v1/creatures/textures/color_6114520f7607da9469c72c28ed9b4c2b92041e5e999f1552e03448b17e18ebe6.png",
@@ -1061,6 +1067,8 @@
         "actor_shared"
       ],
       "contents": [
+        "res://assets/characters/wychwood_brute_motion.res",
+        "res://assets/characters/wychwood_brute_regalia.res",
         "res://assets_external/characters_prepared/monsters/b8537bed2c4cdb9484d845d2.scn",
         "res://assets_external/design_pack_v1/creatures/textures/M20_brute_scar_albedo.png",
         "res://assets_external/design_pack_v1/creatures/textures/color_380ac3f990018a1017a62cae7036ff344033101f149e196480c140e2265cca57.png",
@@ -2379,7 +2387,15 @@
     "res://assets_external/design_pack_v1/creatures/textures/M19_raider_woad_albedo.png": "actor_m19",
     "res://assets_external/design_pack_v1/creatures/textures/M20_brute_scar_albedo.png": "actor_m20",
     "res://assets/characters/grave_tithe_scythe.scn": "actor_m04",
-    "res://assets/characters/gravebound_reaped_armour.res": "actor_m04"
+    "res://assets/characters/gravebound_reaped_armour.res": "actor_m04",
+    "res://assets/characters/wychwood_brute_motion.res": "actor_m20",
+    "res://assets/characters/wychwood_brute_regalia.res": "actor_m20",
+    "res://assets/characters/wychwood_hunters/m01_motion.res": "actor_m01",
+    "res://assets/characters/wychwood_hunters/m01_shroud.res": "actor_m01",
+    "res://assets/characters/wychwood_hunters/m02_motion.res": "actor_m02",
+    "res://assets/characters/wychwood_hunters/m02_vanes.res": "actor_m02",
+    "res://assets/characters/wychwood_raider_motion.res": "actor_m19",
+    "res://assets/characters/wychwood_raider_regalia.res": "actor_m19"
   },
   "startup_dependencies": [
     "base",
