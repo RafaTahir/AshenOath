@@ -42,8 +42,8 @@ func _initialize() -> void:
 	check(str(game.story_state.get_flag("final_covenant", "")) == "ash", "Ash covenant was not persisted")
 	check(game.quests.is_completed("main_hart_remembers"), "Boss victory did not complete the finale")
 	check(str(game.pending_ending) == "", "Pending ending was not cleaned up")
-	var result_code := 0 if failures == 0 else 1
 	await _shutdown_game(game)
+	var result_code := 0 if failures == 0 else 1
 	print("BOSS-001 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	quit(result_code)
 
@@ -54,7 +54,11 @@ func settle(count: int) -> void:
 func _shutdown_game(game: Node) -> void:
 	if is_instance_valid(game) and game.has_method("prepare_resource_shutdown"):
 		game.prepare_resource_shutdown()
-		await settle(20)
+		await settle(ZoneResidencyService.ZONE_RETIRE_FRAMES + 2)
+		var deadline := Time.get_ticks_msec() + 10000
+		while game.pending_zone_retirements > 0 and Time.get_ticks_msec() < deadline:
+			await process_frame
+		check(game.pending_zone_retirements == 0, "Retired world still releasing meshes at fixture shutdown")
 	if is_instance_valid(game) and game.has_method("finalize_resource_shutdown"):
 		game.finalize_resource_shutdown()
 		await settle(12)
