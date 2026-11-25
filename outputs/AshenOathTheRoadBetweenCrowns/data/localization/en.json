@@ -1576,65 +1576,83 @@
       "speaker": "",
       "context": "campaign_dialogue.report_decision"
     },
-    "campaign_dialogue.report_decision.lines.0": {
+    "campaign_dialogue.report_decision.lines.0.text": {
       "source": "Kael: The pack is dead. Here is what I could establish on the road.",
       "text": "Kael: The pack is dead. Here is what I could establish on the road.",
       "speaker": "",
-      "context": "campaign_dialogue.report_decision.lines"
+      "context": "campaign_dialogue.report_decision.lines.0"
     },
     "campaign_dialogue.report_decision.lines.1.text": {
-      "source": "Kael: Bram was still gripping the cart brake. His ledger's debts were crossed out.",
-      "text": "Kael: Bram was still gripping the cart brake. His ledger's debts were crossed out.",
+      "source": "Kael: Four fell. The one with the cord stepped aside and lived. Here is what I could establish on the road.",
+      "text": "Kael: Four fell. The one with the cord stepped aside and lived. Here is what I could establish on the road.",
       "speaker": "",
       "context": "campaign_dialogue.report_decision.lines.1"
     },
-    "campaign_dialogue.report_decision.lines.2.text": {
-      "source": "Kael: Red thread bound the black feathers.",
-      "text": "Kael: Red thread bound the black feathers.",
-      "speaker": "",
-      "context": "campaign_dialogue.report_decision.lines.2"
-    },
-    "campaign_dialogue.report_decision.lines.3.text": {
-      "source": "Anwen: My knot. I tied that thread for Sella.",
-      "text": "Anwen: My knot. I tied that thread for Sella.",
-      "speaker": "",
-      "context": "campaign_dialogue.report_decision.lines.3"
-    },
-    "campaign_dialogue.report_decision.lines.4.text": {
-      "source": "Kael: Oren's wooden crow had his name scraped away.",
-      "text": "Kael: Oren's wooden crow had his name scraped away.",
-      "speaker": "",
-      "context": "campaign_dialogue.report_decision.lines.4"
-    },
-    "campaign_dialogue.report_decision.lines.5.text": {
-      "source": "Kael: Vargan wire bound a name to the creatures. Someone tried to burn it off.",
-      "text": "Kael: Vargan wire bound a name to the creatures. Someone tried to burn it off.",
-      "speaker": "",
-      "context": "campaign_dialogue.report_decision.lines.5"
-    },
-    "campaign_dialogue.report_decision.lines.6.text": {
-      "source": "Kael: The drag marks were deliberate. Boots followed the pack's tracks.",
-      "text": "Kael: The drag marks were deliberate. Boots followed the pack's tracks.",
-      "speaker": "",
-      "context": "campaign_dialogue.report_decision.lines.6"
-    },
-    "campaign_dialogue.report_decision.lines.7": {
+    "campaign_dialogue.report_decision.lines.10": {
       "source": "Anwen: Give me what you found, show the village, or keep it while we make copies. Do not fill the gaps for anyone.",
       "text": "Anwen: Give me what you found, show the village, or keep it while we make copies. Do not fill the gaps for anyone.",
       "speaker": "",
       "context": "campaign_dialogue.report_decision.lines"
     },
-    "campaign_dialogue.report_decision.lines.8": {
+    "campaign_dialogue.report_decision.lines.11": {
       "source": "Anwen: A public account is not permission to speak for the people behind it.",
       "text": "Anwen: A public account is not permission to speak for the people behind it.",
       "speaker": "",
       "context": "campaign_dialogue.report_decision.lines"
     },
-    "campaign_dialogue.report_decision.lines.9": {
+    "campaign_dialogue.report_decision.lines.12": {
       "source": "Kael: I will stay. The payment ends the hunt. It does not settle what I now know.",
       "text": "Kael: I will stay. The payment ends the hunt. It does not settle what I now know.",
       "speaker": "",
       "context": "campaign_dialogue.report_decision.lines"
+    },
+    "campaign_dialogue.report_decision.lines.2.text": {
+      "source": "Kael: I answered its signal from the bridge. When we met in the clearing, I drew blood all the same.",
+      "text": "Kael: I answered its signal from the bridge. When we met in the clearing, I drew blood all the same.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision.lines.2"
+    },
+    "campaign_dialogue.report_decision.lines.3.text": {
+      "source": "Kael: One knew a carter's knock. I heard it give me time to answer. I kept quiet.",
+      "text": "Kael: One knew a carter's knock. I heard it give me time to answer. I kept quiet.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision.lines.3"
+    },
+    "campaign_dialogue.report_decision.lines.4.text": {
+      "source": "Kael: Bram was still gripping the cart brake. His ledger's debts were crossed out.",
+      "text": "Kael: Bram was still gripping the cart brake. His ledger's debts were crossed out.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision.lines.4"
+    },
+    "campaign_dialogue.report_decision.lines.5.text": {
+      "source": "Kael: Red thread bound the black feathers.",
+      "text": "Kael: Red thread bound the black feathers.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision.lines.5"
+    },
+    "campaign_dialogue.report_decision.lines.6.text": {
+      "source": "Anwen: My knot. I tied that thread for Sella.",
+      "text": "Anwen: My knot. I tied that thread for Sella.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision.lines.6"
+    },
+    "campaign_dialogue.report_decision.lines.7.text": {
+      "source": "Kael: Oren's wooden crow had his name scraped away.",
+      "text": "Kael: Oren's wooden crow had his name scraped away.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision.lines.7"
+    },
+    "campaign_dialogue.report_decision.lines.8.text": {
+      "source": "Kael: Vargan wire bound a name to the creatures. Someone tried to burn it off.",
+      "text": "Kael: Vargan wire bound a name to the creatures. Someone tried to burn it off.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision.lines.8"
+    },
+    "campaign_dialogue.report_decision.lines.9.text": {
+      "source": "Kael: The drag marks were deliberate. Boots followed the pack's tracks.",
+      "text": "Kael: The drag marks were deliberate. Boots followed the pack's tracks.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision.lines.9"
     },
     "campaign_dialogue.report_decision.name": {
       "source": "Sister Anwen",
@@ -2367,6 +2385,48 @@
       "text": "Oren's coat",
       "speaker": "",
       "context": "conversation_topics.topics.anwen_orens_coat"
+    },
+    "conversation_topics.topics.anwen_wychwood_carters_knock.lines.0.text": {
+      "source": "Two quick knocks, then one. I heard it answered on the far bank.",
+      "text": "Two quick knocks, then one. I heard it answered on the far bank.",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.anwen_wychwood_carters_knock.lines.0"
+    },
+    "conversation_topics.topics.anwen_wychwood_carters_knock.lines.1.text": {
+      "source": "Bram used to give me that knock on the shutter. It meant his wheels were too wide to pass unless I moved my bench. Oren would give it back with a spoon.",
+      "text": "Bram used to give me that knock on the shutter. It meant his wheels were too wide to pass unless I moved my bench. Oren would give it back with a spoon.",
+      "speaker": "Anwen",
+      "context": "conversation_topics.topics.anwen_wychwood_carters_knock.lines.1"
+    },
+    "conversation_topics.topics.anwen_wychwood_carters_knock.lines.2.text": {
+      "source": "I kept trying to hear a name in it.",
+      "text": "I kept trying to hear a name in it.",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.anwen_wychwood_carters_knock.lines.2"
+    },
+    "conversation_topics.topics.anwen_wychwood_carters_knock.lines.3.text": {
+      "source": "I'd give a great deal to hear his spoon again. Write down what you heard.",
+      "text": "I'd give a great deal to hear his spoon again. Write down what you heard.",
+      "speaker": "Anwen",
+      "context": "conversation_topics.topics.anwen_wychwood_carters_knock.lines.3"
+    },
+    "conversation_topics.topics.anwen_wychwood_carters_knock.name": {
+      "source": "Anwen",
+      "text": "Anwen",
+      "speaker": "",
+      "context": "conversation_topics.topics.anwen_wychwood_carters_knock"
+    },
+    "conversation_topics.topics.anwen_wychwood_carters_knock.summary": {
+      "source": "Ask where the call at the ford came from.",
+      "text": "Ask where the call at the ford came from.",
+      "speaker": "",
+      "context": "conversation_topics.topics.anwen_wychwood_carters_knock"
+    },
+    "conversation_topics.topics.anwen_wychwood_carters_knock.title": {
+      "source": "The carter's knock",
+      "text": "The carter's knock",
+      "speaker": "",
+      "context": "conversation_topics.topics.anwen_wychwood_carters_knock"
     },
     "conversation_topics.topics.edric_seal_in_hand.name": {
       "source": "Edric",
@@ -4757,8 +4817,8 @@
       "context": "decision_contexts.contexts.main_road_of_crows:return_village"
     },
     "decision_contexts.contexts.main_road_of_crows:return_village.options.0.commitment": {
-      "source": "Give Anwen the token privately and commit to protecting people who choose to speak.",
-      "text": "Give Anwen the token privately and commit to protecting people who choose to speak.",
+      "source": "Give Anwen the recovered evidence privately and commit to protecting people who choose to speak.",
+      "text": "Give Anwen the recovered evidence privately and commit to protecting people who choose to speak.",
       "speaker": "",
       "context": "decision_contexts.contexts.main_road_of_crows:return_village.options.0"
     },
@@ -4781,8 +4841,8 @@
       "context": "decision_contexts.contexts.main_road_of_crows:return_village.options.1"
     },
     "decision_contexts.contexts.main_road_of_crows:return_village.options.2.commitment": {
-      "source": "Keep the original token, make protected copies, and remain responsible for the investigation.",
-      "text": "Keep the original token, make protected copies, and remain responsible for the investigation.",
+      "source": "Keep the original evidence, make protected copies, and remain responsible for the investigation.",
+      "text": "Keep the original evidence, make protected copies, and remain responsible for the investigation.",
       "speaker": "",
       "context": "decision_contexts.contexts.main_road_of_crows:return_village.options.2"
     },
@@ -5271,6 +5331,12 @@
       "text": "Rest beside him a moment.",
       "speaker": "",
       "context": "dialogue.bracken_rescue.variants.0.actions.2"
+    },
+    "dialogue.bracken_rescue.variants.0.actions.3.label": {
+      "source": "Give Bracken a travel command.",
+      "text": "Give Bracken a travel command.",
+      "speaker": "",
+      "context": "dialogue.bracken_rescue.variants.0.actions.3"
     },
     "dialogue.bracken_rescue.variants.0.greeting": {
       "source": "Bracken lifts his head at Kael's step.",
@@ -6071,28 +6137,46 @@
       "context": "dialogue.notice_board.variants.2.lines"
     },
     "dialogue.notice_board.variants.3.greeting": {
-      "source": "A small note has been added: anyone who saw Bram's cart should speak to Anwen.",
-      "text": "A small note has been added: anyone who saw Bram's cart should speak to Anwen.",
+      "source": "The account hangs beneath the contract. Someone has tucked its lower edge under a dry strip of cloth.",
+      "text": "The account hangs beneath the contract. Someone has tucked its lower edge under a dry strip of cloth.",
       "speaker": "",
       "context": "dialogue.notice_board.variants.3"
     },
     "dialogue.notice_board.variants.3.lines.0": {
-      "source": "Kael: A private account can still invite a second witness.",
-      "text": "Kael: A private account can still invite a second witness.",
+      "source": "Kael: They have not taken it down. Somebody is afraid enough to cover it and kind enough to keep it dry.",
+      "text": "Kael: They have not taken it down. Somebody is afraid enough to cover it and kind enough to keep it dry.",
       "speaker": "",
       "context": "dialogue.notice_board.variants.3.lines"
     },
     "dialogue.notice_board.variants.4.greeting": {
-      "source": "The payment remains unclaimed. Beneath it, three empty places for names.",
-      "text": "The payment remains unclaimed. Beneath it, three empty places for names.",
+      "source": "A small note has been added: anyone who saw Bram's cart should speak to Anwen.",
+      "text": "A small note has been added: anyone who saw Bram's cart should speak to Anwen.",
       "speaker": "",
       "context": "dialogue.notice_board.variants.4"
     },
     "dialogue.notice_board.variants.4.lines.0": {
+      "source": "Kael: A private account can still invite a second witness.",
+      "text": "Kael: A private account can still invite a second witness.",
+      "speaker": "",
+      "context": "dialogue.notice_board.variants.4.lines"
+    },
+    "dialogue.notice_board.variants.5.greeting": {
+      "source": "The payment remains unclaimed. Beneath it, three empty places for names.",
+      "text": "The payment remains unclaimed. Beneath it, three empty places for names.",
+      "speaker": "",
+      "context": "dialogue.notice_board.variants.5"
+    },
+    "dialogue.notice_board.variants.5.lines.0.text": {
       "source": "Kael: Keeping the token is not the same as keeping them safe.",
       "text": "Kael: Keeping the token is not the same as keeping them safe.",
       "speaker": "",
-      "context": "dialogue.notice_board.variants.4.lines"
+      "context": "dialogue.notice_board.variants.5.lines.0"
+    },
+    "dialogue.notice_board.variants.5.lines.1.text": {
+      "source": "Kael: I kept the evidence. I still have people to look after.",
+      "text": "Kael: I kept the evidence. I still have people to look after.",
+      "speaker": "",
+      "context": "dialogue.notice_board.variants.5.lines.1"
     },
     "dialogue.returned_soldier.actions.0.cost": {
       "source": "This records an explicit promise or practical action. A record cannot supply someone else's consent.",
@@ -6748,13 +6832,19 @@
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.5.lines.2"
     },
-    "dialogue.sister_anwen.variants.5.lines.3": {
+    "dialogue.sister_anwen.variants.5.lines.3.text": {
       "source": "Kael: The pack is dead. The people hiding this are alive.",
       "text": "Kael: The pack is dead. The people hiding this are alive.",
       "speaker": "",
-      "context": "dialogue.sister_anwen.variants.5.lines"
+      "context": "dialogue.sister_anwen.variants.5.lines.3"
     },
-    "dialogue.sister_anwen.variants.5.lines.4": {
+    "dialogue.sister_anwen.variants.5.lines.4.text": {
+      "source": "Kael: I let one go on the ford road. The people hiding what happened there are alive, too.",
+      "text": "Kael: I let one go on the ford road. The people hiding what happened there are alive, too.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.5.lines.4"
+    },
+    "dialogue.sister_anwen.variants.5.lines.5": {
       "source": "Anwen: Take your payment if you must. I need help I have no right to order.",
       "text": "Anwen: Take your payment if you must. I need help I have no right to order.",
       "speaker": "",
@@ -9574,6 +9664,132 @@
       "speaker": "",
       "context": "interaction_scenes.work_road_return"
     },
+    "interaction_scenes.wychwood_axle_ring.actions.0.label": {
+      "source": "Give the carter's answer. Hold an empty palm above the rail.",
+      "text": "Give the carter's answer. Hold an empty palm above the rail.",
+      "speaker": "",
+      "context": "interaction_scenes.wychwood_axle_ring.actions.0"
+    },
+    "interaction_scenes.wychwood_axle_ring.actions.1.label": {
+      "source": "Let the ring hang. Listen without answering.",
+      "text": "Let the ring hang. Listen without answering.",
+      "speaker": "",
+      "context": "interaction_scenes.wychwood_axle_ring.actions.1"
+    },
+    "interaction_scenes.wychwood_axle_ring.actions.2.label": {
+      "source": "Step away before answering.",
+      "text": "Step away before answering.",
+      "speaker": "",
+      "context": "interaction_scenes.wychwood_axle_ring.actions.2"
+    },
+    "interaction_scenes.wychwood_axle_ring.lines.0.text": {
+      "source": "A fleck of black paint, the colour of Oren's wooden crow, sits in the hollow under the iron. Kael lifts the ring. It strikes twice, hangs for a breath, then strikes once more.",
+      "text": "A fleck of black paint, the colour of Oren's wooden crow, sits in the hollow under the iron. Kael lifts the ring. It strikes twice, hangs for a breath, then strikes once more.",
+      "speaker": "At the axle",
+      "context": "interaction_scenes.wychwood_axle_ring.lines.0"
+    },
+    "interaction_scenes.wychwood_axle_ring.lines.1.text": {
+      "source": "Two clicks in a wet throat. A breath. One click. Through the reeds, a length of cart cord pulls tight, then slack.",
+      "text": "Two clicks in a wet throat. A breath. One click. Through the reeds, a length of cart cord pulls tight, then slack.",
+      "speaker": "Across the ford",
+      "context": "interaction_scenes.wychwood_axle_ring.lines.1"
+    },
+    "interaction_scenes.wychwood_axle_ring.lines.2.text": {
+      "source": "Carter's knock at a blind bend. One hard knock back says the road is yours. Who taught you that?",
+      "text": "Carter's knock at a blind bend. One hard knock back says the road is yours. Who taught you that?",
+      "speaker": "Kael",
+      "context": "interaction_scenes.wychwood_axle_ring.lines.2"
+    },
+    "interaction_scenes.wychwood_axle_ring.name": {
+      "source": "The axle ring",
+      "text": "The axle ring",
+      "speaker": "",
+      "context": "interaction_scenes.wychwood_axle_ring"
+    },
+    "interaction_scenes.wychwood_ring_open_hand.actions.0.label": {
+      "source": "Return to the road",
+      "text": "Return to the road",
+      "speaker": "",
+      "context": "interaction_scenes.wychwood_ring_open_hand.actions.0"
+    },
+    "interaction_scenes.wychwood_ring_open_hand.lines.0.text": {
+      "source": "One knock from Kael. He holds his palm clear of the timber. A hard tap answers from the far bank. The cord slips loose. For a moment he can hear the water through the gap.",
+      "text": "One knock from Kael. He holds his palm clear of the timber. A hard tap answers from the far bank. The cord slips loose. For a moment he can hear the water through the gap.",
+      "speaker": "At the axle",
+      "context": "interaction_scenes.wychwood_ring_open_hand.lines.0"
+    },
+    "interaction_scenes.wychwood_ring_open_hand.lines.1.text": {
+      "source": "A way through. When the one with the cord steps out, I'll put my blade away and give that answer close enough to see its face.",
+      "text": "A way through. When the one with the cord steps out, I'll put my blade away and give that answer close enough to see its face.",
+      "speaker": "Kael",
+      "context": "interaction_scenes.wychwood_ring_open_hand.lines.1"
+    },
+    "interaction_scenes.wychwood_ring_open_hand.name": {
+      "source": "Room to pass",
+      "text": "Room to pass",
+      "speaker": "",
+      "context": "interaction_scenes.wychwood_ring_open_hand"
+    },
+    "interaction_scenes.wychwood_ring_remembered.actions.0.label": {
+      "source": "Return to the road",
+      "text": "Return to the road",
+      "speaker": "",
+      "context": "interaction_scenes.wychwood_ring_remembered.actions.0"
+    },
+    "interaction_scenes.wychwood_ring_remembered.lines.0.text": {
+      "source": "Small flecks of crow-black paint cling to the iron. A scratched token lies close by. Someone carried both along this road.",
+      "text": "Small flecks of crow-black paint cling to the iron. A scratched token lies close by. Someone carried both along this road.",
+      "speaker": "At the axle",
+      "context": "interaction_scenes.wychwood_ring_remembered.lines.0"
+    },
+    "interaction_scenes.wychwood_ring_remembered.lines.1.text": {
+      "source": "The iron moves a little in the current of air above the ford. Only the water answers now.",
+      "text": "The iron moves a little in the current of air above the ford. Only the water answers now.",
+      "speaker": "At the axle",
+      "context": "interaction_scenes.wychwood_ring_remembered.lines.1"
+    },
+    "interaction_scenes.wychwood_ring_remembered.lines.2.text": {
+      "source": "The wood is smooth where Kael laid his knuckles. He gave the empty-hand sign here.",
+      "text": "The wood is smooth where Kael laid his knuckles. He gave the empty-hand sign here.",
+      "speaker": "At the axle",
+      "context": "interaction_scenes.wychwood_ring_remembered.lines.2"
+    },
+    "interaction_scenes.wychwood_ring_remembered.lines.3.text": {
+      "source": "Kael remembers the length of the pause across the ford. He let the ring hang.",
+      "text": "Kael remembers the length of the pause across the ford. He let the ring hang.",
+      "speaker": "At the axle",
+      "context": "interaction_scenes.wychwood_ring_remembered.lines.3"
+    },
+    "interaction_scenes.wychwood_ring_remembered.name": {
+      "source": "The axle ring",
+      "text": "The axle ring",
+      "speaker": "",
+      "context": "interaction_scenes.wychwood_ring_remembered"
+    },
+    "interaction_scenes.wychwood_ring_silence.actions.0.label": {
+      "source": "Return to the road",
+      "text": "Return to the road",
+      "speaker": "",
+      "context": "interaction_scenes.wychwood_ring_silence.actions.0"
+    },
+    "interaction_scenes.wychwood_ring_silence.lines.0.text": {
+      "source": "Kael lets the ring settle against his glove. The answering tap comes anyway. A cord draws tight against bark. The reeds close over the gap.",
+      "text": "Kael lets the ring settle against his glove. The answering tap comes anyway. A cord draws tight against bark. The reeds close over the gap.",
+      "speaker": "Across the ford",
+      "context": "interaction_scenes.wychwood_ring_silence.lines.0"
+    },
+    "interaction_scenes.wychwood_ring_silence.lines.1.text": {
+      "source": "It left me time to answer. I'll remember that when they ask what happened here.",
+      "text": "It left me time to answer. I'll remember that when they ask what happened here.",
+      "speaker": "Kael",
+      "context": "interaction_scenes.wychwood_ring_silence.lines.1"
+    },
+    "interaction_scenes.wychwood_ring_silence.name": {
+      "source": "The unanswered knock",
+      "text": "The unanswered knock",
+      "speaker": "",
+      "context": "interaction_scenes.wychwood_ring_silence"
+    },
     "items.ash_bomb.description": {
       "source": "A clay bomb packed with ash-salt and sparkstone.",
       "text": "A clay bomb packed with ash-salt and sparkstone.",
@@ -10317,6 +10533,72 @@
       "text": "Blackened Vargan binding wire",
       "speaker": "",
       "context": "journal_evidence_details.details.vargan_wire"
+    },
+    "journal_evidence_details.details.wychwood_road_signal.sections.answer.body": {
+      "source": "I put my hand above the rail. I heard the cord slacken and saw a gap open in the reeds. For a moment we had made room for one another.",
+      "text": "I put my hand above the rail. I heard the cord slacken and saw a gap open in the reeds. For a moment we had made room for one another.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.wychwood_road_signal.sections.answer"
+    },
+    "journal_evidence_details.details.wychwood_road_signal.sections.answer.title": {
+      "source": "The empty-hand answer",
+      "text": "The empty-hand answer",
+      "speaker": "",
+      "context": "journal_evidence_details.details.wychwood_road_signal.sections.answer"
+    },
+    "journal_evidence_details.details.wychwood_road_signal.sections.limits.body": {
+      "source": "A creature learned a custom of the cart road. I cannot say who taught it, or what it saw when the pilgrims died.",
+      "text": "A creature learned a custom of the cart road. I cannot say who taught it, or what it saw when the pilgrims died.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.wychwood_road_signal.sections.limits"
+    },
+    "journal_evidence_details.details.wychwood_road_signal.sections.limits.title": {
+      "source": "The missing account",
+      "text": "The missing account",
+      "speaker": "",
+      "context": "journal_evidence_details.details.wychwood_road_signal.sections.limits"
+    },
+    "journal_evidence_details.details.wychwood_road_signal.sections.passage.body": {
+      "source": "In the clearing I sheathed my weapon and returned the call. The Raider made room. We both walked on.",
+      "text": "In the clearing I sheathed my weapon and returned the call. The Raider made room. We both walked on.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.wychwood_road_signal.sections.passage"
+    },
+    "journal_evidence_details.details.wychwood_road_signal.sections.passage.title": {
+      "source": "Face to face",
+      "text": "Face to face",
+      "speaker": "",
+      "context": "journal_evidence_details.details.wychwood_road_signal.sections.passage"
+    },
+    "journal_evidence_details.details.wychwood_road_signal.sections.quiet.body": {
+      "source": "I held the ring still. The creature waited long enough for me to answer, then drew its cord tight. I never learned what it would have done if I had answered.",
+      "text": "I held the ring still. The creature waited long enough for me to answer, then drew its cord tight. I never learned what it would have done if I had answered.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.wychwood_road_signal.sections.quiet"
+    },
+    "journal_evidence_details.details.wychwood_road_signal.sections.quiet.title": {
+      "source": "The space between knocks",
+      "text": "The space between knocks",
+      "speaker": "",
+      "context": "journal_evidence_details.details.wychwood_road_signal.sections.quiet"
+    },
+    "journal_evidence_details.details.wychwood_road_signal.sections.voice.body": {
+      "source": "Two quick sounds and a third after a breath. A throat across the ford repeated the rhythm of the cart ring. A length of cord moved with the sound.",
+      "text": "Two quick sounds and a third after a breath. A throat across the ford repeated the rhythm of the cart ring. A length of cord moved with the sound.",
+      "speaker": "",
+      "context": "journal_evidence_details.details.wychwood_road_signal.sections.voice"
+    },
+    "journal_evidence_details.details.wychwood_road_signal.sections.voice.title": {
+      "source": "A call across water",
+      "text": "A call across water",
+      "speaker": "",
+      "context": "journal_evidence_details.details.wychwood_road_signal.sections.voice"
+    },
+    "journal_evidence_details.details.wychwood_road_signal.source": {
+      "source": "Kael at the Wychwood ford",
+      "text": "Kael at the Wychwood ford",
+      "speaker": "",
+      "context": "journal_evidence_details.details.wychwood_road_signal"
     },
     "journal_people.people.anwen.body": {
       "source": "Greyfen's shrine keeper. The people who come to her need care as well as an account of the road.",
@@ -12969,6 +13251,24 @@
       "text": "A second containment",
       "speaker": "",
       "context": "story_campaign.evidence.vargan_wire"
+    },
+    "story_campaign.evidence.wychwood_road_signal.source": {
+      "source": "Kael at the Wychwood ford",
+      "text": "Kael at the Wychwood ford",
+      "speaker": "",
+      "context": "story_campaign.evidence.wychwood_road_signal"
+    },
+    "story_campaign.evidence.wychwood_road_signal.text": {
+      "source": "A throat across the ford repeated the interval of a carter's bridge call.",
+      "text": "A throat across the ford repeated the interval of a carter's bridge call.",
+      "speaker": "",
+      "context": "story_campaign.evidence.wychwood_road_signal"
+    },
+    "story_campaign.evidence.wychwood_road_signal.title": {
+      "source": "Room at the axle ring",
+      "text": "Room at the axle ring",
+      "speaker": "",
+      "context": "story_campaign.evidence.wychwood_road_signal"
     },
     "story_campaign.title": {
       "source": "Ashen Oath: The Road Between Crowns",

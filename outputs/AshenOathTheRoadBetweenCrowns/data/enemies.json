@@ -14,7 +14,7 @@
     "behavior_profile": "skirmisher",
     "perception_memory": 2.2,
     "color": "#6d6f4a",
-    "memory_rule": "It scavenges near the road, circles on the approach and backs away after a strike.",
+    "memory_rule": "In Wychwood it follows running footfalls around cover. Walk behind the trees to leave it searching where it last heard you.",
     "motivation": "A denied name is the only thing holding its borrowed body together."
   },
   "bog_wretch": {
@@ -64,7 +64,7 @@
     "behavior_profile": "flanker",
     "perception_memory": 2.8,
     "color": "#2f5738",
-    "memory_rule": "It circles toward a flank, then commits to a strike. Its sideways recovery and an Iron Trap create openings.",
+    "memory_rule": "On the forest road it circles under a steady gaze, then commits. Turn away and it closes at once. An Iron Trap catches its approach.",
     "motivation": "It hunts the hands that moved the evidence after the road attack."
   },
   "wychwood_raider": {
@@ -82,7 +82,7 @@
     "behavior_profile": "feinter",
     "perception_memory": 2.4,
     "color": "#52633f",
-    "memory_rule": "It weaves across the approach before committing to a strike. Keep it in view and punish the recovery.",
+    "memory_rule": "It weaves before committing. The cord at its wrist keeps the rhythm of a carter’s road call.",
     "motivation": "It is pulled toward the objects that still carry a living person's name."
   },
   "wychwood_brute": {
@@ -100,7 +100,7 @@
     "behavior_profile": "brute",
     "perception_memory": 1.8,
     "color": "#3f4932",
-    "memory_rule": "It advances head-on and turns slowly into a strike. Give the blow room; a long pursuit sends it back toward its clearing.",
+    "memory_rule": "In the wheel ruts it plants both feet before swinging. Step across the line of its tusks and answer while it recovers.",
     "motivation": "It carries the weight of many bodies but only one unfinished command."
   },
   "white_hart_avatar": {

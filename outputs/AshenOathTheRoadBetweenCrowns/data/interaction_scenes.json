@@ -2101,5 +2101,136 @@
         "source_tag": "campaign_revision_2"
       }
     ]
+  },
+  "wychwood_axle_ring": {
+    "name": "The axle ring",
+    "greeting": "",
+    "lines": [
+      {
+        "speaker": "At the axle",
+        "speaker_id": "narrator",
+        "text": "A fleck of black paint, the colour of Oren's wooden crow, sits in the hollow under the iron. Kael lifts the ring. It strikes twice, hangs for a breath, then strikes once more.",
+        "line_id": "wychwood.ring.call"
+      },
+      {
+        "speaker": "Across the ford",
+        "speaker_id": "narrator",
+        "text": "Two clicks in a wet throat. A breath. One click. Through the reeds, a length of cart cord pulls tight, then slack.",
+        "line_id": "wychwood.ring.voice"
+      },
+      {
+        "speaker": "Kael",
+        "speaker_id": "player",
+        "text": "Carter's knock at a blind bend. One hard knock back says the road is yours. Who taught you that?",
+        "line_id": "wychwood.ring.recognition",
+        "voice_take": "story_401d6319a0af1c221a21"
+      }
+    ],
+    "actions": [
+      {
+        "type": "wychwood_road_reply",
+        "answer": "open_hand",
+        "label": "Give the carter's answer. Hold an empty palm above the rail."
+      },
+      {
+        "type": "wychwood_road_reply",
+        "answer": "silence",
+        "label": "Let the ring hang. Listen without answering."
+      },
+      {
+        "type": "close",
+        "label": "Step away before answering."
+      }
+    ],
+    "voice": []
+  },
+  "wychwood_ring_open_hand": {
+    "name": "Room to pass",
+    "greeting": "",
+    "lines": [
+      {
+        "speaker": "At the axle",
+        "speaker_id": "narrator",
+        "text": "One knock from Kael. He holds his palm clear of the timber. A hard tap answers from the far bank. The cord slips loose. For a moment he can hear the water through the gap.",
+        "line_id": "wychwood.ring.offered"
+      },
+      {
+        "speaker": "Kael",
+        "speaker_id": "player",
+        "text": "A way through. When the one with the cord steps out, I'll put my blade away and give that answer close enough to see its face.",
+        "line_id": "wychwood.ring.passage",
+        "voice_take": "story_40d73812620392ac52d7"
+      }
+    ],
+    "actions": [
+      {
+        "type": "close",
+        "label": "Return to the road"
+      }
+    ],
+    "voice": []
+  },
+  "wychwood_ring_silence": {
+    "name": "The unanswered knock",
+    "greeting": "",
+    "lines": [
+      {
+        "speaker": "Across the ford",
+        "speaker_id": "narrator",
+        "text": "Kael lets the ring settle against his glove. The answering tap comes anyway. A cord draws tight against bark. The reeds close over the gap.",
+        "line_id": "wychwood.ring.silence_heard"
+      },
+      {
+        "speaker": "Kael",
+        "speaker_id": "player",
+        "text": "It left me time to answer. I'll remember that when they ask what happened here.",
+        "line_id": "wychwood.ring.silence_kept",
+        "voice_take": "story_3a0542b55fc0897a5928"
+      }
+    ],
+    "actions": [
+      {
+        "type": "close",
+        "label": "Return to the road"
+      }
+    ],
+    "voice": []
+  },
+  "wychwood_ring_remembered": {
+    "name": "The axle ring",
+    "greeting": "",
+    "lines": [
+      {
+        "speaker": "At the axle",
+        "speaker_id": "narrator",
+        "text": "Small flecks of crow-black paint cling to the iron. A scratched token lies close by. Someone carried both along this road.",
+        "line_id": "wychwood.ring.unread"
+      },
+      {
+        "speaker": "At the axle",
+        "speaker_id": "narrator",
+        "text": "The iron moves a little in the current of air above the ford. Only the water answers now.",
+        "line_id": "wychwood.ring.empty"
+      },
+      {
+        "speaker": "At the axle",
+        "speaker_id": "narrator",
+        "text": "The wood is smooth where Kael laid his knuckles. He gave the empty-hand sign here.",
+        "line_id": "wychwood.ring.open_hand"
+      },
+      {
+        "speaker": "At the axle",
+        "speaker_id": "narrator",
+        "text": "Kael remembers the length of the pause across the ford. He let the ring hang.",
+        "line_id": "wychwood.ring.silence"
+      }
+    ],
+    "actions": [
+      {
+        "type": "close",
+        "label": "Return to the road"
+      }
+    ],
+    "voice": []
   }
 }

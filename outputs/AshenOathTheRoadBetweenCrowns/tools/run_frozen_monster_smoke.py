@@ -26,6 +26,7 @@ HERE = Path(__file__).resolve().parent
 GODOT = Path.home() / ".cache/codex-runtimes/godot-4.6.3/Godot_v4.6.3-stable_win64_console.exe"
 QA = HERE / "verify_frozen_monster_smoke.gd"
 COORDINATES = HERE / "qa_viewport_coordinates.gd"
+FOREST = HERE / "qa_wychwood_export_encounter.gd"
 
 
 def digest(data: bytes) -> str:
@@ -146,6 +147,8 @@ def prepare(export: Path, output: Path, expected_profile: str) -> dict:
     (output / "qa" / QA.name).write_bytes(qa_payload)
     coordinate_payload = COORDINATES.read_bytes()
     (output / "qa" / COORDINATES.name).write_bytes(coordinate_payload)
+    forest_payload = FOREST.read_bytes()
+    (output / "qa" / FOREST.name).write_bytes(forest_payload)
     for row in payloads:
         target = output / "decoded" / row["path"]
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -157,6 +160,7 @@ def prepare(export: Path, output: Path, expected_profile: str) -> dict:
                "expected_profile_sha256": expected_profile, "packs": payloads,
                "qa_script_sha256": digest(qa_payload),
                "coordinate_helper_sha256": digest(coordinate_payload),
+               "forest_helper_sha256": digest(forest_payload),
                "launcher_sha256": digest(Path(__file__).read_bytes()),
                "background_launcher_sha256": digest((HERE / "background_native_capture.py").read_bytes()),
                "source_fallback": False, "engine_launched": False,
@@ -178,8 +182,10 @@ def check_prepared(output: Path) -> dict:
         raise ValueError("prepared QA script changed")
     if digest((output / "qa" / COORDINATES.name).read_bytes()) != receipt["coordinate_helper_sha256"]:
         raise ValueError("prepared coordinate helper changed")
-    if {path.name for path in (output / "qa").iterdir()} != {QA.name, COORDINATES.name}:
-        raise ValueError("only the two reviewed QA scripts may accompany the frozen packs")
+    if digest((output / "qa" / FOREST.name).read_bytes()) != receipt["forest_helper_sha256"]:
+        raise ValueError("prepared Wychwood encounter helper changed")
+    if {path.name for path in (output / "qa").iterdir()} != {QA.name, COORDINATES.name, FOREST.name}:
+        raise ValueError("only the reviewed QA scripts may accompany the frozen packs")
     if digest(Path(__file__).read_bytes()) != receipt["launcher_sha256"]:
         raise ValueError("QA launcher changed since preparation")
     if digest((HERE / "background_native_capture.py").read_bytes()) != receipt["background_launcher_sha256"]:
@@ -249,6 +255,7 @@ def run(output: Path, godot: Path, timeout: int) -> dict:
                    "--resolution", f"{size[0]}x{size[1]}", "--disable-vsync", "--no-focus", "--",
                    f"--output={target.resolve()}", f"--preparation={(output / 'preparation.json').resolve()}",
                    f"--coordinates={(output / 'qa' / COORDINATES.name).resolve()}",
+                   f"--forest={(output / 'qa' / FOREST.name).resolve()}",
                    f"--pack-root={(output / 'decoded').resolve()}", f"--profile-root={roaming.resolve()}", f"--viewport={mode}"]
         with (target / "engine.log").open("xb") as log:
             process = spawn_background(command, cwd=output / "resource-root", stdout=log, env=environment)
@@ -292,6 +299,8 @@ def run(output: Path, godot: Path, timeout: int) -> dict:
         raise ValueError("supplied QA changed during smoke")
     if digest((output / "qa" / COORDINATES.name).read_bytes()) != receipt["coordinate_helper_sha256"]:
         raise ValueError("supplied coordinate helper changed during smoke")
+    if digest((output / "qa" / FOREST.name).read_bytes()) != receipt["forest_helper_sha256"]:
+        raise ValueError("supplied Wychwood encounter helper changed during smoke")
     result = {"kind": "native_frozen_export_monster_smoke", "build_id": receipt["build_id"],
               "passed": len(summaries) == 2 and all(row["passed"] for row in summaries),
               "godot_executable": str(godot.resolve()), "godot_sha256": digest(godot.read_bytes()),

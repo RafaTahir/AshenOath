@@ -64,6 +64,7 @@ func _on_player_footstep() -> void:
 		surface = "wood"
 	surface = _actor.combat.foot_surface(_actor.player, surface)
 	_actor.audio.play_footstep(_actor.current_zone_id, on_road, surface)
+	preload("res://scripts/views/wychwood_pack_encounter.gd").footfall(_actor)
 
 func _on_player_parried() -> void:
 	if _actor.current_zone_id == "wychwood": preload("res://scripts/greyfen_guidance.gd").learn(_actor._host, "parry")

@@ -371,6 +371,15 @@ def compile_layout(defer_environment=False, require_prepared_forest=False):
         if name != "Runtime Pack Opening":
             includes[name].discard(SAGA_OPENING_RECORD)
             files[name].discard("res://" + SAGA_OPENING_RECORD)
+    # Kael can bring the carved token back to Greyfen. The axle and tally
+    # are encountered only after the forest's adjacent pack has mounted.
+    trail_props = {
+        "assets_external/environment/village/CarvedCrowToken.res": "Runtime Pack Opening",
+        "assets_external/environment/forest/Wychwood_CartersAxle.res": adjacent,
+        "assets_external/environment/forest/Wychwood_RaiderTally.res": adjacent,
+    }
+    for relative, owner_name in trail_props.items():
+        files[owner_name].add("res://" + relative)
     includes[adjacent].add("assets_external/environment/prepared/wychwood_*.res")
     includes["Runtime Pack Campaign"].add("assets_external/environment/prepared/*.res")
     for owner, name in (("opening", "Runtime Pack Opening"), ("characters", "Runtime Pack Characters"), ("monsters", "Runtime Pack Monsters")):
@@ -745,6 +754,11 @@ def compile_layout(defer_environment=False, require_prepared_forest=False):
     # sets. Reapply the forest ownership boundary to the final preset set too.
     for name, section in sections.items():
         excluded = set(json.loads(config[section].get("exclude_filter", '""')).split(",")) - {""}
+        for relative, owner_name in trail_props.items():
+            if name == owner_name:
+                excluded.discard(relative)
+            else:
+                excluded.add(relative)
         excluded.update(source.removeprefix("res://") for source in forest)
         forest_pattern = "assets_external/environment/prepared/forest_tree_*.res"
         if name == "Runtime Pack Opening":

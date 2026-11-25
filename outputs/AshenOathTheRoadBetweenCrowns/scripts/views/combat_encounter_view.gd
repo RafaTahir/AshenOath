@@ -62,27 +62,26 @@ func _on_enemy_died(enemy: Variant) -> void:
 		_actor.hud.show_status_cue("The graves fall still", "victory")
 		_actor._show_current_objective_guidance(5.0)
 		_actor.hud.toast("The Ghoulkin carried grave soil beneath its nails. The chapel seal answers its death.")
-	elif _actor.current_zone_id == "wychwood" and enemy.enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
+	elif _actor.current_zone_id == "wychwood" and int(_actor.read_presentation_tag(enemy, "wychwood_wave", -1)) == _actor.wychwood_pack_kills:
 		_actor.wychwood_pack_kills += 1
 		if _actor.wychwood_pack_kills == 1:
-			_actor._activate_wychwood_wave(["ghoulkin"], "A second Ghoulkin answers from the trees.")
+			_actor._activate_wychwood_wave(["ghoulkin"], "A second Ghoulkin cocks its head toward the sound of boots.")
 		elif _actor.wychwood_pack_kills == 2:
-			_actor._activate_wychwood_wave(["wychwood_stalker"], "Branches snap along the left flank.")
+			_actor._activate_wychwood_wave(["wychwood_stalker"], "The Stalker skirts the wheel ruts, keeping one barred shoulder turned toward Kael.")
 		elif _actor.wychwood_pack_kills == 3:
 			_actor._activate_wychwood_wave(["wychwood_raider"], "A raider cuts across the clearing.")
 		elif _actor.wychwood_pack_kills == 4:
-			_actor._activate_wychwood_wave(["wychwood_brute"], "The earth heaves. The Brute comes last.")
+			_actor._activate_wychwood_wave(["wychwood_brute"], "The Brute plants both feet in the wheel ruts. Its tusks point down the cut.")
 		if _actor.wychwood_pack_kills >= 5:
 			_actor.quests.complete_objective("main_road_of_crows", "fight_ghoulkin")
 			_actor.story_state.set_flag("wychwood_pack_cleared", true)
 			_actor.audio.play_event("victory", 0.03)
 			_actor.audio.play_music_cue("victory_return_cue")
 			_actor.audio.set_music_state("return_report")
-			_actor.audio.play_voice("voice_player_ghoulkin_death_01")
 			_actor.hud.hide_enemy()
 			_actor.hud.show_status_cue("Wychwood pack broken", "victory")
 			_actor._show_current_objective_guidance(6.0)
-			_actor.hud.toast("The Ghoulkin dies too far from its den. Something drew it to the road. Search the tracks.")
+			_actor.hud.toast("Boot prints cross the claw tracks. A cut thread lies between them.")
 			_actor._make_post_ghoulkin_story_clue()
 	elif enemy.enemy_id == "bog_wretch":
 		_actor.quests.complete_objective("main_teeth_in_rain", "fight_bog_wretch")

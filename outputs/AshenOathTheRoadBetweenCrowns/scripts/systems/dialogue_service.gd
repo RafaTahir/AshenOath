@@ -3,6 +3,9 @@ extends "res://scripts/systems/game_bindings.gd"
 signal dialogue_action_completed(action: Dictionary)
 
 func _handle_dialogue_action(action: Dictionary) -> void:
+	if action.get("type") == "wychwood_road_reply":
+		preload("res://scripts/views/monster_road_signs_view.gd").answer_road_sign(_host, action)
+		return
 	if str(action.get("type", "")) == "community_action":
 		preload("res://scripts/story_activity_director.gd").choose_community(_host, action)
 		return

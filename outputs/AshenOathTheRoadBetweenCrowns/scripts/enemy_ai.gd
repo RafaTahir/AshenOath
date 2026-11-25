@@ -65,11 +65,13 @@ func _simulate_tick(delta: float) -> void:
 		return
 	if surrender_offer or resolved_nonlethal:
 		_cancel_pending_strike()
-		_release_attack_token()
 		velocity=Vector3.ZERO
 		if animation_driver!=null:
 			animation_driver.set_external_tick(false)
-			animation_driver.set_life_activity("fear" if surrender_offer else "sit")
+			if enemy_id == "wychwood_raider":
+				if animation_driver.observation_clip == &"": animation_driver.set_observation_clip("Investigate")
+			else:
+				animation_driver.set_life_activity("fear" if surrender_offer else "sit")
 		return
 	if bool(get_meta("story_surrender_protected", false)):
 		_cancel_pending_strike()
@@ -245,7 +247,9 @@ func apply_damage(amount: float, source_tag: String = "") -> void:
 	if surrender_offer:
 		surrender_offer=false
 		surrender_declined=true
-		if animation_driver!=null:animation_driver.clear_life_activity()
+		if animation_driver != null:
+			animation_driver.clear_life_activity()
+			animation_driver.clear_observation_clip()
 	if bool(get_meta("dormant_arena", false)):
 		var controller: Node = get_node_or_null("BossEncounterController")
 		if controller != null and is_instance_valid(controller.host):
@@ -266,7 +270,6 @@ func apply_damage(amount: float, source_tag: String = "") -> void:
 	if bool(get_meta("ordinary_surrender_eligible",false)) and not surrender_declined and not dead and health_component.health>0.0 and health_component.health<=health_component.max_health*0.25:
 		surrender_offer=true
 		_cancel_pending_strike()
-		_release_attack_token()
 	if animation_driver != null and animation_driver.trigger_action("hit"):
 		native_attack_tail_active = false
 		_cancel_pending_strike(false)
@@ -286,7 +289,6 @@ func accept_ordinary_surrender() -> bool:
 	resolved_nonlethal=true
 	encounter_active=false
 	_cancel_pending_strike()
-	_release_attack_token()
 	set_meta("story_surrender_protected",true)
 	if animation_driver!=null:
 		animation_driver.stop_action("idle",0.12)

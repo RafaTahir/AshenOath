@@ -286,6 +286,21 @@
         "flag": "renewal_stopped",
         "value": true
       }
+    },
+    {
+      "id": "wychwood_road_signal",
+      "title": "Room at the axle ring",
+      "text": "A throat across the ford repeated the interval of a carter's bridge call.",
+      "kind": "observed",
+      "source": "Kael at the Wychwood ford",
+      "zone": "wychwood",
+      "gate": {
+        "flag": "wychwood_road_answer",
+        "values": [
+          "open_hand",
+          "silence"
+        ]
+      }
     }
   ],
   "decisions": [

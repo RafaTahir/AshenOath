@@ -495,10 +495,18 @@ func _voice_playback_paused() -> bool:
 func _sync_voice_pause() -> void:
 	if is_instance_valid(voice_player):
 		voice_player.stream_paused = _voice_playback_paused()
+	for player in spatial_players:
+		if player.stream != null and player.stream.resource_name in WychwoodSounds.ROAD_KNOCKS:
+			if dialogue_active: player.stream_paused = _voice_playback_paused()
+			else: player.stop()
 
 func play_dialogue_page(page: Dictionary) -> void:
 	stop_voice()
 	set_dialogue_active(true)
+	for player in spatial_players:
+		if player.stream != null and player.stream.resource_name in WychwoodSounds.ROAD_KNOCKS: player.stop()
+	for strike: Dictionary in page.get("road_knocks", []):
+		play_wychwood_dialogue_knock(str(strike.id), strike.source, strike.listener)
 	_build_voice_library()
 	var speaker := str(page.get("speaker_id", "")).strip_edges()
 	var text := str(page.get("text", "")).strip_edges()
@@ -805,8 +813,18 @@ func play_event_limited(event_name: String, cooldown_seconds: float, pitch_varia
 	event_cooldowns[event_name] = now + int(maxf(cooldown_seconds, 0.0) * 1000000.0)
 	play_event(event_name, pitch_variation)
 
+const WychwoodSounds := preload("res://scripts/core/wychwood_sounds.gd")
+
+func play_wychwood_dialogue_knock(id: String, point: Vector3, listener: Vector3) -> void:
+	if dialogue_active and not dialogue_review_paused and id in WychwoodSounds.ROAD_KNOCKS:
+		play_spatial_event(id, point, listener, 24.0, 0.0, 0.0)
+		# A 3D player's playback starts on its next physics update. History can
+		# open before that first tick, while there is no playback to pause yet.
+		if not get_tree().physics_frame.is_connected(_sync_voice_pause):
+			get_tree().physics_frame.connect(_sync_voice_pause, CONNECT_ONE_SHOT | CONNECT_DEFERRED)
+
 func play_spatial_event(event_name: String, source_position: Vector3, listener_position: Vector3, max_distance: float = 16.0, cooldown_seconds: float = 5.0, pitch_variation: float = 0.05) -> void:
-	if max_distance <= 0.0 or game_paused:
+	if max_distance <= 0.0 or (game_paused and not (dialogue_active and event_name in WychwoodSounds.ROAD_KNOCKS)):
 		return
 	var distance := source_position.distance_to(listener_position)
 	if distance > max_distance:
@@ -827,11 +845,13 @@ func play_spatial_event(event_name: String, source_position: Vector3, listener_p
 	player.pitch_scale = 1.0 + randf_range(-pitch_variation, pitch_variation)
 	player.play()
 	_track_cue(player)
-	if event_name in ["enemy_windup", "ghoulkin_lunge", "heavy_hit", "light_hit", "shrine_bell", "wychwood_drop"]:
-		perception_cue.emit(source_position, minf(max_distance, 9.0), event_name in ["ghoulkin_lunge", "heavy_hit", "light_hit"])
+	if event_name in ["enemy_windup", "ghoulkin_lunge", "heavy_hit", "light_hit", "shrine_bell", "wychwood_drop"] or WychwoodSounds.WINDUPS.find_key(event_name) != null or WychwoodSounds.CONTACT_STREAMS.has(event_name):
+		perception_cue.emit(source_position, minf(max_distance, 9.0), event_name in ["ghoulkin_lunge", "heavy_hit", "light_hit"] or WychwoodSounds.CONTACT_STREAMS.has(event_name))
 
 func enemy_event_name(enemy_id: String, phase: String) -> String:
-	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bell_eater"]:
+	if WychwoodSounds.WINDUPS.has(enemy_id):
+		return WychwoodSounds.event_for(enemy_id, phase)
+	if enemy_id in ["ghoulkin", "bell_eater"]:
 		return {"windup": "enemy_windup", "hit": "stagger", "death": "death", "attack": "ghoulkin_lunge"}.get(phase, "")
 	if enemy_id == "rootbound_colossus":
 		return {"windup": "wychwood_drop", "hit": "heavy_hit", "death": "wychwood_drop", "attack": "heavy_hit"}.get(phase, "")
@@ -942,6 +962,7 @@ func _prepare_event(event_name: String) -> void:
 	_prepare_recorded_event(event_name)
 
 func _event_stream(event_name: String) -> AudioStream:
+	event_name = str(WychwoodSounds.CONTACT_STREAMS.get(event_name, event_name))
 	_prepare_event(event_name)
 	if has_recorded_event(event_name):
 		var variants: Array = recorded_variants[event_name]

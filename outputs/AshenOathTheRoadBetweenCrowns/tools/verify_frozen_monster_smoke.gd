@@ -18,6 +18,7 @@ var options: Dictionary = {}
 var output := ""
 var preparation: Dictionary = {}
 var coordinates: Script
+var forest: RefCounted
 var game: Node
 var viewport := Vector2i(1280, 720)
 var touch := false
@@ -47,6 +48,17 @@ func _initialize() -> void:
 	_check(FileAccess.get_sha256(coordinate_path) == str(preparation.get("coordinate_helper_sha256", "")), "Reviewed absolute QA coordinate helper is required")
 	coordinates = load(coordinate_path) as Script
 	_check(coordinates != null, "QA coordinate helper could not load")
+	var forest_path := str(options.get("forest", ""))
+	if forest_path.is_empty() or FileAccess.get_sha256(forest_path) != str(preparation.get("forest_helper_sha256", "")):
+		_fail("Reviewed absolute Wychwood encounter helper is required")
+		_finish()
+		return
+	var forest_script := load(forest_path) as Script
+	if forest_script == null or not forest_script.can_instantiate():
+		_fail("Frozen encounter helper could not load")
+		_finish()
+		return
+	forest = forest_script.new()
 	var profile_root := str(options.get("profile-root", "")).replace("\\", "/").trim_suffix("/") + "/"
 	_check(profile_root.length() > 4 and OS.get_user_data_dir().replace("\\", "/").begins_with(profile_root), "OS profile was not isolated before process launch")
 	_check(not OS.has_feature("web"), "This receipt describes native frozen-export QA only")
@@ -149,6 +161,8 @@ func _run() -> void:
 	await _capture("wychwood_gameplay")
 	_verify_materials()
 	await _capture_monsters()
+	if failures.is_empty():
+		await forest.run(self)
 	await _shutdown()
 
 func _playable(zone: String) -> bool:
@@ -234,10 +248,10 @@ func _gameplay_input(action: String, pressed: bool) -> void:
 			Input.parse_input_event(drag)
 			input_record["logical_delta"] = [logical_delta.x, logical_delta.y]
 			input_record["window_delta"] = [raw_delta.x, raw_delta.y]
-	elif action == "move_left":
+	elif action in ["move_left", "interact", "weapon_sheath"]:
 		var event := InputEventKey.new()
-		event.keycode = KEY_A
-		event.physical_keycode = KEY_A
+		event.keycode = {"move_left": KEY_A, "interact": KEY_E, "weapon_sheath": KEY_H}[action]
+		event.physical_keycode = event.keycode
 		event.pressed = pressed
 		Input.parse_input_event(event)
 	else:
@@ -384,6 +398,8 @@ func _capture_monsters() -> void:
 		await _capture(id + "_control_inspection_camera")
 		for material: ShaderMaterial in settings:
 			material.set_shader_parameter("anatomy_detail", settings[material])
+		if id == "M19":
+			await forest.inspect_tally(self, actor, camera)
 		actor.set_encounter_active(original_active)
 		actor.visible = original_visible
 		actor.process_mode = actor_mode
@@ -394,6 +410,7 @@ func _capture_monsters() -> void:
 			"visible_mesh_observed":visible_mesh, "projected_center":[projected.x, projected.y], "center_on_screen":on_screen,
 			"restored_active":bool(actor.encounter_active), "restored_visible":bool(actor.visible), "restored_process_mode":int(actor.process_mode)})
 		_check(bool(actor.encounter_active) == original_active and bool(actor.visible) == original_visible and int(actor.process_mode) == actor_mode, "Inspection flags failed restoration: " + id)
+	await forest.inspect_road(self, camera)
 	game.camera_rig.camera.make_current()
 	camera.queue_free()
 	game.day_night.process_mode = daylight_mode

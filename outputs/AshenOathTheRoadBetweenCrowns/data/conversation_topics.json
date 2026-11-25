@@ -2222,6 +2222,50 @@
         }
       ],
       "variants": []
+    },
+    {
+      "id": "anwen_wychwood_carters_knock",
+      "revision": "1",
+      "actor_ids": [
+        "sister_anwen"
+      ],
+      "speaker_id": "sister_anwen",
+      "name": "Anwen",
+      "zones": [
+        "greyfen"
+      ],
+      "title": "The carter's knock",
+      "summary": "Ask where the call at the ford came from.",
+      "conditions": {
+        "quest_completed": "main_road_of_crows"
+      },
+      "known_evidence": [
+        "wychwood_road_signal"
+      ],
+      "require_variant": false,
+      "lines": [
+        {
+          "speaker": "Kael",
+          "speaker_id": "player",
+          "text": "Two quick knocks, then one. I heard it answered on the far bank."
+        },
+        {
+          "speaker": "Anwen",
+          "speaker_id": "sister_anwen",
+          "text": "Bram used to give me that knock on the shutter. It meant his wheels were too wide to pass unless I moved my bench. Oren would give it back with a spoon."
+        },
+        {
+          "speaker": "Kael",
+          "speaker_id": "player",
+          "text": "I kept trying to hear a name in it."
+        },
+        {
+          "speaker": "Anwen",
+          "speaker_id": "sister_anwen",
+          "text": "I'd give a great deal to hear his spoon again. Write down what you heard."
+        }
+      ],
+      "variants": []
     }
   ]
 }

@@ -357,7 +357,18 @@
               ]
             }
           },
-          "Kael: The pack is dead. The people hiding this are alive.",
+          {
+            "text": "Kael: The pack is dead. The people hiding this are alive.",
+            "conditions": {
+              "wychwood_raider_spared": false
+            }
+          },
+          {
+            "text": "Kael: I let one go on the ford road. The people hiding what happened there are alive, too.",
+            "conditions": {
+              "wychwood_raider_spared": true
+            }
+          },
           "Anwen: Take your payment if you must. I need help I have no right to order."
         ],
         "actions": [

@@ -238,6 +238,13 @@ class FrozenPreparationTests(unittest.TestCase):
         (self.output / "qa/source_fallback.gd").write_text("source fallback", encoding="utf-8")
         with self.assertRaises(ValueError): smoke.check_prepared(self.output)
 
+    def test_prepared_forest_helper_corruption(self):
+        receipt = self.prepare()
+        path = self.output / "qa" / smoke.FOREST.name
+        self.assertEqual(smoke.digest(path.read_bytes()), receipt["forest_helper_sha256"])
+        path.write_text("changed", encoding="utf-8")
+        with self.assertRaises(ValueError): smoke.check_prepared(self.output)
+
     def test_actual_touch_client_and_internal_render_contract(self):
         report = {"requested_window_size":[960,540], "window_client_size":[960,540], "internal_render_size":[1280,720],
                   "frames":[{"width":1280,"height":720,"window_client_size":[960,540]}],

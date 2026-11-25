@@ -345,16 +345,7 @@ static func _danger_near(game) -> bool:
 	return false
 
 func _build(root: Node3D) -> void:
-	for creature: String in APPROACH_SIGNS:
-		var sign: Dictionary = APPROACH_SIGNS[creature]
-		if str(sign.zone) != zone: continue
-		var position: Vector3 = sign.position
-		if host.spatial_service != null:
-			position = host.spatial_service.validate_position(position, 0.6, host.spatial_service.bank_for(position))
-		_point(root, "approach_" + creature, str(sign.prompt), position, str(sign.title), Color(0.50,0.48,0.40))
-		var area := root.find_child("approach_" + creature, true, false) as Node3D
-		if area != null:
-			preload("res://scripts/saga_work_presentation.gd").clue_visual(host, area, str(sign.prompt))
+	preload("res://scripts/views/monster_road_signs_view.gd").mount(self, root)
 	if zone == "greyfen":
 		_point(root, "lr_gathering", "Room at the common table", Vector3(-5.4, 0, 10.5), "ROOM FOR COMPANY", Color(0.59, 0.65, 0.61))
 		for id: String in FRIEND_TASKS:
@@ -448,6 +439,10 @@ func refresh() -> void:
 	if community != null: community.refresh()
 
 func activate(id: String) -> void:
+	if id == "wychwood_axle_ring":
+		var ring := host.zone_root.find_child(id, true, false) as Node3D
+		preload("res://scripts/views/monster_road_signs_view.gd").open_road_sign(host, ring)
+		return
 	if id.begins_with("approach_"):
 		var creature := id.trim_prefix("approach_")
 		var sign: Dictionary = APPROACH_SIGNS.get(creature, {})

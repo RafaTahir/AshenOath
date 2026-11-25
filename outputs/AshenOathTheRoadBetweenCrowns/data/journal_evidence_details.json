@@ -31,7 +31,7 @@
       "id": "oren",
       "source": "Oren's wooden crow and the altered token",
       "record_ids": ["oren_token"],
-      "related_ids": ["sella", "drag_marks", "vargan_wire"],
+      "related_ids": ["sella", "drag_marks", "vargan_wire", "wychwood_road_signal"],
       "related_quests": ["main_road_of_crows", "main_teeth_in_rain"],
       "related_entries": [{"section_id": "people", "entry_id": "person:oren"}],
       "sections": [
@@ -157,6 +157,68 @@
         {"id": "reading", "kind": "interpretation", "title": "What that condition asks", "body": "Kael reads the adjoining entries as a condition on food. A household that must agree to keep its allotment cannot give a freely witnessed oath through that requirement."},
         {"id": "limits", "kind": "limit", "title": "Limits of this record", "body": "The proclamation records what the order demanded. It does not record each household's wishes or allow anyone to supply their consent."},
         {"id": "condition_removed", "kind": "relevance", "title": "The recorded change", "body": "The ration condition was removed at the assembly. Refusing participation no longer forfeits food or a safe way out. The original proclamation remains evidence of the condition that was challenged.", "gate": {"flag": "renewal_stopped", "value": true}}
+      ]
+    },
+    {
+      "id": "wychwood_road_signal",
+      "source": "Kael at the Wychwood ford",
+      "related_ids": [
+        "oren",
+        "bram",
+        "drag_marks"
+      ],
+      "related_quests": [
+        "main_road_of_crows"
+      ],
+      "related_entries": [
+        {
+          "section_id": "creatures",
+          "entry_id": "creature:wychwood_raider"
+        }
+      ],
+      "sections": [
+        {
+          "id": "voice",
+          "kind": "observation",
+          "title": "A call across water",
+          "body": "Two quick sounds and a third after a breath. A throat across the ford repeated the rhythm of the cart ring. A length of cord moved with the sound."
+        },
+        {
+          "id": "answer",
+          "kind": "interpretation",
+          "title": "The empty-hand answer",
+          "body": "I put my hand above the rail. I heard the cord slacken and saw a gap open in the reeds. For a moment we had made room for one another.",
+          "gate": {
+            "flag": "wychwood_road_answer",
+            "value": "open_hand"
+          }
+        },
+        {
+          "id": "quiet",
+          "kind": "interpretation",
+          "title": "The space between knocks",
+          "body": "I held the ring still. The creature waited long enough for me to answer, then drew its cord tight. I never learned what it would have done if I had answered.",
+          "gate": {
+            "flag": "wychwood_road_answer",
+            "value": "silence"
+          }
+        },
+        {
+          "id": "passage",
+          "kind": "observation",
+          "title": "Face to face",
+          "body": "In the clearing I sheathed my weapon and returned the call. The Raider made room. We both walked on.",
+          "gate": {
+            "flag": "wychwood_raider_spared",
+            "value": true
+          }
+        },
+        {
+          "id": "limits",
+          "kind": "limit",
+          "title": "The missing account",
+          "body": "A creature learned a custom of the cart road. I cannot say who taught it, or what it saw when the pilgrims died."
+        }
       ]
     }
   ]

@@ -66,7 +66,8 @@ func _tick_pending_attack(delta: float) -> void:
 		return
 	# Read the opponent early, then commit. A late dodge can leave the blade
 	# behind instead of being followed by an instantaneous full-body swivel.
-	if is_instance_valid(_actor.player) and _actor.pending_attack_time > _actor.attack_windup_total * 0.45:
+	var planted: bool = _actor.enemy_id == "wychwood_brute" and bool(_actor.read_presentation_tag(_actor, "progression_opening_wave", false))
+	if not planted and is_instance_valid(_actor.player) and _actor.pending_attack_time > _actor.attack_windup_total * 0.45:
 		var offset: Vector3 = _actor.player.global_position - _actor.global_position
 		offset.y = 0.0
 		if offset.length_squared() > 0.01:

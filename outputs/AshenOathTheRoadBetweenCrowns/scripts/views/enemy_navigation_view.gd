@@ -5,6 +5,9 @@ const FINAL_ROUTE_STOP_SQUARED := 0.002
 const READY_APPROACH_MARGIN := 0.05
 
 var _actor: CharacterBody3D
+var _watch_elapsed := 0.0
+var _stalker_circling := false
+const STALKER_WATCH_SECONDS := 1.15
 
 func _init(actor: CharacterBody3D) -> void:
 	_actor = actor
@@ -139,6 +142,8 @@ func _engagement_target(target_position: Vector3 = Vector3.INF) -> Vector3:
 	if _actor.encounter_slot > 0:
 		side = -1.0 if _actor.encounter_slot % 2 == 0 else 1.0
 	var angle: Variant = deg_to_rad(_actor.approach_angle_degrees * side)
+	if _stalker_circling:
+		return focus + radial.normalized().rotated(Vector3.UP, deg_to_rad(73.0) * side) * _actor.preferred_distance
 	var desired: Vector3 = radial.normalized().rotated(Vector3.UP, angle)
 	var radius: float = _actor.tactics.engagement_radius(_actor.preferred_distance, _actor.attack_range, _actor.can_see_player, _actor.attack_cooldown, _actor.attack_recovery_time, READY_APPROACH_MARGIN)
 	return focus + desired * radius
@@ -146,6 +151,8 @@ func _engagement_target(target_position: Vector3 = Vector3.INF) -> Vector3:
 func _update_perception(delta: float, player_distance: float) -> void:
 	_actor.perception_refresh_time = maxf(_actor.perception_refresh_time - delta, 0.0)
 	_actor.perception_memory_time = maxf(_actor.perception_memory_time - delta, 0.0)
+	if _actor.enemy_id == "wychwood_stalker":
+		_observe_stalker(delta, player_distance)
 	if _actor.perception_refresh_time > 0.0:
 		return
 	_actor.perception_refresh_time = 0.18
@@ -153,6 +160,38 @@ func _update_perception(delta: float, player_distance: float) -> void:
 	if _actor.can_see_player:
 		_actor.last_known_player_position = _actor.player.global_position
 		_actor.perception_memory_time = _actor.perception_memory_duration
+
+func _observe_stalker(delta: float, distance: float) -> void:
+	_stalker_circling = false
+	if not _actor.can_see_player:
+		if _actor.perception_memory_time <= 0.0: _watch_elapsed = 0.0
+		return
+	if distance > 4.4 or not bool(_actor.read_presentation_tag(_actor, "progression_opening_wave", false)):
+		return
+	var sightline: Vector3 = _actor.global_position - _actor.player.global_position
+	sightline.y = 0.0
+	var forward: Vector3 = -_actor.player.global_basis.z
+	var watched := forward.dot(sightline.normalized()) > 0.40
+	_watch_elapsed = minf(_watch_elapsed + delta, STALKER_WATCH_SECONDS) if watched else STALKER_WATCH_SECONDS
+	_stalker_circling = _watch_elapsed < STALKER_WATCH_SECONDS and distance > _actor.attack_range
+
+func hear_ghoulkin_footfall(position: Vector3) -> void:
+	if _actor.enemy_id != "ghoulkin" or _actor.dead or not _actor.encounter_active or _actor.can_see_player or _actor.heard_cue_deadline > 0:
+		return
+	if _actor.pending_attack_time > 0.0 or _actor.stagger_time > 0.0 or _actor.spatial_service == null:
+		return
+	if _actor.global_position.distance_squared_to(position) > 64.0 or _actor.home_position.distance_to(position) >= _actor.leash_radius:
+		return
+	# Follow the actual footfall around cover through the normal route owner.
+	# A sound supplies a place to search, never sight or permission to strike.
+	if _actor.perception_memory_time > 0.0:
+		_actor.last_known_player_position = position
+	_actor.heard_cue_deadline = 45
+	_actor.ambient_state = "investigating"
+	_actor.ambient_target = position
+	_actor.ambient_remaining = 3.0
+	_actor.navigation_target = Vector3.INF
+	_actor.navigation_refresh_time = 0.0
 
 func _has_perception_line() -> bool:
 	if not _actor.is_inside_tree() or _actor.player == null or not _actor.player.is_inside_tree():

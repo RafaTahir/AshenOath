@@ -66,6 +66,8 @@ func _apply_curated_opening(index: Dictionary) -> Error:
 			var error := ResourceSaver.save(stream, path, ResourceSaver.FLAG_COMPRESS)
 			if error != OK: return error
 			index[category][id] = path
+	var road_status := preload("res://tools/wychwood_sound_authoring.gd").compile(OUTPUT + "adjacent/", index.cues)
+	if road_status != OK: return road_status
 	var file := FileAccess.open(INDEX, FileAccess.WRITE)
 	if file == null:
 		return ERR_FILE_CANT_WRITE

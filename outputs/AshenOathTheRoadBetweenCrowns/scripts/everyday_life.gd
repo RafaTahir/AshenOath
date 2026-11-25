@@ -68,14 +68,7 @@ func configure() -> void:
 		if OS.has_feature("web") and not host.runtime_packs.is_ready("leisure"):
 			host.runtime_packs.request_pack("leisure",30)
 	preload("res://scripts/regional_meet.gd").install(self)
-	for enemy in host.active_enemies:
-		if not is_instance_valid(enemy) or not bool(enemy.get_meta("ordinary_surrender_eligible",false)):continue
-		var area:Node3D=point_action("surrender","Accept surrender",enemy.global_position)
-		area.reparent(enemy,true)
-		area.position=Vector3.ZERO
-		area.set_meta("interaction_collision_owner",NodePath(".."))
-		area.set_interaction_enabled(false)
-		surrender_targets.append({"enemy":weakref(enemy),"area":weakref(area)})
+	preload("res://scripts/views/wychwood_pack_encounter.gd").install_targets(self)
 	for area: Node in host.zone_root.get_children():
 		if area is Area3D and area.has_meta("design_ecology") and area.is_visible_in_tree():
 			ecology.append({"actor":weakref(area), "elapsed":0.0, "phase":-1, "visible_time":0.0, "event_clip":"", "event_phase":-1.0})
@@ -305,7 +298,9 @@ func box(parent: Node3D, size: Vector3, point: Vector3, color: Color = Color(0.2
 func activate(area: Node3D) -> void:
 	if not host.zone_root.is_ancestor_of(area) or area.global_position.distance_to(host.player.global_position) > 2.8: return
 	var id := str(area.get_meta("everyday_action", ""))
-	if id == "surrender":
+	if id == "road_call":
+		preload("res://scripts/views/wychwood_pack_encounter.gd").answer(self, area)
+	elif id == "surrender":
 		host.accept_ordinary_surrender(area.get_parent())
 		area.set_interaction_enabled(false)
 	elif id == "meet":
@@ -545,10 +540,7 @@ func _physics_process(delta: float) -> void:
 	if decision_elapsed < 0.25: return
 	var step := decision_elapsed
 	decision_elapsed = 0.0
-	for entry:Dictionary in surrender_targets:
-		var enemy:Node=entry.enemy.get_ref()
-		var area:Node=entry.area.get_ref()
-		if is_instance_valid(enemy) and is_instance_valid(area):area.set_interaction_enabled(bool(enemy.surrender_offer) and not enemy.dead)
+	preload("res://scripts/views/wychwood_pack_encounter.gd").tick_targets(self)
 	for entry: Dictionary in ecology:
 		var actor := entry.actor.get_ref() as Node3D
 		if not is_instance_valid(actor): continue

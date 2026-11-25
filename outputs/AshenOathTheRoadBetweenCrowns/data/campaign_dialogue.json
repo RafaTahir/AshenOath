@@ -1498,7 +1498,31 @@
     ],
     "greeting": "Tell me what you found. If some of it is still unknown, say so.",
     "lines": [
-      "Kael: The pack is dead. Here is what I could establish on the road.",
+      {
+        "text": "Kael: The pack is dead. Here is what I could establish on the road.",
+        "conditions": {
+          "wychwood_raider_spared": false
+        }
+      },
+      {
+        "text": "Kael: Four fell. The one with the cord stepped aside and lived. Here is what I could establish on the road.",
+        "conditions": {
+          "wychwood_raider_spared": true
+        }
+      },
+      {
+        "text": "Kael: I answered its signal from the bridge. When we met in the clearing, I drew blood all the same.",
+        "conditions": {
+          "wychwood_road_answer": "open_hand",
+          "wychwood_raider_spared": false
+        }
+      },
+      {
+        "text": "Kael: One knew a carter's knock. I heard it give me time to answer. I kept quiet.",
+        "conditions": {
+          "wychwood_road_answer": "silence"
+        }
+      },
       {
         "text": "Kael: Bram was still gripping the cart brake. His ledger's debts were crossed out.",
         "conditions": {
