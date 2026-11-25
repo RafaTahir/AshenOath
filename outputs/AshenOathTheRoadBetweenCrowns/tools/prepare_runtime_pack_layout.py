@@ -295,6 +295,9 @@ def compile_layout(defer_environment=False, require_prepared_forest=False):
                 for n, s in sections.items()}
     files = {n: set(selected_files(config[s].get("export_files", "PackedStringArray()")))
              for n, s in sections.items()}
+    # The standalone base includes HUD scripts through a filter. Its view
+    # dependencies need explicit resource selection for Godot to emit bytecode.
+    files["Runtime Pack Base"].add("res://scripts/views/dialogue_button_dispatch.gd")
     # The compiler proves identical arrays, bounds and effective flat materials.
     # Keep raw authoring files locally, but never load their obsolete imported
     # materials through a later pack after their prepared replacement is owned.
