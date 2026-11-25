@@ -87,7 +87,15 @@ static func _variant(native: BaseMaterial3D, recipe: Dictionary, source: String)
 	material.native_material = native
 	material.source_path = source
 	material.palette_revision = _revision
-	material.set_shader_parameter("authored_atlas", native.albedo_texture)
+	var painted_path := str(recipe.get("authored_albedo", ""))
+	var atlas := native.albedo_texture
+	if not painted_path.is_empty():
+		atlas = load(painted_path) as Texture2D
+		if atlas == null:
+			push_error("Missing painted creature hide: " + painted_path)
+			return null
+	material.set_shader_parameter("authored_atlas", atlas)
+	material.set_shader_parameter("hand_painted_albedo", not painted_path.is_empty())
 	material.set_shader_parameter("authored_tint", native.albedo_color)
 	material.set_shader_parameter("vertex_color_enabled", native.vertex_color_use_as_albedo)
 	material.set_shader_parameter("authored_uv_scale", Vector2(native.uv1_scale.x, native.uv1_scale.y))

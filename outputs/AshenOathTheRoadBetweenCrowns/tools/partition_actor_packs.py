@@ -94,6 +94,20 @@ def partition_actor_packs(project, config, sections, manifest, catalog, standalo
             path = resource["path"]
             if path.removeprefix("res://") not in standalone:
                 resources.setdefault(path, set()).add("actor_" + asset.lower())
+    # Pigment atlases are loaded after their actor mounts, so they do not
+    # appear among the prepared scene's native PBR dependencies.
+    pigments = json.loads((project / "data/monster_material_profiles.json").read_text(encoding="utf-8-sig"))
+    for asset, profile in pigments["assets"].items():
+        for recipe in profile["materials"].values():
+            if "authored_albedo" not in recipe:
+                continue
+            path = recipe["authored_albedo"]
+            prefix = "res://assets_external/design_pack_v1/creatures/textures/"
+            if (asset not in designs or not isinstance(path, str) or not path.startswith(prefix)
+                    or "/" in path[len(prefix):] or not path.endswith(".png")
+                    or not (project / path.removeprefix("res://")).is_file()):
+                raise ValueError(f"Invalid authored albedo for {asset}: {path!r}")
+            resources.setdefault(path, set()).add("actor_" + asset.lower())
     owners = {path: next(iter(users)) if len(users) == 1 else "actor_shared"
               for path, users in resources.items()}
     pack_ids = sorted(set(owners.values()))

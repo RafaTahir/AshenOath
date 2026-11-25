@@ -615,6 +615,7 @@
       ],
       "contents": [
         "res://assets_external/characters_prepared/monsters/167225684a08f30a29e2ea17.scn",
+        "res://assets_external/design_pack_v1/creatures/textures/M01_ghoulkin_peat_albedo.png",
         "res://assets_external/design_pack_v1/creatures/textures/color_f000cf478ca45fa2cf626e83290e5862749f495b5f0dee728873ac7bc90bcef3.png",
         "res://assets_external/design_pack_v1/creatures/textures/linear_39e68a05f88243441ae85467b31bdbf7ddbaa2e22709b9a5d7fda0a942d2f440.png",
         "res://assets_external/design_pack_v1/creatures/textures/linear_441853a0a618092ffb07e8a39289db02fcd09c75d4a404d2e6a7c49039239df2.png",
@@ -1026,6 +1027,7 @@
       ],
       "contents": [
         "res://assets_external/characters_prepared/monsters/6402484f7fbcf29644f7b96f.scn",
+        "res://assets_external/design_pack_v1/creatures/textures/M19_raider_woad_albedo.png",
         "res://assets_external/design_pack_v1/creatures/textures/color_6114520f7607da9469c72c28ed9b4c2b92041e5e999f1552e03448b17e18ebe6.png",
         "res://assets_external/design_pack_v1/creatures/textures/color_fad09498bf72210f7b097bb2f61a612a24e2ceb9d776cfd062e2824886c72d30.png",
         "res://assets_external/design_pack_v1/creatures/textures/linear_035afad7caa396eb451ae8663acd16d3a75d5509a84fd9fd821901ff33851d5d.png",
@@ -1058,6 +1060,7 @@
       ],
       "contents": [
         "res://assets_external/characters_prepared/monsters/b8537bed2c4cdb9484d845d2.scn",
+        "res://assets_external/design_pack_v1/creatures/textures/M20_brute_scar_albedo.png",
         "res://assets_external/design_pack_v1/creatures/textures/color_380ac3f990018a1017a62cae7036ff344033101f149e196480c140e2265cca57.png",
         "res://assets_external/design_pack_v1/creatures/textures/color_c948a3aba1dec9769d2265cb980c8c57bf90ddd44ea3addb7671a536e949ace1.png",
         "res://assets_external/design_pack_v1/creatures/textures/linear_33d73047c11745fb0164ea86f02c170a50687fe110bc1ab7f07440b5c24ae710.png",
@@ -2369,7 +2372,10 @@
     "res://assets_external/environment_prepared/living_cast/station_edric_03.res": "actor_c08",
     "res://assets_external/environment_prepared/living_cast/station_edric_04.res": "actor_c08",
     "res://assets_external/environment_prepared/living_cast/station_edric_05.res": "actor_c08",
-    "res://assets_external/environment_prepared/living_cast/merrow_cup.scn": "actor_c10"
+    "res://assets_external/environment_prepared/living_cast/merrow_cup.scn": "actor_c10",
+    "res://assets_external/design_pack_v1/creatures/textures/M01_ghoulkin_peat_albedo.png": "actor_m01",
+    "res://assets_external/design_pack_v1/creatures/textures/M19_raider_woad_albedo.png": "actor_m19",
+    "res://assets_external/design_pack_v1/creatures/textures/M20_brute_scar_albedo.png": "actor_m20"
   },
   "startup_dependencies": [
     "base",

@@ -123,7 +123,7 @@ func _focus(q, target: Area3D) -> bool:
 		_place(q, target.global_position, offset)
 		var focused: bool = await q._wait(func() -> bool:
 			q.game.get_system("interaction")._update_interaction_focus()
-			return q.game.active_interactable == target, 440)
+			return q.game.active_interactable == target, 1500)
 		if focused: return true
 	return false
 
@@ -154,6 +154,27 @@ func _dialogue_action(q, kind: String, answer := "") -> bool:
 func _approach_raider(q, raider: Node3D) -> void:
 	_place(q, raider.global_position, -raider.global_basis.z.normalized() * 1.05 + Vector3.UP * 0.06)
 	await q._steps(4)
+
+func _raider_status(q, raider: Node3D, palm: Area3D) -> Dictionary:
+	var target: Node = q.game.active_interactable
+	return {"sheathed":q.game.player.sword_sheathed, "equipping":q.game.player.equipment_loadout.is_transitioning(),
+		"player_can_control":q.game.player.can_control, "paused":q.paused, "line_of_sight":raider.can_see_player,
+		"distance_m":raider.global_position.distance_to(q.game.player.global_position), "attack_line":raider._has_attack_line(),
+		"offer":raider.surrender_offer, "declined":raider.surrender_declined, "health":raider.health_component.health,
+		"windup":raider.pending_attack_time, "recovery":raider.attack_recovery_time, "stagger":raider.stagger_time,
+		"broken":q.game.story_state.get_flag(BROKEN,false), "target_enabled":is_instance_valid(palm) and palm.is_interaction_enabled(),
+		"focused":str(target.get("interaction_id")) if is_instance_valid(target) else ""}
+
+func _await_offer(q, raider: Node3D) -> bool:
+	var spatial = q.game.spatial_service
+	var bank: int = spatial.bank_for(raider.global_position)
+	for offset: Vector3 in [Vector3(0,0,3.6), Vector3(-2.7,0,2.5), Vector3(2.7,0,2.5), Vector3(-3.5,0,-0.8), Vector3(0,0,-3.5)]:
+		var spot: Vector3 = raider.global_position + offset
+		if not spatial.is_walkable_position(spot, 0.45, bank): continue
+		_place(q, raider.global_position, offset + Vector3.UP * 0.04)
+		if await q._wait(func() -> bool: return raider.surrender_offer, 3500):
+			return true
+	return false
 
 func _inspect_wave(q, actor: Node3D, n: int, receipt: Dictionary) -> void:
 	var nav = actor.enemy_navigation_view
@@ -221,8 +242,8 @@ func run(q) -> void:
 	if raider == null or game.wychwood_pack_kills != 3 or not raider.encounter_active:
 		q._fail("Real opening wave advancement did not produce the Raider")
 		return
-	await _approach_raider(q, raider)
 	if q.touch:
+		await _approach_raider(q, raider)
 		var hp: float = raider.health_component.health
 		await _press(q, "light_attack")
 		if not await q._wait(func() -> bool: return raider.health_component.health < hp, 3500):
@@ -234,12 +255,20 @@ func run(q) -> void:
 		# through its actual health/death owner to exercise wave persistence.
 		raider.apply_damage(raider.health_component.max_health * 2.0, "light")
 	else:
-		await _press(q, "weapon_sheath")
-		var ready: bool = await q._wait(func() -> bool: return raider.surrender_offer and game.player.sword_sheathed and not game.player.equipment_loadout.is_transitioning(), 7000)
 		var palm := _area(game, "everyday:road_call")
-		if not ready or palm == null or not await _focus(q, palm):
-			q._fail("Sheathed player could not focus the active Raider's waiting hand")
+		receipt["before_sheathing"] = _raider_status(q, raider, palm)
+		if not game.player.sword_sheathed: await _press(q, "weapon_sheath")
+		var sheathed: bool = await q._wait(func() -> bool: return game.player.sword_sheathed and not game.player.equipment_loadout.is_transitioning(), 16000)
+		if not sheathed:
+			q._fail("Raider approach did not finish sheathing: " + str(_raider_status(q, raider, palm)))
 			return
+		if not await _await_offer(q, raider):
+			q._fail("Raider did not acknowledge the sheathed approach: " + str(_raider_status(q, raider, palm)))
+			return
+		if palm == null or not await _focus(q, palm):
+			q._fail("Waiting Raider could not be focused: " + str(_raider_status(q, raider, palm)))
+			return
+		receipt["hand_focused"] = _raider_status(q, raider, palm)
 		await _press(q, "interact")
 		q._check(raider.resolved_nonlethal and not raider.dead and raider.is_visible_in_tree() and not raider.encounter_active, "Physical road answer did not leave the living Raider in peace")
 		q._check(game.story_state.has_evidence("creature:wychwood_raider"), "Peace did not record the Raider as observed in the bestiary")

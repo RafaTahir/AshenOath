@@ -28,6 +28,7 @@
       "method": "semantic",
       "materials": {
         "M01_PeatSkin": {
+          "authored_albedo": "res://assets_external/design_pack_v1/creatures/textures/M01_ghoulkin_peat_albedo.png",
           "method": "semantic",
           "neutral_color": "#78704b",
           "warm_color": "#95564b",
@@ -594,6 +595,7 @@
       "method": "semantic",
       "materials": {
         "M19_OliveGreyHide": {
+          "authored_albedo": "res://assets_external/design_pack_v1/creatures/textures/M19_raider_woad_albedo.png",
           "method": "semantic",
           "neutral_color": "#90804c",
           "warm_color": "#a86742",
@@ -656,6 +658,7 @@
       "method": "semantic",
       "materials": {
         "M20_CharcoalOliveHide": {
+          "authored_albedo": "res://assets_external/design_pack_v1/creatures/textures/M20_brute_scar_albedo.png",
           "method": "semantic",
           "neutral_color": "#5a7549",
           "warm_color": "#966747",

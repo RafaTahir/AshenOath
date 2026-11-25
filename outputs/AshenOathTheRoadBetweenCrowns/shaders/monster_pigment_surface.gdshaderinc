@@ -3,7 +3,7 @@ vec4 texel = texture(authored_atlas, authored_uv) * authored_tint;
 if (vertex_color_enabled) {
 	texel *= COLOR;
 }
-ALBEDO = monster_pigment(texel.rgb);
+ALBEDO = hand_painted_albedo ? texel.rgb : monster_pigment(texel.rgb);
 if (anatomy_detail != 0 && pigment_strength > 0.0) {
 	vec2 detail_uv = fract(authored_uv);
 	if (anatomy_detail == 1) {

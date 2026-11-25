@@ -25,6 +25,11 @@ PARAMETERS = {
     "highlight_preservation": (0.0, 1.0), "value_gain": (1.0, 1.24),
 }
 PIGMENT_KEYS = {"method", "neutral_color", "warm_color", "cool_color", *PARAMETERS}
+BODY_BAKES = {
+    ("M01", "M01_PeatSkin"): "M01_ghoulkin_peat_albedo.png",
+    ("M19", "M19_OliveGreyHide"): "M19_raider_woad_albedo.png",
+    ("M20", "M20_CharcoalOliveHide"): "M20_brute_scar_albedo.png",
+}
 EVIDENCE = "art_source/art_recovery_v2/evidence/monster_vitality_20261118"
 BASELINE_NAME = "retained_material_baseline.json"
 
@@ -238,6 +243,7 @@ def validate_profiles(project, profiles, contracts, baseline):
     require(baseline.get("schema_version") == 1 and baseline.get("kind") == "immutable_monster_material_baseline",
             "Invalid immutable source baseline")
     require(set(baseline.get("assets", {})) == set(IDS), "Incomplete immutable source baseline")
+    body_hashes = set()
     for aid in IDS:
         row, source = profiles["assets"][aid], contracts[aid]
         require(source == baseline["assets"][aid], aid + ": source/material/texture bytes differ from baseline")
@@ -254,8 +260,20 @@ def validate_profiles(project, profiles, contracts, baseline):
                 aid + ": exact authored material-name coverage differs")
         graded_opaque = 0
         for name, material in row["materials"].items():
-            require(set(material) == PIGMENT_KEYS and material.get("method") == row["method"],
+            filename = BODY_BAKES.get((aid, name))
+            required = PIGMENT_KEYS | {"authored_albedo"} if filename else PIGMENT_KEYS
+            require(set(material) == required and material.get("method") == row["method"],
                     aid + "/" + name + ": unsupported/missing pigment controls")
+            if filename:
+                expected = SOURCE_PREFIX + "textures/" + filename
+                require(material["authored_albedo"] == expected, aid + "/" + name + ": incorrect authored body atlas")
+                raw = resource(project, expected).read_bytes()
+                require(raw.startswith(bytes.fromhex("89504e470d0a1a0a")), expected + ": expected PNG")
+                identity = sha(raw)
+                require(identity not in body_hashes, aid + ": duplicate authored body bake")
+                require(identity != source["materials"][name]["textures"]["albedo"]["sha256"],
+                        aid + ": authored body bake matches the retained native atlas")
+                body_hashes.add(identity)
             for field in ("neutral_color", "warm_color", "cool_color"):
                 require(isinstance(material[field], str) and re.fullmatch(r"#[0-9a-fA-F]{6}", material[field]),
                         aid + "/" + name + ": invalid sRGB color")
@@ -268,6 +286,7 @@ def validate_profiles(project, profiles, contracts, baseline):
             elif alpha_mode == "OPAQUE" and material["strength"] > 0.0:
                 graded_opaque += 1
         require(graded_opaque > 0, aid + ": at least one opaque surface must receive positive pigment strength")
+    require(len(body_hashes) == len(BODY_BAKES), "Incomplete Wychwood body atlas coverage")
 
 
 def live_coverage(project, contracts, profiles):

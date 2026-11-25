@@ -5,6 +5,7 @@ const Bindings = preload("res://scripts/character_material_bindings.gd")
 const MaterialBudget = preload("res://scripts/views/character_material_budget_view.gd")
 var errors: Array[String] = []
 var rows: Array[Dictionary] = []
+var body_pixels: Dictionary = {}
 
 func _initialize() -> void:
 	call_deferred("_run")
@@ -34,7 +35,7 @@ func _run() -> void:
 				if material == null:
 					continue
 				originals.append({"mesh": mesh, "surface": surface, "material": material,
-					"albedo": material.albedo_color, "geometry": mesh.mesh, "skin": mesh.skin,
+					"albedo": material.albedo_color, "atlas": material.albedo_texture, "geometry": mesh.mesh, "skin": mesh.skin,
 					"transform": mesh.transform})
 		_check(Palette.prepare(actor, source), asset_id + ": palette binds")
 		_check(Bindings.capture(actor, source), asset_id + ": binding capture")
@@ -57,7 +58,18 @@ func _run() -> void:
 			known_materials[asset_id + "/" + native.resource_name] = true
 			_check(mesh.mesh == entry.geometry and mesh.skin == entry.skin and mesh.transform == entry.transform, asset_id + ": unchanged mesh/skin/frame")
 			_check(native.albedo_color == entry.albedo, asset_id + ": immutable shared native")
-			_check(Bindings.texture_for(material) == native.albedo_texture, asset_id + ": retained atlas")
+			_check(native.albedo_texture == entry.atlas and material.native_material == native, asset_id + ": original atlas and native material provenance")
+			var recipe: Dictionary = profile.materials[native.resource_name]
+			var active_atlas := Bindings.texture_for(material)
+			_check((material.get_shader_parameter("hand_painted_albedo") == true) == recipe.has("authored_albedo"), asset_id + ": authored body grade bypass")
+			if recipe.has("authored_albedo"):
+				_verify_body_bake(asset_id, str(recipe.authored_albedo), active_atlas, native.albedo_texture)
+			else:
+				_check(active_atlas == native.albedo_texture, asset_id + ": retained atlas")
+			_check(material.get_shader_parameter("authored_uv_scale") == Vector2(native.uv1_scale.x, native.uv1_scale.y), asset_id + ": retained native UV scale")
+			_check(material.get_shader_parameter("authored_uv_offset") == Vector2(native.uv1_offset.x, native.uv1_offset.y), asset_id + ": retained native UV offset")
+			_check(is_equal_approx(float(material.get_shader_parameter("authored_roughness")), native.roughness), asset_id + ": retained roughness factor")
+			_check(is_equal_approx(float(material.get_shader_parameter("authored_metallic")), native.metallic), asset_id + ": retained metallic factor")
 			_check(material.get_shader_parameter("authored_tint") == native.albedo_color, asset_id + ": retained alpha/tint")
 			_check(material.get_shader_parameter("authored_normal") == native.normal_texture, asset_id + ": retained normal texture")
 			_check(is_equal_approx(float(material.get_shader_parameter("authored_normal_scale")), native.normal_scale), asset_id + ": retained normal scale")
@@ -93,6 +105,7 @@ func _run() -> void:
 		actor.free()
 	_check(profiles.size() == 20 and rows.size() == 20, "all twenty native species")
 	_check(known_materials.size() == 43, "all 43 authored material identities")
+	_check(body_pixels.size() == 3 and body_pixels.has("M01") and body_pixels.has("M19") and body_pixels.has("M20"), "three distinct Wychwood body bakes")
 	Palette.clear_material_cache()
 	_check(Palette._variants.is_empty(), "streamed-zone material cache releases deferred texture references")
 	var result := {"kind": "monster_material_runtime_contract", "passed": errors.is_empty(),
@@ -107,6 +120,22 @@ func _run() -> void:
 		file.store_string(JSON.stringify(result, "\t") + "\n")
 	print(JSON.stringify(result))
 	quit(0 if errors.is_empty() else 1)
+
+func _verify_body_bake(id: String, path: String, texture: Texture2D, native: Texture2D) -> void:
+	if texture == null or texture == native or texture.resource_path != path or texture != load(path):
+		_check(false, id + ": wrong active authored body texture: " + path)
+		return
+	if body_pixels.has(id): return
+	var image := texture.get_image()
+	if image == null or image.is_empty() or (image.is_compressed() and image.decompress() != OK):
+		_check(false, id + ": cannot decode authored body pixels")
+		return
+	image.clear_mipmaps()
+	image.convert(Image.FORMAT_RGBA8)
+	var pixels := image.get_data()
+	for prior: String in body_pixels:
+		_check(body_pixels[prior] != pixels, id + ": decoded body pixels duplicate " + prior)
+	body_pixels[id] = pixels
 
 func _verify_universal_budget() -> void:
 	var native := StandardMaterial3D.new()

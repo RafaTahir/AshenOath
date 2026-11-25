@@ -1,5 +1,6 @@
 // Pigment changes use the retained atlas; lighting and surface detail stay native.
 uniform sampler2D authored_atlas : source_color, filter_linear_mipmap, repeat_enable;
+uniform bool hand_painted_albedo = false;
 uniform vec4 authored_tint : source_color = vec4(1.0);
 uniform bool vertex_color_enabled = false;
 uniform vec2 authored_uv_scale = vec2(1.0);

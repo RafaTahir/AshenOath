@@ -136,6 +136,12 @@ def optimize_menu_png(export_dir: Path) -> None:
         print(f"Lossless menu PNG: {len(original)} -> {len(packed)} bytes")
 
 
+def bind_root_pack_size(sizes: dict, root: Path) -> None:
+    """The engine's progress contract uses the final decoded pack length."""
+    payload = root.read_bytes()
+    sizes["index.pck"] = len(gzip.decompress(payload) if payload.startswith(b"\x1f\x8b") else payload)
+
+
 def prepare_engine_transport(export_dir: Path) -> dict:
     """Give unchanged engine bytes an immutable URL independent of game releases."""
     names = ("index.js", "index.wasm", "index.audio.worklet.js", "index.audio.position.worklet.js")
@@ -163,7 +169,8 @@ def prepare_engine_transport(export_dir: Path) -> dict:
     config = json.loads(match.group(1))
     config["executable"] = stem
     config["mainPack"] = "index.pck"
-    sizes = config.get("fileSizes", {})
+    sizes = config.setdefault("fileSizes", {})
+    bind_root_pack_size(sizes, export_dir / "index.pck")
     if "index.wasm" in sizes:
         sizes[stem + ".wasm"] = sizes.pop("index.wasm")
     text = text[:match.start(1)] + json.dumps(config, separators=(",", ":")) + text[match.end(1):]

@@ -302,6 +302,14 @@ func _verify_materials() -> void:
 				_check(str(material.source_path) == source, "Wrong material source: " + id)
 				_check(str(material.palette_revision) == str(data.palette_revision), "Wrong material revision: " + id)
 				_check(material.native_material != null and material.native_material.albedo_texture != null, "Missing retained native atlas: " + id)
+				var recipe: Dictionary = data.assets[id].materials.get(material.resource_name, {})
+				var atlas := material.get_shader_parameter("authored_atlas") as Texture2D
+				_check((material.get_shader_parameter("hand_painted_albedo") == true) == recipe.has("authored_albedo"), "Incorrect mounted body grade bypass: " + id)
+				if recipe.has("authored_albedo"):
+					var path := str(recipe.authored_albedo)
+					_check(atlas != null and atlas.resource_path == path and atlas == load(path) and atlas != material.native_material.albedo_texture, "Incorrect mounted Wychwood body bake: " + id)
+				else:
+					_check(atlas == material.native_material.albedo_texture, "Incorrect mounted native atlas: " + material.resource_name)
 				var expected := int(DETAIL_BY_SURFACE.get(material.resource_name, 0))
 				var actual: Variant = material.get_shader_parameter("anatomy_detail")
 				_check((int(actual) if actual != null else 0) == expected, "Wrong Wychwood detail binding: " + material.resource_name)

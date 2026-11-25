@@ -1,8 +1,12 @@
+import gzip
 import hashlib
+import json
+import re
 import tempfile
 import unittest
 from pathlib import Path
 
+from build_web_runtime_manifest import prepare_engine_transport
 from verify_web_export import engine_paths, verify_pack_files
 
 
@@ -59,6 +63,22 @@ class PackCompleteness(unittest.TestCase):
 
     def test_invalid_manifest_fails(self):
         self.assertIn("must be an object", " ".join(verify_pack_files(self.root, [])))
+
+    def test_shell_uses_final_decoded_root_size(self):
+        # Voice indexing changes the archive after Godot writes the shell.
+        initial_root = b"GDPCshort"
+        indexed_root = initial_root + b"indexed voice" * 30
+        encoded_root = gzip.compress(indexed_root, mtime=0)
+        (self.root / "index.pck").write_bytes(encoded_root)
+        (self.root / "index.js").write_text("const engine = {};", encoding="utf-8")
+        (self.root / "index.wasm").write_bytes(b"\x00asm")
+        original = {"executable": "index", "fileSizes": {"index.pck": len(initial_root), "index.wasm": 4}}
+        shell = self.root / "index.html"
+        shell.write_text('const GODOT_CONFIG = ' + json.dumps(original) + ';\n<script src="index.js"></script>', encoding="utf-8")
+        engine = prepare_engine_transport(self.root)
+        config = json.loads(re.search(r"const GODOT_CONFIG\s*=\s*(\{[^\n]+\});", shell.read_text(encoding="utf-8")).group(1))
+        self.assertEqual(config["fileSizes"], {engine["wasm"]: 4, "index.pck": len(indexed_root)})
+        self.assertNotEqual(len(encoded_root), config["fileSizes"]["index.pck"])
 
     def test_addressed_engine_layout_retains_all_required_files(self):
         stem = "engine/" + "a" * 24 + "/index"
