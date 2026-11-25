@@ -44,6 +44,32 @@ def read_surface(path, material):
             accessor(attrs["TEXCOORD_0"]), accessor(surface["indices"]).reshape(-1, 3))
 
 
+def exterior_last(pos, triangles):
+    # The original skin includes tiny inner-eye inserts. One uses more than
+    # half a UV tile that is also used by the visible head, torso and limbs.
+    # Rank connected shells by physical surface area, independent of import
+    # order. Weld UV-seam vertices for connectivity only.
+    points, weld = np.unique(pos.round(5), axis=0, return_inverse=True)
+    parents = np.arange(len(points))
+
+    def root(index):
+        while parents[index] != index:
+            parents[index] = parents[parents[index]]
+            index = parents[index]
+        return index
+
+    for a, b, c in weld[triangles]:
+        parent = root(a)
+        parents[root(b)] = parent
+        parents[root(c)] = parent
+    shells = np.array([root(v) for v in weld[triangles[:, 0]]])
+    mesh = pos[triangles]
+    areas = np.linalg.norm(np.cross(mesh[:, 1] - mesh[:, 0], mesh[:, 2] - mesh[:, 0]), axis=1)
+    shell_areas = np.bincount(shells, weights=areas)
+    order = np.argsort(shell_areas[shells], kind="stable")
+    return triangles[order], triangles[shells == np.argmax(shell_areas)]
+
+
 def rasterize(pos, norm, uv, triangles):
     # Wrap only at the final pixel address. Interpolating already-wrapped UVs
     # would stretch triangles crossing the repeat boundary over the whole hide.
@@ -191,9 +217,20 @@ def paint(identity, sample):
 
 
 def bake(identity, material, name, output):
-    positions, coverage = rasterize(*read_surface(next(CREATURES.glob(identity + "_*.glb")), material))
+    pos, normals, uv, triangles = read_surface(next(CREATURES.glob(identity + "_*.glb")), material)
+    ordered, exterior = exterior_last(pos, triangles)
+    positions, coverage = rasterize(pos, normals, uv, ordered)
     rgb = np.zeros((SIZE,SIZE,3), np.uint8)
     rgb[coverage] = paint(identity, positions)
+    # Triangles sharing a texel must yield the same visible skin location.
+    # Catch an inner-eye overwrite, a flipped V, or a reordered exterior.
+    bind = np.zeros((SIZE, SIZE, 3), np.float32)
+    bind[coverage] = positions[:, :3]
+    mid = (uv[exterior].mean(axis=1) * SIZE).astype(int) % SIZE
+    error = np.linalg.norm(bind[mid[:, 1], mid[:, 0]] - pos[exterior].mean(axis=1), axis=1)
+    p90 = np.percentile(error, 90)
+    if p90 > 0.018:
+        raise ValueError(f"{identity}: exterior bind-position error at 90th percentile: {p90:.4f}")
     # Bleed island edges into the gutter for bilinear sampling and mipmaps.
     valid = coverage.copy()
     for _ in range(9):
@@ -209,7 +246,7 @@ def bake(identity, material, name, output):
     rgb[~valid] = np.median(rgb[coverage],axis=0).astype(np.uint8)
     output.mkdir(parents=True, exist_ok=True)
     Image.fromarray(rgb).save(output / name, optimize=True)
-    print(identity, int(coverage.sum()), name, flush=True)
+    print(identity, int(coverage.sum()), name, f"exterior p90 error {p90:.5f}", flush=True)
 
 
 if __name__ == "__main__":
