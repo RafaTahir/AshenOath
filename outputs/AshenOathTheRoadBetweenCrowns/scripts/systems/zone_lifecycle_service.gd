@@ -735,13 +735,19 @@ func _set_single_zone_collision_enabled(node: Node, enabled: bool) -> void:
 
 func _schedule_zone_autosave() -> void:
 	var expected_zone: String = current_zone_id
-	var delay_timer := _create_owned_timer(0.35)
-	delay_timer.timeout.connect(func():
-		if opening_checkpoint_pending:
+	var generation := journey_arrival_generation
+	var expected_root := zone_root
+	while true:
+		await _create_owned_timer(0.35).timeout
+		if resource_shutdown_prepared or not game_started or opening_checkpoint_pending or _journey_load_pending():
 			return
-		if not resource_shutdown_prepared and game_started and player != null and is_instance_valid(player) and current_zone_id == expected_zone and world_transition.autosave_allowed() and not player.transition_locked and save_manager != null:
+		if generation != journey_arrival_generation or current_zone_id != expected_zone or not is_instance_valid(expected_root) or zone_root != expected_root:
+			return
+		if world_transition.state == world_transition.State.PRELOADING_ADJACENT:
+			continue
+		if is_instance_valid(player) and not player.transition_locked and world_transition.autosave_allowed() and save_manager != null:
 			save_manager.autosave(_host)
-	)
+		return
 
 func _clear_route_zone_cache(preserve_root: Node3D = null) -> void:
 	if seamless_world != null: seamless_world.cancel_preparation()

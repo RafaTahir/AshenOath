@@ -1,5 +1,16 @@
 # A Cohesive Ashen Oath
 
+## Delivery checkpoints, 26 November 2026
+
+| Checkpoint | Status and evidence | Remaining delivery tasks |
+| --- | --- | ---: |
+| 1. Branch sync | Complete. Development fast-forwarded from `f522f3c` through all 16 commits on main to `0cccd3f`, including the four Wychwood hunts. | 3 |
+| 2. Startup | Source complete. Both release manifests download together. Services, UI and Greyfen scenery can prepare while actor packs transfer. The optional cemetery soldier loads at the tracks before their clue can be consumed. Saved and returning Greyfen retain the full cast. Incoming Balanced size was 79,224,226 bytes. | 2 |
+| 3. World travel | Source complete. Every eligible physical road uses the selected destination on approach. Construction starts within 18 m and persists to 22 m on retreat. Cold roads retain ordinary pack-ready travel. Ruins construction now has four stages, and an active-zone autosave delayed by adjacent construction is retried for the same arrival. | 1 |
+| 4. Publication | In progress. Export the production root and changed adjacent script, retain the other packed assets, then push development and main. | |
+
+Player acceptance is tracked separately: cold start to first control, cold and cached crossings and reversals, Continue on existing saves, endings and homecoming, dialogue and character presentation, and sustained frame rate and memory.
+
 ## Opening download and the northern forest road, 2026-11-24
 
 The opening pack previously included modular roofs and a wall used by later castle scenery. Greyfen's houses use the four authored house meshes. Its shrine arch and other village pieces still use the shared wood trim. The environment dependency compiler assigns three modules and eight exclusive texture imports to the masonry pack. Their compiled payloads and bindings carry over intact. The castle approach and courtyard request this pack through ordinary travel and selected Continue. The road scheduler can prepare the wall mesh on approach without requesting it when entering Bandit Road.

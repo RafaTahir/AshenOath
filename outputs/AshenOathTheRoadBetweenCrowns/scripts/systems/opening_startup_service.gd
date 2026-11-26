@@ -247,25 +247,21 @@ func _on_opening_pack_progress(pack_id: String, progress: float) -> void:
 func _on_startup_pack_ready(_pack_id: String) -> void:
 	if game_started or startup_prepare_failed or not startup_packs_waiting or runtime_packs == null:
 		return
-	if not runtime_packs.startup_packs_ready():
-		return
-	print("LOADING: startup_pack_ready source=signal id=%s" % _pack_id)
-	startup_packs_waiting = false
-	_begin_opening_prewarm()
+	_begin_opening_prewarm_if_ready(opening_prepare_generation)
 
 func _begin_opening_prewarm_if_ready(generation: int) -> void:
-	if not _opening_attempt_current(generation) or not startup_packs_waiting \
-			or greyfen_prewarm_started or runtime_packs == null:
+	if not _opening_attempt_current(generation) or not startup_packs_waiting or runtime_packs == null:
 		return
-	if runtime_packs.has_method("startup_packs_ready") and runtime_packs.startup_packs_ready():
-		print("LOADING: startup_pack_ready source=deferred")
-		startup_packs_waiting = false
+	# The common pack owns Greyfen scenery. Its preparation can overlap actor downloads.
+	if runtime_packs.is_ready("opening"):
 		_begin_opening_prewarm()
+	if runtime_packs.startup_packs_ready():
+		startup_packs_waiting = false
 
 func _wait_for_startup_packs_then_prewarm(generation: int) -> void:
 	var deadline := Time.get_ticks_msec() + 120000
 	while Time.get_ticks_msec() < deadline:
-		if not _opening_attempt_current(generation):
+		if not _opening_attempt_current(generation) or not startup_packs_waiting:
 			return
 		if runtime_packs != null and runtime_packs.has_method("startup_packs_ready") and runtime_packs.startup_packs_ready():
 			startup_packs_waiting = false
@@ -285,8 +281,6 @@ func _wait_for_startup_packs_then_prewarm(generation: int) -> void:
 func _begin_opening_prewarm() -> void:
 	if game_started or greyfen_prewarm_started or _journey_load_pending() or route_zone_cache.has("greyfen"):
 		return
-	if runtime_packs != null:
-		for pack: String in runtime_packs.required_startup_packs(): world_transition.pack_mounted(pack, opening_prepare_generation)
 	greyfen_prewarm_started = true
 	_host.call_deferred("_prepare_opening_services", opening_prepare_generation)
 
@@ -318,6 +312,15 @@ func _prepare_opening_services(generation: int) -> void:
 	if environment_status != OK:
 		_opening_prepare_failed("Greyfen's environment could not be prepared. %s Select Retry to try again." % asset_helper.resource_prewarm_error)
 		return
+	# Actor bodies and quality-specific materials belong to other packs. The
+	# download owner handles Retry and invalidates this generation on failure.
+	while startup_packs_waiting and _opening_attempt_current(generation):
+		await _host.get_tree().process_frame
+	if not _opening_attempt_current(generation):
+		return
+	if runtime_packs != null:
+		for pack: String in runtime_packs.required_startup_packs():
+			world_transition.pack_mounted(pack, generation)
 	if DisplayServer.get_name().to_lower() != "headless":
 		world_materials.prewarm_surfaces(world_materials.PBR_SURFACE_IDS, str(settings.settings.get("quality_preset", "balanced")))
 		var props_status: Error = asset_helper.request_resource_paths(CharacterPresentation.OPENING_OCCUPATION_PROP_PATHS)

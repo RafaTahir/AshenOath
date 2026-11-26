@@ -1,18 +1,40 @@
 extends RefCounted
 
+func step_count(_zone_id: String) -> int:
+	return 4
+
+func build_step(context: ZoneBuildContext, index: int) -> bool:
+	match index:
+		0: _ground_and_lights(context)
+		1: _walls(context)
+		2: _pillars_and_rubble(context)
+		3: _routes_and_encounters(context)
+		_: return false
+	return true
+
 func build(context: ZoneBuildContext) -> void:
+	for index in range(step_count(context.zone_id)):
+		build_step(context, index)
+
+func _ground_and_lights(context: ZoneBuildContext) -> void:
 	context.make_ground(Vector3(0, -0.08, 0), Vector3(48, 0.16, 42), Color(0.13, 0.13, 0.13))
 	context.make_play_area_bounds(48.0, 42.0, Color(0.075, 0.075, 0.075))
 	context.make_road(Vector3(-5, 0.018, 3), Vector3(24.0, 0.04, 4.0), Color(0.09, 0.08, 0.075))
 	context.make_light("Ruin Fire", Vector3(-4, 4, -5), Color(0.9, 0.42, 0.22), 4.0)
 	context.make_torch(Vector3(-6.5, 0, -4.5))
 	context.make_torch(Vector3(6.5, 0, -4.0))
+
+func _walls(context: ZoneBuildContext) -> void:
 	for pos in [Vector3(-8,0,-5), Vector3(0,0,-8), Vector3(8,0,-4), Vector3(0,0,8)]:
 		context.make_prop_box("BrokenWall", pos + Vector3(0,1,0), Vector3(5,2,0.7), Color(0.24,0.24,0.23))
+
+func _pillars_and_rubble(context: ZoneBuildContext) -> void:
 	for pos in [Vector3(-10,0,-10), Vector3(-5,0,-11), Vector3(5,0,-11), Vector3(10,0,-10), Vector3(-10,0,7), Vector3(10,0,7)]:
 		context.make_pillar(pos)
 	for pos in [Vector3(-1,0,-6.5), Vector3(1,0,-6.2), Vector3(3,0,-6.8)]:
 		context.make_rubble(pos)
+
+func _routes_and_encounters(context: ZoneBuildContext) -> void:
 	var late_road: bool = context.is_quest_unlocked("main_hart_remembers") or context.is_quest_active("main_hart_remembers") or bool(context.get_story_flag("final_choice_completed", false))
 	if late_road:
 		context.make_road(Vector3(-15,0.018,5), Vector3(16,0.04,3.2), Color(0.12,0.14,0.10))

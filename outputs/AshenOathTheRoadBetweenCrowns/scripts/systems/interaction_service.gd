@@ -2,6 +2,24 @@ extends "res://scripts/systems/game_bindings.gd"
 ## Owns interaction operations; configure() injects dependencies.
 signal interaction_focus_updated(target: Node)
 
+func _wait_for_soldier_at_tracks(area: Area3D, pack: String) -> void:
+	if area.get_meta("waiting_for_soldier", false):
+		return
+	area.set_meta("waiting_for_soldier", true)
+	var requested: bool = runtime_packs.retry_pack(pack, 0) if runtime_packs.get_state(pack) in ["cancelled", "failed"] else runtime_packs.request_pack(pack, 0)
+	while requested and is_instance_valid(area) and active_interactable == area and not resource_shutdown_prepared:
+		if runtime_packs.is_ready(pack):
+			area.remove_meta("waiting_for_soldier")
+			_systems["session"]._dispatch_gameplay_action("interact", area.get_instance_id())
+			return
+		if runtime_packs.get_state(pack) in ["failed", "cancelled"] or _journey_load_pending():
+			break
+		await _host.get_tree().process_frame
+	if is_instance_valid(area):
+		area.remove_meta("waiting_for_soldier")
+		if active_interactable == area and not resource_shutdown_prepared and runtime_packs.get_state(pack) == "failed":
+			hud.toast("The soldier could not be loaded. Use the tracks to retry.")
+
 func _handle_interaction(area) -> void:
 	if area != null and area.interaction_type == "road_status":
 		if seamless_world != null: seamless_world.request_road(str(area.zone_target),true)
@@ -15,6 +33,11 @@ func _handle_interaction(area) -> void:
 	if area != null and area.interaction_type == "story_activity":
 		preload("res://scripts/story_activity_director.gd").handle(_host, area)
 		return
+	if area != null and area.interaction_id == "empty_grave_tracks" and OS.has_feature("web"):
+		var pack: String = runtime_packs.actor_pack("returned_soldier")
+		if not runtime_packs.is_ready(pack):
+			_wait_for_soldier_at_tracks(area, pack)
+			return
 	var prop_activated := false
 	if world_props != null and area != null and area.has_meta("world_prop_id"):
 		prop_activated = world_props.activate_prop(str(area.get_meta("world_prop_id", "")))
@@ -392,6 +415,10 @@ func _update_interaction_focus() -> void:
 		compass_dirty = true
 		if active_interactable != null:
 			_set_interactable_label_visible(active_interactable,true)
+			if OS.has_feature("web") and active_interactable.interaction_id == "empty_grave_tracks":
+				var pack: String = runtime_packs.actor_pack("returned_soldier")
+				if not runtime_packs.is_ready(pack) and runtime_packs.get_state(pack) != "failed":
+					runtime_packs.request_pack(pack)
 	_systems["session"]._publish_interaction_prompt()
 	interaction_focus_dirty = false
 	interaction_focus_cache_valid = true

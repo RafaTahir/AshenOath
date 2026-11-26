@@ -482,13 +482,17 @@
         } finally { window.clearTimeout(timeout); }
       }
       async function readPackManifest(signal) {
-          const releaseResponse = await fetch('release_manifest.json', { cache: 'no-cache', signal });
-          if (!releaseResponse.ok) throw new Error(`release manifest HTTP ${releaseResponse.status}`);
-          const release = await releaseResponse.json();
+          const [release, manifestPayload] = await Promise.all([
+            fetch('release_manifest.json', { cache: 'no-cache', signal }).then(response => {
+              if (!response.ok) throw new Error(`release manifest HTTP ${response.status}`);
+              return response.json();
+            }),
+            fetch('runtime_pack_manifest.json', { cache: 'no-cache', signal }).then(response => {
+              if (!response.ok) throw new Error(`runtime pack manifest HTTP ${response.status}`);
+              return response.arrayBuffer();
+            }),
+          ]);
           if (String(release?.build_id || '') !== SHELL_BUILD_ID) throw new Error('Page/release identity mismatch');
-          const manifestResponse = await fetch('runtime_pack_manifest.json', { cache: 'no-cache', signal });
-          if (!manifestResponse.ok) throw new Error(`runtime pack manifest HTTP ${manifestResponse.status}`);
-          const manifestPayload = await manifestResponse.arrayBuffer();
           const manifestDigest = await sha256Hex(manifestPayload);
           if (manifestDigest !== String(release?.runtime_pack_manifest?.sha256 || '').toLowerCase()) throw new Error('Runtime manifest hash mismatch');
           const manifest = JSON.parse(new TextDecoder().decode(manifestPayload));
