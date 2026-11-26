@@ -7,9 +7,20 @@
 | 1. Branch sync | Complete. Development fast-forwarded from `f522f3c` through all 16 commits on main to `0cccd3f`, including the four Wychwood hunts. | 3 |
 | 2. Startup | Source complete. Both release manifests download together. Services, UI and Greyfen scenery can prepare while actor packs transfer. The optional cemetery soldier loads at the tracks before their clue can be consumed. Saved and returning Greyfen retain the full cast. Incoming Balanced size was 79,224,226 bytes. | 2 |
 | 3. World travel | Source complete. Every eligible physical road uses the selected destination on approach. Construction starts within 18 m and persists to 22 m on retreat. Cold roads retain ordinary pack-ready travel. Ruins construction now has four stages, and an active-zone autosave delayed by adjacent construction is retried for the same arrival. | 1 |
-| 4. Publication | In progress. Export the production root and changed adjacent script, retain the other packed assets, then push development and main. | |
+| 4. Publication | Production package `first-road-20261126t152557z` from source `9ac7749`. This checkpoint ships with the package on development and main. | 0 on main |
 
-Player acceptance is tracked separately: cold start to first control, cold and cached crossings and reversals, Continue on existing saves, endings and homecoming, dialogue and character presentation, and sustained frame rate and memory.
+**Release contents.** The full Web export is 178,226,010 bytes. Balanced opening dependencies total 77,649,853 bytes, down 1,574,373 bytes from the incoming release. Quality totals 84,804,817 bytes. At 20 Mbps, the Balanced files alone take at least 31.06 seconds to transfer. First control also depends on decompression, construction and rendering.
+
+The export compiled all 24 registered services. Seven Wychwood script IDs now match the previous production package across checkouts. The engine and all actor packs retain their incoming artifact hashes. The packager retained the previous Web files for rollback. Package identities are recorded in the [release manifest](../../web/release_manifest.json).
+
+**Player acceptance remaining**
+
+| Area | What remains to observe |
+| --- | --- |
+| Startup | Time a cold Balanced start to the first controllable frame against the 32-second goal. |
+| Travel | Cross and reverse on cold and cached roads, starting with Greyfen, Wychwood and Deep Wood. Check control and footing when turning back during preparation. |
+| Saved campaign | Continue an existing save, complete the optional grave-track encounter, and review the six supported endings across both revisions and their homecomings. |
+| Presentation and performance | Review character appearance, dialogue and audio, phone controls, sustained frame rate and peak private memory. |
 
 ## Opening download and the northern forest road, 2026-11-24
 
