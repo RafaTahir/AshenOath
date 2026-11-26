@@ -13,7 +13,9 @@
 
 The export compiled all 24 registered services. Seven Wychwood script IDs now match the previous production package across checkouts. The engine and all actor packs retain their incoming artifact hashes. The packager retained the previous Web files for rollback. Package identities are recorded in the [release manifest](../../web/release_manifest.json).
 
-**Player acceptance remaining**
+**Accepted on 26 November 2026.** Rafa accepted release `7248219`, closing the startup and world-travel handoff with zero delivery tasks remaining. The 32-second target for first control remains unmeasured.
+
+**Player review checklist retained for reference**
 
 | Area | What remains to observe |
 | --- | --- |
