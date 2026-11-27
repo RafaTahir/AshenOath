@@ -95,6 +95,7 @@ func refresh() -> void:
 		area.set_interaction_enabled(enabled)
 		if not enabled: game._remove_interaction_candidate(area)
 	game.interaction_focus_dirty = true
+	preload("res://scripts/views/novel/field_performances.gd").project(self)
 
 static func resolve_beat(base: Dictionary, state: Node, quests: Node) -> Dictionary:
 	for variant: Dictionary in base.get("variants",[]):

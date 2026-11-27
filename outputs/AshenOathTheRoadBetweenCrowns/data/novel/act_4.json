@@ -391,17 +391,9 @@
             4.6
           ],
           "object": "linen",
-          "prompt": "Wrap the pages before answering the Hart",
+          "prompt": "Wrap the human copies in dry linen",
           "seconds": 1.6,
-          "result": "Take what people can bear away with them. Leave room for an answer only this witness can give.",
-          "when": {
-            "objectives": [
-              [
-                "main_hart_remembers",
-                "hear_testimony"
-              ]
-            ]
-          }
+          "result": "Vale folds the tally inward. These names can travel even after the grass falls quiet."
         }
       ]
     },
@@ -1135,6 +1127,34 @@
       ]
     },
     {
+      "id": "hart_invitation",
+      "chapter": 33,
+      "title": "The witness lowers its head",
+      "when": {
+        "objectives": [
+          [
+            "main_hart_remembers",
+            "enter_glade"
+          ]
+        ],
+        "before_covenant": true
+      },
+      "beats": [
+        {
+          "zone": "hart_glade",
+          "actor": "white_hart",
+          "speaker": "White Hart",
+          "prompt": "Show me the road as it was",
+          "line": "The Hart lowers its muzzle. In the grass beneath it, a wheel turns half a spoke. “Walk beside them. I can give you the road I stood on.”",
+          "reply": "Step onto the old road",
+          "result": "A strand of wool catches on a spoke at the edge of the circle. The covenant can wait.",
+          "set": {
+            "novel_hart_showed_road": true
+          }
+        }
+      ]
+    },
+    {
       "chapter": 33,
       "id": "old_gate_memory",
       "title": "Where the road waited",
@@ -1142,10 +1162,13 @@
         "objectives": [
           [
             "main_hart_remembers",
-            "hear_testimony"
+            "enter_glade"
           ]
         ],
-        "before_covenant": true
+        "before_covenant": true,
+        "flags": {
+          "novel_hart_showed_road": true
+        }
       },
       "beats": [
         {

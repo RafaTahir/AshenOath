@@ -116,6 +116,14 @@ func _initialize() -> void:
 	var story=game.story_state
 	_check(story.get_flag("novel_edition",0)==1,"New literary edition loaded")
 	var layer: Node = game.zone_root.get_node_or_null("StoryActivities/NovelScenes")
+	if scene_key=="old_gate_memory" and layer!=null:
+		_check(not layer.turns.has(scene_key) and not game.quests.is_objective_done("main_hart_remembers","hear_testimony"),"Arrival alone grants no memory")
+		await _interact("white_hart")
+		await _dialogue_button("Show me the road as it was")
+		await _dialogue_button("Step onto the old road")
+		var until := Time.get_ticks_msec()+15000
+		while not layer.turns.has(scene_key) and Time.get_ticks_msec()<until and failures.is_empty(): await process_frame
+		_check(story.get_flag("novel_hart_showed_road",false),"The living Hart opened the road")
 	if layer==null or not layer.turns.has(scene_key):
 		_fail("Required scene absent on actual restored sector: "+scene_key)
 		await _finish()
@@ -138,7 +146,9 @@ func _initialize() -> void:
 	if failures.is_empty():
 		_check(bool(story.get_flag("novel_done_"+scene_key,false)),"Reached the scene consequence")
 		if scene_key=="omitted_return": _check(story.get_flag("novel_kael_correction","")=="declined","The refusal survived the protected record handover")
-		if scene_key=="old_gate_memory": _check(story.get_flag("novel_hart_question","")=="escort","The Hart answered within its own witnessed history")
+		if scene_key=="old_gate_memory":
+			_check(game.quests.is_objective_done("main_hart_remembers","hear_testimony") and str(story.get_flag("final_covenant",""))=="","The testimony leaves every covenant open")
+			_check(story.get_flag("novel_hart_question","")=="escort","The Hart answered within its own witnessed history")
 		if scene_key=="spring_open_road": _check(int(game.day_night.day_count)==original_day+180,"Explicit spring visit advanced 180 days once")
 		await RenderingServer.frame_post_draw
 		_check(root.get_texture().get_image().save_png(output.path_join(scene_key+".png"))==OK,"Recorded the playable scene")

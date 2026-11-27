@@ -1,6 +1,6 @@
 extends SceneTree
 
-const Requirements = preload("res://scripts/novel/field_pack_requirements.gd")
+const Requirements = preload("res://scripts/core/novel/field_pack_requirements.gd")
 const WILLOW := ["novel_field_willow"]
 const GALLERY := ["novel_field_gallery"]
 const CULVERT := ["novel_field_culvert"]

@@ -50,6 +50,7 @@ static func record_step(state: Node, quests: Node, scene: Dictionary, beat: Dict
 	if index+1 == scene.beats.size():
 		state.set_flag("novel_done_"+id,true)
 		finish_scene(quests,id)
+		if id == "old_gate_memory": quests.complete_objective("main_hart_remembers","hear_testimony")
 	state.end_change()
 	return true
 

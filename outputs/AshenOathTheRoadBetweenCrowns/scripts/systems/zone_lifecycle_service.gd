@@ -75,17 +75,16 @@ func _perform_direct_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
 
 func _perform_requested_zone_load() -> void:
 	var destination := requested_zone_id
-	var arrival := requested_zone_spawn
 	zone_load_request_pending = false
 	requested_zone_id = ""
-	_load_zone_after_runtime_pack(destination, arrival)
+	_load_zone_after_runtime_pack(destination, requested_zone_spawn)
 
 func _zone_encounter_packs(zone_id: String, recorded_journey: Dictionary = {}) -> Array[String]:
 	var encounter_packs: Array[String] = []
 	var flags: Dictionary = story_state.flags if recorded_journey.is_empty() else recorded_journey.get("story_state",{}).get("flags",{})
 	var completed: Dictionary = quests.completed if recorded_journey.is_empty() else recorded_journey.get("quests",{}).get("completed",{})
 	if preload("res://scripts/campaign_story_overlay.gd").required_for(zone_id,flags,completed): encounter_packs.append("community")
-	encounter_packs.append_array(preload("res://scripts/novel/field_pack_requirements.gd").for_zone(zone_id,flags,completed))
+	encounter_packs.append_array(preload("res://scripts/core/novel/field_pack_requirements.gd").for_zone(zone_id,flags,completed))
 	if zone_id != "greyfen":
 		return encounter_packs
 	var bell_pending: bool

@@ -85,6 +85,13 @@ func replay(route: String, alternate: bool) -> void:
 		if chapter == "main_road_of_crows": state.set_flag("evidence_report","private" if alternate else "public")
 		if chapter == "main_soldier_without_banner": state.set_flag("senn_fate","exile" if alternate else "testimony")
 		if chapter == "main_last_witness": state.set_flag("halvern_fate","released" if alternate else "witness")
+		if chapter == "main_hart_remembers":
+			quests.complete_objective(chapter,"enter_glade")
+			expect(not Scenes.matches_rule(catalog.old_gate_memory.when,state,quests),"physical arrival does not invent the witness")
+			perform("human_copies",quests,state,alternate)
+			perform("hart_invitation",quests,state,alternate)
+			perform("old_gate_memory",quests,state,alternate)
+			expect(quests.is_objective_done(chapter,"hear_testimony") and state.get_flag("final_covenant","")=="","hearing precedes covenant")
 		for objective: Dictionary in quests.quest_defs[chapter].objectives:
 			if objective.id.begins_with("novel_") or objective.get("optional",false): continue
 			if quests.is_choice_objective(chapter,objective.id): quests.complete_choice(chapter,objective.id)
