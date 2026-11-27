@@ -264,8 +264,10 @@ func _start_new_game_world() -> void:
 		return
 	new_game_start_pending = false
 	save_manager.begin_new_journey()
-	quests.configure_campaign_revision(revision)
+	quests.configure_campaign_revision(revision, revision == preload("res://scripts/campaign_revision.gd").EXPANDED)
 	story_state.set_flag("campaign_revision", revision)
+	if revision == preload("res://scripts/campaign_revision.gd").EXPANDED:
+		story_state.set_flag("novel_edition", 1)
 	hud.load_text_history([])
 	if hud != null and hud.has_method("set_new_game_ready"):
 		hud.set_new_game_ready(true)

@@ -9,7 +9,7 @@ const Routes = preload("res://scripts/story_route_catalog.gd")
 static func describe(data: Dictionary, recorded: Dictionary, quest_defs: Dictionary, item_defs: Dictionary) -> Dictionary:
 	var quests = QuestView.new()
 	quests.source_quest_defs = quest_defs
-	if not quests.configure_campaign_revision(preload("res://scripts/campaign_revision.gd").from_save(data)):
+	if not quests.configure_campaign_revision(preload("res://scripts/campaign_revision.gd").from_save(data), preload("res://scripts/novel/novel_campaign.gd").saved_edition(data)):
 		quests.quest_defs = quest_defs.duplicate(true)
 	quests.load_state(data.get("quests", {}))
 	var story = StoryView.new()

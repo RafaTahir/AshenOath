@@ -1,0 +1,880 @@
+{
+  "version": 1,
+  "act": 4,
+  "scenes": [
+    {
+      "chapter": 28,
+      "id": "dry_floor",
+      "title": "Before anyone sleeps here",
+      "when": {
+        "objectives": [
+          [
+            "main_house_many_names",
+            "reach_hearthward"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            3.5,
+            2.8
+          ],
+          "object": "water",
+          "prompt": "Test the washhouse roof with a bucket",
+          "seconds": 1.7,
+          "result": "You wait below. The floor where the records will stand stays dry."
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            -6,
+            4.5
+          ],
+          "object": "sill",
+          "prompt": "Fit the latch so the sleeping-room door shuts",
+          "seconds": 2,
+          "result": "The woman at the head of the queue closes it herself. A door she cannot close from inside is no use to her."
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            -4.7,
+            5.6
+          ],
+          "object": "bedding",
+          "prompt": "Make up the first bed and receive the arrivals",
+          "seconds": 2.4,
+          "result": "A blanket laid on a frame, a cup where a hand reaches: now there is somewhere to put a tired person.",
+          "set": {
+            "novel_first_beds": true
+          }
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            3.8,
+            4.8
+          ],
+          "object": "copy",
+          "prompt": "Separate the public summary from protected accounts",
+          "seconds": 1.8,
+          "result": "Offices and dates go on the public sheet. Private material stays with its speaker or its agreed limits."
+        }
+      ]
+    },
+    {
+      "chapter": 29,
+      "id": "wooden_spoon",
+      "title": "A spoon, eventually",
+      "when": {
+        "quest": "main_what_we_promise"
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            -4.4,
+            5.4
+          ],
+          "object": "sill",
+          "prompt": "Pare the bowl of a spoon across the grain",
+          "seconds": 1.8,
+          "result": "A curl of wood comes away. Soup would still run out one side."
+        },
+        {
+          "zone": "hearthward",
+          "actor": "mira",
+          "prompt": "Ask where she wants to go when she can leave the practice",
+          "line": "The coast. I want to see what grows where salt gets into the soil. And before you ask, I have already arranged who will come when Pell needs someone.",
+          "result": "Mira turns the spoon and shows where to start again.",
+          "speaker": "Mira",
+          "choices": [
+            {
+              "label": "Ask her to bring back a plant name",
+              "result": "She makes no promise about the spelling.",
+              "set": {
+                "novel_mira_coast": true
+              },
+              "when": {}
+            },
+            {
+              "label": "Set aside evening time together",
+              "result": "The coast is still her plan. This evening belongs to both of you.",
+              "set": {
+                "novel_mira_coast": true
+              },
+              "when": {
+                "flags": {
+                  "lr_commitment_partner": "mira"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 29,
+      "id": "elna_cupboard",
+      "title": "The other fold",
+      "when": {
+        "quest": "main_what_we_promise"
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            -3.5,
+            6.2
+          ],
+          "object": "linen",
+          "prompt": "Leave the private cupboard shut",
+          "seconds": 1.3,
+          "result": "A broken horn button shows for a moment before the fold closes. Some of Harl belongs to his widow alone.",
+          "set": {
+            "novel_private_cupboard": true
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 30,
+      "id": "alarm_test",
+      "title": "A pan within reach",
+      "when": {
+        "objectives": [
+          [
+            "main_what_we_promise",
+            "gather_cast"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            2.6,
+            5.7
+          ],
+          "object": "meal",
+          "prompt": "Test the alarm from the covered step",
+          "seconds": 1.4,
+          "result": "Nine quick blows bring people to the wrong door. The next test starts in the back sleeping room."
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            -4.6,
+            4.5
+          ],
+          "object": "post",
+          "prompt": "Check whether the alarm carries to the far bed",
+          "seconds": 1.4,
+          "result": "It is loud enough. The agreed signal must be slow enough to count."
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            2.5,
+            5.7
+          ],
+          "object": "signal",
+          "prompt": "Sound three blows, pause, then three more",
+          "seconds": 1.2,
+          "result": "This time the watch finds the right door.",
+          "mechanic": "alarm",
+          "set": {
+            "novel_alarm_heard": true
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 30,
+      "id": "short_watch",
+      "title": "The relief at midnight",
+      "when": {
+        "objectives": [
+          [
+            "main_what_we_promise",
+            "choose_responsibilities"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            -2.8,
+            5.9
+          ],
+          "object": "ledger",
+          "prompt": "Enter only the shifts the keepers have accepted",
+          "seconds": 1.5,
+          "result": "An empty space stays empty. Someone still has to decide what to do when the next pair of hands goes to bed."
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            3.4,
+            7.5
+          ],
+          "object": "post",
+          "prompt": "Take Kael’s own turn at the covered step",
+          "seconds": 2.4,
+          "result": "By the time the next watch arrives the step has gone cold. Someone offers another hour. The resting place is theirs to use."
+        }
+      ]
+    },
+    {
+      "chapter": 31,
+      "id": "refusal_book",
+      "title": "The disused north kitchen",
+      "when": {
+        "complete": [
+          "main_what_we_promise"
+        ]
+      },
+      "beats": [
+        {
+          "zone": "record_hall",
+          "at": [
+            -3.5,
+            3.1
+          ],
+          "object": "order",
+          "prompt": "Read the notice suspending existing marks",
+          "seconds": 1.4,
+          "result": "“Reverified.” Delay can do a refusal’s work while leaving the refusal column blank."
+        },
+        {
+          "zone": "record_hall",
+          "at": [
+            -4.7,
+            1.7
+          ],
+          "object": "strongbox",
+          "prompt": "Fit Merrow’s flat key in the outer lock",
+          "seconds": 1.5,
+          "result": "One lock opens. Edric still has the other key. The chopping block is older than the iron."
+        },
+        {
+          "zone": "record_hall",
+          "at": [
+            -4.7,
+            1.7
+          ],
+          "object": "strongbox",
+          "prompt": "Work the worn hinge clear of the bolted bench",
+          "seconds": 2.8,
+          "result": "The inner lock holds. The old hinge gives. Inside is a thin volume in faded cloth."
+        },
+        {
+          "zone": "record_hall",
+          "at": [
+            -2.2,
+            5.2
+          ],
+          "object": "copy",
+          "prompt": "Compare the duplicate refusal entries",
+          "seconds": 1.7,
+          "result": "A second reason in Merrow’s hand: “Would not assent.” This is a ration duplicate. It supplies neither the old closure order nor a missing witness.",
+          "evidence": {
+            "id": "duplicate_refusal",
+            "title": "The duplicate refusal book",
+            "text": "Dates, amounts and refusals. Some entries say that a household would not assent. The duplicate adds evidence about the grain condition only.",
+            "kind": "document"
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 32,
+      "id": "grain_lane",
+      "title": "Keep the grain lane open",
+      "when": {
+        "quest": "main_crowns_without_mercy"
+      },
+      "beats": [
+        {
+          "zone": "assembly",
+          "at": [
+            -2.5,
+            5.4
+          ],
+          "object": "load",
+          "prompt": "Move the sack off the lane to the grain scales",
+          "seconds": 1.7,
+          "result": "Now someone can leave with flour without having to pass a witness chair."
+        },
+        {
+          "zone": "assembly",
+          "at": [
+            2.3,
+            5.7
+          ],
+          "object": "ledger",
+          "prompt": "Set the ration book apart from the speaking list",
+          "seconds": 1.8,
+          "result": "A mark here records a measure received. It offers no account of the old gate.",
+          "set": {
+            "novel_assent_separated": true
+          }
+        },
+        {
+          "zone": "assembly",
+          "at": [
+            0.4,
+            4.8
+          ],
+          "object": "post",
+          "prompt": "Leave Elna’s place empty after the hearing",
+          "seconds": 1.3,
+          "result": "Her answer was hers. A quiet chair is an honest part of the hearing.",
+          "when": {
+            "objectives": [
+              [
+                "main_crowns_without_mercy",
+                "confession_choice"
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 33,
+      "id": "human_copies",
+      "title": "What the paper can hold",
+      "when": {
+        "objectives": [
+          [
+            "main_hart_remembers",
+            "enter_glade"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "hart_glade",
+          "at": [
+            -3,
+            6.6
+          ],
+          "object": "copy",
+          "prompt": "Spread the human copies on the dry stone",
+          "seconds": 1.8,
+          "result": "A tally, a receipt and a correction cannot hold the feeling of standing at a gate. They can still show who shut it."
+        },
+        {
+          "zone": "hart_glade",
+          "at": [
+            1.3,
+            4.6
+          ],
+          "object": "linen",
+          "prompt": "Wrap the pages before answering the Hart",
+          "seconds": 1.6,
+          "result": "Take what people can bear away with them. Leave room for an answer only this witness can give.",
+          "when": {
+            "objectives": [
+              [
+                "main_hart_remembers",
+                "hear_testimony"
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 34,
+      "id": "siv_request",
+      "title": "Whose mark requests passage",
+      "when": {
+        "flags": {
+          "final_covenant": "open_road"
+        }
+      },
+      "beats": [
+        {
+          "zone": "hart_glade",
+          "at": [
+            2.6,
+            6
+          ],
+          "object": "petition",
+          "prompt": "Lay the households’ requests beside the stones",
+          "seconds": 1.8,
+          "result": "Siv reads her own words with a finger under the line. A keeper offering a shift is not a passenger asking for shelter."
+        },
+        {
+          "zone": "lantern_reach",
+          "at": [
+            -2.7,
+            6.3
+          ],
+          "object": "linen",
+          "prompt": "Place a warm brick away from the ramp",
+          "seconds": 1.4,
+          "result": "There is a dry place for Bracken with an adult. The working ramp is clear for the families."
+        }
+      ]
+    },
+    {
+      "chapter": 35,
+      "id": "wear_and_loss",
+      "title": "What the crossing cost",
+      "when": {
+        "flags": {
+          "final_covenant": "open_road",
+          "open_road_route_delivered": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            -4,
+            5.2
+          ],
+          "object": "linen",
+          "prompt": "Sort serviceable blankets from the mud-stiff ones",
+          "seconds": 2,
+          "result": "No one goes back for furniture while the last passengers need shelter."
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            2.7,
+            4.5
+          ],
+          "object": "ledger",
+          "prompt": "Account for people and damaged goods separately",
+          "seconds": 1.5,
+          "result": "A chair is a heavy loss to the person who owns it. It is still counted on a different page from a person."
+        }
+      ]
+    },
+    {
+      "chapter": 36,
+      "id": "nera_evening",
+      "title": "The end of one shift",
+      "when": {
+        "flags": {
+          "final_choice_completed": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "actor": "saga_maren",
+          "prompt": "Ask Nera what company she wants tonight",
+          "line": "An evening. It doesn’t have to mean we’ve settled every other evening.",
+          "result": "The space between you has a purpose too.",
+          "speaker": "Nera",
+          "when": {
+            "unless": {
+              "final_covenant": "open_road"
+            }
+          },
+          "choices": [
+            {
+              "label": "Share the evening meal",
+              "result": "Two bowls come to the table.",
+              "set": {
+                "novel_nera_evening": "meal"
+              },
+              "when": {}
+            },
+            {
+              "label": "Wish her a quiet evening",
+              "result": "She takes her own bowl and a place near the door.",
+              "set": {
+                "novel_nera_evening": "space"
+              },
+              "when": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 36,
+      "id": "refuge_evening",
+      "title": "A bowl by the repaired window",
+      "when": {
+        "flags": {
+          "final_choice_completed": true,
+          "final_covenant": "open_road"
+        }
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "actor": "saga_nera",
+          "prompt": "Offer Nera a place at the evening meal",
+          "line": "I’ve counted them. The stores will wait an hour. I can sit for an hour.",
+          "result": "She takes her own bowl when she leaves.",
+          "speaker": "Nera",
+          "choices": [
+            {
+              "label": "Make room at your end of the table",
+              "result": "She stays until she wants to sleep.",
+              "set": {
+                "novel_nera_evening": "meal"
+              },
+              "when": {}
+            },
+            {
+              "label": "Let her choose a quiet place",
+              "result": "The handover stands either way.",
+              "set": {
+                "novel_nera_evening": "space"
+              },
+              "when": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 37,
+      "id": "spring_witness",
+      "title": "A table anyone can reach",
+      "when": {
+        "flags": {
+          "final_covenant": "witness",
+          "final_choice_completed": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "at": [
+            -2.8,
+            7.2
+          ],
+          "object": "ledger",
+          "prompt": "Place the public copy outside the record room",
+          "seconds": 1.5,
+          "result": "A carter comes to check a date and leaves with a claim form. Kael takes the next answering shift."
+        },
+        {
+          "zone": "greyfen",
+          "at": [
+            2.1,
+            6.1
+          ],
+          "object": "sill",
+          "prompt": "Visit again in the spring",
+          "line": "The immediate work is recorded. Spend the winter here before coming back to this place?",
+          "result": "",
+          "choices": [
+            {
+              "label": "Return six months later",
+              "result": "Six months later, the public copy has a thumb-worn corner. A survivor asks to correct a name, and someone is on duty to hear it.",
+              "set": {
+                "novel_season": "spring",
+                "novel_spring_route": "witness"
+              }
+            }
+          ]
+        },
+        {
+          "zone": "greyfen",
+          "at": [
+            -1.3,
+            5.6
+          ],
+          "object": "load",
+          "prompt": "Set out the restitution claims beside the copy",
+          "seconds": 2,
+          "result": "Six months later, the public copy has a thumb-worn corner. A survivor asks to correct a name, and someone is on duty to hear it."
+        }
+      ]
+    },
+    {
+      "chapter": 37,
+      "id": "spring_mercy",
+      "title": "A name in safe keeping",
+      "when": {
+        "flags": {
+          "final_covenant": "mercy",
+          "final_choice_completed": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "at": [
+            -2.8,
+            7.2
+          ],
+          "object": "ledger",
+          "prompt": "Carry the closed packet to sheltered storage",
+          "seconds": 1.5,
+          "result": "The last resonance is gone. A living household can tell the keeper who may open its papers."
+        },
+        {
+          "zone": "greyfen",
+          "at": [
+            2.1,
+            6.1
+          ],
+          "object": "sill",
+          "prompt": "Visit again in the spring",
+          "line": "The immediate work is recorded. Spend the winter here before coming back to this place?",
+          "result": "",
+          "choices": [
+            {
+              "label": "Return six months later",
+              "result": "In spring a woman asks to see her own statement. There is still a key and someone who knows its limits. Nobody can give her back the sound of the lost voice.",
+              "set": {
+                "novel_season": "spring",
+                "novel_spring_route": "mercy"
+              }
+            }
+          ]
+        },
+        {
+          "zone": "greyfen",
+          "at": [
+            -1.3,
+            5.6
+          ],
+          "object": "load",
+          "prompt": "Write the keeper’s access limits on the outer fold",
+          "seconds": 2,
+          "result": "In spring a woman asks to see her own statement. There is still a key and someone who knows its limits. Nobody can give her back the sound of the lost voice."
+        }
+      ]
+    },
+    {
+      "chapter": 37,
+      "id": "spring_duty",
+      "title": "The road beyond the post",
+      "when": {
+        "flags": {
+          "final_covenant": "duty",
+          "final_choice_completed": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "hart_glade",
+          "at": [
+            -2.8,
+            7.2
+          ],
+          "object": "ledger",
+          "prompt": "Hang Kael’s own watch cloak by the binding",
+          "seconds": 1.5,
+          "result": "The road is visible through the trees. Tonight someone else has to take the far end of it."
+        },
+        {
+          "zone": "hart_glade",
+          "at": [
+            2.1,
+            6.1
+          ],
+          "object": "sill",
+          "prompt": "Visit again in the spring",
+          "line": "The immediate work is recorded. Spend the winter here before coming back to this place?",
+          "result": "",
+          "choices": [
+            {
+              "label": "Return six months later",
+              "result": "Six months on, Keel grass grows through the watch step. Kael knows which loose stone to avoid on the way back from the spring before the next call.",
+              "set": {
+                "novel_season": "spring",
+                "novel_spring_route": "duty"
+              }
+            }
+          ]
+        },
+        {
+          "zone": "hart_glade",
+          "at": [
+            -1.3,
+            5.6
+          ],
+          "object": "load",
+          "prompt": "Set his meal within reach of the watch",
+          "seconds": 2,
+          "result": "Six months on, Keel grass grows through the watch step. Kael knows which loose stone to avoid on the way back from the spring before the next call."
+        }
+      ]
+    },
+    {
+      "chapter": 37,
+      "id": "spring_ash",
+      "title": "The ground after the last fight",
+      "when": {
+        "flags": {
+          "final_covenant": "ash",
+          "final_choice_completed": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "hart_glade",
+          "at": [
+            -2.8,
+            7.2
+          ],
+          "object": "ledger",
+          "prompt": "Test the grey ground beyond the burned stones",
+          "seconds": 1.5,
+          "result": "A voice is gone for good. Human copies survive. The seed will have to be checked after rain."
+        },
+        {
+          "zone": "hart_glade",
+          "at": [
+            2.1,
+            6.1
+          ],
+          "object": "sill",
+          "prompt": "Visit again in the spring",
+          "line": "The immediate work is recorded. Spend the winter here before coming back to this place?",
+          "result": "",
+          "choices": [
+            {
+              "label": "Return six months later",
+              "result": "In spring two beds have come up thin. The grower can point to the day the ash moved; no record can restore the Hart’s voice.",
+              "set": {
+                "novel_season": "spring",
+                "novel_spring_route": "ash"
+              }
+            }
+          ]
+        },
+        {
+          "zone": "hart_glade",
+          "at": [
+            -1.3,
+            5.6
+          ],
+          "object": "load",
+          "prompt": "Carry clean seed to the edge where soil still holds",
+          "seconds": 2,
+          "result": "In spring two beds have come up thin. The grower can point to the day the ash moved; no record can restore the Hart’s voice."
+        }
+      ]
+    },
+    {
+      "chapter": 37,
+      "id": "spring_concord",
+      "title": "A shift someone can leave",
+      "when": {
+        "flags": {
+          "final_covenant": "concord",
+          "final_choice_completed": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            -2.8,
+            7.2
+          ],
+          "object": "ledger",
+          "prompt": "Read the living rota beside the refuge door",
+          "seconds": 1.5,
+          "result": "The keeper puts down the cup and goes to bed. A recorded promise has never made a tired body less tired."
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            2.1,
+            6.1
+          ],
+          "object": "sill",
+          "prompt": "Visit again in the spring",
+          "line": "The immediate work is recorded. Spend the winter here before coming back to this place?",
+          "result": "",
+          "choices": [
+            {
+              "label": "Return six months later",
+              "result": "In spring the rota bears crossings-out, swapped hours and a place for withdrawals. Kael is on it today; the meal still needs serving.",
+              "set": {
+                "novel_season": "spring",
+                "novel_spring_route": "concord"
+              }
+            }
+          ]
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            -1.3,
+            5.6
+          ],
+          "object": "load",
+          "prompt": "Take the relief shift while the keeper rests",
+          "seconds": 2,
+          "result": "In spring the rota bears crossings-out, swapped hours and a place for withdrawals. Kael is on it today; the meal still needs serving."
+        }
+      ]
+    },
+    {
+      "chapter": 37,
+      "id": "spring_open_road",
+      "title": "The chair through the freight door",
+      "when": {
+        "flags": {
+          "final_covenant": "open_road",
+          "final_choice_completed": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            -2.8,
+            7.2
+          ],
+          "object": "ledger",
+          "prompt": "Take the dry record packet from the repaired window",
+          "seconds": 1.5,
+          "result": "A home has room for a chair with a back. Carry it sideways and the legs just clear the frame."
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            2.1,
+            6.1
+          ],
+          "object": "sill",
+          "prompt": "Visit again in the spring",
+          "line": "The immediate work is recorded. Spend the winter here before coming back to this place?",
+          "result": "",
+          "choices": [
+            {
+              "label": "Return six months later",
+              "result": "Six months after the crossings, a new guide line hangs at the ferry. Nera has orders for freight with her own name above the door. Kael rests his calf on the step before taking the next crate.",
+              "set": {
+                "novel_season": "spring",
+                "novel_spring_route": "open_road"
+              }
+            }
+          ]
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            -1.3,
+            5.6
+          ],
+          "object": "load",
+          "prompt": "Set Nera’s chair beside the wide freight door",
+          "seconds": 2,
+          "result": "Six months after the crossings, a new guide line hangs at the ferry. Nera has orders for freight with her own name above the door. Kael rests his calf on the step before taking the next crate."
+        }
+      ]
+    }
+  ]
+}

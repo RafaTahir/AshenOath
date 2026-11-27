@@ -1,0 +1,647 @@
+{
+  "version": 1,
+  "act": 2,
+  "scenes": [
+    {
+      "chapter": 10,
+      "id": "tally_house",
+      "title": "What the chimney held",
+      "when": {
+        "objectives": [
+          [
+            "main_names_they_burned",
+            "reconstruct_register"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "deep_wood",
+          "at": [
+            1.5,
+            -6.6
+          ],
+          "object": "sill",
+          "prompt": "Set the lever against the chimney sill",
+          "seconds": 2.4,
+          "result": "The square of dry wood beneath the soot is a register cover. You get a knee under it before the weight shifts again."
+        },
+        {
+          "zone": "deep_wood",
+          "at": [
+            -3.5,
+            4.4
+          ],
+          "object": "ledger",
+          "prompt": "Separate the receipt from the later addition",
+          "line": "A patrol clerk counted a delivery. A different hand filled the empty margin.",
+          "result": "Vale will need both hands preserved on the copy.",
+          "choices": [
+            {
+              "label": "Copy the margin and receipt on separate leaves",
+              "result": "Two leaves carry separate attributions.",
+              "set": {
+                "novel_receipt_copy": "separate"
+              },
+              "when": {}
+            },
+            {
+              "label": "Trace both hands together and mark the change of ink",
+              "result": "The join is visible and labelled.",
+              "set": {
+                "novel_receipt_copy": "traced"
+              },
+              "when": {}
+            }
+          ],
+          "evidence": {
+            "id": "tally_receipt",
+            "title": "The sanctuary receipt",
+            "text": "The old hand acknowledges receipt. A later hand added an oral claim. Neither entry records a safe onward journey.",
+            "kind": "observed"
+          }
+        },
+        {
+          "zone": "greyfen",
+          "actor": "sister_anwen",
+          "prompt": "Ask who added the words in the margin",
+          "line": "I saw the red cord. I knew Avel when he said it. I wrapped the crow again and promised I’d come behind them. I waited. Then I went looking. It matters which I did first.",
+          "result": "She names her own act. The search afterward cannot turn a promise into a return.",
+          "speaker": "Anwen",
+          "set": {
+            "novel_anwen_admitted": true
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 11,
+      "id": "elna_paragraph",
+      "title": "Where Elna draws the line",
+      "when": {
+        "quest": "main_names_they_burned"
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "actor": "widow_elna",
+          "prompt": "Ask which words are hers to release",
+          "line": "I wrote that Harl held the gate. Close it, Kael. That’s the verb I mean. The letter in the other fold is a letter from my husband.",
+          "result": "The first paragraph is hers to give. She slips the other fold back inside her bodice.",
+          "speaker": "Elna",
+          "choices": [
+            {
+              "label": "Take only the paragraph she offers",
+              "result": "Elna marks the fair copy with her initials.",
+              "set": {
+                "novel_elna_account": "paragraph"
+              },
+              "when": {}
+            },
+            {
+              "label": "Let her keep both pages",
+              "result": "The pages stay with Elna.",
+              "set": {
+                "novel_elna_account": "private"
+              },
+              "when": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 11,
+      "id": "bakery_copy",
+      "title": "The price on Nessa’s receipt",
+      "when": {
+        "quest": "main_names_they_burned"
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "at": [
+            -1.7,
+            7.8
+          ],
+          "object": "ledger",
+          "prompt": "Cover the household addresses before copying",
+          "seconds": 1.8,
+          "result": "The figures and delivery dates remain legible."
+        },
+        {
+          "zone": "greyfen",
+          "at": [
+            -4.8,
+            9
+          ],
+          "object": "copy",
+          "prompt": "Compare the flour charge against the receipt",
+          "seconds": 1.5,
+          "result": "One soldier bought his own bread. His purchase cannot stand for an entire levy.",
+          "evidence": {
+            "id": "bakery_receipt",
+            "title": "A baker’s sale",
+            "text": "The soldier paid for his own loaf. The bakery copy retains amounts and dates without household addresses.",
+            "kind": "observed"
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 12,
+      "id": "freight_sill",
+      "title": "The second lashing",
+      "when": {
+        "quest": "main_ash_at_the_mill"
+      },
+      "beats": [
+        {
+          "zone": "deep_wood",
+          "at": [
+            -5,
+            9.4
+          ],
+          "object": "line",
+          "prompt": "Take up the capstan slack",
+          "seconds": 1.7,
+          "result": "The first lashing holds. The sill shifts under the second."
+        },
+        {
+          "zone": "old_mill",
+          "at": [
+            -4.6,
+            9.7
+          ],
+          "object": "load",
+          "prompt": "Catch the slipping freight",
+          "line": "The sill is coming out. There is time to steady one load. The other will go into the water.",
+          "result": "",
+          "choices": [
+            {
+              "label": "Catch the medicine chest",
+              "result": "The jars stay dry. Tor must borrow tools for the repair.",
+              "set": {
+                "novel_freight_saved": "medicine",
+                "novel_freight_lost": "tools"
+              },
+              "when": {}
+            },
+            {
+              "label": "Catch the tool chest",
+              "result": "The planes and augers stay dry. Mira will stretch the clean stores.",
+              "set": {
+                "novel_freight_saved": "tools",
+                "novel_freight_lost": "medicine"
+              },
+              "when": {}
+            }
+          ]
+        },
+        {
+          "zone": "old_mill",
+          "at": [
+            -2.2,
+            6.1
+          ],
+          "object": "ledger",
+          "prompt": "Strike the lost load from the receiving sheet",
+          "seconds": 1.5,
+          "result": "There is a wet mark beside the short delivery. Nobody will set out looking for a chest that never came."
+        }
+      ]
+    },
+    {
+      "chapter": 12,
+      "id": "freight_night",
+      "title": "Places left at supper",
+      "when": {
+        "flags": {
+          "novel_done_freight_sill": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "actor": "mira",
+          "prompt": "Leave room at the end of the supper bench",
+          "line": "You can sit down even if your arm doesn’t need seeing to. You will have to cut the onions.",
+          "result": "There is work for two hands at supper.",
+          "speaker": "Mira",
+          "choices": [
+            {
+              "label": "Cut onions together",
+              "result": "She keeps the uneven slices for the bottom of the pot.",
+              "set": {
+                "novel_supper": "shared"
+              },
+              "when": {}
+            },
+            {
+              "label": "Bring a covered bowl for later",
+              "result": "Mira can eat after the last call.",
+              "set": {
+                "novel_supper": "left"
+              },
+              "when": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 13,
+      "id": "workers_count",
+      "title": "Seven on the clean side",
+      "when": {
+        "objectives": [
+          [
+            "main_ash_at_the_mill",
+            "escort_mill_workers"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "old_mill",
+          "at": [
+            -3.8,
+            9.7
+          ],
+          "object": "water",
+          "prompt": "Pass drinking water down the south-yard bench",
+          "seconds": 2,
+          "result": "Six hands take the cup. A seventh is holding a strip of cloth against someone’s head."
+        },
+        {
+          "zone": "old_mill",
+          "at": [
+            1.1,
+            8.6
+          ],
+          "object": "copy",
+          "prompt": "Check the workers against the wage marks",
+          "seconds": 1.8,
+          "result": "Seven made it out. A wage mark is still owed to each of them.",
+          "evidence": {
+            "id": "seven_out",
+            "title": "Seven out of the gallery",
+            "text": "The crew was counted in the yard after the escape. Seven workers reached clean air.",
+            "kind": "observed"
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 13,
+      "id": "mill_measures",
+      "title": "Flour, by whose measure",
+      "when": {
+        "flags": {
+          "mill_records_saved": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "old_mill",
+          "at": [
+            3.2,
+            6.7
+          ],
+          "object": "ledger",
+          "prompt": "Match the wage page to the mill measure",
+          "seconds": 2,
+          "result": "The half-notch marks belong to the mill. The handwriting beside them is a clerk’s."
+        },
+        {
+          "zone": "old_mill",
+          "at": [
+            -2.5,
+            8.2
+          ],
+          "object": "copy",
+          "prompt": "Leave a checked copy with the wheelkeeper",
+          "seconds": 1.8,
+          "result": "He can answer for the measures he used. He was never at the sanctuary.",
+          "evidence": {
+            "id": "measures",
+            "title": "The wheelkeeper’s copy",
+            "text": "The wheelkeeper can attest the mill measures. His account does not reach the old gate.",
+            "kind": "observed"
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 14,
+      "id": "tor_wrist",
+      "title": "The left hand",
+      "when": {
+        "objectives": [
+          [
+            "main_ash_at_the_mill",
+            "mill_encounter"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "old_mill",
+          "at": [
+            2.6,
+            5.4
+          ],
+          "object": "sill",
+          "prompt": "Hold the fallen sill off the wheelkeeper",
+          "seconds": 2.4,
+          "result": "The wheelkeeper rolls clear. Tor lets go with his left hand and cannot close it again."
+        },
+        {
+          "zone": "old_mill",
+          "at": [
+            -2,
+            8.3
+          ],
+          "object": "linen",
+          "prompt": "Fit two cratewood splints around Tor’s left wrist",
+          "seconds": 2.2,
+          "result": "“Straight enough,” Tor says, looking past his arm at the gallery. “Someone still has to cut that sill square.”",
+          "set": {
+            "novel_tor_braced": true
+          }
+        },
+        {
+          "zone": "old_mill",
+          "at": [
+            1.1,
+            8.5
+          ],
+          "object": "pin",
+          "prompt": "Mark the sill to Tor’s right-hand measurement",
+          "seconds": 2,
+          "result": "Another pair of hands does the cutting. His mark still governs the fit."
+        }
+      ]
+    },
+    {
+      "chapter": 15,
+      "id": "bell_return",
+      "title": "An object on loan",
+      "when": {
+        "flags": {
+          "novel_bell_custody": "loan"
+        }
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "actor": "widow_elna",
+          "prompt": "Return the bell by its worn leather handle",
+          "line": "You could have asked for another day. I’m glad you didn’t.",
+          "result": "Elna puts the real bell back on its nail. You retain the rubbing from the cemetery.",
+          "speaker": "Elna",
+          "when": {
+            "complete": [
+              "main_ash_at_the_mill"
+            ]
+          },
+          "set": {
+            "novel_bell_custody": "returned"
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 15,
+      "id": "burned_loaf",
+      "title": "Nessa’s burnt loaf",
+      "when": {
+        "complete": [
+          "main_ash_at_the_mill"
+        ]
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "at": [
+            -1.8,
+            7.5
+          ],
+          "object": "meal",
+          "prompt": "Scrape the worst of the crust over the bucket",
+          "seconds": 1.5,
+          "result": "The inside is still soft. The heel will make a reasonable doorstop."
+        },
+        {
+          "zone": "greyfen",
+          "at": [
+            0.6,
+            7.3
+          ],
+          "object": "copy",
+          "prompt": "Turn the grain proclamation over",
+          "line": "Grain on the front. A place for assent on the back. The store count is real. So is the condition.",
+          "result": "Nera’s margin reads: passage first. Nobody’s meal signs for them.",
+          "choices": [
+            {
+              "label": "Mark the condition for the crew",
+              "result": "The people who haul this grain will know the price.",
+              "set": {
+                "novel_grain_warning": "crew"
+              },
+              "when": {}
+            },
+            {
+              "label": "Post a clean copy beside the portions",
+              "result": "The figures and condition can be read together.",
+              "set": {
+                "novel_grain_warning": "board"
+              },
+              "when": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 16,
+      "id": "hearth_cover",
+      "title": "Who is on after Nessa",
+      "when": {
+        "objectives": [
+          [
+            "main_empty_tables",
+            "reach_lantern_reach"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "lantern_reach",
+          "at": [
+            -4.5,
+            5.5
+          ],
+          "object": "post",
+          "prompt": "Open the smoky end of the cooking shelter",
+          "seconds": 1.8,
+          "result": "The smoke lifts above the bench. A tired cook can breathe there."
+        },
+        {
+          "zone": "lantern_reach",
+          "at": [
+            -1.7,
+            6.2
+          ],
+          "object": "ledger",
+          "prompt": "Set a relief turn at the serving table",
+          "line": "Nessa has worked the first pot. Someone has to mind the second.",
+          "result": "",
+          "choices": [
+            {
+              "label": "Take the next service yourself",
+              "result": "Nessa turns the ladle loose and goes outside with her own bowl.",
+              "set": {
+                "novel_kitchen_cover": "kael"
+              },
+              "when": {}
+            },
+            {
+              "label": "Divide the shift at the second pot",
+              "result": "The first cook gets a seat before the next pot boils.",
+              "set": {
+                "novel_kitchen_cover": "split"
+              },
+              "when": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 17,
+      "id": "rook_schedule",
+      "title": "The copy without the houses",
+      "when": {
+        "objectives": [
+          [
+            "main_empty_tables",
+            "prepare_kitchen"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "lantern_reach",
+          "at": [
+            -4.1,
+            4.9
+          ],
+          "object": "meal",
+          "prompt": "Let the waiting worker measure the portions",
+          "seconds": 1.8,
+          "result": "The worker levels the ladle. A fair portion leaves the pot sooner than an argument does."
+        },
+        {
+          "zone": "lantern_reach",
+          "actor": "rook",
+          "prompt": "Ask why he needs the crew together",
+          "line": "I took the houses off it. The names too. Merrow wanted a time and a place, and I wanted bread. I sent the times. I did that before asking.",
+          "result": "He pays for grain with his own silver. It still was not his schedule to trade.",
+          "speaker": "Rook",
+          "set": {
+            "novel_rook_disclosed": true
+          }
+        },
+        {
+          "zone": "lantern_reach",
+          "at": [
+            0.6,
+            5.8
+          ],
+          "object": "copy",
+          "prompt": "Lay the exposed schedule in front of the crew",
+          "line": "Only the crew needs the times. They need them before they choose a road.",
+          "result": "",
+          "choices": [
+            {
+              "label": "Tell them where the copy went, keeping the names private",
+              "result": "Nera carries the route book herself.",
+              "set": {
+                "novel_crew_briefed": true
+              },
+              "when": {}
+            },
+            {
+              "label": "Have Rook read his alteration aloud beside the route book",
+              "result": "The people who carry the grain hear exactly what he sold.",
+              "set": {
+                "novel_crew_briefed": true
+              },
+              "when": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 18,
+      "id": "willow_strop",
+      "title": "Guide and hauling line",
+      "when": {
+        "objectives": [
+          [
+            "main_road_kept_open",
+            "survey_crossing"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "lantern_reach",
+          "at": [
+            10.5,
+            -1.8
+          ],
+          "object": "strop",
+          "prompt": "Check the bank around the living willow",
+          "seconds": 2,
+          "result": "The trunk holds. It is the earth around the roots that must be checked after rain."
+        },
+        {
+          "zone": "lantern_reach",
+          "at": [
+            2.7,
+            1.6
+          ],
+          "object": "line",
+          "prompt": "Lay the hauling line clear of the guide",
+          "seconds": 1.6,
+          "result": "One line guides the hull. The other moves it. Neither does the other’s work."
+        },
+        {
+          "zone": "lantern_reach",
+          "at": [
+            9.8,
+            2.4
+          ],
+          "object": "post",
+          "prompt": "Mark the landing for freight and passengers",
+          "seconds": 1.8,
+          "result": "Four aboard with freight. Six adults travelling light, crew included. The receiving cart waits beyond the soft hollow.",
+          "when": {
+            "objectives": [
+              [
+                "main_road_kept_open",
+                "open_route"
+              ]
+            ]
+          },
+          "set": {
+            "novel_load_limits_known": true
+          }
+        }
+      ]
+    }
+  ]
+}

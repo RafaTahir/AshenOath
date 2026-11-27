@@ -51,6 +51,10 @@ static func from_save(data: Dictionary) -> int:
 static func save_revision_error(data: Dictionary) -> String:
 	var story: Variant = data.get("story_state", {})
 	var flags: Dictionary = story.get("flags", {}) if story is Dictionary and story.get("flags", {}) is Dictionary else {}
+	if flags.has("novel_edition"):
+		var edition: Variant = flags.novel_edition
+		if typeof(edition) not in [TYPE_INT,TYPE_FLOAT] or float(edition) != 1 or from_flags(flags) != EXPANDED:
+			return "unsupported_novel_edition"
 	if flags.has(FLAG):
 		var value: Variant = flags[FLAG]
 		if typeof(value) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(value)):

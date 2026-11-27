@@ -1,0 +1,588 @@
+{
+  "version": 1,
+  "act": 3,
+  "scenes": [
+    {
+      "chapter": 19,
+      "id": "west_relief",
+      "title": "Relief of the west approach",
+      "when": {
+        "objectives": [
+          [
+            "main_soldier_without_banner",
+            "reach_bandit_road"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "bandit_road",
+          "at": [
+            -5.4,
+            7.3
+          ],
+          "object": "pin",
+          "prompt": "Examine the loose ring at the west post",
+          "seconds": 1.4,
+          "result": "The third ring has worked out of its wire. Two notes still carry. The empty horse lines belong to a larger company than the one here today."
+        },
+        {
+          "zone": "bandit_road",
+          "at": [
+            2.3,
+            5.2
+          ],
+          "object": "post",
+          "prompt": "Check the west line after the confrontation",
+          "seconds": 1.6,
+          "result": "Three posts, three sets of mismatched equipment. A camp large enough for a company held only three dead guards.",
+          "when": {
+            "objectives": [
+              [
+                "main_soldier_without_banner",
+                "senn_confrontation"
+              ]
+            ]
+          },
+          "evidence": {
+            "id": "west_posts",
+            "title": "The three posts",
+            "text": "All three stations can be accounted for. The present tolls do not establish who wrote the old sanctuary command.",
+            "kind": "observed"
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 20,
+      "id": "levy_inventory",
+      "title": "Somebody’s spring",
+      "when": {
+        "objectives": [
+          [
+            "main_soldier_without_banner",
+            "senn_confrontation"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "bandit_road",
+          "at": [
+            -5.6,
+            3.3
+          ],
+          "object": "load",
+          "prompt": "Check the four confiscated sacks",
+          "seconds": 2,
+          "result": "Seed barley, kept to plant in spring. Feeding it to the camp would spend next year’s crop."
+        },
+        {
+          "zone": "bandit_road",
+          "at": [
+            -3.7,
+            6.7
+          ],
+          "object": "ledger",
+          "prompt": "List the two axes, three bracelets and the small shoe",
+          "seconds": 1.8,
+          "result": "Someone can claim a tool without signing someone else’s testimony.",
+          "set": {
+            "novel_levy_listed": true
+          }
+        },
+        {
+          "zone": "bandit_road",
+          "at": [
+            1.3,
+            9.9
+          ],
+          "object": "load",
+          "prompt": "Bring the barley to the outward carts",
+          "seconds": 2,
+          "result": "The goods can go home whatever happens to the captain."
+        }
+      ]
+    },
+    {
+      "chapter": 20,
+      "id": "weather_paragraph",
+      "title": "The weather paragraph",
+      "when": {
+        "flags": {
+          "senn_fate": "testimony"
+        }
+      },
+      "beats": [
+        {
+          "zone": "bandit_road",
+          "at": [
+            1,
+            6.5
+          ],
+          "object": "copy",
+          "prompt": "Compare the voluntary account with the seizure list",
+          "seconds": 1.7,
+          "result": "The inventory is signed in a different place. Guard watches and food are owed even if Senn stops speaking."
+        },
+        {
+          "zone": "bandit_road",
+          "at": [
+            -1.4,
+            7.8
+          ],
+          "object": "ledger",
+          "prompt": "Keep what Senn actually saw",
+          "line": "He was twenty-two. The northern track was closed against people trying to leave. Edric was a child. There is still a paragraph about the rain.",
+          "result": "",
+          "choices": [
+            {
+              "label": "Retain the weather and mark what he witnessed",
+              "result": "The witness keeps the rain. The copy separates observation from hearsay.",
+              "set": {
+                "novel_senn_copy": "witnessed"
+              },
+              "when": {}
+            },
+            {
+              "label": "Seal the account against public reading",
+              "result": "The signed source stays in custody; the barley can still be returned.",
+              "set": {
+                "novel_senn_copy": "sealed"
+              },
+              "when": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 21,
+      "id": "culvert",
+      "title": "The culvert before the fork",
+      "when": {
+        "flags": {
+          "novel_done_rook_schedule": true
+        },
+        "complete": [
+          "main_soldier_without_banner"
+        ]
+      },
+      "beats": [
+        {
+          "zone": "marsh_crossing",
+          "at": [
+            -4.1,
+            7.3
+          ],
+          "object": "order",
+          "prompt": "Read both sides of the inspection warrant",
+          "seconds": 1.6,
+          "result": "Merrow’s signature holds the loads. The added directions let people pass after inspection. A spoken order has left out that line."
+        },
+        {
+          "zone": "marsh_crossing",
+          "at": [
+            2.7,
+            4.5
+          ],
+          "object": "line",
+          "prompt": "Get the trapped patrolman’s sleeve out from under the wheel",
+          "seconds": 2.4,
+          "result": "Another man takes the hauling line. The shaft strikes Rook under the ribs as the cart goes over.",
+          "set": {
+            "novel_rook_ribs": true,
+            "novel_route_book": "nera",
+            "novel_lost_blankets": true
+          }
+        },
+        {
+          "zone": "marsh_crossing",
+          "at": [
+            -3.4,
+            9.5
+          ],
+          "object": "frame",
+          "prompt": "Carry Elna’s coat-litter up past the fork",
+          "seconds": 2,
+          "result": "The meal runs down the bank. The people reach high ground. Elna says Rook owes her a lining; this time he saves his breath."
+        },
+        {
+          "zone": "vargan_approach",
+          "at": [
+            -3.3,
+            9
+          ],
+          "object": "bedding",
+          "prompt": "Set the litter down by the washroom",
+          "seconds": 1.8,
+          "result": "Give Rook a small breath before moving him again. Nera keeps the route book. He still gets a bed and hot food."
+        }
+      ]
+    },
+    {
+      "chapter": 22,
+      "id": "three_workers",
+      "title": "Three marks beneath Toma’s hand",
+      "when": {
+        "objectives": [
+          [
+            "main_blood_under_stone",
+            "reach_castle"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "actor": "farmer_toma",
+          "prompt": "Ask who will stay with Pell while he petitions",
+          "line": "Pell’s my daughter. Those are three seasonal hands from the gardens. I can go once we agree who’s here until I’m back.",
+          "result": "You wait for a real handover before carrying the petition.",
+          "speaker": "Toma",
+          "choices": [
+            {
+              "label": "Bring the petition yourself while Toma stays with Pell",
+              "result": "Toma sees you off from his own doorstep.",
+              "set": {
+                "novel_pell_care": "toma"
+              },
+              "when": {}
+            },
+            {
+              "label": "Take the afternoon watch while Toma files it",
+              "result": "Toma returns before you leave for the gate.",
+              "set": {
+                "novel_pell_care": "kael_relieved"
+              },
+              "when": {}
+            }
+          ]
+        },
+        {
+          "zone": "vargan_approach",
+          "at": [
+            2.2,
+            8.8
+          ],
+          "object": "petition",
+          "prompt": "Present the three workers’ marks at the lower gate",
+          "seconds": 1.6,
+          "result": "Two charges appear twice. One tool bond had already expired."
+        },
+        {
+          "zone": "vargan_court",
+          "at": [
+            -1.6,
+            5
+          ],
+          "object": "copy",
+          "prompt": "File the workers’ tool claims with the release",
+          "seconds": 1.8,
+          "result": "Their tools can leave with them. The third worker asks whether the cart job actually pays.",
+          "set": {
+            "novel_workers_release": true
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 23,
+      "id": "seals",
+      "title": "Two dates, two hands",
+      "when": {
+        "objectives": [
+          [
+            "main_blood_under_stone",
+            "recover_ledger"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "record_hall",
+          "at": [
+            -3.5,
+            4.8
+          ],
+          "object": "order",
+          "prompt": "Trace the date and seal on the old closure order",
+          "seconds": 1.8,
+          "result": "The office seal acknowledges a closure thirty-two years ago. Edric was a child then."
+        },
+        {
+          "zone": "record_hall",
+          "at": [
+            3.6,
+            2.2
+          ],
+          "object": "copy",
+          "prompt": "Compare the instruction in red office thread",
+          "seconds": 1.7,
+          "result": "Six years ago, Edric was grown. His own instruction kept the older file out of reach.",
+          "evidence": {
+            "id": "suppression",
+            "title": "The dated instruction",
+            "text": "The old closure and Edric’s suppression instruction are distinct documents, separated by twenty-six years.",
+            "kind": "observed"
+          }
+        },
+        {
+          "zone": "record_hall",
+          "at": [
+            -2.2,
+            6
+          ],
+          "object": "ledger",
+          "prompt": "Check both copies and receipt the sealed original",
+          "seconds": 2,
+          "result": "Page by page, in front of two clerks. The custody receipt and the suppression instruction travel separately.",
+          "set": {
+            "novel_checked_copies": true
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 24,
+      "id": "absent_members",
+      "title": "A ration for an absent daughter",
+      "when": {
+        "objectives": [
+          [
+            "main_blood_under_stone",
+            "recover_ledger"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "vargan_court",
+          "at": [
+            2.1,
+            6.8
+          ],
+          "object": "meal",
+          "prompt": "Weigh a real ration at the court store",
+          "seconds": 1.5,
+          "result": "The flour is real. So is the old woman waiting beside it."
+        },
+        {
+          "zone": "vargan_court",
+          "at": [
+            -3.2,
+            5.8
+          ],
+          "object": "order",
+          "prompt": "Compare the ration slip to the assent line",
+          "line": "The signature claims assent for present and absent household members. A hand raw from work rests beside the pen.",
+          "result": "",
+          "choices": [
+            {
+              "label": "Pay this ration without collecting a signature",
+              "result": "One woman can take her flour. The condition still faces the next household.",
+              "set": {
+                "novel_store_help": "ration"
+              },
+              "when": {}
+            },
+            {
+              "label": "Make a witnessed copy of the condition",
+              "result": "You preserve the wording for the Assembly. A copy will not feed the queue.",
+              "set": {
+                "novel_store_help": "document"
+              },
+              "when": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 25,
+      "id": "felt_under_iron",
+      "title": "The lamp beneath the gate",
+      "when": {
+        "objectives": [
+          [
+            "main_last_witness",
+            "reach_undercroft"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "undercroft",
+          "at": [
+            -2.9,
+            6.6
+          ],
+          "object": "linen",
+          "prompt": "Slip felt beneath the rattling iron",
+          "seconds": 1.6,
+          "result": "The bracket grows quiet. Behind the drip from the channel, a second rhythm returns."
+        },
+        {
+          "zone": "undercroft",
+          "at": [
+            2.5,
+            3.6
+          ],
+          "object": "order",
+          "prompt": "Lay out the sanctuary order and put the newer sleeve aside",
+          "seconds": 1.8,
+          "result": "The living lord’s instruction was written after Halvern died. Only the old gate belongs in this hearing."
+        },
+        {
+          "zone": "undercroft",
+          "at": [
+            -1.3,
+            5.8
+          ],
+          "object": "copy",
+          "prompt": "Wrap the account after Halvern’s resolution",
+          "seconds": 1.5,
+          "result": "The old promise, the closure, the refusal. The copy has room to mark where this witness ends.",
+          "when": {
+            "objectives": [
+              [
+                "main_last_witness",
+                "halvern_choice"
+              ]
+            ]
+          },
+          "evidence": {
+            "id": "halvern_limit",
+            "title": "Where the gate account ends",
+            "text": "The undercroft belongs to Halvern’s last escort. He supplies no evidence about Edric’s later suppression or Kael’s own retreat.",
+            "kind": "observed"
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 26,
+      "id": "omitted_return",
+      "title": "Two stools and a flat stone",
+      "when": {
+        "complete": [
+          "main_last_witness"
+        ]
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            -4.8,
+            6.4
+          ],
+          "object": "sill",
+          "prompt": "Set two stools apart with a writing board between them",
+          "seconds": 1.4,
+          "result": "The road is visible from both seats. Nera can leave from hers."
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            -2.5,
+            5.4
+          ],
+          "object": "copy",
+          "prompt": "Reconstruct the words of Kael’s old report",
+          "line": "“We withdrew under orders.” You remember writing it. Vale does not have the old report on her board. What happened after the retreat?",
+          "result": "",
+          "choices": [
+            {
+              "label": "Add the decision to stay away under Kael’s name",
+              "result": "“I chose not to come back.” Vale labels it as remembered wording, followed by a correction.",
+              "set": {
+                "novel_kael_correction": "named"
+              },
+              "when": {}
+            },
+            {
+              "label": "Seal the exact correction for the relief crew",
+              "result": "His signature and the decision not to return stay with the crew’s private account.",
+              "set": {
+                "novel_kael_correction": "protected"
+              },
+              "when": {}
+            }
+          ]
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            2.2,
+            5.5
+          ],
+          "object": "ledger",
+          "prompt": "Dry the two accounts separately",
+          "seconds": 1.8,
+          "result": "Nera’s record belongs to Nera. Kael’s name and choice stay on his page. Nothing here asks her to forgive him."
+        }
+      ]
+    },
+    {
+      "chapter": 27,
+      "id": "first_night",
+      "title": "Two dry rooms",
+      "when": {
+        "quest": "main_house_many_names"
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            -6.4,
+            3.5
+          ],
+          "object": "ladder",
+          "prompt": "Find the rotten rungs before lifting the roof ladder",
+          "seconds": 1.8,
+          "result": "Two give way. There is one length of patched sailcloth for a leaking room or for privacy."
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            3.5,
+            4.4
+          ],
+          "object": "linen",
+          "prompt": "Carry the patch to the first-night shelter",
+          "line": "The cloth can do one job tonight. Both beds and records still need actual dry places.",
+          "result": "",
+          "choices": [
+            {
+              "label": "Cover the leaking roof; use a borrowed screen below",
+              "result": "Rain runs outside. The second bed waits behind the borrowed screen.",
+              "set": {
+                "novel_sailcloth": "roof"
+              },
+              "when": {}
+            },
+            {
+              "label": "Divide the sleeping room; keep records in the dry washroom",
+              "result": "Someone can change behind the cloth. Papers go uphill in a closed chest.",
+              "set": {
+                "novel_sailcloth": "privacy"
+              },
+              "when": {}
+            }
+          ]
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            -1.7,
+            6.8
+          ],
+          "object": "water",
+          "prompt": "Draw the first bucket and clear the smoky flue",
+          "seconds": 2,
+          "result": "A leaf floats in the first bucket. The second comes up clean. There is one night of shelter here, and still a house to build."
+        }
+      ]
+    }
+  ]
+}

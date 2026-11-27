@@ -1,0 +1,608 @@
+{
+  "version": 1,
+  "act": 1,
+  "scenes": [
+    {
+      "chapter": 1,
+      "id": "gate_hub",
+      "title": "The cracked hub",
+      "when": {
+        "quest": "main_road_of_crows",
+        "before": [
+          "main_road_of_crows"
+        ]
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "at": [
+            -3.2,
+            10.6
+          ],
+          "object": "load",
+          "prompt": "Unload the cabbage basket",
+          "seconds": 1.5,
+          "result": "The rim lifts clear of the rut. A cabbage rolls back against your boot."
+        },
+        {
+          "zone": "greyfen",
+          "at": [
+            1.9,
+            8.4
+          ],
+          "object": "pin",
+          "prompt": "Push the loose pin home",
+          "seconds": 2.2,
+          "result": "The wheel takes the weight. The carter rolls it forward by hand."
+        },
+        {
+          "zone": "greyfen",
+          "actor": "blacksmith_tor",
+          "prompt": "Return the spare pin",
+          "line": "You kept the thumb. That's usually the expensive part.",
+          "result": "Tor keeps the bent pin as a pattern.",
+          "speaker": "Tor",
+          "reply": "Ask him to show you where it cracked"
+        }
+      ]
+    },
+    {
+      "chapter": 1,
+      "id": "boots_and_supper",
+      "title": "The pot by the door",
+      "when": {
+        "quest": "main_road_of_crows"
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "actor": "rook",
+          "prompt": "Ask what became of the left gloves",
+          "line": "Thirty-seven. All left. I couldn’t find a one-handed company with the right sort of bad luck.",
+          "result": "He mimes polishing a boot with a glove on each finger.",
+          "speaker": "Rook",
+          "reply": "Let him finish the story"
+        },
+        {
+          "zone": "greyfen",
+          "at": [
+            -1.7,
+            7.4
+          ],
+          "object": "meal",
+          "prompt": "Take a turn at Nessa’s soup pot",
+          "seconds": 2,
+          "result": "There is a black heel by the stove. Bera was drying a boot. Only the pigeons ever liked the smell."
+        }
+      ]
+    },
+    {
+      "chapter": 2,
+      "id": "brush_and_button",
+      "title": "The carter’s little purse",
+      "when": {
+        "objectives": [
+          [
+            "main_road_of_crows",
+            "bram"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "wychwood",
+          "at": [
+            -4.2,
+            6.4
+          ],
+          "object": "linen",
+          "prompt": "Ease the purse from beneath the cart board",
+          "seconds": 1.8,
+          "result": "Three coins and a button, together as if they were worth the same."
+        },
+        {
+          "zone": "wychwood",
+          "at": [
+            1.6,
+            5.2
+          ],
+          "object": "wire",
+          "prompt": "Compare the loops with the split cart wire",
+          "seconds": 1.8,
+          "result": "Two flat turns. A brush bound with hair lies under the splinter. You can carry both without deciding who made the cut.",
+          "evidence": {
+            "id": "cart_purse",
+            "title": "Under the cart",
+            "text": "Three coins, a button and a handmade brush. The flat wire loops describe a fastening. They do not identify a patrol.",
+            "kind": "observed"
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 2,
+      "id": "short_track",
+      "title": "Where the little prints stop",
+      "when": {
+        "objectives": [
+          [
+            "main_road_of_crows",
+            "drag_marks"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "wychwood",
+          "at": [
+            5.8,
+            7.7
+          ],
+          "object": "shawl",
+          "prompt": "Lift the yellow edge clear of the thorn",
+          "seconds": 1.5,
+          "result": "The thorn has been cut. The grey thread still runs through the brown wool."
+        },
+        {
+          "zone": "wychwood",
+          "at": [
+            5.7,
+            1.4
+          ],
+          "object": "post",
+          "prompt": "Walk the smaller prints to the wet edge",
+          "seconds": 1,
+          "result": "Small heels, then water. Kael turns back before his own boots destroy the last print.",
+          "evidence": {
+            "id": "small_prints",
+            "title": "At the water’s edge",
+            "text": "The smaller tracks leave the cart toward the marsh. Where the print ends, the account ends.",
+            "kind": "observed"
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "id": "mira_basin",
+      "title": "Away from the fever bed",
+      "when": {
+        "objectives": [
+          [
+            "main_road_of_crows",
+            "fight_ghoulkin"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "at": [
+            -6.2,
+            -1.4
+          ],
+          "object": "water",
+          "prompt": "Bring clean water away from Pell’s bed",
+          "seconds": 2,
+          "result": "You take the clean bowl to the window. Mira can reach the cut without disturbing the child."
+        },
+        {
+          "zone": "greyfen",
+          "actor": "mira",
+          "prompt": "Offer the arm you actually hurt",
+          "line": "Next time use your left. Oh, that is the one I’ve just stitched. In that case, let somebody else be brave.",
+          "result": "She wrings out the cloth with both hands. The pain eases before either of you tries another joke.",
+          "speaker": "Mira",
+          "reply": "Keep still for the last stitch"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "id": "two_pass",
+      "title": "A maker’s answer",
+      "when": {
+        "flags": {
+          "novel_done_brush_and_button": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "actor": "blacksmith_tor",
+          "prompt": "Lay the two loops on Tor’s anvil",
+          "line": "Two passes. First one holds the load, second stops it slipping. Tell me what road it was on and I can tell you what road it was on.",
+          "result": "He returns the wire. His name can stand beside the method alone.",
+          "speaker": "Tor",
+          "evidence": {
+            "id": "two_pass",
+            "title": "What Tor can identify",
+            "text": "Tor recognizes a two-pass fastening. He cannot identify the buyer.",
+            "kind": "testimony"
+          }
+        },
+        {
+          "zone": "greyfen",
+          "actor": "sister_anwen",
+          "prompt": "Hand Anwen the brush, hair end first",
+          "line": "I know that stitch. That much you can say I knew.",
+          "result": "She holds the little handle in her palm. Her answer does not change the report you choose to make.",
+          "speaker": "Anwen",
+          "reply": "Give her time to set it down"
+        }
+      ]
+    },
+    {
+      "chapter": 4,
+      "id": "two_doors",
+      "title": "Two doors laid flat",
+      "when": {
+        "quest": "main_bell_beneath_greyfen"
+      },
+      "beats": [
+        {
+          "zone": "cemetery",
+          "at": [
+            -4.4,
+            8.7
+          ],
+          "object": "door",
+          "prompt": "Lay out a door for Bram",
+          "seconds": 1.8,
+          "result": "An ordinary latch knocks against the earth."
+        },
+        {
+          "zone": "cemetery",
+          "at": [
+            -1.1,
+            7.8
+          ],
+          "object": "door",
+          "prompt": "Fit the second door beside the first",
+          "seconds": 2,
+          "result": "Two bodies, two doors. The empty patch beyond them is left bare.",
+          "evidence": {
+            "id": "two_doors",
+            "title": "The space beside the doors",
+            "text": "Oren has not been found. No one prepared a third body for burial.",
+            "kind": "observed"
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 4,
+      "id": "loaned_bell",
+      "title": "Elna’s cart bell",
+      "when": {
+        "quest": "main_bell_beneath_greyfen"
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "actor": "widow_elna",
+          "prompt": "Ask to borrow the little cart bell",
+          "line": "Harl packed cloth inside so it wouldn’t wake me. That was after the clapper went. A man can get into the habit of a kindness.",
+          "result": "She puts it in your hand by the leather, not by the rim.",
+          "speaker": "Elna",
+          "choices": [
+            {
+              "label": "Promise to bring back the bell itself",
+              "result": "Elna lets the handle go.",
+              "set": {
+                "novel_bell_custody": "loan"
+              },
+              "when": {}
+            }
+          ]
+        },
+        {
+          "zone": "cemetery",
+          "at": [
+            -4.7,
+            6.3
+          ],
+          "object": "bell",
+          "prompt": "Set the borrowed bell against the worn groove",
+          "seconds": 1.6,
+          "result": "The arc lines up. A mark can tell you where metal struck. It cannot speak for Harl."
+        }
+      ]
+    },
+    {
+      "chapter": 5,
+      "id": "chain_wedge",
+      "title": "The gap in the yew",
+      "when": {
+        "quest": "main_bell_beneath_greyfen"
+      },
+      "beats": [
+        {
+          "zone": "cemetery",
+          "at": [
+            3.5,
+            5.4
+          ],
+          "object": "sill",
+          "prompt": "Wedge the dragging chain clear of the path",
+          "seconds": 2,
+          "result": "There is room beside the yew for one person to move."
+        },
+        {
+          "zone": "cemetery",
+          "at": [
+            2.1,
+            2.9
+          ],
+          "object": "line",
+          "prompt": "Ease the binding off the fallen chain",
+          "seconds": 1.6,
+          "result": "A cut end springs back. It was a hand at this end once.",
+          "when": {
+            "objectives": [
+              [
+                "main_bell_beneath_greyfen",
+                "cemetery_ambush"
+              ]
+            ]
+          }
+        },
+        {
+          "zone": "greyfen",
+          "actor": "sister_anwen",
+          "prompt": "Ask whose cot stood beside the plant pot",
+          "line": "Evin. Seventeen. Last winter. I keep saying he fell, as if that tells you everything about the rope.",
+          "result": "She carries a basin to the next bed. The pot stays outside the door.",
+          "speaker": "Anwen",
+          "evidence": {
+            "id": "evin",
+            "title": "Last winter",
+            "text": "Evin was Anwen’s seventeen-year-old novice. His death belongs to last winter, separately from the old sanctuary and the travelers.",
+            "kind": "testimony"
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 6,
+      "id": "blanket_count",
+      "title": "The blanket that was promised",
+      "when": {
+        "quest": "main_teeth_in_rain"
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "at": [
+            2.8,
+            9.5
+          ],
+          "object": "bedding",
+          "prompt": "Unroll and count the bedding actually aboard",
+          "seconds": 2,
+          "result": "One folded blanket makes two bumps. Only one person can sleep under it."
+        },
+        {
+          "zone": "greyfen",
+          "at": [
+            4.5,
+            7.5
+          ],
+          "object": "ledger",
+          "prompt": "Correct the passenger sheet",
+          "line": "Two blankets were promised. One is in the wagon.",
+          "result": "Nera can plan another stop with an honest count.",
+          "choices": [
+            {
+              "label": "List the second as owed",
+              "result": "The crew knows to collect it.",
+              "set": {
+                "novel_blanket": "owed"
+              },
+              "when": {}
+            },
+            {
+              "label": "Send word for another before loading",
+              "result": "The outgoing list marks the collection still due.",
+              "set": {
+                "novel_blanket": "collection"
+              },
+              "when": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 6,
+      "id": "bracken_brick",
+      "title": "A warm brick",
+      "when": {
+        "objectives": [
+          [
+            "side_bracken_rescue",
+            "release_strap"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "at": [
+            4.8,
+            6.4
+          ],
+          "object": "linen",
+          "prompt": "Wrap the warm brick for Bracken’s sore hind foot",
+          "seconds": 1.8,
+          "result": "The little hearthscale settles his weight on the good side and blinks one eye at the parcel."
+        },
+        {
+          "zone": "greyfen",
+          "at": [
+            3.1,
+            5.8
+          ],
+          "object": "bedding",
+          "prompt": "Set the basket outside the wheel track",
+          "seconds": 1.5,
+          "result": "There is heat beneath the blanket and no strap to catch a hind foot."
+        }
+      ]
+    },
+    {
+      "chapter": 7,
+      "id": "pell_drawing",
+      "title": "Six arms and a hat",
+      "when": {
+        "quest": "main_teeth_in_rain"
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "actor": "farmer_toma",
+          "prompt": "Turn Pell’s drawing the way she held it",
+          "line": "That part's a hat. She’s particular about the hat. I keep seeing what else the arms could do.",
+          "result": "Toma lets you look at the fence and folds the drawing away again.",
+          "speaker": "Toma"
+        },
+        {
+          "zone": "greyfen",
+          "at": [
+            10.6,
+            5.3
+          ],
+          "object": "sill",
+          "prompt": "Push at the foot of the rotten rail",
+          "seconds": 1.7,
+          "result": "The rail yields under one hand. A child could get through. Her rescue and the danger can both be true."
+        }
+      ]
+    },
+    {
+      "chapter": 8,
+      "id": "willow_frame",
+      "title": "The way back with Oren",
+      "when": {
+        "objectives": [
+          [
+            "main_teeth_in_rain",
+            "fight_bog_wretch"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "wychwood",
+          "at": [
+            7.3,
+            -3.6
+          ],
+          "object": "line",
+          "prompt": "Set the safety line above the willow bank",
+          "seconds": 2,
+          "result": "The line takes your weight. Beneath the willow is a shoe with its lace still tied."
+        },
+        {
+          "zone": "wychwood",
+          "at": [
+            8.2,
+            -5.6
+          ],
+          "object": "shoe",
+          "prompt": "Match the shoe and lift Oren onto the frame",
+          "seconds": 2.8,
+          "result": "The two shoes match. You tuck the wet shawl under his head. There is the faintest smell of onion on the wool.",
+          "set": {
+            "novel_oren_found": true
+          },
+          "evidence": {
+            "id": "oren_willow",
+            "title": "Oren beneath the willow",
+            "text": "Kael recovered Oren under the willow. His shoe matches the one at the cart. The memory fragment is a separate object.",
+            "kind": "observed"
+          }
+        },
+        {
+          "zone": "wychwood",
+          "at": [
+            -1.3,
+            10.3
+          ],
+          "object": "frame",
+          "prompt": "Rest the frame on the southern bank",
+          "seconds": 2,
+          "result": "At the next lift you take the heavier end. The crow stays wrapped."
+        },
+        {
+          "zone": "greyfen",
+          "at": [
+            -1.1,
+            -5.3
+          ],
+          "object": "frame",
+          "prompt": "Bring the frame to the shrine porch",
+          "seconds": 2,
+          "result": "The door opens far enough for both bearers. Nobody asks for a report before the frame is inside."
+        },
+        {
+          "zone": "cemetery",
+          "at": [
+            -1.8,
+            8.8
+          ],
+          "object": "ledger",
+          "prompt": "Check Bram, Sella and Oren against the three graves",
+          "seconds": 2,
+          "result": "Three names this time. There is a new button on the little coat.",
+          "set": {
+            "novel_oren_buried": true
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 9,
+      "id": "loaded_ground",
+      "title": "A warning with a reason",
+      "when": {
+        "quest": "main_names_they_burned"
+      },
+      "beats": [
+        {
+          "zone": "deep_wood",
+          "at": [
+            -5.6,
+            8.8
+          ],
+          "object": "load",
+          "prompt": "Lift the test load at the fork",
+          "seconds": 1.6,
+          "result": "The stones fit in one sack. Walking empty would tell you less."
+        },
+        {
+          "zone": "deep_wood",
+          "at": [
+            -3.7,
+            4.9
+          ],
+          "object": "post",
+          "prompt": "Test the brushed-over ground under load",
+          "seconds": 2,
+          "result": "The mud gives before the branch does. You step back onto firm earth."
+        },
+        {
+          "zone": "deep_wood",
+          "at": [
+            -5.4,
+            8.4
+          ],
+          "object": "order",
+          "prompt": "Mark the reason on the wayboard",
+          "seconds": 1.6,
+          "result": "“Foot passage on the left. Loaded wheel sinks under the brush.” Someone can use that without having met you."
+        }
+      ]
+    }
+  ]
+}

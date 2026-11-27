@@ -27,6 +27,7 @@ var completed_objectives: Dictionary:
 var quest_defs = {}
 var source_quest_defs: Dictionary = {}
 var campaign_revision := CampaignRevision.LEGACY
+var novel_edition := false
 var world_reads = preload("res://scripts/world_read_scope.gd").new()
 var _active: Dictionary = {}
 var active: Dictionary:
@@ -87,19 +88,21 @@ func load_quests(path: String) -> void:
 	if typeof(parsed) == TYPE_DICTIONARY:
 		source_quest_defs = parsed
 		source_quest_defs.merge(preload("res://scripts/saga_catalog.gd").quest_definitions(), true)
-		configure_campaign_revision(campaign_revision)
+		configure_campaign_revision(campaign_revision, novel_edition)
 
 func can_load_campaign_revision(revision: int) -> bool:
 	var source: Dictionary = source_quest_defs if not source_quest_defs.is_empty() else quest_defs
 	return revision == CampaignRevision.LEGACY or (revision == CampaignRevision.EXPANDED and CampaignRevision.has_complete_expansion(source))
 
-func configure_campaign_revision(revision: int) -> bool:
+func configure_campaign_revision(revision: int, novel: bool = false) -> bool:
 	if not can_load_campaign_revision(revision):
 		return false
 	if source_quest_defs.is_empty():
 		source_quest_defs = quest_defs.duplicate(true)
 	campaign_revision = revision
 	quest_defs = CampaignRevision.project_quests(source_quest_defs, revision)
+	novel_edition = novel and revision == CampaignRevision.EXPANDED
+	if novel_edition: preload("res://scripts/novel/novel_campaign.gd").extend(quest_defs)
 	return true
 
 func start_quest(id: String) -> bool:

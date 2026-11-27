@@ -45,7 +45,7 @@ func _apply_loaded_journey(data: Dictionary) -> void:
 		minigames.load_state(data.get("minigames", {}) if data.get("minigames", {}) is Dictionary else {})
 	# Select the journey's graph before sanitizing its active/completed IDs.
 	# The preparation owner already rejected a revision whose definitions are absent.
-	quests.configure_campaign_revision(preload("res://scripts/campaign_revision.gd").from_save(data))
+	quests.configure_campaign_revision(preload("res://scripts/campaign_revision.gd").from_save(data), preload("res://scripts/novel/novel_campaign.gd").saved_edition(data))
 	quests.load_state(data.get("quests", {}))
 	if quest_presentation != null:
 		quest_presentation.load_state(data.get("quest_presentation", {}))
@@ -57,6 +57,8 @@ func _apply_loaded_journey(data: Dictionary) -> void:
 		settings.restore_settings(data.settings)
 		settings.apply()
 	story_state.load_state(data.get("story_state", {}))
+	if story_state.get_flag("novel_edition",0) == 1 and not story_state.get_flag("novel_prologue_closed",false) and str(data.get("world_sector",data.get("zone",""))) == "greyfen":
+		opening_scene_pending = true
 	progression.load_state(data.get("progression", {}))
 	if seamless_world != null and seamless_world.has_method("load_state"):
 		seamless_world.load_state(data.get("seamless_world", {}))

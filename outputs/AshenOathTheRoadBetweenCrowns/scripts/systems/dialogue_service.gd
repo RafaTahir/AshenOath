@@ -6,6 +6,14 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 	if action.get("type") == "wychwood_road_reply":
 		preload("res://scripts/views/monster_road_signs_view.gd").answer_road_sign(_host, action)
 		return
+	if str(action.get("type", "")) in ["novel_visit", "novel_reply"]:
+		var novel: Node = preload("res://scripts/novel/novel_scenes.gd").current(_host)
+		if str(action.type) == "novel_visit":
+			_host._resume_game()
+			if novel != null: novel.activate(str(action.id),int(action.index),instance_from_id(int(action.source)) as Node3D)
+		elif novel != null: novel.reply(action)
+		else: _host._resume_game()
+		return
 	if str(action.get("type", "")) == "community_action":
 		preload("res://scripts/story_activity_director.gd").choose_community(_host, action)
 		return

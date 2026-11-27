@@ -132,7 +132,8 @@ func _build_objective_view_model() -> Dictionary:
 			var beat: Dictionary = quest_beats.get_current_beat()
 			if str(beat.get("quest_id", "")) == view.quest_id and str(beat.get("objective_id", "")) == view.objective_id:
 				view.next_action = str(beat.get("next", "")).trim_suffix(".")
-		var route: Dictionary = RouteCatalog.for_objective(view.quest_id, view.objective_id, story_state, quest_manager, zone_id)
+		var route: Dictionary = preload("res://scripts/novel/novel_scenes.gd").route(story_state,view.objective_id)
+		if route.is_empty(): route = RouteCatalog.for_objective(view.quest_id, view.objective_id, story_state, quest_manager, zone_id)
 		_apply_route(view, route)
 		if route.has("next_action"):
 			view.next_action = str(route["next_action"])

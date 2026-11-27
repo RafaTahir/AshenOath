@@ -109,6 +109,8 @@ static func personal_scenes(game, actor_id: String) -> Array[Dictionary]:
 	return scenes
 
 static func add_personal_invitation(game, area: Node3D, content: Dictionary) -> void:
+	var novel: Node = preload("res://scripts/novel/novel_scenes.gd").current(game)
+	if novel != null: novel.invitations(area,content)
 	if str(game.current_zone_id) == "greyfen" and str(area.get("interaction_id")) == "mira":
 		content["actions"].append({"type":"greyfen_detail_action", "operation":"preparation", "label":"What should I understand before preparing?"})
 	var recovery_key := "evidence_report" if str(area.get("interaction_id")) == "notice_board" else ("iron_fate" if str(area.get("interaction_id")) == "blacksmith_tor" else "")
@@ -221,6 +223,10 @@ static func choose_community(game, action: Dictionary) -> void:
 static func handle(game, area) -> void:
 	if str(area.interaction_id) == "wychwood_axle_ring":
 		preload("res://scripts/views/monster_road_signs_view.gd").open_road_sign(game, area)
+		return
+	if area.has_meta("novel_scene"):
+		var novel: Node = preload("res://scripts/novel/novel_scenes.gd").current(game)
+		if novel != null: novel.activate(str(area.get_meta("novel_scene")), int(area.get_meta("novel_index")), area)
 		return
 	if handle_community(game, area): return
 	if area.has_meta("everyday_action"):
@@ -401,7 +407,7 @@ func refresh() -> void:
 	for area in get_tree().get_nodes_in_group("story_activity"):
 		if not host.zone_root.is_ancestor_of(area):
 			continue
-		if area.has_meta("community_action"): continue
+		if area.has_meta("community_action") or area.has_meta("novel_scene"): continue
 		var id := str(area.interaction_id)
 		var enabled := true
 		if id.begins_with("lr_work_"):
@@ -440,6 +446,7 @@ func refresh() -> void:
 	if saga != null:
 		saga.refresh()
 	if community != null: community.refresh()
+	preload("res://scripts/novel/novel_scenes.gd").install(self)
 
 func activate(id: String) -> void:
 	if id.begins_with("approach_"):
