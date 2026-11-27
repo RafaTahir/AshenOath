@@ -20,6 +20,7 @@ static func _migrate(raw_data: Dictionary, target_version: int) -> Dictionary:
 	data["player_position"] = Fields._normalize_position(data.get("player_position", [0.0, 1.0, 7.0]), data.zone)
 	data["world_sector"] = Fields._normalize_zone(str(data.get("world_sector", data.zone)))
 	data["world_position"] = Fields._normalize_position(data.get("world_position", Fields._local_to_world(data.player_position, data.world_sector)), data.world_sector)
+	data["world_position"] = Fields._correct_sector_origin(raw_data, data.world_sector, data.player_position, data.world_position)
 	if not data.has("seamless_world") or typeof(data.get("seamless_world")) != TYPE_DICTIONARY:
 		data["seamless_world"] = {}
 	for key in ["inventory", "vendors", "quests", "story_state", "progression", "world_state", "player_health", "player_stamina", "equipment"]:

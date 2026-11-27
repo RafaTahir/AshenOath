@@ -55,25 +55,20 @@ static func _normalize_zone(zone: String) -> String:
 
 static func _local_to_world(local_position: Array, zone: String) -> Array:
 	var position := _normalize_position(local_position, zone)
-	var coordinates := {
-		"greyfen": Vector2i(0, 0),
-		"wychwood": Vector2i(0, 1),
-		"deep_wood": Vector2i(0, 2),
-		"old_mill": Vector2i(0, 3),
-		"burned_farmstead": Vector2i(0, 4),
-		"marsh_crossing": Vector2i(0, 5),
-		"bandit_road": Vector2i(0, 6),
-		"vargan_approach": Vector2i(1, 6),
-		"vargan_court": Vector2i(1, 7),
-		"record_hall": Vector2i(1, 8),
-		"undercroft": Vector2i(1, 9),
-		"assembly": Vector2i(1, 10),
-		"hart_glade": Vector2i(1, 11),
-		"cemetery": Vector2i(1, 0),
-		"ruins": Vector2i(-1, 0),
-	}
-	var cell: Vector2i = coordinates.get(zone, Vector2i.ZERO)
-	return [float(cell.x * 48.0) + float(position[0]), position[1], float(cell.y * 40.0) + float(position[2])]
+	var world := preload("res://scripts/world_sector_manifest.gd").local_to_world(zone, Vector3(position[0], position[1], position[2]))
+	return [world.x, world.y, world.z]
+
+## Released saves wrote these three sector origins using a stale private atlas.
+## Recognize that exact signature when a local position survived the save.
+static func _correct_sector_origin(raw: Dictionary, sector: String, local: Array, world: Array) -> Array:
+	if sector not in ["lantern_reach", "hearthward", "assembly"] or not raw.get("player_position") is Array or raw.player_position.size() != 3:
+		return world
+	var legacy_offset := Vector3(48, 0, 400) if sector == "assembly" else Vector3.ZERO
+	var local_point := Vector3(local[0], local[1], local[2])
+	var stored := Vector3(world[0], world[1], world[2])
+	if stored.is_equal_approx(local_point + legacy_offset):
+		return _local_to_world(local, sector)
+	return world
 
 static func _normalize_position(raw_position: Variant, zone: String) -> Array:
 	if typeof(raw_position) != TYPE_ARRAY or raw_position.size() < 3:
