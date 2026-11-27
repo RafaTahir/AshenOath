@@ -1,6 +1,7 @@
 extends RefCounted
 const Api = preload("res://scripts/core/zone_construction_api.gd")
 const Scope = preload("res://scripts/core/zone_instance_scope.gd")
+const NovelInjury = preload("res://scripts/views/novel_cast_injury_view.gd")
 var _host: Api
 var _scope: Scope
 func _init(host: Api, scope: Scope) -> void:
@@ -223,6 +224,7 @@ func _spawn_enemy(id: String, pos: Vector3, visual_role: String = "") -> Node:
 func _configure_npc_animation(mapped: Node3D, id: String) -> bool:
 	var existing: Variant = mapped.get_node_or_null("CharacterAnimationDriver")
 	if existing != null:
+		if NovelInjury.FLAGS.has(id): NovelInjury.bind_named_actor(existing, id, _host.story_state)
 		return _host.CharacterAnimationDriver.record_configuration(_scope.zone_root, id, existing)
 	var clips: Variant = {
 		"idle": "Idle", "walk": "Walk", "walk_back": "Walk",
@@ -273,6 +275,7 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> bool:
 		load("res://scripts/grounded_feet_modifier.gd").install_npc(mapped, driver)
 	var npc_animation_rate: Variant = 8.0
 	driver.set_update_rate_hz(npc_animation_rate)
+	if NovelInjury.FLAGS.has(id): NovelInjury.bind_named_actor(driver, id, _host.story_state)
 	return true
 func should_defer_character_role(_role: String, _actor_id: String) -> bool:
 	return false

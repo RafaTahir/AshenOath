@@ -111,6 +111,7 @@ var locomotion_phase_distance := 0.0
 var locomotion_step_index := 0
 var story_gesture_remaining := 0.0
 var story_dialogue_active := false
+var novel_injury: StringName = &""
 var life_modifier
 var carried_activity_scope := ""
 var life_clip := StringName()
@@ -719,7 +720,7 @@ func set_working(active: bool) -> void:
 		presentation_state = "work"
 		current_state = ""
 		target_playback_scale = 1.0
-		_play_state("work", 0.14)
+		_play_state("idle" if novel_injury == &"novel_tor_braced" else "work", 0.14)
 	else:
 		if presentation_state == "work":
 			presentation_state = ""
@@ -784,11 +785,7 @@ func set_life_activity(kind: String) -> void:
 	if presentation_state == "life:" + kind:
 		return
 	_reset_ambient_morphs(true)
-	if life_modifier == null:
-		life_modifier = load("res://scripts/character_life_modifier.gd").new()
-		life_modifier.name = "CharacterLifePose"
-		skeleton.add_child(life_modifier)
-		life_modifier.configure(character_root, self)
+	_ensure_life_modifier()
 	life_modifier.activity = kind
 	if kind != "sleep":
 		life_modifier.rest_anchor = {}
@@ -801,7 +798,7 @@ func set_life_activity(kind: String) -> void:
 	var requested := "Life_Idle_A" if life_idle_variant == 0 else "Life_Idle_B"
 	if kind in life_work_kinds:
 		var bound_station: bool = life_modifier != null and not life_modifier.station.is_empty() and str(life_modifier.station.get("activity", "")) == kind
-		if not life_requires_station or bound_station: requested = "Life_Work"
+		if (not life_requires_station or bound_station) and novel_injury != &"novel_tor_braced": requested = "Life_Work"
 	elif kind not in LIFE_IDLE_KINDS:
 		requested = ""
 	if requested == "" or not _play_life_clip(requested):

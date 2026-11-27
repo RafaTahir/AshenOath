@@ -1,4 +1,5 @@
 extends RefCounted
+const RookPerformance = preload("res://scripts/views/novel_rook_performance.gd")
 var _life: Node
 func _init(life: Node) -> void:
 	_life = life
@@ -9,6 +10,8 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		entry.motion_speed = 0.0
 		entry.travel_direction = Vector3.ZERO
 		return
+	var hurt_rook := RookPerformance.injured(entry)
+	if entry.has("rib_walk_metres"): RookPerformance.reconcile(_life, entry, hurt_rook)
 	if entry.driver.get("dead") == true:
 		_life._cancel_greeting(entry, false)
 		_life._release_activity(entry, false)
@@ -110,7 +113,8 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 			return
 	if distance <= _life.ARRIVAL_DISTANCE + 0.015 and float(entry.motion_speed) < 0.12:
 		entry.motion_speed = 0.0
-		_life._set_motion(entry, 0.0)
+		if not entry.has("rib_breath_left"): _life._set_motion(entry, 0.0)
+		if hurt_rook and RookPerformance.pause_at_arrival(entry, delta): return
 		entry.route_index = int(entry.route_index) + 1
 		if int(entry.route_index) < entry.route.size():
 			_life._set_agent_target(entry)
@@ -130,7 +134,8 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 	turn_error = absf(wrapf(wanted_yaw - node.rotation.y, -PI, PI))
 	var turn_pace: float = clampf((deg_to_rad(65.0) - turn_error) / deg_to_rad(48.0), 0.0, 1.0)
 	var arrival_pace: float = sqrt(2.0 * _life.WALK_BRAKING * maxf(distance - _life.ARRIVAL_DISTANCE, 0.0))
-	var desired_speed: float = minf(float(entry.speed) * turn_pace, arrival_pace)
+	var ordinary_pace: float = float(entry.speed) * RookPerformance.WALK_SCALE if hurt_rook else float(entry.speed)
+	var desired_speed: float = minf(ordinary_pace * turn_pace, arrival_pace)
 	var crowd_pace: Variant = _life._crowd_pace(entry, direction, delta)
 	if not is_equal_approx(crowd_pace, 1.0): entry.erase("carry_route_scope")
 	desired_speed *= crowd_pace
@@ -141,7 +146,9 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 	heading.y = 0.0
 	heading = heading.normalized()
 	entry.travel_direction = heading
+	var step_start := node.global_position
 	_life._move_actor(entry, heading, float(entry.motion_speed), delta, maxf(distance - _life.ARRIVAL_DISTANCE, 0.0))
+	if hurt_rook: RookPerformance.record_step(entry, step_start)
 
 func _crowd_pace(entry: Dictionary, direction: Vector3, delta: float) -> float:
 	var pace: Variant = 1.0

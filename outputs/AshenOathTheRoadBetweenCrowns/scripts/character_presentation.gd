@@ -300,13 +300,8 @@ static func _add_occupation_equipment(owner: Node3D, role: String) -> void:
 			"hand": "right", "scale": 1.0,
 			"position": Vector3(0.02, -0.03, 0.0), "rotation": Vector3(0.0, 0.0, 90.0),
 		},
-		"blacksmith_tor": {
-			"path": FORGE_HAMMER_PATH,
-			"hand": "right", "scale": 1.0,
-			"position": Vector3(0.02, -0.03, 0.0), "rotation": Vector3(0.0, 0.0, 90.0),
-		},
 	}
-	var definition: Dictionary = definitions.get(role, {})
+	var definition: Dictionary = definitions.get("forge_helper" if role == "blacksmith_tor" else role, {})
 	if definition.is_empty() or owner.find_child("OccupationEquipment", true, false) != null:
 		return
 	var skeleton := _find_skeleton(owner)
@@ -337,6 +332,8 @@ static func _add_occupation_equipment(owner: Node3D, role: String) -> void:
 	prop.name = "OccupationProp_%s" % role
 	prop.scale = Vector3.ONE * float(definition.get("scale", 1.0))
 	equipment.add_child(prop)
+	if definition.path == FORGE_HAMMER_PATH:
+		preload("res://scripts/views/novel_tor_performance.gd").hammer_mounted(skeleton, prop)
 	owner.set_meta("character_occupation_equipment", role)
 
 static func _copy_identity_contract(owner: Node3D, visual_target: Node3D, role: String) -> void:

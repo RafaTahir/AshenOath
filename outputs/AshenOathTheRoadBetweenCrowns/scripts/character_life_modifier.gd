@@ -1,5 +1,6 @@
 extends SkeletonModifier3D
 
+const ArmIK = preload("res://scripts/views/character_arm_ik.gd")
 const StationaryWorkGrip = preload("res://scripts/stationary_work_grip.gd")
 
 ## Small authored work/attention poses on the retained rig. Hands solve to
@@ -45,6 +46,7 @@ var shift_rotation := 0.0
 var shift_target := 0.0
 var next_shift := 0.0
 var idle_rng := RandomNumberGenerator.new()
+var viewer_near := true
 var humanoid := false
 var anwen_staff_pose := false
 var staff_equipment: Node3D
@@ -114,6 +116,18 @@ func configure(body: Node3D, motion: Node) -> void:
 	humanoid = not arms.is_empty() and wings.is_empty() and role not in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bog_wretch", "gravebound_knight", "bell_eater", "rootbound_colossus", "ashwing", "white_hart_avatar"]
 
 func _process_modification() -> void:
+	_update_life_pose()
+	if not is_instance_valid(driver) or driver.novel_injury == &"" or driver.dead or driver.distance_suspended:
+		return
+	var rig := get_skeleton()
+	if rig == null or not is_instance_valid(actor): return
+	match driver.novel_injury:
+		&"novel_tor_braced":
+			preload("res://scripts/views/novel_tor_performance.gd").apply_pose(self, rig)
+		&"novel_rook_ribs":
+			preload("res://scripts/views/novel_rook_performance.gd").apply_pose(self, rig)
+
+func _update_life_pose() -> void:
 	var skeleton := get_skeleton()
 	if skeleton == null or not is_instance_valid(driver) or not is_instance_valid(actor):
 		return
@@ -132,11 +146,14 @@ func _process_modification() -> void:
 		return
 	var delta := minf(get_process_delta_time(), 0.05)
 	elapsed += delta
-	var near := true
+	viewer_near = true
 	var viewer: Variant = actor.get_meta("cast_viewer") if actor.has_meta("cast_viewer") else null
 	if is_instance_valid(viewer):
-		near = actor.global_position.distance_squared_to(viewer.global_position) < 100.0
+		viewer_near = actor.global_position.distance_squared_to(viewer.global_position) < 100.0
 	var effective := activity if activity != "" else carried_activity
+	if driver.novel_injury == &"novel_tor_braced" and (effective in ["forge", "repair", "carry"] or activity_prop == "hammer"):
+		hide_activity_tool()
+		return
 	var waiting_for_station: bool = bool(driver.get("life_requires_station")) and effective in driver.life_work_kinds \
 		and (station.is_empty() or str(station.get("activity", "")) != effective)
 	if waiting_for_station:
@@ -145,7 +162,7 @@ func _process_modification() -> void:
 		effective = "idle"
 	var native_motion: Dictionary = driver.life_motion_sample()
 	var awaiting_native: bool = driver.life_clip != StringName() and native_motion.is_empty()
-	var requested := effective != "" and near and not bool(driver.story_dialogue_active)
+	var requested := effective != "" and viewer_near and not bool(driver.story_dialogue_active)
 	if bool(driver.story_dialogue_active) and rest_anchor.has("awake_rest_owner"):
 		rest_anchor = {}
 	if effective == "rest" and rest_anchor.has("awake_rest_owner"):
@@ -153,8 +170,8 @@ func _process_modification() -> void:
 		awake_seat_weight = move_toward(awake_seat_weight, 1.0 if sitting else 0.0, delta * 4.5)
 	else:
 		awake_seat_weight = 0.0
-	_ambient_pose(skeleton, delta, near, effective, awaiting_native or not native_motion.is_empty())
-	if humanoid and near and garment_arm_clearance > 0.0 and not bool(driver.story_dialogue_active) and float(driver.current_speed_mps) > 0.08 and effective in ["", "idle", "watch", "lookout", "walk", "travel"]:
+	_ambient_pose(skeleton, delta, viewer_near, effective, awaiting_native or not native_motion.is_empty())
+	if humanoid and viewer_near and garment_arm_clearance > 0.0 and not bool(driver.story_dialogue_active) and float(driver.current_speed_mps) > 0.08 and effective in ["", "idle", "watch", "lookout", "walk", "travel"]:
 		var across := actor.global_basis.x.normalized()
 		var clearance := garment_arm_clearance * actor.global_basis.get_scale().y * clampf(float(driver.current_speed_mps) / 0.6, 0.0, 1.0)
 		for arm: Dictionary in arms:
@@ -164,7 +181,7 @@ func _process_modification() -> void:
 	if anwen_staff_pose:
 		_staff_pose(skeleton, delta, effective)
 	var scoped_grip := _update_tool(effective, requested and not waiting_for_station, not waiting_for_station)
-	creature_weight = move_toward(creature_weight, creature_amount if near and not bool(driver.story_dialogue_active) else 0.0, delta*3.0)
+	creature_weight = move_toward(creature_weight, creature_amount if viewer_near and not bool(driver.story_dialogue_active) else 0.0, delta*3.0)
 	if creature_weight > 0.001:
 		_creature_pose(skeleton)
 	pose_weight = move_toward(pose_weight, 1.0 if requested else 0.0, delta * 4.5)
@@ -193,7 +210,7 @@ func _process_modification() -> void:
 		var base := skeleton.get_bone_pose_rotation(spine)
 		var bend := 0.12 if effective == "scavenge" else 0.0
 		skeleton.set_bone_pose_rotation(spine, base * Quaternion(Vector3.RIGHT, (bend + sin(elapsed * 1.4) * 0.007) * pose_weight))
-	if effective in ["watch", "lookout", "idle", "remember", "rest", "sleep"]:
+	if effective in ["watch", "lookout", "idle", "remember", "rest", "sleep", "rook_catch_breath"]:
 		return
 	var forward: Vector3 = driver.get_visible_forward()
 	var right := forward.cross(Vector3.UP).normalized()
@@ -558,7 +575,7 @@ func _creature_pose(skeleton: Skeleton3D) -> void:
 		skeleton.set_bone_pose_rotation(head, skeleton.get_bone_pose_rotation(head)*Quaternion(Vector3.FORWARD, tilt*creature_weight))
 
 func _world(skeleton: Skeleton3D, bone: int) -> Vector3:
-	return (skeleton.global_transform * skeleton.get_bone_global_pose(bone)).origin
+	return ArmIK.world(skeleton, bone)
 
 func _staff_pose(skeleton: Skeleton3D, delta: float, effective: String) -> void:
 	if not is_instance_valid(staff_equipment):
@@ -605,48 +622,5 @@ func _staff_pose(skeleton: Skeleton3D, delta: float, effective: String) -> void:
 					skeleton.set_bone_pose_rotation(bone, skeleton.get_bone_pose_rotation(bone).slerp(relaxed, staff_weight))
 
 func _solve_arm(skeleton: Skeleton3D, arm: Dictionary, goal: Vector3, wrist_target: Variant = null, elbow_direction: Vector3 = Vector3.ZERO, wrist_weight: float = -1.0) -> void:
-	solved_wrist_goal = Vector3.INF
-	var shoulder := _world(skeleton, int(arm.upper))
-	var elbow := _world(skeleton, int(arm.lower))
-	var hand := _world(skeleton, int(arm.hand))
-	var upper := shoulder.distance_to(elbow)
-	var lower := elbow.distance_to(hand)
-	if upper < 0.02 or lower < 0.02 or shoulder.distance_squared_to(goal) < 0.0001:
-		return
-	var axis := (goal - shoulder).normalized()
-	var distance := clampf(shoulder.distance_to(goal), absf(upper - lower) + 0.005, upper + lower - 0.005)
-	goal = shoulder + axis * distance
-	var along := (upper * upper + distance * distance - lower * lower) / (2.0 * distance)
-	var bend := elbow - shoulder - axis * (elbow - shoulder).dot(axis)
-	if elbow_direction.length_squared() > 0.0001:
-		bend = elbow_direction - axis * elbow_direction.dot(axis)
-	if bend.length_squared() < 0.0001:
-		bend = actor.global_basis.x * float(arm.side)
-		bend -= axis * bend.dot(axis)
-	if bend.length_squared() < 0.0001:
-		return
-	var desired_elbow := shoulder + axis * along + bend.normalized() * sqrt(maxf(upper * upper - along * along, 0.0))
-	# Propagate the upper-arm rotation analytically into the lower arm. Both
-	# joints use one pose snapshot rather than forcing four whole-rig refreshes.
-	var frame := skeleton.global_basis.orthonormalized()
-	var upper_parent := skeleton.get_bone_parent(int(arm.upper))
-	var lower_parent := skeleton.get_bone_parent(int(arm.lower))
-	var upper_parent_basis := skeleton.get_bone_global_pose(upper_parent).basis.orthonormalized() if upper_parent >= 0 else Basis.IDENTITY
-	var lower_parent_basis := skeleton.get_bone_global_pose(lower_parent).basis.orthonormalized() if lower_parent >= 0 else Basis.IDENTITY
-	var hand_parent := skeleton.get_bone_parent(int(arm.hand))
-	var hand_parent_basis := skeleton.get_bone_global_pose(hand_parent).basis.orthonormalized() if hand_parent >= 0 else Basis.IDENTITY
-	var upper_basis := skeleton.get_bone_global_pose(int(arm.upper)).basis.orthonormalized()
-	var lower_basis := skeleton.get_bone_global_pose(int(arm.lower)).basis.orthonormalized()
-	var upper_turn := Basis(Quaternion((elbow - shoulder).normalized(), (desired_elbow - shoulder).normalized()))
-	var local_turn := frame.inverse() * upper_turn * frame
-	skeleton.set_bone_pose_rotation(int(arm.upper), (upper_parent_basis.inverse() * local_turn * upper_basis).orthonormalized().get_rotation_quaternion())
-	var moved_elbow := shoulder + upper_turn * (elbow - shoulder)
-	var moved_hand := shoulder + upper_turn * (hand - shoulder)
-	if moved_hand.distance_squared_to(moved_elbow) < 0.00001 or goal.distance_squared_to(moved_elbow) < 0.00001:
-		return
-	var lower_turn := frame.inverse() * Basis(Quaternion((moved_hand - moved_elbow).normalized(), (goal - moved_elbow).normalized())) * frame
-	skeleton.set_bone_pose_rotation(int(arm.lower), ((local_turn * lower_parent_basis).inverse() * lower_turn * local_turn * lower_basis).orthonormalized().get_rotation_quaternion())
-	if wrist_target is Basis:
-		var desired := ((lower_turn * local_turn * hand_parent_basis).inverse() * frame.inverse() * (wrist_target as Basis)).orthonormalized().get_rotation_quaternion()
-		skeleton.set_bone_pose_rotation(int(arm.hand), skeleton.get_bone_pose_rotation(int(arm.hand)).slerp(desired, pose_weight if wrist_weight < 0 else wrist_weight))
-	solved_wrist_goal = goal
+	var weight := pose_weight if wrist_weight < 0.0 else wrist_weight
+	solved_wrist_goal = ArmIK.solve(skeleton, arm, goal, actor.global_basis.x, wrist_target, elbow_direction, weight)
