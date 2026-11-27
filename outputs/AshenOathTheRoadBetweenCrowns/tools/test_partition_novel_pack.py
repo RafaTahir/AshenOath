@@ -205,9 +205,12 @@ class NovelPack(unittest.TestCase):
             filters(owner, "exclude_filter") | {"data/novel/*", "assets/narrative_props/*"}
         )))
         manifest["packs"]["base"]["contents"].append("res://data/novel/act_1.json")
+        field_inputs = {
+            path for pack, paths in FIELD_PACK_PATHS.items() if pack in manifest["pack_presets"] for path in paths
+        }
         with tempfile.TemporaryDirectory() as temporary:
             project = Path(temporary)
-            for path in novel_paths | {draft, book}:
+            for path in novel_paths | {draft, book} | field_inputs:
                 asset = project / path
                 asset.parent.mkdir(parents=True, exist_ok=True)
                 asset.touch()
