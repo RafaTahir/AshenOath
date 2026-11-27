@@ -4,9 +4,15 @@ Recover from this document, DIRECTIVE.md and the unchanged originals in source/2
 
 ## First-control release
 
-Rafa authorized publication of the complete novel after a cold Web test. Work continues on `codex/novel-first-control` in D:/AOStory. Commit c7f5159 hands movement to Kael during the village arrival, retains its optional cinematic framing and clears the reproduced Old Mill shutdown leak. Commit 88708cb integrates verified Web pack-buffer ownership. The stock-engine cut reached control in 97.8 seconds and moved Kael 1.98 metres. Its renderer peaked at 1,012.8 MiB. The next candidate changes Web shader-program lifetime. Measurements and shutdown evidence are in [first-control/measurements.json](evidence/web/first-control/measurements.json).
+Rafa selected the 44-second candidate for automatic Git deployment. Build `novel-first-control-ee580ff81c` uses gameplay source `f336282` and the Web template and shell at `ee580ff`. Its 59 files total 181,519,640 bytes. Release manifest SHA-256 is `4aab898d58dba3919e8ecdda36c98a49534c2560de1b9a2077e5c04c42db6bb9`. The preceding production commit was `7248219`.
 
-## Local review build
+On a cold Edge profile on the reference Intel HD 620 PC, the menu opened at 33.859 seconds. All four Sella scenes were witnessed and Kael took control at 43.976 seconds, compared with 148.730 seconds in the original novel review. A real movement input displaced him by 1.52 metres. A warm Continue from that earned Greyfen save restored control at 27.179 seconds. Both Web checks used the tested package on loopback and recorded zero browser errors.
+
+Peak sampled renderer private memory was 973.9 MiB cold and 875.1 MiB on Continue. The original cold novel review peaked at 981.1 MiB. Total private memory across the owned browser processes fell from 2,105.7 to 2,012.4 MiB cold. The reproduced Old Mill save, reload and exit completed without the ObjectDB shutdown warning or the four leaked objects. The five headless simulation suites passed. The measured cold start remains 11.976 seconds above the 32-second target, and peak memory exceeds the reference budget.
+
+All 49 external archives match the previous full novel build byte for byte. The root retains the same content payloads, including its matching Godot resource identifiers, with the embedded manifest updated for this build. The Web engine compiles shader variants on first use, releases linked shader stages and streams its private engine download. The village arrival retains its dialogue and optional cinematic camera while Kael can move. The Balanced opening requires 80,236,980 transport bytes plus the release manifest, a theoretical transfer floor of 32.1 seconds at 20 Mbps before startup work. The later canvas-presentation experiment remains local. [Measurement records](evidence/web/first-control/measurements.json)
+
+## Earlier local review build
 
 The full literary campaign is integrated in the local review build **novel-review-7b909c3-3df0808**. Open http://127.0.0.1:8734/ on this PC. The durable package is in D:/AshenOathReview/novel-review-7b909c3-3df0808/web. Start Review.cmd alongside that directory reopens it after a restart. Choose New Game to enter Sellaâ€™s prologue. Existing journeys retain their original edition.
 

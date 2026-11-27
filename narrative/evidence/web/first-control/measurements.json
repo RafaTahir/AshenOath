@@ -84,7 +84,526 @@
       "status": "pass",
       "errors": [],
       "leaks": [],
-      "warning": false
+      "warning": false,
+      "final_source_repeat": "f336282: rendered tor_wrist save and restoration, 37 input events, process exit 0; no leaked instances or ObjectDB warning."
     }
+  },
+  "first_bind_cold": {
+    "status": "pass",
+    "build_id": "novel-first-control-ee580ff81c",
+    "release_manifest_sha256": "4aab898d58dba3919e8ecdda36c98a49534c2560de1b9a2077e5c04c42db6bb9",
+    "phases": {
+      "boot_document_ms": 312,
+      "menu_ready_ms": 33859,
+      "new_game_requested_ms": 33888,
+      "prologue_ready_ms": 37667,
+      "prologue_completed_ms": 43820,
+      "first_control_ms": 43976,
+      "movement_started_ms": 44255,
+      "movement_completed_ms": 46292
+    },
+    "memory_summary": {
+      "samples": 25,
+      "valid_samples": 25,
+      "peak_renderer_private_mb": 973.9,
+      "peak_owned_private_mb": 2012.4,
+      "peak_js_heap_mb": 22.987289428710938,
+      "sampling": "Observed maxima; target interval 2000 ms, actual sample timestamps retained. Shorter peaks can be missed."
+    },
+    "movement_metres": 1.52244186401367,
+    "browser_errors": 0,
+    "evidence_file": "C:\\Temp\\ao-browser-review\\runs\\novel-first-control-ee580ff81c\\report.json",
+    "report_sha256": "a39aa9cffc17f8aae44a91edee7006dbcb00f5bac7dbfafd97f331d09a195229",
+    "samples": [
+      {
+        "at_ms": 2093,
+        "js_heap_mb": 1.7211494445800781,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 462.8,
+        "renderer_process_count": 10,
+        "owned_process_private_mb": 710.9,
+        "owned_process_count": 18
+      },
+      {
+        "at_ms": 6117,
+        "js_heap_mb": 8.898983001708984,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 547.2,
+        "renderer_process_count": 10,
+        "owned_process_private_mb": 784.6,
+        "owned_process_count": 17
+      },
+      {
+        "at_ms": 8138,
+        "js_heap_mb": 8.485897064208984,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 509.8,
+        "renderer_process_count": 9,
+        "owned_process_private_mb": 763,
+        "owned_process_count": 17
+      },
+      {
+        "at_ms": 10146,
+        "js_heap_mb": 9.751121520996094,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 548.5,
+        "renderer_process_count": 9,
+        "owned_process_private_mb": 772,
+        "owned_process_count": 16
+      },
+      {
+        "at_ms": 12161,
+        "js_heap_mb": 10.829227447509766,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 556.9,
+        "renderer_process_count": 9,
+        "owned_process_private_mb": 789.1,
+        "owned_process_count": 17
+      },
+      {
+        "at_ms": 14176,
+        "js_heap_mb": 11.41766357421875,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 483.9,
+        "renderer_process_count": 5,
+        "owned_process_private_mb": 774.1,
+        "owned_process_count": 12
+      },
+      {
+        "at_ms": 16183,
+        "js_heap_mb": 8.421855926513672,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 538.9,
+        "renderer_process_count": 5,
+        "owned_process_private_mb": 817.1,
+        "owned_process_count": 12
+      },
+      {
+        "at_ms": 18192,
+        "js_heap_mb": 11.048110961914062,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 595,
+        "renderer_process_count": 5,
+        "owned_process_private_mb": 938.7,
+        "owned_process_count": 12
+      },
+      {
+        "at_ms": 20205,
+        "js_heap_mb": 9.159488677978516,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 598.5,
+        "renderer_process_count": 5,
+        "owned_process_private_mb": 1140.4,
+        "owned_process_count": 12
+      },
+      {
+        "at_ms": 22208,
+        "js_heap_mb": 11.701709747314453,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 579.2,
+        "renderer_process_count": 5,
+        "owned_process_private_mb": 1212.3,
+        "owned_process_count": 12
+      },
+      {
+        "at_ms": 24222,
+        "js_heap_mb": 12.285011291503906,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 579,
+        "renderer_process_count": 5,
+        "owned_process_private_mb": 1249.9,
+        "owned_process_count": 12
+      },
+      {
+        "at_ms": 26225,
+        "js_heap_mb": 11.916934967041016,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 592.7,
+        "renderer_process_count": 5,
+        "owned_process_private_mb": 1569.1,
+        "owned_process_count": 12
+      },
+      {
+        "at_ms": 28236,
+        "js_heap_mb": 13.389080047607422,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 593.8,
+        "renderer_process_count": 5,
+        "owned_process_private_mb": 1577.9,
+        "owned_process_count": 12
+      },
+      {
+        "at_ms": 30244,
+        "js_heap_mb": 12.336532592773438,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 568.8,
+        "renderer_process_count": 4,
+        "owned_process_private_mb": 1564.8,
+        "owned_process_count": 11
+      },
+      {
+        "at_ms": 32256,
+        "js_heap_mb": 15.200035095214844,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 547.3,
+        "renderer_process_count": 3,
+        "owned_process_private_mb": 1434.2,
+        "owned_process_count": 10
+      },
+      {
+        "at_ms": 34266,
+        "js_heap_mb": 15.656723022460938,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 892.2,
+        "renderer_process_count": 3,
+        "owned_process_private_mb": 1781.7,
+        "owned_process_count": 10
+      },
+      {
+        "at_ms": 36285,
+        "js_heap_mb": 14.119491577148438,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 854.6,
+        "renderer_process_count": 3,
+        "owned_process_private_mb": 1846.9,
+        "owned_process_count": 10
+      },
+      {
+        "at_ms": 40310,
+        "js_heap_mb": 22.987289428710938,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 873.3,
+        "renderer_process_count": 3,
+        "owned_process_private_mb": 1874.3,
+        "owned_process_count": 11
+      },
+      {
+        "at_ms": 44415,
+        "js_heap_mb": 14.079463958740234,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 955.2,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 1992.4,
+        "owned_process_count": 9
+      },
+      {
+        "at_ms": 46421,
+        "js_heap_mb": 15.495193481445312,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 964.7,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 2000.1,
+        "owned_process_count": 9
+      },
+      {
+        "at_ms": 48430,
+        "js_heap_mb": 21.483474731445312,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 973.9,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 2012.4,
+        "owned_process_count": 9
+      },
+      {
+        "at_ms": 50445,
+        "js_heap_mb": 11.112503051757812,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 814,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 1849.2,
+        "owned_process_count": 9
+      },
+      {
+        "at_ms": 52446,
+        "js_heap_mb": 12.298011779785156,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 827.2,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 1860.3,
+        "owned_process_count": 9
+      },
+      {
+        "at_ms": 54448,
+        "js_heap_mb": 14.05398178100586,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 866,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 1878.4,
+        "owned_process_count": 9
+      },
+      {
+        "at_ms": 56297,
+        "js_heap_mb": 11.799907684326172,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 850.9,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 1880.8,
+        "owned_process_count": 9
+      }
+    ],
+    "prologue": {
+      "input": "Four focused Enter key presses through Godot GUI; no skip, save injection, or game setter",
+      "frames": [
+        {
+          "before_cursor": 0,
+          "after_cursor": 1,
+          "input_at_ms": 37707,
+          "observed_at_ms": 39817,
+          "closed": false
+        },
+        {
+          "before_cursor": 1,
+          "after_cursor": 2,
+          "input_at_ms": 39849,
+          "observed_at_ms": 40714,
+          "closed": false
+        },
+        {
+          "before_cursor": 2,
+          "after_cursor": 3,
+          "input_at_ms": 40735,
+          "observed_at_ms": 42518,
+          "closed": false
+        },
+        {
+          "before_cursor": 3,
+          "after_cursor": 3,
+          "input_at_ms": 42571,
+          "observed_at_ms": 43820,
+          "closed": true
+        }
+      ],
+      "edition": 1,
+      "presentation": "witnessed",
+      "closed": true
+    }
+  },
+  "first_bind_continue": {
+    "status": "pass",
+    "build_id": "novel-first-control-ee580ff81c",
+    "release_manifest_sha256": "4aab898d58dba3919e8ecdda36c98a49534c2560de1b9a2077e5c04c42db6bb9",
+    "phases": {
+      "boot_document_ms": 487,
+      "menu_ready_ms": 11115,
+      "continue_requested_ms": 11187,
+      "first_control_ms": 27179,
+      "movement_started_ms": 27939,
+      "movement_completed_ms": 30500
+    },
+    "memory_summary": {
+      "samples": 19,
+      "valid_samples": 19,
+      "peak_renderer_private_mb": 875.1,
+      "peak_owned_private_mb": 1844.3,
+      "peak_js_heap_mb": 17.419151306152344,
+      "sampling": "Observed maxima; target interval 2000 ms, actual sample timestamps retained. Shorter peaks can be missed."
+    },
+    "movement_metres": 1.52244186401367,
+    "browser_errors": 0,
+    "scissor_status_queries": [
+      159,
+      6856.699999958277,
+      10861,
+      43215
+    ],
+    "wasm_heap_sizes_bytes": [
+      40304640,
+      48365568,
+      58064896,
+      69730304,
+      83689472,
+      100466688,
+      120586240,
+      144703488,
+      173670400,
+      215416832
+    ],
+    "evidence_file": "C:\\Temp\\ao-browser-review\\runs\\novel-first-control-ee580ff81c-earned\\report.json",
+    "report_sha256": "7ed3f59185e6c483fe85103b19d92d23738dea6a1ecaddc87dd6fa97ce441c28",
+    "samples": [
+      {
+        "at_ms": 2081,
+        "js_heap_mb": 6.832740783691406,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 326.3,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 551,
+        "owned_process_count": 8
+      },
+      {
+        "at_ms": 4085,
+        "js_heap_mb": 9.219440460205078,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 353.2,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 559.7,
+        "owned_process_count": 8
+      },
+      {
+        "at_ms": 6094,
+        "js_heap_mb": 8.262466430664062,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 357.9,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 564.4,
+        "owned_process_count": 8
+      },
+      {
+        "at_ms": 8109,
+        "js_heap_mb": 10.585494995117188,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 366.1,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 572.6,
+        "owned_process_count": 8
+      },
+      {
+        "at_ms": 10119,
+        "js_heap_mb": 9.293872833251953,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 386.9,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 635,
+        "owned_process_count": 8
+      },
+      {
+        "at_ms": 12131,
+        "js_heap_mb": 8.683815002441406,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 461.7,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 735,
+        "owned_process_count": 8
+      },
+      {
+        "at_ms": 14140,
+        "js_heap_mb": 8.307544708251953,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 451.7,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 813.9,
+        "owned_process_count": 8
+      },
+      {
+        "at_ms": 16154,
+        "js_heap_mb": 8.737476348876953,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 467.6,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 943.7,
+        "owned_process_count": 8
+      },
+      {
+        "at_ms": 18164,
+        "js_heap_mb": 11.955497741699219,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 458.8,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 982.4,
+        "owned_process_count": 8
+      },
+      {
+        "at_ms": 20174,
+        "js_heap_mb": 9.646926879882812,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 466.8,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 1116.6,
+        "owned_process_count": 8
+      },
+      {
+        "at_ms": 22185,
+        "js_heap_mb": 9.462074279785156,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 780.7,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 1590.7,
+        "owned_process_count": 8
+      },
+      {
+        "at_ms": 24199,
+        "js_heap_mb": 16.84918212890625,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 798.7,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 1843.4,
+        "owned_process_count": 8
+      },
+      {
+        "at_ms": 28278,
+        "js_heap_mb": 17.419151306152344,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 811.2,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 1844.3,
+        "owned_process_count": 8
+      },
+      {
+        "at_ms": 30279,
+        "js_heap_mb": 10.903263092041016,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 821,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 1844,
+        "owned_process_count": 8
+      },
+      {
+        "at_ms": 34291,
+        "js_heap_mb": 12.85110092163086,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 875.1,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 1810.2,
+        "owned_process_count": 8
+      },
+      {
+        "at_ms": 36303,
+        "js_heap_mb": 13.85186767578125,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 774.1,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 1682.5,
+        "owned_process_count": 8
+      },
+      {
+        "at_ms": 38311,
+        "js_heap_mb": 10.897071838378906,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 747.4,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 1654.1,
+        "owned_process_count": 8
+      },
+      {
+        "at_ms": 40320,
+        "js_heap_mb": 12.016059875488281,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 763.7,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 1675.4,
+        "owned_process_count": 8
+      },
+      {
+        "at_ms": 41457,
+        "js_heap_mb": 12.61606216430664,
+        "method": "isolated_renderer_process_private_upper_bound",
+        "renderer_private_mb": 769.6,
+        "renderer_process_count": 2,
+        "owned_process_private_mb": 1683.5,
+        "owned_process_count": 8
+      }
+    ],
+    "prologue": {
+      "source": "earned Greyfen save",
+      "closed": true
+    }
+  },
+  "selected_release": {
+    "build_id": "novel-first-control-ee580ff81c",
+    "complete_bytes": 181519640,
+    "external_archives_unchanged": 49,
+    "previous_production": "724821915f0b4a02677a862c7472a7fe5af3dcc7",
+    "delivery": "Git-triggered Vercel",
+    "timing_acceptance": "Rafa approved the measured 44-second candidate for publication."
   }
 }

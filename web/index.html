@@ -169,9 +169,9 @@
         if (total > 0) progressBar.value = Math.min(0.99, Math.max(0, current / total));
         else progressBar.removeAttribute('value');
       }
-      const SHELL_BUILD_ID = "first-road-20261126t152557z";
-      const RUNTIME_PACK_CONTRACT = "first-road-20261126t152557z";
-      const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"engine/7e1b339885c8301a383276e3/index","experimentalVK":false,"fileSizes":{"index.pck":12723432,"engine/7e1b339885c8301a383276e3/index.wasm":37700666},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4,"mainPack":"index.pck"};
+      const SHELL_BUILD_ID = "novel-first-control-ee580ff81c";
+      const RUNTIME_PACK_CONTRACT = "novel-first-control-ee580ff81c";
+      const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"engine/f3887030ec48f9ba72a9e8bd/index","experimentalVK":false,"fileSizes":{"index.pck":12851904,"engine/f3887030ec48f9ba72a9e8bd/index.wasm":36949836},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4,"mainPack":"index.pck"};
       let engine = null, engineBooted = false, started = false, failed = false;
       let startupResourceError = '';
       const audioNotice = document.getElementById('audio-notice');
@@ -481,6 +481,56 @@
           ]), signal);
         } finally { window.clearTimeout(timeout); }
       }
+      function verifiedPackResponse(payload, signal) {
+        // A Response constructed directly from an ArrayBuffer snapshots the
+        // whole pack. Feed Cache Storage independent, backpressured chunks.
+        const size = payload.byteLength;
+        const chunkBytes = 256 * 1024;
+        let offset = 0;
+        let onAbort;
+        function release() {
+          payload = null;
+          signal?.removeEventListener('abort', onAbort);
+        }
+        const body = new ReadableStream({
+          start(stream) {
+            onAbort = () => {
+              release();
+              stream.error(signal.reason);
+            };
+            signal?.addEventListener('abort', onAbort, { once: true });
+            if (signal?.aborted) onAbort();
+          },
+          pull(stream) {
+            const end = Math.min(offset + chunkBytes, size);
+            stream.enqueue(new Uint8Array(payload, offset, end - offset).slice());
+            offset = end;
+            if (offset === size) {
+              release();
+              stream.close();
+            }
+          },
+          cancel: release,
+        });
+        return new Response(body, { headers: { 'Content-Length': String(size) } });
+      }
+      async function saveVerifiedPack(cache, url, payload, signal) {
+        const write = new AbortController();
+        const cancel = () => write.abort(signal.reason);
+        const timeout = window.setTimeout(() => write.abort(), 15000);
+        signal.addEventListener('abort', cancel, { once: true });
+        if (signal.aborted) cancel();
+        try {
+          await awaitWithAbort(cache.put(url, verifiedPackResponse(payload, write.signal)), write.signal);
+          return true;
+        } catch (_) {
+          write.abort();
+          return false;
+        } finally {
+          window.clearTimeout(timeout);
+          signal.removeEventListener('abort', cancel);
+        }
+      }
       async function readPackManifest(signal) {
           const [release, manifestPayload] = await Promise.all([
             fetch('release_manifest.json', { cache: 'no-cache', signal }).then(response => {
@@ -610,10 +660,11 @@
           const metadata = { state: 'verified', progress: 0.95, path: `/${id}-${digest.slice(0, 20)}.pck`, url: packUrl, version: pack.version, bytes: payload.byteLength, sha256: digest };
           if (controller.signal.aborted || packOperations.get(id) !== operation) return null;
           // Speculation owns HTTP-cache bytes, not a second in-memory game pack.
+          let cacheWrite = null;
           if (operation.cacheOnly) {
             if (!fromCache) {
-              const stored = await optionalPackCache(
-                packCache.put(packUrl, new Response(payload)).then(() => true), controller.signal);
+              cacheWrite = saveVerifiedPack(packCache, packUrl, payload, controller.signal);
+              const stored = await optionalPackCache(cacheWrite, controller.signal);
               if (!stored) packCache = null;
             }
             if (controller.signal.aborted || packOperations.get(id) !== operation) return null;
@@ -648,8 +699,9 @@
           }
           // HTTP caches may evict large packs even with immutable URLs. Persist
           // only verified bytes; optional cache I/O must not gate readiness.
-          if (packCache && !fromCache) {
-            void packCache.put(packUrl, new Response(payload)).then(async () => {
+          if (packCache && !fromCache && !cacheWrite) {
+            void saveVerifiedPack(packCache, packUrl, payload, controller.signal).then(async stored => {
+              if (!stored) return;
               const live = new Set(Object.values(manifest.packs).filter(pack => pack.url)
                 .map(pack => new URL(pack.url, location.href).href));
               const keys = await packCache.keys();
@@ -677,6 +729,7 @@
           return null;
         } finally {
           window.clearInterval(timeout);
+          if (packOperations.get(id) === operation) packOperations.delete(id);
         }
       }
       function requestPack(id, expected, cacheOnly, bootstrap) {
@@ -728,7 +781,7 @@
           const state = window.__ashenOathPreloadedPacks[id]?.state;
           if (required.has(id) && ['loading', 'verified'].includes(state)) {
             currentBootWork.push(id);
-          } else if (state === 'loading') {
+          } else if (state === 'loading' || state === 'verified') {
             window.__ashenOathCancelPack(id);
           }
         }
@@ -774,6 +827,8 @@
             return;
           }
           engine = new Engine(GODOT_CONFIG);
+          // This page owns a single engine and releases its download after init.
+          engine.ownsWasmDownload = true;
           const restoreAudioConstructors = captureEngineAudioContext();
           // startGame downloads/initializes WASM and the root PCK together.
           try {
@@ -822,7 +877,7 @@
       };
     })();
   </script>
-  <script src="engine/7e1b339885c8301a383276e3/index.js" onerror="window.__ashenOathBootstrapFailure('The game engine could not be downloaded. Check your connection and reload.')"></script>
+  <script src="engine/f3887030ec48f9ba72a9e8bd/index.js" onerror="window.__ashenOathBootstrapFailure('The game engine could not be downloaded. Check your connection and reload.')"></script>
   <script>window.__ashenOathStart();</script>
 </body>
 </html>
