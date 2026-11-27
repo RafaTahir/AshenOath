@@ -2,14 +2,19 @@ extends CanvasLayer
 
 ## Sella's memory is presented at the scale of her hands. Its cursor and
 ## keepsake never write evidence to Kael's journal.
-const Tabletop = preload("res://scripts/novel/tabletop.gd")
+const SCENERY := "res://assets/narrative_props/prologue/"
 const CROW := "res://assets/narrative_props/crow/"
-const FORMS := ["OrenPaintedCrow","OrenPaintedCrow","OrenShrineCrow","OrenWrappedCrow"]
+const SHOTS := [
+	{"setting": "yard", "form": "OrenPaintedCrow", "light": Color("#f1dfc5"), "energy": 0.88},
+	{"setting": "basin", "form": "OrenPaintedCrow", "light": Color("#d9e4ef"), "energy": 0.62},
+	{"setting": "shrine", "form": "OrenShrineCrow", "light": Color("#efe2cb"), "energy": 0.75},
+	{"setting": "gate", "form": "OrenWrappedCrow", "light": Color("#c7d5e2"), "energy": 0.68},
+]
 const CAPTIONS := [
-	["The cart · before Greyfen","Oren has borrowed the black paint. He has left a little circle of bare brass. “So it can see,” he tells his mother."],
-	["Sella","Four letters scratched into the brass. Oren mouths them. The lamp guttering beside the basin is suddenly the loudest thing in the room."],
-	["At the shrine","Sella has tied the red cord. Anwen winds grey burial thread over it. Bram breaks the last onion pastry into three pieces."],
-	["At the gate","The latch sticks. Anwen lends Sella a brown shawl with a yellow edge. “I’ll come behind you.” The boy’s coat stays on its peg."]
+	["Beneath Bram’s wagon", "Sella finds her good black paint in the dust. Oren has left a pinprick of bare brass for the crow’s eye."],
+	["At the washbasin", "The water darkens. Oren shows his mother the four letters he scratched clear beneath the bird. AVEL."],
+	["At the shrine", "Sella gave Oren the larger piece of onion pastry. Now Anwen winds grey thread over Sella’s knot. “You can still see the crow,” he says."],
+	["At the gate", "Oren’s damp coat stays by the shrine fire. In its place he has Anwen’s shawl. At the wagon, Sella checks the knot once more."]
 ]
 const VERBS := ["Turn the crow to the light","Tie Sella’s red cord","Wrap the crow for the road","Lift the latch"]
 
@@ -17,7 +22,8 @@ var game
 var view: SubViewport
 var stage: Node3D
 var token: Node3D
-var flame: OmniLight3D
+var setting: Node3D
+var daylight: DirectionalLight3D
 var title: Label
 var subtitle: Label
 var next: Button
@@ -101,46 +107,55 @@ func _make_stage() -> void:
 	environment.environment.ambient_light_color = Color("#d1cdc1")
 	environment.environment.ambient_light_energy = 0.55
 	stage.add_child(environment)
-	var camera := Camera3D.new()
-	stage.add_child(camera)
-	camera.position = Vector3(0,0.22,0.46)
-	camera.look_at(Vector3(0,0.05,0),Vector3.UP)
-	camera.near = 0.015
-	camera.fov = 32
-	camera.current = true
-	for i in 5:
-		Tabletop.box(stage,Vector3((i-2)*0.135,-0.03,0),Vector3(0.133,0.05,0.72),Color(0.31+i*0.014,0.21,0.14))
-	var daylight := DirectionalLight3D.new()
-	daylight.rotation_degrees = Vector3(-47,-30,0)
-	daylight.light_color = Color("#e8d2ad")
+	daylight = DirectionalLight3D.new()
+	daylight.rotation_degrees = Vector3(-52, -32, 0)
+	daylight.shadow_enabled = true
+	daylight.shadow_bias = 0.025
+	daylight.shadow_normal_bias = 0.7
+	daylight.directional_shadow_mode = DirectionalLight3D.SHADOW_ORTHOGONAL
 	stage.add_child(daylight)
-	flame = OmniLight3D.new()
-	flame.position = Vector3(-0.16,0.12,0.10)
-	flame.light_color = Color("#ffab59")
-	flame.omni_range = 1.1
-	stage.add_child(flame)
 
 func _redraw() -> void:
 	view.render_target_update_mode = SubViewport.UPDATE_ONCE
 
 func _show_frame() -> void:
-	if is_instance_valid(token):
-		stage.remove_child(token)
-		token.queue_free()
-	var path := CROW + str(FORMS[cursor]) + ".tscn"
-	var scene := ResourceLoader.load(path) as PackedScene
+	if is_instance_valid(setting):
+		stage.remove_child(setting)
+		setting.queue_free()
+	token = null
+	var shot: Dictionary = SHOTS[cursor]
+	var scene := load(SCENERY + shot.setting + ".tscn") as PackedScene
 	if scene != null:
-		token = scene.instantiate()
-		stage.add_child(token)
-		token.position.y = 0.067
-		token.rotation_degrees = Vector3(-20,18 if cursor == 0 else -12,-6)
+		setting = scene.instantiate() as Node3D
+		stage.add_child(setting)
+		var camera: Camera3D = setting.get_node("Shot")
+		camera.make_current()
+		var seat: Marker3D = setting.get_node("TokenSeat")
+		daylight.directional_shadow_max_distance = maxf(0.55, 2.5 * camera.global_position.distance_to(seat.global_position))
+		daylight.light_color = shot.light
+		daylight.light_energy = shot.energy
+		_place_token(seat, shot.form)
 	else:
-		push_error("Missing prologue crow: " + path)
-	flame.light_energy = 0.82 if cursor == 0 else 0.13
+		push_error("Missing prologue setting: " + shot.setting)
 	title.text = CAPTIONS[cursor][0]
 	subtitle.text = CAPTIONS[cursor][1]
 	next.text = VERBS[cursor]
 	_redraw()
+
+func _place_token(seat: Marker3D, form: String) -> void:
+	var path := CROW + form + ".tscn"
+	var scene := load(path) as PackedScene
+	if scene == null:
+		push_error("Missing prologue crow: " + path)
+		return
+	token = scene.instantiate() as Node3D
+	seat.add_child(token)
+	# The original mesh faces +Z. Lay its actual back on the authored seat.
+	var body: MeshInstance3D = token.get_node("FoldedGreyCloth" if cursor == 3 else "Token")
+	token.rotation.x = -PI / 2.0
+	token.position.y = -(body.transform * body.get_aabb()).position.z
+	if cursor < 2:
+		token.get_node("RedCord").hide()
 
 func _advance() -> void:
 	if done: return

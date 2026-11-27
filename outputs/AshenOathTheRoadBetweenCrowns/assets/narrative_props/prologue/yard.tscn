@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/narrative_props/prologue/yard_scenery.res" id="1"]
+
+[node name="WagonPaintBoard" type="Node3D"]
+
+[node name="Scenery" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1")
+
+[node name="TokenSeat" type="Marker3D" parent="."]
+rotation = Vector3(0, -0.12, 0)
+
+[node name="Shot" type="Camera3D" parent="."]
+position = Vector3(0.0670000, 0.2070000, 0.2060000)
+rotation = Vector3(-0.72411296, 0.19781450, 0)
+near = 0.006
+far = 3.0
+fov = 30.5
