@@ -78,3 +78,9 @@ across-river and Hearthward counts, delivery and handover gates, interrupted
 travel, save round-trips, guide persistence, and legacy progression. The ferry
 fixture uses placeholder meshes. Rendered actor placement and a full campaign
 playthrough remain unverified.
+
+## The second landing in the integrated campaign
+
+The player takes the actual westbound return after Bera’s four arrive. Siv’s father is still by the shed. Her rescue waits for the pan, the existing Wychwood Stalker and a cleared bank. Fighting it works. Drawing it toward the frayed line on the eroding lip can also clear the landing. The first shelter work leaves Kael with an empty bow slot and all his remaining arrows. A loan bow hangs at the eastern landing after delivery. The six-month Open Road visit restores the replacement he bought over the winter. Neither replacement returns the original.
+
+The river fixture begins just after the dismantling of the ward with two household requests and zero crossings. Its continuation files come from the ordinary save menu and chapter checkpoints. The initial run exposed a hidden rescue prompt after the danger passed. The following run reached Siv but its approach to the last boarding prompt met the solid hull. The prompt now stands on the accessible western apron. The earned continuation landed all seven and collected the spare bow with normal input. The complete-run evidence and exact Web delivery belong to the final ledger.

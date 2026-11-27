@@ -4,7 +4,7 @@ Recover from this document, DIRECTIVE.md and the unchanged originals in source/2
 
 ## Current milestone
 
-All nine originals remain in source/2026-11-27. SCENES.md maps every one of the 114 manuscript scenes to gameplay in source order. The chapter register describes the adaptation intent. The dated checkpoints below distinguish source, model receipts, rendered play and remaining work. Production continues in D:/AOStory.
+All nine source files remain in source/2026-11-27. SCENES.md follows the 114 manuscript scenes in order. CONTINUITY.md follows Kael, the twelve supporting characters and all six endings. The chapter register identifies integrated content. A rendered sample covers only the actions named in the dated evidence below. The working branch and local candidate are separate from the public release.
 
 QuestManager owns the existing campaign graph. StoryState holds evidence, choices and consent. A new journey opts into the novel edition. Older classic and expanded journeys retain their graphs. The art and packaging workstreams maintain separate local checkouts.
 
@@ -12,44 +12,44 @@ QuestManager owns the existing campaign graph. StoryState holds evidence, choice
 
 | Section | Pages | Existing anchor | Essential playable beats and continuity | State |
 |---|---|---|---|---|
-| Prologue · The Painted Crow | 4–8 | Literary frame | Play Sella at the gate; bind the red cord and wrap the crow in grey. Keep her knowledge private from Kael. | Mapped |
-| Chapter 1 · A Hunter's Price | 9–15 | main_road_of_crows | Unload the gate cart; release Tor’s hub; Nessa’s burnt boot story. Keep Anwen’s contract in the existing reward ledger. | Mapped |
-| Chapter 2 · The Broken Cart | 16–20 | main_road_of_crows | Follow separated tracks through the four hunts; lower the weapon for the boards. The two flat loops identify a method only. | Mapped |
-| Chapter 3 · What We Brought Back | 21–26 | main_road_of_crows | Help Mira at the basin, return the brush to Anwen, show Tor the wire; let the player bound the report. | Mapped |
-| Chapter 4 · A Widow's Bell | 27–32 | main_bell_beneath_greyfen, side_widows_bell | Use two doors for two bodies; Elna lends Harl’s clapperless bell. Witness Len’s interrupted lantern; trace RECEIVED / AVEL. | Mapped |
-| Chapter 5 · The Rope | 33–38 | main_bell_beneath_greyfen | Wedge the chain, draw the Bell-Eater away from Tor, lower Evin; separate Anwen’s recent loss from the old killings. | Mapped |
-| Chapter 6 · The One Who Returned | 39–44 | side_escort_01, side_bracken_rescue | Free Bracken’s trapped foot, find his basket a carer; correct promised blankets against the actual load with Nera. | Mapped |
-| Chapter 7 · Under Green Water | 45–50 | main_teeth_in_rain, side_black_dog, side_bitter_roots | Read Pell’s six-armed guardian drawing; inspect the fence and test the ground. The guardian can be dangerous and also have saved him. | Mapped |
-| Chapter 8 · The Name in the Reeds | 51–56 | main_teeth_in_rain, side_childs_charm | Set Mira’s safety line, recover Oren’s second shoe and bear the frame in turns. Check the three names before burial. | Mapped |
-| Chapter 9 · No Footsteps Back | 57–62 | side_escort_02, main_names_they_burned | Load stones and test the crossing separately from the cargo. Let Nera own the memory of tied sleeves; sign a warning with its reason. | Mapped |
-| Chapter 10 · The Names They Burned | 63–69 | main_names_they_burned | Lever the tally record from the broken chimney, keep Bracken clear; compare the old receipt and Anwen’s later addition. | Mapped |
-| Chapter 11 · The Widow's Version | 70–75 | side_widows_bell, side_rooks_map, main_names_they_burned | Elna closes the door on her own account; she can release one paragraph without releasing private letters. Redact bakery addresses. | Mapped |
-| Chapter 12 · What We Carried | 76–81 | side_escort_03 | Work two lashings then choose the surviving load, medicine or tools. Log the material loss. Hear Nera’s Jem account on her terms. | Mapped |
-| Chapter 13 · Ash at the Mill | 82–87 | main_ash_at_the_mill, side_millers_measure | Vent the mill, count all seven out, save wage sheets before copying mill measures; Ashwing’s defeat alone cannot do these jobs. | Mapped |
-| Chapter 14 · Iron Remembers | 88–93 | main_ash_at_the_mill, side_iron_remembers | Tor breaks the left wrist saving the wheelkeeper; Mira fits cratewood and Nera takes the hammer. Handle marked iron restitution. | Mapped |
-| Chapter 15 · Bread and Ash | 94–100 | main_ash_at_the_mill | Return Elna’s bell, retain only its rubbing. Share the burned loaf; optional closeness with Mira never overrides care for Pell. | Mapped |
-| Chapter 16 · The Empty Tables | 101–106 | main_empty_tables | Build the receiving hearth, fix smoke and divide fuel. Rook sends the relief schedule for grain without sending names. | Mapped |
-| Chapter 17 · A Place at the Table | 107–112 | main_empty_tables | Serve actual portions, let the accuser measure. Rook briefs the crew before interception; keep unsigned forms separate from headcounts. | Mapped |
-| Chapter 18 · A Road Kept Open | 113–119 | main_road_kept_open | Test two ferry banks with cargo separately from passengers. Retain an actual first crossing before the repair. | Mapped |
-| Chapter 19 · A Soldier Without a Banner | 120–126 | main_soldier_without_banner | Recognize three guards, offer Senn stand-down, preserve the combat alternative. | Mapped |
-| Chapter 20 · The Officer's Hand | 127–134 | main_soldier_without_banner, side_soldiers_debt | Disarm, inventory restitution, distinguish voluntary testimony from guarded work; retain death/exile branches. | Mapped |
-| Chapter 21 · Hold the Rear | 135–143 | side_escort_04 | Nera directs the convoy between front and rear; Rook’s ribs and schedule restrictions persist, food remains available. | Mapped |
-| Chapter 22 · The Man Who Keeps Keys | 144–151 | main_blood_under_stone, saga_var_q03 | Bring Toma’s petition for the three detained seasonal workers; place Pell with a named carer. | Mapped |
-| Chapter 23 · Blood Under Stone | 152–158 | main_blood_under_stone, saga_var_q01 | Compare witnessed old command and Edric’s six-years-later suppression. Preserve original seal and dated copies. | Mapped |
-| Chapter 24 · The Price of Bread | 159–166 | main_blood_under_stone | Challenge grain signatures; admit the player’s agency in cooperation, exposure or compulsion. | Mapped |
-| Chapter 25 · The Last Witness | 167–174 | main_last_witness | Halvern’s evidence ends at the old sanctuary refusal and execution; he cannot speak to Kael’s later escort. | Mapped |
-| Chapter 26 · The Word Retreat | 175–182 | side_escort_05 | Reconstruct Kael’s own words and failure to return; Nera owns her response. Protect private or public correction. | Mapped |
-| Chapter 27 · The House That Was Empty | 183–190 | main_house_many_names | Survey Hearthward for first-night shelter; an outline on the ground cannot house anyone. | Mapped |
-| Chapter 28 · The House of Many Names | 191–198 | main_house_many_names | Fit real beds, care and dry record storage, then receive the first arrivals. | Mapped |
-| Chapter 29 · What Remains Private | 199–206 | main_house_many_names | Keep letters private, stage voluntary closeness/decline; Mira retains the coast as a life outside Kael. | Mapped |
-| Chapter 30 · What We Promise | 207–213 | main_what_we_promise | Test meals, alarm and watch; explicit keeper consent and workable alternatives for each occupied role. | Mapped |
-| Chapter 31 · The Refusal Book | 214–221 | main_crowns_without_mercy | Two independent locks in the disused kitchen protect optional duplicate refusal evidence; no critical path through them. | Mapped |
-| Chapter 32 · Crowns Without Mercy | 222–228 | main_crowns_without_mercy, saga_var_q04 | Separate grain from signatures before recording volunteered testimony; retain the three methods. | Mapped |
-| Chapter 33 · The Hart Remembers | 229–236 | main_hart_remembers | Hear the White Hart’s complete witness or form a case from partial human evidence, and choose among all six methods. | Mapped |
-| Chapter 34 · The Last Load | 237–243 | main_hart_remembers | Separate choosing departure from irreversible dismantling, crew consent and voluntary shelter. | Mapped |
-| Chapter 35 · The Man Who Came Back | 244–251 | main_hart_remembers | Two ferry trips for seven dependents, six places including crew. Lose the guide line, save the hauling line; record injury and losses. | Mapped |
-| Chapter 36 · The Relief Handover | 252–258 | side_escort_06 | Deliver residents to actual care and account for the boat; retain non-departure routes. Choose evening company freely. | Mapped |
-| Epilogue · The Road Between Crowns | 259–265 | Literary frame | Project six months into spring, retain Tor’s wrist, Mira’s coast, Nera’s freight enterprise and Kael’s calf across appropriate routes. | Mapped |
+| Prologue · The Painted Crow | 4–8 | Literary frame | Play Sella at the gate; bind the red cord and wrap the crow in grey. Keep her knowledge private from Kael. | Integrated |
+| Chapter 1 · A Hunter's Price | 9–15 | main_road_of_crows | Unload the gate cart; release Tor’s hub; Nessa’s burnt boot story. Keep Anwen’s contract in the existing reward ledger. | Integrated |
+| Chapter 2 · The Broken Cart | 16–20 | main_road_of_crows | Follow separated tracks through the four hunts; lower the weapon for the boards. The two flat loops identify a method only. | Integrated |
+| Chapter 3 · What We Brought Back | 21–26 | main_road_of_crows | Help Mira at the basin, return the brush to Anwen, show Tor the wire; let the player bound the report. | Integrated |
+| Chapter 4 · A Widow's Bell | 27–32 | main_bell_beneath_greyfen, side_widows_bell | Use two doors for two bodies; Elna lends Harl’s clapperless bell. Witness Len’s interrupted lantern; trace RECEIVED / AVEL. | Integrated |
+| Chapter 5 · The Rope | 33–38 | main_bell_beneath_greyfen | Wedge the chain, draw the Bell-Eater away from Tor, lower Evin; separate Anwen’s recent loss from the old killings. | Integrated |
+| Chapter 6 · The One Who Returned | 39–44 | side_escort_01, side_bracken_rescue | Free Bracken’s trapped foot, find his basket a carer; correct promised blankets against the actual load with Nera. | Integrated |
+| Chapter 7 · Under Green Water | 45–50 | main_teeth_in_rain, side_black_dog, side_bitter_roots | Read Pell’s six-armed guardian drawing; inspect the fence and test the ground. The guardian can be dangerous and also have saved him. | Integrated |
+| Chapter 8 · The Name in the Reeds | 51–56 | main_teeth_in_rain, side_childs_charm | Set Mira’s safety line, recover Oren’s second shoe and bear the frame in turns. Check the three names before burial. | Integrated |
+| Chapter 9 · No Footsteps Back | 57–62 | side_escort_02, main_names_they_burned | Load stones and test the crossing separately from the cargo. Let Nera own the memory of tied sleeves; sign a warning with its reason. | Integrated |
+| Chapter 10 · The Names They Burned | 63–69 | main_names_they_burned | Lever the tally record from the broken chimney, keep Bracken clear; compare the old receipt and Anwen’s later addition. | Integrated |
+| Chapter 11 · The Widow's Version | 70–75 | side_widows_bell, side_rooks_map, main_names_they_burned | Elna closes the door on her own account; she can release one paragraph without releasing private letters. Redact bakery addresses. | Integrated |
+| Chapter 12 · What We Carried | 76–81 | side_escort_03 | Work two lashings then choose the surviving load, medicine or tools. Log the material loss. Hear Nera’s Jem account on her terms. | Integrated |
+| Chapter 13 · Ash at the Mill | 82–87 | main_ash_at_the_mill, side_millers_measure | Vent the mill, count all seven out, save wage sheets before copying mill measures; Ashwing’s defeat alone cannot do these jobs. | Integrated |
+| Chapter 14 · Iron Remembers | 88–93 | main_ash_at_the_mill, side_iron_remembers | Tor breaks the left wrist saving the wheelkeeper; Mira fits cratewood and Nera takes the hammer. Handle marked iron restitution. | Integrated |
+| Chapter 15 · Bread and Ash | 94–100 | main_ash_at_the_mill | Return Elna’s bell, retain only its rubbing. Share the burned loaf; optional closeness with Mira never overrides care for Pell. | Integrated |
+| Chapter 16 · The Empty Tables | 101–106 | main_empty_tables | Build the receiving hearth, fix smoke and divide fuel. Rook sends the relief schedule for grain without sending names. | Integrated |
+| Chapter 17 · A Place at the Table | 107–112 | main_empty_tables | Serve actual portions, let the accuser measure. Rook briefs the crew before interception; keep unsigned forms separate from headcounts. | Integrated |
+| Chapter 18 · A Road Kept Open | 113–119 | main_road_kept_open | Test two ferry banks with cargo separately from passengers. Retain an actual first crossing before the repair. | Integrated |
+| Chapter 19 · A Soldier Without a Banner | 120–126 | main_soldier_without_banner | Recognize three guards, offer Senn stand-down, preserve the combat alternative. | Integrated |
+| Chapter 20 · The Officer's Hand | 127–134 | main_soldier_without_banner, side_soldiers_debt | Disarm, inventory restitution, distinguish voluntary testimony from guarded work; retain death/exile branches. | Integrated |
+| Chapter 21 · Hold the Rear | 135–143 | side_escort_04 | Nera directs the convoy between front and rear; Rook’s ribs and schedule restrictions persist, food remains available. | Integrated |
+| Chapter 22 · The Man Who Keeps Keys | 144–151 | main_blood_under_stone, saga_var_q03 | Bring Toma’s petition for the three detained seasonal workers; place Pell with a named carer. | Integrated |
+| Chapter 23 · Blood Under Stone | 152–158 | main_blood_under_stone, saga_var_q01 | Compare witnessed old command and Edric’s six-years-later suppression. Preserve original seal and dated copies. | Integrated |
+| Chapter 24 · The Price of Bread | 159–166 | main_blood_under_stone | Challenge grain signatures; admit the player’s agency in cooperation, exposure or compulsion. | Integrated |
+| Chapter 25 · The Last Witness | 167–174 | main_last_witness | Halvern’s evidence ends at the old sanctuary refusal and execution; he cannot speak to Kael’s later escort. | Integrated |
+| Chapter 26 · The Word Retreat | 175–182 | side_escort_05 | Reconstruct Kael’s own words and failure to return; Nera owns her response. Protect private or public correction. | Integrated |
+| Chapter 27 · The House That Was Empty | 183–190 | main_house_many_names | Survey Hearthward for first-night shelter; an outline on the ground cannot house anyone. | Integrated |
+| Chapter 28 · The House of Many Names | 191–198 | main_house_many_names | Fit real beds, care and dry record storage, then receive the first arrivals. | Integrated |
+| Chapter 29 · What Remains Private | 199–206 | main_house_many_names | Keep letters private, stage voluntary closeness/decline; Mira retains the coast as a life outside Kael. | Integrated |
+| Chapter 30 · What We Promise | 207–213 | main_what_we_promise | Test meals, alarm and watch; explicit keeper consent and workable alternatives for each occupied role. | Integrated |
+| Chapter 31 · The Refusal Book | 214–221 | main_crowns_without_mercy | Two independent locks in the disused kitchen protect optional duplicate refusal evidence; no critical path through them. | Integrated |
+| Chapter 32 · Crowns Without Mercy | 222–228 | main_crowns_without_mercy, saga_var_q04 | Separate grain from signatures before recording volunteered testimony; retain the three methods. | Integrated |
+| Chapter 33 · The Hart Remembers | 229–236 | main_hart_remembers | Hear the White Hart’s complete witness or form a case from partial human evidence, and choose among all six methods. | Integrated |
+| Chapter 34 · The Last Load | 237–243 | main_hart_remembers | Separate choosing departure from irreversible dismantling, crew consent and voluntary shelter. | Integrated |
+| Chapter 35 · The Man Who Came Back | 244–251 | main_hart_remembers | Two ferry trips for seven dependents, six places including crew. Lose the guide line, save the hauling line; record injury and losses. | Integrated |
+| Chapter 36 · The Relief Handover | 252–258 | side_escort_06 | Deliver residents to actual care and account for the boat; retain non-departure routes. Choose evening company freely. | Integrated |
+| Epilogue · The Road Between Crowns | 259–265 | Literary frame | Project six months into spring, retain Tor’s wrist, Mira’s coast, Nera’s freight enterprise and Kael’s calf across appropriate routes. | Integrated |
 
 ## Production checkpoint
 
@@ -89,3 +89,23 @@ The inherited full-suite rerun passed JSON/references, archive, Godot resource p
 The integrated field performances and three demand-loaded scene families are on the local branch. A firsthand hearing with the living Hart now opens the old road while all six covenants remain undecided. The native route began with arrival and the confession history only, earned the invitation, performed the first memory, saved, resumed and asked about Kael’s eight-year escort. Its 120 input events and the final playable view are retained in evidence/hart_testimony. evidence/neras_account preserves a separate refusal at Hearthward. The public/private choices, manuscript equivalents and chapter order are in SCENES.md.
 
 The first real return of the rescue ferry exposed a missing station refresh after the Stalker fell. It also exposed source-only neighbor pack requests for field scenes already present in the native editor project. The integration now distinguishes directly available native scenes from the manifest-owned packs in Web. The mill staging passed 49 normal input events with an interrupted save, but its retired activity view logged invalid zone references. That ownership repair is being checked separately. The previous packaging checkpoint is intermediate; the local review package must include the final river and spring performances.
+
+## Completed scene work and the local review cut
+
+The campaign runtime is at 7b909c3 on codex/novel-campaign. The final four-act catalog contains 95 sequences, 206 beats and 65 choices, in addition to Sella’s playable prologue, the original campaign and the physical Open Road crossing. The new-edition quest graph uses the same fourteen main chapters. The six-route rehearsal performed 1,068 assertions and 18 save-codec restores. The catalog/save fixture performed 837 assertions across 38 literary sections. The prior public edition and its save projections are retained.
+
+| Playable milestone | Evidence and boundaries |
+|---|---|
+| Sella and the first Greyfen job | New Game through the prologue and the cart hub with ordinary controls. See evidence/opening. |
+| Tor’s left wrist at the mill | A boundary save enters Old Mill. A 49-event rendered run performs the work, saves, reopens the mill and finishes the accident. The final run emitted zero script or engine errors. See evidence/mill_field. |
+| Record Hall and the dry refuge | Sealed records and the four shelter tasks were completed from separate chapter saves. See evidence/seals and evidence/dry_floor. |
+| Nera’s correction | A rendered Hearthward run chooses refusal after restoring the partly completed scene. See evidence/neras_account. |
+| Testimony before the covenant | A 120-event run walks to the living Hart, chooses its invitation and asks about the escort after saving during the walk. The final covenant is still open. See evidence/hart_testimony. |
+| Refugees at the ferry | A 95-event run begins before boarding. Bera’s four cross, Continue restores the east bank, the ferry returns empty, Kael diverts the live Stalker and Siv’s three cross. The driver counts seven, verifies the empty bow slot and retrieves the ferryman’s spare. See evidence/river. The scene’s incidental market greeting was subsequently revised. |
+| Six months later | A rendered Open Road spring advances the calendar by 180 days and finishes the chair work. In focused cast checks Tor steadies the joint and Rook walks normally with a brief rib gesture on laughter. See evidence/spring_open_road and evidence/spring_cast. |
+
+The river, mill and Hart captures came from ordinary player input in isolated profiles. The handoff seed supplies earned history up to each chapter boundary. Prior diagnostic attempts and timing differences remain in their original folders. The native process still logs an ObjectDB shutdown warning. The full six ending projections cover quest and save consistency; representative rendered scenes cover a smaller span. The manuscript’s private interiority, several travel days and some secondary conversations share playable scenes as detailed in SCENES.md. Final artistic acceptance belongs to the creator.
+
+All twelve unified checks passed on 7b909c3. They include the architecture ratchet on 394 files, static script/scene references, archive checks, imports and five game simulation suites. evidence/integration/unified-checks.json records the individual results. Evidence for the 95-event complete evacuation and the corrected mill restore is retained under evidence/river and evidence/mill_field. The cast workstream’s original pose fixtures and new spring evidence are under evidence/performances and evidence/spring_cast. The intermediate browser export exposed an early dependency on the community rules script. The packaging workstream is correcting startup ownership before handover.
+
+On the final dialogue cut a normal Continue from the earned empty-return checkpoint repeated the west-bank encounter, the seven-person landing and the replacement bow in 52 input events. The corrected capture and report sit beside the earlier complete crossing. Toma’s unrelated market greeting is absent in the corrected capture.

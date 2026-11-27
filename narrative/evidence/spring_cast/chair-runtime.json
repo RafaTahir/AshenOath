@@ -1,0 +1,395 @@
+{
+  "checks": 91,
+  "contacts": [
+    {
+      "actor": "Kael",
+      "distance_m": 0.000000111758708953857,
+      "frame": "willow",
+      "marker": "LeftHand"
+    },
+    {
+      "actor": "mira",
+      "distance_m": 0.000000484230440633837,
+      "frame": "willow",
+      "marker": "LeftHand"
+    },
+    {
+      "actor": "mira",
+      "distance_m": 0.000000311145385012424,
+      "frame": "willow",
+      "marker": "RightHand"
+    },
+    {
+      "actor": "Kael",
+      "distance_m": 0.000000120137002568299,
+      "frame": "culvert",
+      "marker": "LeftHand"
+    },
+    {
+      "actor": "Kael",
+      "distance_m": 0.000000556753320779535,
+      "frame": "culvert",
+      "marker": "RightHand"
+    },
+    {
+      "actor": "widow_elna",
+      "distance_m": 0.000000666400183035876,
+      "frame": "culvert",
+      "marker": "LeftHand"
+    },
+    {
+      "actor": "widow_elna",
+      "distance_m": 0.00249751145020127,
+      "frame": "culvert",
+      "marker": "RightHand"
+    },
+    {
+      "actor": "Tor",
+      "distance_m": 0.000000146000971312787,
+      "frame": "spring_open_road",
+      "marker": "LeftHand"
+    },
+    {
+      "actor": "Tor",
+      "distance_m": 0.000000178813934326172,
+      "frame": "spring_open_road",
+      "marker": "RightHand"
+    },
+    {
+      "actor": "Toma",
+      "distance_m": 0.00000012287812012346,
+      "frame": "spring_open_road",
+      "marker": "LeftHand"
+    },
+    {
+      "actor": "Toma",
+      "distance_m": 0.000000224137437498939,
+      "frame": "spring_open_road",
+      "marker": "RightHand"
+    },
+    {
+      "actor": "Tor",
+      "distance_m": 0.000000136571401299079,
+      "frame": "spring_open_road",
+      "marker": "LeftHand"
+    },
+    {
+      "actor": "Tor",
+      "distance_m": 0.000000136571401299079,
+      "frame": "spring_open_road",
+      "marker": "RightHand"
+    },
+    {
+      "actor": "Toma",
+      "distance_m": 0.00000012287812012346,
+      "frame": "spring_open_road",
+      "marker": "LeftHand"
+    },
+    {
+      "actor": "Toma",
+      "distance_m": 0.000000273548948825919,
+      "frame": "spring_open_road",
+      "marker": "RightHand"
+    },
+    {
+      "actor": "Tor",
+      "distance_m": 0.000000149011611938477,
+      "frame": "spring_open_road",
+      "marker": "LeftHand"
+    },
+    {
+      "actor": "Tor",
+      "distance_m": 0.000000066640019724673,
+      "frame": "spring_open_road",
+      "marker": "RightHand"
+    },
+    {
+      "actor": "Toma",
+      "distance_m": 0.00000012287812012346,
+      "frame": "spring_open_road",
+      "marker": "LeftHand"
+    },
+    {
+      "actor": "Toma",
+      "distance_m": 0.0000000897168703772877,
+      "frame": "spring_open_road",
+      "marker": "RightHand"
+    },
+    {
+      "actor": "Tor",
+      "distance_m": 0.000000266560078898692,
+      "frame": "spring_open_road",
+      "marker": "LeftHand"
+    },
+    {
+      "actor": "Tor",
+      "distance_m": 0.000000136571401299079,
+      "frame": "spring_open_road",
+      "marker": "RightHand"
+    },
+    {
+      "actor": "Toma",
+      "distance_m": 0.000000168587391158326,
+      "frame": "spring_open_road",
+      "marker": "LeftHand"
+    },
+    {
+      "actor": "Toma",
+      "distance_m": 0.000000178813934326172,
+      "frame": "spring_open_road",
+      "marker": "RightHand"
+    }
+  ],
+  "failures": [],
+  "states": [
+    {
+      "name": "Oren line",
+      "people": {
+        "mira": {
+          "bones": 76,
+          "injury": "",
+          "pose": "work",
+          "role": "mira_human",
+          "temporary": false
+        }
+      }
+    },
+    {
+      "name": "Oren recovery",
+      "people": {
+        "mira": {
+          "bones": 76,
+          "injury": "",
+          "pose": "kneel",
+          "role": "mira_human",
+          "temporary": false
+        }
+      }
+    },
+    {
+      "name": "Oren carried",
+      "people": {
+        "mira": {
+          "bones": 76,
+          "injury": "",
+          "pose": "carry",
+          "role": "mira_human",
+          "temporary": false
+        }
+      }
+    },
+    {
+      "name": "Gallery before shoring",
+      "people": {
+        "blacksmith_tor": {
+          "bones": 76,
+          "injury": "",
+          "pose": "brace_load",
+          "role": "blacksmith_tor",
+          "temporary": true
+        },
+        "wheelkeeper": {
+          "bones": 76,
+          "injury": "",
+          "pose": "supported",
+          "role": "generic_villager_01",
+          "temporary": true
+        }
+      }
+    },
+    {
+      "name": "Tor on bench",
+      "people": {
+        "blacksmith_tor": {
+          "bones": 76,
+          "injury": "",
+          "pose": "seated",
+          "role": "blacksmith_tor",
+          "temporary": true
+        },
+        "mira": {
+          "bones": 76,
+          "injury": "",
+          "pose": "kneel",
+          "role": "mira",
+          "temporary": true
+        }
+      }
+    },
+    {
+      "name": "Tor directs Nera",
+      "people": {
+        "blacksmith_tor": {
+          "bones": 76,
+          "injury": "novel_tor_braced",
+          "pose": "indicate",
+          "role": "blacksmith_tor",
+          "temporary": true
+        },
+        "saga_nera": {
+          "bones": 76,
+          "injury": "",
+          "pose": "work",
+          "role": "saga_nera",
+          "temporary": true
+        }
+      }
+    },
+    {
+      "name": "Culvert casualties",
+      "people": {
+        "patrolman": {
+          "bones": 76,
+          "injury": "",
+          "pose": "kneel",
+          "role": "castle_guard_human",
+          "temporary": true
+        },
+        "rook": {
+          "bones": 76,
+          "injury": "",
+          "pose": "seated",
+          "role": "rook_human",
+          "temporary": true
+        },
+        "saga_nera": {
+          "bones": 76,
+          "injury": "",
+          "pose": "brace",
+          "role": "saga_nera",
+          "temporary": true
+        }
+      }
+    },
+    {
+      "name": "Rook on litter",
+      "people": {
+        "mira": {
+          "bones": 76,
+          "injury": "",
+          "pose": "kneel",
+          "role": "mira_human",
+          "temporary": true
+        },
+        "patrolman": {
+          "bones": 76,
+          "injury": "",
+          "pose": "rest",
+          "role": "castle_guard_human",
+          "temporary": true
+        },
+        "rook": {
+          "bones": 76,
+          "injury": "novel_rook_ribs",
+          "pose": "supported",
+          "role": "rook_human",
+          "temporary": true
+        }
+      }
+    },
+    {
+      "name": "Arrival",
+      "people": {
+        "mira": {
+          "bones": 76,
+          "injury": "",
+          "pose": "watch",
+          "role": "mira_human",
+          "temporary": true
+        },
+        "rook": {
+          "bones": 76,
+          "injury": "novel_rook_ribs",
+          "pose": "supported",
+          "role": "rook_human",
+          "temporary": true
+        },
+        "saga_nera": {
+          "bones": 76,
+          "injury": "",
+          "pose": "guard",
+          "role": "saga_nera",
+          "temporary": true
+        },
+        "widow_elna": {
+          "bones": 76,
+          "injury": "",
+          "pose": "carry",
+          "role": "widow_elna",
+          "temporary": true
+        }
+      }
+    },
+    {
+      "name": "Rook on the cot",
+      "people": {
+        "mira": {
+          "bones": 76,
+          "injury": "",
+          "pose": "kneel",
+          "role": "mira_human",
+          "temporary": true
+        },
+        "rook": {
+          "bones": 76,
+          "injury": "novel_rook_ribs",
+          "pose": "supported",
+          "role": "rook_human",
+          "temporary": true
+        },
+        "saga_nera": {
+          "bones": 76,
+          "injury": "",
+          "pose": "guard",
+          "role": "saga_nera",
+          "temporary": true
+        }
+      }
+    },
+    {
+      "name": "Guarded room",
+      "people": {
+        "mira": {
+          "bones": 76,
+          "injury": "",
+          "pose": "kneel",
+          "role": "mira_human",
+          "temporary": true
+        },
+        "rook": {
+          "bones": 76,
+          "injury": "novel_rook_ribs",
+          "pose": "supported",
+          "role": "rook_human",
+          "temporary": true
+        },
+        "saga_nera": {
+          "bones": 76,
+          "injury": "",
+          "pose": "guard",
+          "role": "saga_nera",
+          "temporary": true
+        }
+      }
+    },
+    {
+      "name": "Tor holds the chair for Toma",
+      "people": {
+        "blacksmith_tor": {
+          "bones": 76,
+          "injury": "novel_tor_stiff_wrist",
+          "pose": "kneel",
+          "role": "blacksmith_tor",
+          "temporary": true
+        },
+        "farmer_toma": {
+          "bones": 76,
+          "injury": "",
+          "pose": "kneel",
+          "role": "farmer_toma",
+          "temporary": true
+        }
+      }
+    }
+  ]
+}

@@ -170,6 +170,13 @@ func _evacuate() -> void:
 			_check(not story.get_flag("novel_bank_cleared",false),"The empty return leaves a live danger on the west bank")
 			await _interact("novel_river_pan_0")
 			await _wait_flag("novel_done_river_pan",true,12)
+			var actor_deadline := Time.get_ticks_msec()+9000
+			while get_first_node_in_group("novel_shed_stalker")==null and Time.get_ticks_msec()<actor_deadline and failures.is_empty(): await process_frame
+			var creature := get_first_node_in_group("novel_shed_stalker") as Node3D
+			_check(is_instance_valid(creature) and creature.is_visible_in_tree() and creature.is_encounter_active(),"The Stalker is present and can act")
+			if is_instance_valid(creature):
+				await _face(creature.global_position)
+				await _snapshot("stalker_at_the_shed")
 			await _walk_to(game.zone_root.to_global(Vector3(2.8,0,-3.3)))
 			await _wait_flag("novel_bank_cleared",true,35)
 			await _operation("departure_second_rescue","novel_departure_second_rescue",18)

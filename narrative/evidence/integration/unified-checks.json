@@ -1,0 +1,79 @@
+{
+  "scope": "headless simulation; not GPU/phone/runtime acceptance",
+  "passed": true,
+  "elapsed_ms": 61928.34270000458,
+  "results": [
+    {
+      "name": "Architecture rule self-tests",
+      "status": "PASS",
+      "elapsed_ms": 481.57209999044426,
+      "detail": "exit 0"
+    },
+    {
+      "name": "Architecture ratchet",
+      "status": "PASS",
+      "elapsed_ms": 5548.029899975518,
+      "detail": "394 files; no ratchet or module-boundary violations"
+    },
+    {
+      "name": "JSON/schema + references",
+      "status": "PASS",
+      "elapsed_ms": 13694.749099988258,
+      "detail": "46 JSON documents; 25 item references; 728 active GDScript/scenes; 1592 static script references"
+    },
+    {
+      "name": "Archive hashes + references",
+      "status": "PASS",
+      "elapsed_ms": 7129.297599982237,
+      "detail": "222 byte-identical moves; git grep active references (working tree + index): 0"
+    },
+    {
+      "name": "Godot 4.6 runtime",
+      "status": "PASS",
+      "elapsed_ms": 155.11000002152286,
+      "detail": "exit 0"
+    },
+    {
+      "name": "GDScript class index",
+      "status": "PASS",
+      "elapsed_ms": 904.7502000175882,
+      "detail": "49 actual class declarations; no world import"
+    },
+    {
+      "name": "Headless UI imports",
+      "status": "PASS",
+      "elapsed_ms": 429.7028000000864,
+      "detail": "4 hash-validated resource imports reused"
+    },
+    {
+      "name": "Phase 1: core/economy",
+      "status": "PASS",
+      "elapsed_ms": 1962.9328000009991,
+      "detail": "123 checks; exit 0"
+    },
+    {
+      "name": "Phase 2: combat/bow",
+      "status": "PASS",
+      "elapsed_ms": 4066.77919998765,
+      "detail": "45 checks; exit 0"
+    },
+    {
+      "name": "Phase 3: zones/travel",
+      "status": "PASS",
+      "elapsed_ms": 8148.505299992394,
+      "detail": "130 checks; exit 0"
+    },
+    {
+      "name": "Phase 4: cast/input/HUD",
+      "status": "PASS",
+      "elapsed_ms": 14348.415299988119,
+      "detail": "52 checks; exit 0"
+    },
+    {
+      "name": "Phase 5: campaign replay",
+      "status": "PASS",
+      "elapsed_ms": 2316.0575999936555,
+      "detail": "17 checks; exit 0"
+    }
+  ]
+}

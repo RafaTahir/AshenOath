@@ -6,10 +6,10 @@ Local art milestone `a6ca1fa`, parent `e601b4a`. The project was rendered in God
 
 `field-runtime.json` and `render-runtime.json` record the same 36 checks in headless and rendered modes. The retained `verify_fields.gd` fixture extends the baseline cast verifier. The pose measurements are in `field-cast-render.log`. `field-files.json` identifies the 29 runtime files checked against the render project and the five authoring sources.
 
-In the campaign owner's `NovelScenes.refresh()`, after reconciling station visibility and interaction, call:
+The integrated campaign calls the presentation owner after reconciling station visibility and interaction in `NovelScenes.refresh()`.
 
 ```gdscript
-preload("res://scripts/novel/field_performances.gd").project(self)
+preload("res://scripts/views/novel/field_performances.gd").project(self)
 ```
 
-The scenery root is `res://assets/narrative_props/field/`. The runtime role-pack requests use the existing manifest and manager. The campaign owner still needs to check figure placement against the published levels, real station progression and archive availability across region changes.
+The scenery root is `res://assets/narrative_props/field/`. The runtime role-pack requests use the existing manifest and manager. The actual mill scene, save interruption and restored staging are captured in ../mill_field. The rendered art studies isolate poses and stations. Archive ownership is recorded with the local Web package.
