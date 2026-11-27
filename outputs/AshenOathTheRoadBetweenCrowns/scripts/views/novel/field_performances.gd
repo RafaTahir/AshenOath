@@ -4,6 +4,7 @@ extends Node3D
 const Artist = preload("res://scripts/views/novel/field_cast.gd")
 const ActorMark = preload("res://scripts/views/novel/field_actor_mark.gd")
 const Stage = preload("res://scripts/views/novel/field_stage.gd")
+const SpringChair = preload("res://scripts/views/novel/spring_chair_stage.gd")
 const ART := "res://assets/narrative_props/field/"
 const SCENES := {"willow_frame":"willow", "tor_wrist":"gallery", "culvert":"culvert"}
 const WAKE_DISTANCE := 26.0
@@ -27,13 +28,11 @@ var work_position := -1.0
 var front_pose: Artist.Pose
 
 static func project(owner_layer: Node) -> void:
-	var active := false
-	for key: String in SCENES:
-		if owner_layer.turns.has(key): active = true
+	var key := _active_scene(owner_layer)
 	var burden := _carried_frame(owner_layer.game.player)
 	var aftermath := _in_washroom(owner_layer)
 	var field := owner_layer.get_node_or_null("FieldPerformances")
-	if not active and not aftermath and burden == null:
+	if key.is_empty() and not aftermath and burden == null:
 		if field != null: field.retire()
 		return
 	if field == null:
@@ -41,7 +40,15 @@ static func project(owner_layer: Node) -> void:
 		field.name = "FieldPerformances"
 		field.layer = owner_layer
 		owner_layer.add_child(field)
-	field.reconcile(burden, aftermath)
+	field.reconcile(burden, aftermath, key)
+
+static func _active_scene(owner_layer: Node) -> String:
+	for key: String in SCENES:
+		if owner_layer.turns.has(key): return key
+	var spring: Dictionary = owner_layer.turns.get("spring_open_road", {})
+	if owner_layer.zone == "hearthward" and int(spring.get("index", -1)) == 2 and owner_layer.game.story_state.get_flag("novel_spring_route", "") == "open_road":
+		return "spring_open_road"
+	return ""
 
 static func _carried_frame(player: Node3D) -> Node3D:
 	if not is_instance_valid(player): return null
@@ -56,19 +63,15 @@ static func _in_washroom(owner_layer: Node) -> bool:
 	var state = owner_layer.game.story_state
 	return int(state.get_flag("novel_step_culvert", 0)) >= 4 and not state.get_flag("novel_done_counterpart", false) and not owner_layer.game.quests.is_completed("main_blood_under_stone")
 
-func reconcile(burden: Node3D, aftermath: bool) -> void:
-	var key := ""
+func reconcile(burden: Node3D, aftermath: bool, key: String) -> void:
 	var index := -1
 	var site: Node3D
 	var position_at := Vector3.ZERO
-	for candidate: String in SCENES:
-		if layer.turns.has(candidate):
-			var turn: Dictionary = layer.turns[candidate]
-			key = candidate
-			index = int(turn.index)
-			site = layer.stations.get("novel_%s_%d" % [key, index])
-			if is_instance_valid(site): position_at = site.global_position
-			break
+	if not key.is_empty():
+		var turn: Dictionary = layer.turns[key]
+		index = int(turn.index)
+		site = layer.stations.get("novel_%s_%d" % [key, index])
+		if is_instance_valid(site): position_at = site.global_position
 	if key.is_empty() and aftermath:
 		key = "culvert"
 		index = 4
@@ -85,7 +88,7 @@ func reconcile(burden: Node3D, aftermath: bool) -> void:
 	if ground_key != key or ground_index != index or ground_generation != position_at or (anchor != site):
 		_clear_ground()
 		if not key.is_empty() and (is_instance_valid(site) or aftermath):
-			ground = _instance(SCENES[key]) as Stage
+			ground = SpringChair.new() if key == "spring_open_road" else _instance(SCENES[key]) as Stage
 			if ground != null:
 				ground_key = key
 				ground_index = index
@@ -133,6 +136,8 @@ func _physics_process(delta: float) -> void:
 	if not is_instance_valid(layer.game.zone_root) or layer.owner_director.get_parent() != layer.game.zone_root:
 		retire()
 		return
+	if ground is SpringChair:
+		ground.set_worker_present(ground.has_worker(leases.get("blacksmith_tor")) and ground.has_worker(leases.get("farmer_toma")))
 	var pending: Dictionary = layer.pending
 	var progress := 0.0
 	if is_instance_valid(ground) and pending.get("key", "") == ground_key and int(pending.get("index", -1)) == ground_index:

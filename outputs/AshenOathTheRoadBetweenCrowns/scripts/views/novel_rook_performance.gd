@@ -3,6 +3,9 @@ extends RefCounted
 ## A hurt Rook still runs his own errands. The ordinary route owner counts
 ## completed steps and offers a short standing rest at a safe destination.
 const INJURY := &"novel_rook_ribs"
+const HEALED := &"novel_rook_healed"
+const LAUGH := "story_rook_laugh"
+const LAUGH_SECONDS := 1.4
 const REST := "rook_catch_breath"
 const WALK_SCALE := 0.68
 const REST_AFTER_METRES := 2.5
@@ -60,21 +63,49 @@ static func pause_at_arrival(entry: Dictionary, delta: float) -> bool:
 	entry.rib_breath_left = REST_SECONDS
 	return true
 
+## EverydayLife supplies a unique scene id for the optional joke. Only Rook's
+## reply takes this gesture; the question and ordinary greetings retain theirs.
+static func try_laugh(driver: Node, scene_id: String, speaking: bool) -> bool:
+	if not speaking or not scene_id.begins_with("everyday:rook:joke:") or driver.novel_injury != HEALED:
+		return false
+	if not driver.story_dialogue_active or driver.dead or driver.distance_suspended or driver.has_active_action():
+		return false
+	var base: StringName = driver._clip_for("idle")
+	if base == &"": return false
+	driver._ensure_life_modifier()
+	driver.resolved_clip_map[LAUGH] = base
+	if not driver.trigger_action(LAUGH, 1.0, 0.14, false, LAUGH_SECONDS): return false
+	driver.story_gesture_remaining = LAUGH_SECONDS
+	return true
+
+static func release_obsolete_pose(driver: Node) -> void:
+	if driver.dead: return
+	if driver.current_state == LAUGH:
+		driver.story_gesture_remaining = 0.0
+		driver.stop_action()
+	elif driver.presentation_state == "life:" + REST and not driver.story_dialogue_active and not driver.has_active_action():
+		driver.clear_life_activity()
+
 static func apply_pose(life: Node, skeleton: Skeleton3D) -> void:
 	var driver = life.driver
-	if life.activity != REST or driver.novel_injury != INJURY or driver.dead or driver.distance_suspended or driver.story_dialogue_active or driver.has_active_action() or life.get_tree().paused:
+	if driver.dead or driver.distance_suspended or life.get_tree().paused or life.spine < 0 or life.pelvis < 0:
 		return
-	if life.spine < 0 or life.pelvis < 0 or life.pose_weight <= 0.001:
-		return
-	var forward: Vector3 = driver.get_visible_forward()
-	forward.y = 0.0
-	if forward.length_squared() < 0.01:
-		return
-	forward = forward.normalized()
-	var weight: float = life.pose_weight
-	# Two small, uneven breaths. Use the actor's own ribcage and arm dimensions
-	# so the hand cups the torso on this skeleton at its installed world scale.
-	var rise := (0.5 + 0.5 * sin(float(life.elapsed) * 4.85)) * 0.014
+	var weight: float
+	var rise: float
+	var laughing: bool = driver.novel_injury == HEALED
+	if laughing:
+		if not driver.story_dialogue_active or driver.current_state != LAUGH or not driver.has_active_action(): return
+		var phase := clampf(float(driver.action_elapsed) / LAUGH_SECONDS, 0.0, 1.0)
+		weight = smoothstep(0.02, 0.26, phase) * (1.0 - smoothstep(0.64, 1.0, phase))
+		# Short bursts of laughter tip the upper body forward, then subside.
+		rise = 0.035 * pow(sin(phase * PI * 3.0), 2)
+	else:
+		if life.activity != REST or driver.novel_injury != INJURY or driver.story_dialogue_active or driver.has_active_action(): return
+		weight = life.pose_weight
+		rise = (0.5 + 0.5 * sin(float(life.elapsed) * 4.85)) * 0.014
+	if weight <= 0.001: return
+	var forward: Vector3 = driver.get_visible_forward().slide(Vector3.UP).normalized()
+	if forward.is_zero_approx(): return
 	var joint: int = life.spine
 	var parent := skeleton.get_bone_parent(joint)
 	var frame := skeleton.global_basis.orthonormalized()
@@ -93,6 +124,7 @@ static func apply_pose(life: Node, skeleton: Skeleton3D) -> void:
 	var ribs: Vector3 = life._world(skeleton, lower_ribs)
 	for arm: Dictionary in life.arms:
 		var guarding := float(arm.side) < 0.0
+		if laughing and not guarding: continue
 		var suffix := "_l" if guarding else "_r"
 		var index := skeleton.find_bone("index_01" + suffix)
 		var middle := skeleton.find_bone("middle_01" + suffix)

@@ -1,4 +1,5 @@
 extends RefCounted
+const RookPerformance = preload("res://scripts/views/novel_rook_performance.gd")
 var _life: Node
 func _init(life: Node) -> void:
 	_life = life
@@ -215,7 +216,8 @@ func _tick_world_scene(delta: float) -> void:
 				if not entry.driver.set_story_prop("cup", _life.get_instance_id()):
 					_life._end_social_exchange()
 					return
-			if body_gesture != "": entry.driver.play_story_gesture(body_gesture)
+			if not RookPerformance.try_laugh(entry.driver, str(scene.id), speaking) and body_gesture != "":
+				entry.driver.play_story_gesture(body_gesture)
 			if body_gesture in ["drink", "settle_ledger"] and bool(entry.driver.action_active):
 				duration = maxf(duration,float(entry.driver.action_duration)+0.15)
 		if is_instance_valid(entry.get("face")):

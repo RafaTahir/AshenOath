@@ -96,6 +96,7 @@ func _run() -> void:
 		await _willow()
 		await _gallery()
 		await _culvert()
+		await _spring_chair()
 	if is_instance_valid(zone):
 		zone.free()
 	services.player.free()
@@ -213,8 +214,9 @@ func _check_grip(actor: String, rig: Skeleton3D, markers: Marker3D) -> void:
 			continue
 		var wrist := ArmIK.world(rig, rig.find_bone(HAND_BONES[side]))
 		var gap := wrist.distance_to(marker.global_position)
-		contacts.append({"frame": field.carry_key, "actor": actor, "marker": side, "distance_m": gap})
-		_check(gap < 0.03, "%s reaches %s on the %s frame" % [actor, side, field.carry_key])
+		var stage_key: String = field.ground_key if field.carry_key.is_empty() else field.carry_key
+		contacts.append({"frame": stage_key, "actor": actor, "marker": side, "distance_m": gap})
+		_check(gap < 0.03, "%s reaches %s during %s" % [actor, side, stage_key])
 
 func _check_carry(rear_id: String) -> void:
 	var front = field.front_pose
@@ -350,3 +352,57 @@ func _culvert() -> void:
 	_refresh_field()
 	await _settle()
 	_check(field.leases.is_empty() and not field.is_physics_processing(), "The resolved washroom releases everyone")
+
+
+func _spring_chair() -> void:
+	_stage_region("hearthward")
+	story.set_flag(TOR, true)
+	_stage_beat("spring_open_road", 2)
+	_check(field == null or field.ground == null, "The chair performance waits for the spring visit")
+	story.set_flag("novel_spring_route", "open_road")
+	_refresh_field()
+	if not await _observe_state("Tor holds the chair for Toma", ["blacksmith_tor", "farmer_toma"]):
+		return
+	var tor = field.leases.blacksmith_tor
+	var toma = field.leases.farmer_toma
+	var held := tor.mark.get_node_or_null("LeftHand") as Marker3D
+	var peg_hand := toma.mark.get_node_or_null("RightHand") as Marker3D
+	if not _check(held != null and peg_hand != null and is_instance_valid(field.ground.peg), "Both hands and the chair peg are present"):
+		return
+	var initial_joint := held.global_position
+	var initial_peg: Vector3 = field.ground.peg.global_position
+	_check(initial_joint.distance_to(initial_peg) < 0.4,
+		"Toma drives the peg in the joint Tor is steadying")
+	layer.pending = {"key": "spring_open_road", "index": 2}
+	var motion: Array[Vector3] = []
+	for progress: float in [0.0, 0.4, 0.75, 1.0]:
+		layer.elapsed = 2.0 * progress
+		field._physics_process(0.05)
+		# Observe the skinned pose inside the native evaluation, before the rig restores its animation.
+		var hits: Array[String] = []
+		var tor_rig: Skeleton3D = tor.driver.skeleton
+		var toma_rig: Skeleton3D = toma.driver.skeleton
+		var check_tor := func() -> void:
+			_check_grip("Tor", tor_rig, tor.mark)
+			hits.append("Tor")
+		var check_toma := func() -> void:
+			_check_grip("Toma", toma_rig, toma.mark)
+			hits.append("Toma")
+		tor_rig.skeleton_updated.connect(check_tor, CONNECT_ONE_SHOT)
+		toma_rig.skeleton_updated.connect(check_toma, CONNECT_ONE_SHOT)
+		for frame in 24:
+			await process_frame
+			if hits.size() == 2: break
+		_check(hits.size() == 2, "Both native rigs updated during the chair sample")
+		_check(held.global_position.is_equal_approx(initial_joint), "Tor keeps his left hand on the joint")
+		motion.append(peg_hand.global_position)
+	_check(motion[0].distance_to(motion[1]) > 0.02 or motion[1].distance_to(motion[2]) > 0.02,
+		"Toma's striking hand moves during the peg stroke")
+	_check(initial_peg.distance_to(field.ground.peg.global_position) > 0.005, "The peg seats visibly during Toma's stroke")
+	layer.pending.clear()
+	field._physics_process(0.05)
+	_check(initial_peg.is_equal_approx(field.ground.peg.global_position), "Cancelling the chair work resets the peg")
+	layer.turns.clear()
+	_refresh_field()
+	await _settle()
+	_check(field.leases.is_empty() and not field.is_physics_processing(), "Completing the chair work releases both people")

@@ -122,9 +122,9 @@ func _process_modification() -> void:
 	var rig := get_skeleton()
 	if rig == null or not is_instance_valid(actor): return
 	match driver.novel_injury:
-		&"novel_tor_braced":
+		&"novel_tor_braced", &"novel_tor_stiff_wrist":
 			preload("res://scripts/views/novel_tor_performance.gd").apply_pose(self, rig)
-		&"novel_rook_ribs":
+		&"novel_rook_ribs", &"novel_rook_healed":
 			preload("res://scripts/views/novel_rook_performance.gd").apply_pose(self, rig)
 
 func _update_life_pose() -> void:
@@ -151,7 +151,7 @@ func _update_life_pose() -> void:
 	if is_instance_valid(viewer):
 		viewer_near = actor.global_position.distance_squared_to(viewer.global_position) < 100.0
 	var effective := activity if activity != "" else carried_activity
-	if driver.novel_injury == &"novel_tor_braced" and (effective in ["forge", "repair", "carry"] or activity_prop == "hammer"):
+	if driver.novel_injury in [&"novel_tor_braced", &"novel_tor_stiff_wrist"] and (effective in ["forge", "repair", "carry"] or activity_prop == "hammer"):
 		hide_activity_tool()
 		return
 	var waiting_for_station: bool = bool(driver.get("life_requires_station")) and effective in driver.life_work_kinds \

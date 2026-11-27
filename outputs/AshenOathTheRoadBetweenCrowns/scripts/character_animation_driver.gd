@@ -720,7 +720,7 @@ func set_working(active: bool) -> void:
 		presentation_state = "work"
 		current_state = ""
 		target_playback_scale = 1.0
-		_play_state("idle" if novel_injury == &"novel_tor_braced" else "work", 0.14)
+		_play_state("idle" if novel_injury in [&"novel_tor_braced", &"novel_tor_stiff_wrist"] else "work", 0.14)
 	else:
 		if presentation_state == "work":
 			presentation_state = ""
@@ -798,7 +798,7 @@ func set_life_activity(kind: String) -> void:
 	var requested := "Life_Idle_A" if life_idle_variant == 0 else "Life_Idle_B"
 	if kind in life_work_kinds:
 		var bound_station: bool = life_modifier != null and not life_modifier.station.is_empty() and str(life_modifier.station.get("activity", "")) == kind
-		if (not life_requires_station or bound_station) and novel_injury != &"novel_tor_braced": requested = "Life_Work"
+		if (not life_requires_station or bound_station) and novel_injury not in [&"novel_tor_braced", &"novel_tor_stiff_wrist"]: requested = "Life_Work"
 	elif kind not in LIFE_IDLE_KINDS:
 		requested = ""
 	if requested == "" or not _play_life_clip(requested):

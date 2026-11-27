@@ -8,8 +8,10 @@ const Context = preload("res://scripts/zone_build_context.gd")
 const Area = preload("res://scripts/interactable.gd")
 const Presentation = preload("res://scripts/character_presentation.gd")
 const Life = preload("res://scripts/greyfen_life_controller.gd")
+const RookPerformance = preload("res://scripts/views/novel_rook_performance.gd")
 const TOR := &"novel_tor_braced"
 const ROOK := &"novel_rook_ribs"
+const ROOK_JOKE := "everyday:rook:joke:3841"
 
 class ErrorLog extends Logger:
 	var errors: Array[String] = []
@@ -106,6 +108,7 @@ func _run() -> void:
 		if not restored.is_empty():
 			_check(_state(restored) == &"", "legacy save clears the condition on a live actor")
 			_check(is_equal_approx(await _walk(restored, false), healthy_speed), "uninjured cadence returns")
+		await _spring_continuity(saved, healthy_speed, hurt_speed)
 	zone.free()
 	game.free()
 	helper.free()
@@ -116,6 +119,55 @@ func _run() -> void:
 	failures.append_array(error_log.errors)
 	print("NOVEL CAST PERFORMANCE ", JSON.stringify({"checks":checks,"failures":failures}))
 	quit(0 if failures.is_empty() else 1)
+
+func _spring_continuity(hurt_save: Dictionary, normal_speed: float, injured_speed: float) -> void:
+	_zone("hearthward")
+	story.load_state(hurt_save)
+	var tor := _actor("blacksmith_tor", "blacksmith_tor", "blacksmith_tor")
+	var rook := _actor("rook", "rook", "rook_human")
+	if tor.is_empty() or rook.is_empty(): return
+	_check(_state(rook) == ROOK and _state(tor) == TOR, "Before spring both conditions still apply")
+	await _laugh(rook, false)
+	story.set_flag("novel_season", "spring")
+	_check(_state(rook) == ROOK, "The season label alone does not complete the spring visit")
+	story.set_flag("novel_spring_route", "open_road")
+	_check(_state(tor) == &"novel_tor_stiff_wrist" and _state(rook) == &"novel_rook_healed", "The spring visit updates both actors in place")
+	_brace(tor, false)
+	await _laugh(rook, true)
+	_check(is_equal_approx(await _walk(rook, false), normal_speed), "After the visit Rook walks his whole route at his normal pace")
+	_hammer(tor, false)
+	var spring_save: Dictionary = story.save_state()
+	_check(spring_save.flags.get(TOR) == true and spring_save.flags.get(ROOK) == true, "Spring preserves both injuries in the saved history")
+	rook.driver.set_dialogue_pose(true)
+	_check(RookPerformance.try_laugh(rook.driver, ROOK_JOKE, true), "Rook starts a spring reply before rewinding")
+	story.load_state(hurt_save)
+	_check(rook.driver.current_state != RookPerformance.LAUGH, "Restoring winter cancels an in-flight spring laugh")
+	rook.driver.set_dialogue_pose(false)
+	_brace(tor, true)
+	_check(_state(tor) == TOR and _state(rook) == ROOK, "Restoring the winter save reinstates the earlier performances on live actors")
+	_check(is_equal_approx(await _walk(rook, true), injured_speed), "Rook returns to his guarded winter cadence and breather")
+	rook.driver.set_life_activity(RookPerformance.REST)
+	_check(rook.driver.presentation_state == "life:" + RookPerformance.REST, "Rook is resting before the spring restore")
+	spring_save.flags.erase("novel_season")
+	story.load_state(spring_save)
+	_check(rook.driver.presentation_state != "life:" + RookPerformance.REST, "Restoring spring clears an in-flight winter breather")
+	_check(is_equal_approx(await _walk(rook, false), normal_speed), "Restoring spring clears the winter cadence and breather on the same Rook")
+	var spring_tor_state := _state(tor)
+	_zone("lantern_reach")
+	var returned_rook := _actor("board_rook", "board_rook", "rook_human", true)
+	var returned_tor := _actor("board_tor", "board_tor", "blacksmith_tor", true)
+	if returned_rook.is_empty() or returned_tor.is_empty(): return
+	_check(is_equal_approx(await _walk(returned_rook, false), normal_speed), "A late-mounted regional Rook uses the restored spring gait")
+	_brace(returned_tor, false)
+	_check(_state(returned_tor) == spring_tor_state, "A late-mounted regional Tor uses his restored wrist condition")
+	_check(story.get_flag(TOR, false) and story.get_flag(ROOK, false), "Late actor mounting preserves injury history")
+	for route: String in ["witness", "mercy", "duty", "ash", "concord"]:
+		story.set_flag("novel_spring_route", route)
+		_check(_state(returned_rook) == &"novel_rook_healed" and _state(returned_tor) == spring_tor_state,
+			"The completed %s spring visit retains both actors' spring performances" % route)
+	story.load_state({"flags": {"novel_spring_route": "open_road"}})
+	_check(_state(returned_rook) == &"" and _state(returned_tor) == &"", "Spring alone never invents an earlier injury")
+	_brace(returned_tor, false)
 
 func _zone(id: String) -> void:
 	if is_instance_valid(facade): facade.free()
@@ -197,21 +249,25 @@ func _forge(actor: Dictionary) -> void:
 		var contacts: Array[String] = []
 		var listener := func(event: String, _point: Vector3): contacts.append(event)
 		driver.activity_contact.connect(listener)
-		for braced: bool in [true, false]:
-			story.set_flag(TOR, braced)
+		var initial_story: Dictionary = story.save_state()
+		for phase: String in ["acute", "spring", "uninjured"]:
+			var limited := phase != "uninjured"
+			story.set_flag(TOR, limited)
+			story.set_flag("novel_spring_route", "open_road" if phase == "spring" else "")
 			driver.life_modifier.pose_weight = 1.0
 			var correct_clip := true
 			# One full four-second hammer cycle plus the queued state transition.
 			for tick in 440:
 				driver.advance_external(0.01)
 				driver.life_modifier._process_modification()
-				correct_clip = correct_clip and (driver.life_clip == &"life/Life_Work") == (not braced)
+				correct_clip = correct_clip and (driver.life_clip == &"life/Life_Work") == (not limited)
 			_check(entry.activity_active and driver.presentation_state == "life:forge" and correct_clip,
-				"Tor keeps his station and selects the correct work clip, braced=%s" % braced)
-			_check(contacts.is_empty() if braced else contacts == ["forge_hammer"],
-				"Tor's braced work stays quiet and recovered work strikes once, braced=%s; events=%s" % [braced, contacts])
+				"Tor keeps his station and selects the correct %s work clip" % phase)
+			_check(contacts.is_empty() if limited else contacts == ["forge_hammer"],
+				"Tor only strikes the anvil with an uninjured wrist, phase=%s events=%s" % [phase, contacts])
 			contacts.clear()
 		driver.activity_contact.disconnect(listener)
+		story.load_state(initial_story)
 		life._release_activity(entry)
 		person.transform = original
 	world.free()
@@ -285,17 +341,37 @@ func _walk(actor: Dictionary, injury_expected: bool, interrupt_rest: bool = fals
 	print("ROOK WALK speed=", max_speed, " rest_seconds=", held)
 	return max_speed
 
-func _check_rook_hands(driver: Node) -> void:
+func _laugh(rook: Dictionary, healed: bool) -> void:
+	var driver: Node = rook.driver
+	driver.set_dialogue_pose(true)
+	_check(not RookPerformance.try_laugh(driver, "everyday:rook:chat:3841", true), "Ordinary speech never triggers the rib touch")
+	_check(not RookPerformance.try_laugh(driver, ROOK_JOKE, false), "Listening to Kael's joke never triggers the rib touch")
+	var started := RookPerformance.try_laugh(driver, ROOK_JOKE, true)
+	_check(started == healed, "The brief laugh is available only after Rook's ribs heal")
+	if started:
+		driver.advance_external(0.60)
+		var laughing: Array[Vector4] = await _sample_rook_hands(driver, false)
+		_check(laughing.size() >= 3 and laughing.all(_palm_at_ribs), "Rook touches the healed ribs during his laugh")
+		for tick in 18: driver.advance_external(0.05)
+		_check(driver.current_state != RookPerformance.LAUGH and not driver.has_active_action(), "Rook returns to conversation after laughing")
+		var released: Array[Vector4] = await _sample_rook_hands(driver, false)
+		_check(released.size() >= 3 and not released.any(_palm_at_ribs), "Rook releases his ribs when the laugh ends")
+	driver.set_dialogue_pose(false)
+
+func _palm_at_ribs(span: Vector4) -> bool:
+	return span.y > -0.70 and span.y < 0.10 and absf(span.w) < 0.32 and span.z > 0.09 and span.z < 0.65
+
+func _sample_rook_hands(driver: Node, breathing: bool) -> Array[Vector4]:
 	var rig: Skeleton3D = driver.skeleton
 	var bones: Dictionary = {}
 	for bone: String in ["spine_02", "upperarm_l", "upperarm_r", "hand_l", "middle_01_l", "hand_r"]:
 		bones[bone] = rig.find_bone(bone)
-		if not _check(bones[bone] >= 0, "Rook has the pose probe " + bone): return
+		if not _check(bones[bone] >= 0, "Rook has the pose probe " + bone): return []
 	var samples: Array[Vector4] = []
 	# Skeleton3D restores the base pose after its modifiers run. Sample while
 	# the final evaluated bones are available, as they are for the skinned mesh.
 	var capture := func() -> void:
-		if driver.life_modifier.pose_weight < 0.9: return
+		if breathing and driver.life_modifier.pose_weight < 0.9: return
 		var points: Dictionary = {}
 		for bone: String in bones:
 			points[bone] = rig.to_global(rig.get_bone_global_pose(bones[bone]).origin)
@@ -305,20 +381,23 @@ func _check_rook_hands(driver: Node) -> void:
 		var free: Vector3 = points.hand_r - points.spine_02
 		samples.append(Vector4(free.y, palm.dot(side), palm.dot(Vector3.UP.cross(side)), palm.y) / width.length())
 	rig.skeleton_updated.connect(capture)
-	driver.life_modifier.pose_weight = 1.0
+	if breathing: driver.life_modifier.pose_weight = 1.0
 	for tick in 20:
 		driver.advance_external(1.0 / 60.0)
 		await process_frame
 		if samples.size() >= 5: break
 	rig.skeleton_updated.disconnect(capture)
+	return samples
+
+func _check_rook_hands(driver: Node) -> void:
+	var samples: Array[Vector4] = await _sample_rook_hands(driver, true)
 	if not _check(samples.size() >= 3, "Rook's evaluated breath pose was sampled"): return
 	print("ROOK HANDS wrist height, palm side/front/height (shoulder spans) ", samples)
 	var relaxed := true
 	var guarding := true
 	for span: Vector4 in samples:
 		relaxed = relaxed and span.x < -0.32
-		var over_left_ribs := span.y > -0.70 and span.y < 0.10 and absf(span.w) < 0.32
-		guarding = guarding and over_left_ribs and span.z > 0.09 and span.z < 0.65
+		guarding = guarding and _palm_at_ribs(span)
 	_check(relaxed, "Rook's free right wrist hangs below his ribs throughout the settled breath")
 	_check(guarding, "Rook's left palm stays over the near side of his ribcage")
 

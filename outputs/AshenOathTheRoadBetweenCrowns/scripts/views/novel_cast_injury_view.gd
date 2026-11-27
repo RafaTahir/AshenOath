@@ -4,6 +4,9 @@ extends Node
 
 const Interactable = preload("res://scripts/interactable.gd")
 const TorPerformance = preload("res://scripts/views/novel_tor_performance.gd")
+const RookPerformance = preload("res://scripts/views/novel_rook_performance.gd")
+const Endings = preload("res://scripts/ending_catalog.gd")
+const SPRING_ROUTE := &"novel_spring_route"
 const FLAGS := {
 	"blacksmith_tor": &"novel_tor_braced",
 	"tor": &"novel_tor_braced",
@@ -47,13 +50,20 @@ func setup(driver: Node, state: Node, flag: StringName) -> void:
 
 
 func _story_changed(changes: Dictionary) -> void:
-	if changes.has("*") or changes.get("flags", {}).has(_flag):
+	var flags: Dictionary = changes.get("flags", {})
+	if changes.has("*") or flags.has(_flag) or flags.has(SPRING_ROUTE):
 		_sync()
 
 
 func _sync() -> void:
 	var active: bool = _state.get_flag(_flag, false) == true
+	var route: String = str(_state.get_flag(SPRING_ROUTE, ""))
+	var spring := active and route in Endings.COVENANTS.values()
+	var old_phase: StringName = _driver.novel_injury
 	_driver.novel_injury = _flag if active else &""
+	if spring:
+		_driver.novel_injury = TorPerformance.STIFF if _flag == &"novel_tor_braced" else RookPerformance.HEALED
 	if _flag == &"novel_tor_braced":
-		# Rebinding after a deferred pack mounts can supply a previously missing brace.
-		TorPerformance.sync(_driver, active)
+		TorPerformance.sync(_driver, active and not spring, spring)
+	elif old_phase != _driver.novel_injury:
+		RookPerformance.release_obsolete_pose(_driver)
