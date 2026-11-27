@@ -1,0 +1,38 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://assets/narrative_props/field/culvert_stage.gd" id="1"]
+[ext_resource type="ArrayMesh" path="res://assets/narrative_props/field/culvert_cart.res" id="2"]
+[ext_resource type="ArrayMesh" path="res://assets/narrative_props/field/culvert_bank.res" id="3"]
+[ext_resource type="ArrayMesh" path="res://assets/narrative_props/field/culvert_litter.res" id="4"]
+[ext_resource type="ArrayMesh" path="res://assets/narrative_props/field/culvert_ward.res" id="5"]
+[ext_resource type="ArrayMesh" path="res://assets/narrative_props/field/culvert_wreck.res" id="6"]
+[ext_resource type="ArrayMesh" path="res://assets/narrative_props/field/culvert_lever.res" id="7"]
+
+[node name="CulvertAndWashroom" type="Node3D"]
+script = ExtResource("1")
+
+[node name="Actors" type="Node3D" parent="."]
+
+[node name="Cart" type="MeshInstance3D" parent="."]
+visible = false
+mesh = ExtResource("2")
+
+[node name="Bank" type="MeshInstance3D" parent="."]
+visible = false
+mesh = ExtResource("3")
+
+[node name="Litter" type="MeshInstance3D" parent="."]
+visible = false
+mesh = ExtResource("4")
+
+[node name="Ward" type="MeshInstance3D" parent="."]
+visible = false
+mesh = ExtResource("5")
+
+[node name="Wreck" type="MeshInstance3D" parent="."]
+visible = false
+mesh = ExtResource("6")
+
+[node name="Lever" type="MeshInstance3D" parent="."]
+visible = false
+mesh = ExtResource("7")
