@@ -109,7 +109,7 @@ static func dress(parent: Node3D, kind: String, height: float = 0.0) -> Node3D:
 				var bundle := box(stand,Vector3(0,0.07+i*0.115,0),Vector3(0.50-i*0.018,0.13,0.35),LINEN if i!=1 else PAPER)
 				bundle.rotation.y = 0.065*i
 			box(stand,Vector3(0,0.34,0),Vector3(0.035,0.018,0.35),RED)
-		"post", "line", "strop", "signal":
+		"post", "line", "strop", "signal", "bow_rack":
 			box(stand,Vector3(0,0.38,0),Vector3(0.11,0.76,0.12),WOOD)
 			for i in 3:
 				box(stand,Vector3(0,0.62+i*0.031,0),Vector3(0.14,0.023,0.15),PAPER)

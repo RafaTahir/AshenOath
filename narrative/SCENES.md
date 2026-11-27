@@ -292,9 +292,9 @@ The 114 rows follow the scene breaks in the supplied Markdown. Line numbers refe
 | Source lines | What the player encounters | Runtime ownership |
 |---|---|---|
 | 10451–10595 | Ferry Bera’s four with two crew | first occupied ferry leg |
-| 10596–10717 | Go back west and help Siv’s father into the second load | empty return; departure_second_rescue |
+| 10596–10717 | Go back west and help Siv’s father into the second load | empty return; river_pan; west_bank_encounter; departure_second_rescue |
 | 10718–10807 | Bring Siv’s three east and count all seven | final occupied ferry leg; departure_delivery |
-| 10808–10867 | Take shelter, bind the calf and record goods lost | departure_delivery; wear_and_loss |
+| 10808–10867 | Take shelter, bind the calf and record goods lost | departure_delivery; wear_and_loss; borrowed_bow |
 
 ## Chapter 36 · The Relief Handover
 

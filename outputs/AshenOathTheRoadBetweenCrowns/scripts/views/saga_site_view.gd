@@ -18,12 +18,15 @@ func _refresh_published_zone() -> void:
 func _owns_published_zone() -> bool:
 	if not is_instance_valid(_activities) or not _activities.is_inside_tree():
 		return false
+	if not is_instance_valid(_activities.host): return false
 	var owner: Node = _activities.host
-	if not is_instance_valid(owner) or owner.neighbor_building:
+	if owner.neighbor_building:
 		return false
+	if owner is ZoneConstructionApi and not is_instance_valid(owner.coordinator): return false
 	var game: Node = owner.coordinator if owner is ZoneConstructionApi else owner
 	if not is_instance_valid(game):
 		return false
+	if not is_instance_valid(game.zone_root): return false
 	var root: Node3D = game.zone_root
 	var transition: WorldTransitionModel = game.world_transition
 	return is_instance_valid(root) and root.is_ancestor_of(_activities) \
@@ -31,7 +34,7 @@ func _owns_published_zone() -> bool:
 
 func refresh() -> void:
 	_refresh_pending = false
-	if _refreshing or _activities.host == null or not is_instance_valid(_activities.host.zone_root) or not _activities.host.zone_root.is_ancestor_of(_activities) or _activities.zone != str(_activities.host.current_zone_id):
+	if _refreshing or not is_instance_valid(_activities.host) or not is_instance_valid(_activities.host.zone_root) or not _activities.host.zone_root.is_ancestor_of(_activities) or _activities.zone != str(_activities.host.current_zone_id):
 		return
 	_refreshing = true
 	if _owns_published_zone(): _activities._reconcile_rewards()

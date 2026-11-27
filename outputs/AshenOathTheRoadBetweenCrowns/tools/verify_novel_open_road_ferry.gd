@@ -141,6 +141,8 @@ func _verify() -> void:
 	activity.tick(4.0)
 	_check(Ending.departure_manifest(state).arrived_passengers == 4 and not west.visible and not east.visible and host.player.position.x < 3.5, "The empty return lands on the west bank and requires the rescue")
 
+	_check(not Ending.complete_action("departure_second_rescue","lantern_reach",state), "Siv’s rescue waits for the actual bank encounter")
+	state.set_flag("novel_bank_cleared",true) # Encounter boundary; the rendered river journey covers this trigger.
 	_check(Ending.complete_action("departure_second_rescue","lantern_reach",state), "Prepare Siv's three after the empty return")
 	activity.refresh()
 	activity.activate(west)

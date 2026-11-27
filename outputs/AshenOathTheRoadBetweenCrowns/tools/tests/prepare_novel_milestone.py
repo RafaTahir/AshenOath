@@ -10,6 +10,7 @@ from prepare_community_acceptance_seeds import build_seed
 from run_full_campaign_acceptance import chapter_ids
 
 CASES = {
+    "siv_crossing": ("seeded_departure_ferry", "lantern_reach", "main_hart_remembers", "hear_testimony", [0.4, 1, 2.5]),
     "tor_wrist": ("lantern_crossing", "old_mill", "main_ash_at_the_mill", "mill_encounter", [2.7, 1, 7.3]),
     "seals": ("hearth_distributed", "record_hall", "main_blood_under_stone", "recover_ledger", [-3.4, 1, 6.6]),
     "dry_floor": ("hearth_distributed", "hearthward", "main_house_many_names", "reach_hearthward", [3.5, 1, 4.6]),
@@ -38,6 +39,13 @@ def prepare(case, output):
                                       if key in quests["completed"]}
     flags = payload["story_state"]["flags"]
     flags.update(novel_edition=1, novel_prologue_closed=True)
+    if case == "siv_crossing":
+        flags.update(final_covenant="open_road", covenant_ritual_started=True, covenant_ritual_step=3,
+                     open_road_households=["water_carrier","quality_sweeper"], open_road_named_roster=[],
+                     open_road_protection_dismantled=True, territorial_protection_active=False,
+                     hart_complete_account_access=False, human_records_preserved=True,
+                     open_road_relocation_started=True)
+        payload["quests"].setdefault("world_flags",{})["ending"]="depart"
     if case == "spring_open_road":
         # The released codec requires the whole evacuation chain on a finished departure.
         flags.update(final_covenant="open_road", final_choice_completed=True, covenant_ritual_step=3,

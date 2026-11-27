@@ -118,8 +118,8 @@ func set_transition_locked(locked: bool) -> void:
 func cancel_buffered_input(reason: String = "context") -> void:
 	player_action_view.cancel_buffered_input(reason)
 
-func bind_inventory(value: Variant) -> void:
-	player_action_view.bind_inventory(value)
+func bind_inventory(value: Variant, story: Node = null) -> void:
+	player_action_view.bind_inventory(value, story)
 
 func get_weapon_mode() -> String:
 	return player_action_view.get_weapon_mode()

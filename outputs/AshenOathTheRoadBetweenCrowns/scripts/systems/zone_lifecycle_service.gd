@@ -84,7 +84,7 @@ func _zone_encounter_packs(zone_id: String, recorded_journey: Dictionary = {}) -
 	var flags: Dictionary = story_state.flags if recorded_journey.is_empty() else recorded_journey.get("story_state",{}).get("flags",{})
 	var completed: Dictionary = quests.completed if recorded_journey.is_empty() else recorded_journey.get("quests",{}).get("completed",{})
 	if preload("res://scripts/campaign_story_overlay.gd").required_for(zone_id,flags,completed): encounter_packs.append("community")
-	encounter_packs.append_array(preload("res://scripts/core/novel/field_pack_requirements.gd").for_zone(zone_id,flags,completed))
+	encounter_packs.append_array(preload("res://scripts/core/novel/field_pack_requirements.gd").requests(zone_id,flags,completed,runtime_packs))
 	if zone_id != "greyfen":
 		return encounter_packs
 	var bell_pending: bool
@@ -404,7 +404,7 @@ func _spawn_player(pos: Vector3) -> void:
 	_apply_progression_to_player()
 	_apply_runtime_settings(settings.settings)
 	if player.has_method("bind_inventory"):
-		player.bind_inventory(inventory)
+		player.bind_inventory(inventory, story_state)
 	player.blade_contact_requested.connect(Callable(_host, "_on_player_blade_contact"))
 	player.potion_requested.connect(Callable(_host, "_use_potion"))
 	player.bomb_requested.connect(Callable(_host, "_throw_bomb"))

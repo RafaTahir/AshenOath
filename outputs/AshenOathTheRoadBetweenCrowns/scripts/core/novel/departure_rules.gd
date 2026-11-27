@@ -60,7 +60,7 @@ static func complete_departure_leg(leg: int, state: Object) -> bool:
 static func novel_action_text(operation: String) -> String:
 	match operation:
 		"departure_load": return "Vale read back both requests for shelter. Bera brought four and Siv brought three. Flood debris tore the upstream guide loose. The hauling line held."
-		"departure_second_rescue": return "The Stalker cut Kael's calf. Rook and Siv's sister brought her father down while Siv steadied him. Kael cut his snagged bow loose so the ferry could leave. Rook stayed on his own bank."
+		"departure_second_rescue": return "The bank is clear. Rook and Siv’s sister bring her father down. Kael binds his bleeding calf against the gunwale and cuts his snagged bow loose. Rook stays on his own bank."
 		"departure_delivery": return "Nera counted seven safe on the east bank. Siv bound Kael's calf and Anwen cleaned it at the overnight shelter. The river took the chair, bedding chest, two grain sacks and much of the last tool load."
 		"departure_arrival": return "Nera made the final mark after all seven were inside Hearthward. Mira put in twelve stitches, Anwen helped with the care, and Nessa found meals and dry beds."
 		"departure_handover": return "Nera confirmed a crew for the Greyfen ferry and Siv and Toma for the mill. She took the outlying shelters with two drivers. Kael agreed to check stores seated with Merrow, and Vale will check after them."
@@ -71,7 +71,7 @@ static func _novel_action_available(operation: String, zone: String, state: Obje
 	if legs < 0: return false
 	match operation:
 		"departure_load": return zone == "lantern_reach" and legs == 0 and not Rules._true(state,"novel_departure_requests_verified") and not Rules._true(state,"open_road_load_carried") and not Rules._true(state,"open_road_route_delivered")
-		"departure_second_rescue": return zone == "lantern_reach" and legs == 2 and Rules._true(state,"open_road_load_carried") and not Rules._true(state,"novel_departure_second_rescue")
+		"departure_second_rescue": return zone == "lantern_reach" and legs == 2 and Rules._true(state,"novel_bank_cleared") and Rules._true(state,"open_road_load_carried") and not Rules._true(state,"novel_departure_second_rescue")
 		"departure_delivery": return zone == "lantern_reach" and legs == 3 and Rules._true(state,"open_road_load_carried") and Rules._true(state,"open_road_route_crossed") and not Rules._true(state,"open_road_route_delivered")
 		"departure_arrival": return zone == "hearthward" and legs == 3 and Rules._true(state,"open_road_route_delivered") and not Rules._true(state,"open_road_relocation_completed") and int(departure_manifest(state).arrived_passengers) == 7
 		"departure_handover": return zone == "hearthward" and legs == 3 and Rules._true(state,"open_road_relocation_completed") and state.get_flag("novel_departure_arrival_count",0) == 7 and not Rules._true(state,"novel_departure_handover")
@@ -134,6 +134,9 @@ static func departure_continuation(state: Object) -> Dictionary:
 	elif _departure_legs(state) == 3: novel_operation = "departure_delivery"
 	elif _departure_legs(state) == 2 and not Rules._true(state,"novel_departure_second_rescue"): novel_operation = "departure_second_rescue"
 	elif Rules._true(state,"open_road_load_carried"): novel_operation = "departure_crossing"
+	if novel_operation == "departure_second_rescue" and not Rules._true(state,"novel_bank_cleared"):
+		var sounded := Rules._true(state,"novel_done_river_pan")
+		return {"id":"open_road_departure","operation":"departure_defend","zone":"lantern_reach","title":"Siv’s household","action":"Draw the Stalker onto the loose bank or fight it" if sounded else "Ring the pan beside the shed","text":"Siv stays with her father. The ferryman holds the boat.","target_ids":["NovelBankEdge" if sounded else "novel_river_pan_0"],"position":[2.8,0,-3.3] if sounded else [-1.4,0,-2.5]}
 	var base := "departure_arrival" if novel_operation == "departure_handover" else ("departure_load" if novel_operation == "departure_second_rescue" else novel_operation)
 	var entry: Dictionary = Rules.data().get("departure_journey",{}).get(base,{}).duplicate(true)
 	entry["operation"] = novel_operation
@@ -146,7 +149,7 @@ static func departure_continuation(state: Object) -> Dictionary:
 	elif novel_operation == "departure_handover": entry["position"] = [-4.5,0.0,4.5]
 	if novel_operation == "departure_crossing":
 		target = "community:ferry" if departure_dock(state) == "west" else "community:departure_return_ferry"
-		entry["position"] = [3.0,0.0,0.8] if departure_dock(state) == "west" else [10.5,0.0,0.8]
+		entry["position"] = [1.7,0.0,0.65] if departure_dock(state) == "west" else [10.5,0.0,0.8]
 	entry["target_ids"] = [target]
 	return entry
 

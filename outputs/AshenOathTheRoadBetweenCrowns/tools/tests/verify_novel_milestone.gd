@@ -18,7 +18,7 @@ func _ready(expected: String) -> void:
 
 func _interact(id: String) -> void:
 	if not failures.is_empty(): return
-	var area := game.zone_root.find_child(id,true,false) as Node3D
+	var area := game.zone_root.find_child(id.replace(":","_"),true,false) as Node3D
 	if area==null or not area.is_visible_in_tree():
 		_fail("No visible action "+id)
 		return
@@ -88,7 +88,7 @@ func _initialize() -> void:
 	output = OS.get_environment("ASHEN_NOVEL_EVIDENCE")
 	case_id = output.get_file()
 	var scene_key := str(FileAccess.get_file_as_string(output.path_join("scene.txt"))).strip_edges()
-	if output.is_empty() or scene_key not in ["tor_wrist","seals","dry_floor","spring_open_road","old_gate_memory","omitted_return"] or DisplayServer.get_name().to_lower()=="headless":
+	if output.is_empty() or scene_key not in ["tor_wrist","seals","dry_floor","spring_open_road","old_gate_memory","omitted_return","siv_crossing"] or DisplayServer.get_name().to_lower()=="headless":
 		quit(2)
 		return
 	start_ms = Time.get_ticks_msec()
@@ -107,7 +107,7 @@ func _initialize() -> void:
 		if available or game.startup_prepare_failed: break
 		await process_frame
 	await _button("Continue")
-	region = {"tor_wrist":"old_mill","seals":"record_hall","dry_floor":"hearthward","spring_open_road":"hearthward","old_gate_memory":"hart_glade","omitted_return":"hearthward"}[scene_key]
+	region = {"siv_crossing":"lantern_reach","tor_wrist":"old_mill","seals":"record_hall","dry_floor":"hearthward","spring_open_road":"hearthward","old_gate_memory":"hart_glade","omitted_return":"hearthward"}[scene_key]
 	await _ready(region)
 	report_extra={"seed":"synthetic_boundary","scene":scene_key,"full_campaign_proof":false}
 	if not failures.is_empty():
@@ -115,6 +115,10 @@ func _initialize() -> void:
 		return
 	var story=game.story_state
 	_check(story.get_flag("novel_edition",0)==1,"New literary edition loaded")
+	if scene_key=="siv_crossing":
+		await _evacuate()
+		await _finish()
+		return
 	var layer: Node = game.zone_root.get_node_or_null("StoryActivities/NovelScenes")
 	if scene_key=="old_gate_memory" and layer!=null:
 		_check(not layer.turns.has(scene_key) and not game.quests.is_objective_done("main_hart_remembers","hear_testimony"),"Arrival alone grants no memory")
@@ -153,3 +157,40 @@ func _initialize() -> void:
 		await RenderingServer.frame_post_draw
 		_check(root.get_texture().get_image().save_png(output.path_join(scene_key+".png"))==OK,"Recorded the playable scene")
 	await _finish()
+
+func _evacuate() -> void:
+	var story: Node = game.story_state
+	if not story.get_flag("open_road_load_carried",false):
+		await _operation("departure_load","open_road_load_carried",18)
+	var start_leg := int(story.get_flag("novel_departure_legs",0))
+	report_extra["starting_ferry_leg"]=start_leg
+	for trip in range(start_leg,3):
+		if not failures.is_empty(): return
+		if trip==2 and not story.get_flag("novel_departure_second_rescue",false):
+			_check(not story.get_flag("novel_bank_cleared",false),"The empty return leaves a live danger on the west bank")
+			await _interact("novel_river_pan_0")
+			await _wait_flag("novel_done_river_pan",true,12)
+			await _walk_to(game.zone_root.to_global(Vector3(2.8,0,-3.3)))
+			await _wait_flag("novel_bank_cleared",true,35)
+			await _operation("departure_second_rescue","novel_departure_second_rescue",18)
+		await _interact("community:departure_return_ferry" if trip==1 else "community:ferry")
+		if failures.is_empty() and trip==0:
+			await _seconds(2.4)
+			await _snapshot("bera_aboard")
+		var due := Time.get_ticks_msec()+35000
+		while failures.is_empty() and int(story.get_flag("novel_departure_legs",0))<=trip and Time.get_ticks_msec()<due: await process_frame
+		_check(int(story.get_flag("novel_departure_legs",0))==trip+1,"Physical ferry completed leg "+str(trip+1))
+		if trip==0 and failures.is_empty():
+			await _save_reload("bera_on_east_bank")
+			story=game.story_state
+			_check(int(story.get_flag("novel_departure_legs",0))==1,"Continue preserves Bera’s crossing")
+	await _operation("departure_delivery","open_road_route_delivered",20)
+	if failures.is_empty():
+		var manifest: Dictionary = preload("res://scripts/community_ending.gd").departure_manifest(story)
+		_check(manifest.arrived_passengers==7,"Both families landed with all seven people")
+		_check(story.get_flag("novel_departure_bow_lost",false),"The river kept the hunting bow")
+		_check(not game.player.equipment_loadout.bow_available,"Kael cannot draw the lost bow")
+		await _snapshot("seven_on_the_east_bank")
+		await _interact("novel_borrowed_bow_0")
+		await _wait_flag("novel_departure_spare_bow",true,12)
+		_check(game.player.equipment_loadout.bow_available,"Kael can equip a replacement after collecting it")

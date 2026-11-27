@@ -872,7 +872,7 @@
           "choices": [
             {
               "label": "Return six months later",
-              "result": "Six months after the crossings, a new guide line hangs at the ferry. Nera has orders for freight with her own name above the door. Kael rests his calf on the step before taking the next crate.",
+              "result": "Six months after the crossings, a new guide line hangs at the ferry. Nera has orders for freight with her own name above the door. Kael rests his calf on the step before taking the next crate. Kael has bought another bow. The ferryman says he liked the old complaint.",
               "set": {
                 "novel_season": "spring",
                 "novel_spring_route": "open_road"
@@ -1443,6 +1443,64 @@
           "prompt": "Leave the delivery hours beside the covered jar",
           "seconds": 1.2,
           "result": "The public hours are enough. His brother’s name goes on neither the packet nor a list of witnesses."
+        }
+      ]
+    },
+    {
+      "id": "river_pan",
+      "chapter": 35,
+      "title": "Hold the west bank",
+      "when": {
+        "flags": {
+          "final_covenant": "open_road",
+          "novel_departure_legs": 2,
+          "open_road_load_carried": true
+        },
+        "unless": {
+          "novel_departure_second_rescue": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "lantern_reach",
+          "at": [
+            -1.4,
+            -2.5
+          ],
+          "object": "child_pan",
+          "prompt": "Ring the shed pan to draw the Stalker away from Siv",
+          "seconds": 0.55,
+          "result": "Its head turns. Rook lowers the pole to Siv’s father. Hold the Stalker here or lead it onto the crumbling lip beside the frayed rope."
+        }
+      ]
+    },
+    {
+      "chapter": 35,
+      "id": "borrowed_bow",
+      "title": "A bow for the road",
+      "when": {
+        "flags": {
+          "novel_departure_bow_lost": true,
+          "open_road_route_delivered": true
+        },
+        "unless": {
+          "novel_spring_route": "open_road"
+        }
+      },
+      "beats": [
+        {
+          "zone": "lantern_reach",
+          "at": [
+            12.3,
+            3.1
+          ],
+          "object": "bow_rack",
+          "prompt": "Unhook the ferryman’s spare bow",
+          "seconds": 1.5,
+          "result": "“Mind the damp.” The ferryman waits while you check the string. This one pulls differently. The river still has yours.",
+          "set": {
+            "novel_departure_spare_bow": true
+          }
         }
       ]
     }

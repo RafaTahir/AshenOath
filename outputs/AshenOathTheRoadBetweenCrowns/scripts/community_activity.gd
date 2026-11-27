@@ -46,7 +46,7 @@ func configure(owner: Node, build_stations: bool = true) -> void:
 		_station("survey:near","Inspect the near landing and read the current",Vector3(1,0,-1),{"operation":"survey","id":"near","seconds":3.0,"kind":"inspect"})
 		_station("survey:far","Inspect the far landing and its approach",Vector3(11,0,-1),{"operation":"survey","id":"far","seconds":3.0,"kind":"inspect"})
 		_station("delivery","Set down the first load at the far landing",Vector3(11,0,1.5),{"operation":"delivery","quest":"main_road_kept_open","seconds":3.0,"kind":"haul"})
-		_station("ferry","Board the ferry with the first load",Vector3(3.0,0,0.8),{"operation":"ferry","dock":"west","seconds":7.5,"kind":"haul"})
+		_station("ferry","Board the ferry with the first load",Vector3(1.7,0,0.65) if Ending.novel_departure(game.story_state) else Vector3(3.0,0,0.8),{"operation":"ferry","dock":"west","seconds":7.5,"kind":"haul"})
 		_station("departure_return_ferry","Return with the ferryman for Siv’s household",Vector3(10.5,0,0.8),{"operation":"ferry","dock":"east","seconds":7.5,"kind":"haul"})
 		_station("departure_second_rescue","Help Siv’s father aboard and free the snagged bow strap",Vector3(2,0,-1.5),{"operation":"departure_second_rescue","seconds":4.0,"kind":"haul"})
 	if zone == "hearthward":

@@ -54,6 +54,8 @@ func _initialize() -> void:
 	_check(Ending.departure_dock(state) == "west" and Ending.next_departure_leg(state).is_empty(), "Second outbound remains blocked before the west-bank rescue")
 	_check(not Ending.complete_departure_leg(3,state) and not Ending.complete_action("departure_delivery","lantern_reach",state), "No rescue or delivery bypass")
 	_check(not Ending.complete_action("departure_second_rescue","hearthward",state), "Rescue belongs to Lantern's west bank")
+	_check(not Ending.complete_action("departure_second_rescue","lantern_reach",state), "Siv’s rescue waits for the actual bank encounter")
+	state.set_flag("novel_bank_cleared",true) # Encounter boundary; the rendered river journey covers this trigger.
 	_check(Ending.complete_action("departure_second_rescue","lantern_reach",state), "Rescue records the calf wound and cut-loose bow")
 	_check(state.get_flag("novel_departure_calf_injured") == true and state.get_flag("novel_departure_bow_lost") == true, "The incidents persist independently of animation")
 	state = _resume(state)

@@ -49,7 +49,8 @@ func cancel_buffered_input(reason: String = "context") -> void:
 	if _actor.slash_arc_root != null:
 		_actor.slash_arc_root.visible = false
 
-func bind_inventory(value: Variant) -> void:
+func bind_inventory(value: Variant, story: Node = null) -> void:
+	if story != null: preload("res://scripts/views/novel/bow_custody.gd").bind(_actor,story)
 	_actor.inventory_ref = value
 	if _actor.inventory_ref != null and int(_actor.inventory_ref.items.get(_actor.selected_arrow_id, 0)) <= 0:
 		_actor._cycle_arrow_type()
@@ -75,6 +76,9 @@ func _select_blade(blade_id: String) -> void:
 	_actor._request_equipment("sword", blade_id, true)
 
 func _request_equipment(mode: String, blade_id: String, drawn: bool) -> void:
+	if mode == "bow" and not _actor.equipment_loadout.bow_available:
+		_actor.ability_hint.emit("The hunting bow went into the river. A spare hangs at the east landing.")
+		return
 	_actor._cancel_bow()
 	_actor.equipment_pending_attack = ""
 	_actor.buffered_attack = ""
@@ -93,8 +97,10 @@ func _cycle_weapon() -> void:
 		_actor._select_blade("steel")
 	elif _actor.get_selected_blade_id() == "steel":
 		_actor._select_blade("oathblade")
-	else:
+	elif _actor.equipment_loadout.bow_available:
 		_actor._request_equipment("bow", _actor.get_selected_blade_id(), true)
+	else:
+		_actor._select_blade("steel")
 
 func _toggle_weapon_draw() -> void:
 	_actor._request_equipment(_actor.weapon_mode, _actor.get_selected_blade_id(), not _actor.equipment_loadout.is_drawn())

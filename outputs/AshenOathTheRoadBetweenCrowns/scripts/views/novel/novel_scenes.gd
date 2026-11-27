@@ -96,6 +96,7 @@ func refresh() -> void:
 		if not enabled: game._remove_interaction_candidate(area)
 	game.interaction_focus_dirty = true
 	preload("res://scripts/views/novel/field_performances.gd").project(self)
+	preload("res://scripts/views/novel/west_bank_encounter.gd").project(self)
 
 static func resolve_beat(base: Dictionary, state: Node, quests: Node) -> Dictionary:
 	for variant: Dictionary in base.get("variants",[]):
@@ -138,7 +139,8 @@ func _station(key: String, index: int, beat: Dictionary) -> Node3D:
 	area.state_label = str(beat.prompt)
 	area.display_name = str(beat.get("place",turns[key].scene.title))
 	area.add_to_group("novel_scene")
-	Tableau.dress(area, str(beat.get("object","")), float(beat.get("height",0)))
+	var prop := Tableau.dress(area, str(beat.get("object","")), float(beat.get("height",0)))
+	if beat.get("object","") == "bow_rack": preload("res://scripts/views/novel/bow_custody.gd").hang_spare(prop,game.player)
 	stations[id] = area
 	return area
 

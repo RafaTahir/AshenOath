@@ -20,6 +20,7 @@ const CONTACT_FRACTION := 0.48
 var active_weapon := "sword"
 var selected_blade_id := "steel"
 var sword_drawn := false
+var bow_available := true
 var bow_aiming := false
 var bow_drawn := false
 var selected_arrow_id := "standard_arrow"
@@ -42,7 +43,7 @@ func transition_progress() -> float:
 	return clampf(transition_elapsed / maxf(transition_duration, 0.001), 0.0, 1.0)
 
 func request_loadout(weapon: String, blade: String, drawn: bool = true) -> bool:
-	if is_transitioning():
+	if is_transitioning() or (weapon == "bow" and not bow_available):
 		return false
 	requested_weapon = "bow" if weapon == "bow" else "sword"
 	requested_blade = normalized_blade_id(blade)
@@ -116,7 +117,7 @@ func bind_node(slot: String, node: Node) -> void:
 
 func set_active_weapon(value: String) -> void:
 	cancel_transition()
-	var next := "bow" if value.to_lower() == "bow" else "sword"
+	var next := "bow" if bow_available and value.to_lower() == "bow" else "sword"
 	if active_weapon == next:
 		apply_visibility()
 		return
@@ -192,7 +193,7 @@ func load_state(data: Dictionary) -> void:
 	if typeof(data) != TYPE_DICTIONARY:
 		return
 	cancel_transition()
-	active_weapon = "bow" if str(data.get("active_weapon", "sword")).to_lower() == "bow" else "sword"
+	active_weapon = "bow" if bow_available and str(data.get("active_weapon", "sword")).to_lower() == "bow" else "sword"
 	selected_blade_id = normalized_blade_id(str(data.get("selected_blade_id", "steel")))
 	sword_drawn = bool(data.get("sword_drawn", false)) and active_weapon == "sword"
 	bow_drawn = bool(data.get("bow_drawn", true)) and active_weapon == "bow"
@@ -211,15 +212,13 @@ func apply_visibility() -> void:
 		_set_slot_visible(blade_id + "_scabbard", true)
 	var sword_hand = nodes.get("sword_hand")
 	var sword_back = nodes.get("sword_back")
-	var bow = nodes.get("bow")
 	var quiver = nodes.get("quiver")
 	if sword_hand != null and is_instance_valid(sword_hand):
 		_set_slot_visible("sword_hand", active_weapon == "sword" and sword_drawn)
 	if sword_back != null and is_instance_valid(sword_back):
 		_set_slot_visible("sword_back", active_weapon == "bow" or not sword_drawn)
-	if bow != null and is_instance_valid(bow):
-		_set_slot_visible("bow", active_weapon == "bow" and bow_drawn)
-	_set_slot_visible("bow_back", active_weapon != "bow" or not bow_drawn)
+	_set_slot_visible("bow", bow_available and active_weapon == "bow" and bow_drawn)
+	_set_slot_visible("bow_back", bow_available and (active_weapon != "bow" or not bow_drawn))
 	if quiver != null and is_instance_valid(quiver):
 		_set_slot_visible("quiver", true)
 
