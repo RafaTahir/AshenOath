@@ -6,7 +6,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from partition_novel_pack import FIELD_PACK_PATHS, partition_novel_pack
+from partition_novel_pack import FIELD_PACK_PATHS, FIELD_VIEW_DEPENDENCIES, TYPED_FIELD_RUNTIME, partition_novel_pack
 from runtime_pack_validation import require_valid_pack_graph
 from verify_web_preset_parity import filters, selected, selected_files
 
@@ -21,7 +21,7 @@ class NovelPack(unittest.TestCase):
         manifest = {"pack_presets": {"opening": "Runtime Pack Opening"}, "packs": {"opening": {}}}
         with tempfile.TemporaryDirectory() as temporary:
             project = Path(temporary)
-            runtime = project / "scripts/novel/field_performances.gd"
+            runtime = project / TYPED_FIELD_RUNTIME
             runtime.parent.mkdir(parents=True)
             runtime.touch()
             with self.assertRaisesRegex(ValueError, "Novel field resources missing") as caught:
@@ -117,7 +117,7 @@ class NovelPack(unittest.TestCase):
         manifest["zone_dependencies"]["greyfen"].extend(sorted(field_ids))
         with tempfile.TemporaryDirectory() as temporary:
             project = Path(temporary)
-            for path in field_paths | common | extras | helpers:
+            for path in field_paths | common | extras | helpers | FIELD_VIEW_DEPENDENCIES | {TYPED_FIELD_RUNTIME}:
                 asset = project / path
                 asset.parent.mkdir(parents=True, exist_ok=True)
                 asset.touch()
@@ -142,10 +142,12 @@ class NovelPack(unittest.TestCase):
             self.assertEqual(["base"], manifest["packs"][pack_id]["dependencies"])
             self.assertFalse(manifest["packs"][pack_id]["required_at_startup"])
         for name, section in sections.items():
-            for path in field_paths | common | extras | helpers:
+            for path in field_paths | common | extras | helpers | FIELD_VIEW_DEPENDENCIES:
                 if path in field_paths:
                     owner = next(pack for pack, paths in FIELD_PACK_PATHS.items() if path in paths)
                     wanted = name == manifest["pack_presets"][owner]
+                elif path in FIELD_VIEW_DEPENDENCIES:
+                    wanted = name in {"Web Browser", "Web QA Browser"}
                 else:
                     wanted = path in common and name == manifest["pack_presets"]["opening"]
                 self.assertEqual(wanted, selected(config[section], "res://" + path), (name, path))

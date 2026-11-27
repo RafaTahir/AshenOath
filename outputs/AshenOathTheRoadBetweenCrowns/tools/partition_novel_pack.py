@@ -7,7 +7,16 @@ import json
 ACT_DIRECTORY = "data/novel/"
 PROP_DIRECTORY = "assets/narrative_props/"
 FIELD_DIRECTORY = PROP_DIRECTORY + "field/"
-FIELD_RUNTIME = "scripts/novel/field_performances.gd"
+TYPED_FIELD_RUNTIME = "scripts/views/novel/field_performances.gd"
+FIELD_RUNTIME_PATHS = {
+    "scripts/novel/field_performances.gd",
+    TYPED_FIELD_RUNTIME,
+}
+FIELD_VIEW_DEPENDENCIES = {
+    "scripts/views/novel/field_actor_mark.gd",
+    "scripts/views/novel/field_stage.gd",
+}
+WEB_ROOT_PRESETS = {"Web Browser", "Web QA Browser"}
 PROP_CATALOG = PROP_DIRECTORY + "library.json"
 ACT_FILES = {f"{ACT_DIRECTORY}act_{act}.json" for act in range(1, 5)}
 # Exact closures of the five field scenes. Their textures are embedded in these
@@ -86,7 +95,7 @@ def partition_novel_pack(project, config, sections, manifest):
         raise ValueError("Novel acts missing from the project: " + ", ".join(sorted(ACT_FILES - present_acts)))
     field_paths = set().union(*FIELD_PACK_PATHS.values())
     has_field = (
-        (project / FIELD_RUNTIME).is_file()
+        any((project / path).is_file() for path in FIELD_RUNTIME_PATHS)
         or any((project / path).is_file() for path in field_paths)
         or any(pack in manifest["pack_presets"] for pack in FIELD_PACK_PATHS)
     )
@@ -94,6 +103,10 @@ def partition_novel_pack(project, config, sections, manifest):
         missing = sorted(path for path in field_paths if not (project / path).is_file())
         if missing:
             raise ValueError("Novel field resources missing from the project: " + ", ".join(missing))
+        if (project / TYPED_FIELD_RUNTIME).is_file():
+            missing = sorted(path for path in FIELD_VIEW_DEPENDENCIES if not (project / path).is_file())
+            if missing:
+                raise ValueError("Novel field view scripts missing from the project: " + ", ".join(missing))
         _ensure_field_presets(config, sections, manifest)
     props = {
         path.relative_to(project).as_posix()
@@ -109,6 +122,8 @@ def partition_novel_pack(project, config, sections, manifest):
 
     field_presets = {manifest["pack_presets"][pack]: paths
                      for pack, paths in FIELD_PACK_PATHS.items() if has_field}
+    field_views = {path for path in FIELD_VIEW_DEPENDENCIES if has_field and (project / path).is_file()}
+    view_resources = {"res://" + path for path in field_views}
     for name, section in sections.items():
         preset = config[section]
         encoded = preset.get("export_files", "PackedStringArray()")
@@ -143,6 +158,15 @@ def partition_novel_pack(project, config, sections, manifest):
             excludes.add(FIELD_DIRECTORY + "*")
         else:
             excludes.update({ACT_DIRECTORY + "*", PROP_DIRECTORY + "*"})
+        # Typed field scenes inherit these root view scripts. The scene owner
+        # relies on base for them, so no supplemental exports carry copies.
+        if name in WEB_ROOT_PRESETS:
+            selected.update(view_resources)
+            excludes.difference_update(field_views)
+        else:
+            selected.difference_update(view_resources)
+            includes.difference_update(field_views)
+            excludes.update(field_views)
         excludes.update(SOURCE_BOOK_FILTERS)
         preset["export_files"] = "PackedStringArray(" + ", ".join(map(json.dumps, sorted(selected))) + ")"
         preset["include_filter"] = json.dumps(",".join(sorted(includes)))
