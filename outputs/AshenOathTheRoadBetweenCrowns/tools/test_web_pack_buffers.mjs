@@ -1,5 +1,5 @@
 // Real exported MEMFS and Cache Storage check, without starting the game or GPU.
-// node tools/test_web_pack_buffers.mjs <report.json> <python.exe>
+// node tools/test_web_pack_buffers.mjs <report.json> <python.exe> [artifact-root]
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { createReadStream, readFileSync, writeFileSync, mkdirSync, mkdtempSync } from 'node:fs';
@@ -7,12 +7,13 @@ import { dirname, resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { gunzipSync } from 'node:zlib';
 import { createHash } from 'node:crypto';
+import { Script } from 'node:vm';
 import puppeteer from 'puppeteer-core';
 
 const reportPath = resolve(process.argv[2]);
 const python = process.argv[3] || 'python';
 const project = resolve(new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'));
-const web = resolve(project, '../../web');
+const web = resolve(process.argv[4] || resolve(project, '../../web'));
 const release = JSON.parse(readFileSync(resolve(web, 'release_manifest.json')));
 const packs = JSON.parse(readFileSync(resolve(web, 'runtime_pack_manifest.json')));
 const stock = gunzipSync(readFileSync(resolve(web, release.engine.script)));
@@ -26,7 +27,19 @@ const served = patched.toString().replace(boundary, boundary +
   'Module["packTestView"]=function(p){const n=FS.lookupPath(p).node;return n.contents.subarray(0,n.usedBytes)};' +
   'Module["packTestRemove"]=function(p){FS.unlink(p)};');
 const shell = readFileSync(resolve(project, 'web_boot_shell.html'), 'utf8');
-assert(shell.includes('packCache.put(packUrl, new Response(payload))'));
+function shellFunction(name) {
+  const declaration = `function ${name}(`;
+  const start = shell.indexOf(declaration);
+  assert(start >= 0 && shell.indexOf(declaration, start + declaration.length) < 0, `Missing/ambiguous shell helper: ${name}`);
+  for (let end = shell.indexOf('}', start); end >= 0; end = shell.indexOf('}', end + 1)) {
+    const candidate = shell.slice(start, end + 1);
+    try { new Script(`(${candidate})`); return candidate; } catch (error) {
+      if (!(error instanceof SyntaxError)) throw error;
+    }
+  }
+  throw new Error(`Cannot parse actual shell helper: ${name}`);
+}
+const cacheResponseFunction = shellFunction('verifiedPackResponse');
 const opening = packs.packs.opening;
 const openingPath = new URL(opening.url, 'http://test.invalid/').pathname;
 const artifact = release.artifacts.find(item => '/' + item.path === openingPath);
@@ -54,6 +67,7 @@ mkdirSync(dirname(reportPath), { recursive: true });
 const profile = mkdtempSync(resolve(dirname(reportPath), 'pack-buffer-profile-'));
 let browser;
 const report = { status: 'running', baseline_build: release.build_id, profile,
+  artifact_root: web,
   phases: [], console_errors: [],
   stock_js_sha256: createHash('sha256').update(stock).digest('hex'),
   candidate_js_sha256: createHash('sha256').update(patched).digest('hex'),
@@ -73,7 +87,8 @@ try {
   });
   await page.goto(`http://127.0.0.1:${server.address().port}/`, { waitUntil: 'load' });
   report.browser = await browser.version();
-  report.result = await page.evaluate(async ({ expected }) => {
+  report.result = await page.evaluate(async ({ expected, cacheResponseFunction }) => {
+    const verifiedPackResponse = (0, eval)(`(${cacheResponseFunction})`);
     const engine = new Engine({ executable: '/index', persistentPaths: [], onPrintError: (...args) => console.error(...args) });
     await engine.init('/index');
     console.log('PACK_CHECK:engine_initialized');
@@ -97,9 +112,20 @@ try {
     const owned = engine.rtenv.packTestView('/owned.pck');
     if (owned.buffer !== payload || await hash(owned) !== expected.sha256) throw new Error('Owned handoff was copied or corrupted');
     console.log('PACK_CHECK:owned_handoff_verified');
+    const sample = verifiedPackResponse(payload).body.getReader();
+    const firstChunk = (await sample.read()).value;
+    if (!(firstChunk instanceof Uint8Array) || firstChunk.byteLength > 256 * 1024 || firstChunk.buffer === payload) {
+      throw new Error('Cache helper must expose bounded independent chunks');
+    }
+    await sample.cancel();
+    const aborted = new AbortController();
+    aborted.abort();
+    let rejected = false;
+    try { await verifiedPackResponse(payload, aborted.signal).arrayBuffer(); } catch (_) { rejected = true; }
+    if (!rejected) throw new Error('Aborted cache response was accepted');
     const cache = await caches.open('pack-ownership-check');
     const cacheStart = performance.now();
-    await cache.put('/verified.pck', new Response(payload));
+    await cache.put('/verified.pck', verifiedPackResponse(payload, new AbortController().signal));
     const cacheMs = performance.now() - cacheStart;
     console.log('PACK_CHECK:cache_written');
     const cached = await (await cache.match('/verified.pck')).arrayBuffer();
@@ -111,9 +137,11 @@ try {
     return { decoded_pack_bytes: payload.byteLength, sha256: expected.sha256,
       normal_copy_independent: true, owned_same_buffer: true, cached_bytes_identical: true,
       owned_bytes_intact_after_cache: true, copy_ms: copyMs, owned_ms: ownedMs,
+      actual_shell_response_helper: true, bounded_independent_cache_chunks: true,
+      first_cache_chunk_bytes: firstChunk.byteLength, aborted_response_rejected: true,
       cache_ms: cacheMs,
       timing_limit: 'One isolated copy operation, not a game-loading benchmark or process-memory measurement.' };
-  }, { expected: { bytes: opening.bytes, sha256: opening.sha256 } });
+  }, { expected: { bytes: opening.bytes, sha256: opening.sha256 }, cacheResponseFunction });
   assert.deepEqual(errors, []);
   assert.deepEqual(report.console_errors, []);
   report.status = 'pass';

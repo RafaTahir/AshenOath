@@ -34,6 +34,12 @@ def engine_gzip_cache_path(decoded: bytes) -> Path:
     return root / ".release-gate" / "transport-cache" / (hashlib.sha256(decoded).hexdigest() + ".wasm.gz")
 
 
+def pck_gzip_cache_path(decoded: bytes) -> Path:
+    """Reuse the same verified PCK transport across clean exports and names."""
+    root = Path(__file__).resolve().parents[3]
+    return root / ".release-gate" / "transport-cache" / (hashlib.sha256(decoded).hexdigest() + ".pck.gz")
+
+
 def retained_gzip(decoded: bytes, relative: str) -> bytes | None:
     """Reuse proven transport only when its entire decoded content is unchanged."""
     published = Path(__file__).resolve().parents[3] / "web"
@@ -42,6 +48,8 @@ def retained_gzip(decoded: bytes, relative: str) -> bytes | None:
         candidates.append(engine_gzip_cache_path(decoded))
     else:
         candidates = [published / relative]
+        if relative.endswith(".pck"):
+            candidates.append(pck_gzip_cache_path(decoded))
     best = None
     for candidate in candidates:
         try:
@@ -253,6 +261,46 @@ def compress_engine_script(path: Path) -> None:
     path.write_bytes(packed)
 
 
+def retain_pck_gzip(decoded: bytes, packed: bytes) -> bytes:
+    """Remember the smallest verified stream without waiting for another build."""
+    if gzip.decompress(packed) != decoded:
+        raise ValueError("PCK gzip cache input changed decoded content")
+    cached = pck_gzip_cache_path(decoded)
+    lock = cached.with_name(cached.name + ".lock")
+    lock_fd = None
+    temporary = None
+    try:
+        cached.parent.mkdir(parents=True, exist_ok=True)
+        lock_fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+        existing = cached.read_bytes() if cached.is_file() else None
+        if existing is not None and existing != packed and len(existing) <= len(packed):
+            try:
+                if gzip.decompress(existing) == decoded:
+                    packed = existing
+            except (OSError, EOFError, zlib.error):
+                pass
+        if existing != packed:
+            with tempfile.NamedTemporaryFile(dir=cached.parent, delete=False, suffix=".tmp") as stream:
+                temporary = Path(stream.name)
+                stream.write(packed)
+            temporary.replace(cached)
+    except OSError:
+        pass  # A disposable cache must not make a valid export fail.
+    finally:
+        if temporary is not None:
+            try:
+                temporary.unlink(missing_ok=True)
+            except OSError:
+                pass
+        if lock_fd is not None:
+            os.close(lock_fd)
+            try:
+                lock.unlink(missing_ok=True)
+            except OSError:
+                pass
+    return packed
+
+
 def compress_pck_transport(export_dir: Path) -> None:
     pck_files = [export_dir / "index.pck"]
     packs_dir = export_dir / "packs"
@@ -268,11 +316,16 @@ def compress_pck_transport(export_dir: Path) -> None:
             decoded = payload
         if not decoded.startswith(b"GDPC"):
             raise ValueError(f"{path.name} is not a valid Godot PCK payload")
+        retained = retained_gzip(decoded, path.relative_to(export_dir).as_posix())
         if payload.startswith(b"\x1f\x8b"):
-            continue
-        packed = retained_gzip(decoded, path.relative_to(export_dir).as_posix()) or lossless_gzip(decoded)
+            packed = min((item for item in (payload, retained) if item is not None), key=len)
+        else:
+            packed = retained or lossless_gzip(decoded)
+        packed = retain_pck_gzip(decoded, packed)
         if gzip.decompress(packed) != decoded:
             raise ValueError(f"{path.name} gzip transport failed its lossless round trip")
+        if packed == payload:
+            continue
         temporary = path.with_name(path.name + ".tmp")
         try:
             temporary.write_bytes(packed)
