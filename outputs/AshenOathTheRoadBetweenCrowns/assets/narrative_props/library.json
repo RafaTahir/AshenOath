@@ -1,0 +1,23 @@
+{
+  "oren_crow": {
+    "default": "res://assets/narrative_props/crow/OrenPaintedCrow.tscn",
+    "variants": {
+      "shrine": "res://assets/narrative_props/crow/OrenShrineCrow.tscn",
+      "recovered": "res://assets/narrative_props/crow/OrenRecoveredCrow.tscn",
+      "wrapped": "res://assets/narrative_props/crow/OrenWrappedCrow.tscn"
+    }
+  },
+  "elna_bell": {
+    "default": "res://assets/narrative_props/bell/ElnaBell.tscn",
+    "variants": {
+      "cemetery": "res://assets/narrative_props/bell/ElnaBellRigged.tscn",
+      "returned": "res://assets/narrative_props/bell/ElnaBellReturned.tscn"
+    }
+  },
+  "tor_brace": {
+    "default": "res://assets/narrative_props/brace/tor_left_wrist_brace.tscn"
+  },
+  "merrow_strongbox": {
+    "default": "res://assets/narrative_props/strongbox/merrow_strongbox.tscn"
+  }
+}

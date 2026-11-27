@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/narrative_props/crow/OrenPaintedCrow.tscn" id="1"]
+[ext_resource type="ArrayMesh" path="res://assets/narrative_props/crow/BurialThread.res" id="2"]
+
+[node name="OrenShrineCrow" instance=ExtResource("1")]
+
+[node name="GreyBurialThread" type="MeshInstance3D" parent="."]
+mesh = ExtResource("2")

@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/narrative_props/crow/OrenToken.res" id="1"]
+[ext_resource type="ArrayMesh" path="res://assets/narrative_props/crow/SellaCord.res" id="2"]
+
+[node name="OrenPaintedCrow" type="Node3D"]
+
+[node name="Token" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1")
+
+[node name="RedCord" type="MeshInstance3D" parent="."]
+mesh = ExtResource("2")
+
+[node name="Grip" type="Marker3D" parent="."]
+position = Vector3(0, 0, -0.002)
+
+[node name="CordAnchor" type="Marker3D" parent="."]
+position = Vector3(0.0079, 0.089, 0.001)
+
+[node name="InspectFocus" type="Marker3D" parent="."]
+position = Vector3(0, -0.002, 0.002)

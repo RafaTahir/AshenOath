@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/narrative_props/bell/ElnaBell.tscn" id="1_bell"]
+[ext_resource type="PackedScene" path="res://assets/narrative_props/bell/wax_residue.glb" id="2_wax"]
+
+[node name="ElnaBellReturned" instance=ExtResource("1_bell")]
+
+[node name="WaxAtHandle" parent="." instance=ExtResource("2_wax")]

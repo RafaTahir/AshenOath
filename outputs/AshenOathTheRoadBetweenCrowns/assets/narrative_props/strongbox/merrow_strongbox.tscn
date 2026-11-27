@@ -1,0 +1,56 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/narrative_props/strongbox/parts/case.res" id="1_case"]
+[ext_resource type="ArrayMesh" path="res://assets/narrative_props/strongbox/parts/lid.res" id="2_lid"]
+[ext_resource type="ArrayMesh" path="res://assets/narrative_props/strongbox/parts/clerk_barrel.res" id="3_clerk"]
+[ext_resource type="ArrayMesh" path="res://assets/narrative_props/strongbox/parts/household_barrel.res" id="4_household"]
+[ext_resource type="ArrayMesh" path="res://assets/narrative_props/strongbox/parts/coin_tray.res" id="5_tray"]
+[ext_resource type="ArrayMesh" path="res://assets/narrative_props/strongbox/parts/wrapped_volume.res" id="6_volume"]
+
+[node name="MerrowStrongbox" type="Node3D"]
+
+[node name="Case" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_case")
+
+[node name="ClerkLock" type="MeshInstance3D" parent="."]
+position = Vector3(-0.122, 0.151, -0.161)
+mesh = ExtResource("3_clerk")
+
+[node name="KeySocket" type="Marker3D" parent="ClerkLock"]
+position = Vector3(0, -0.001, -0.006)
+
+[node name="HouseholdLock" type="MeshInstance3D" parent="."]
+position = Vector3(0.122, 0.151, -0.161)
+mesh = ExtResource("4_household")
+
+[node name="KeySocket" type="Marker3D" parent="HouseholdLock"]
+position = Vector3(0, -0.001, -0.006)
+
+[node name="LidHinge" type="Node3D" parent="."]
+position = Vector3(0, 0.218, 0.164)
+
+[node name="Lid" type="MeshInstance3D" parent="LidHinge"]
+mesh = ExtResource("2_lid")
+
+[node name="PryCorner" type="Marker3D" parent="LidHinge"]
+position = Vector3(-0.249, 0.001, -0.02)
+
+[node name="PriedLip" type="Marker3D" parent="LidHinge"]
+position = Vector3(-0.249, 0.081, -0.02)
+
+[node name="CoinTray" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.132, 0)
+mesh = ExtResource("5_tray")
+
+[node name="WrappedVolume" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.033, 0)
+mesh = ExtResource("6_volume")
+
+[node name="Grip" type="Marker3D" parent="WrappedVolume"]
+position = Vector3(0.06, 0.02, -0.055)
+
+[node name="FloorFixingLeft" type="Marker3D" parent="."]
+position = Vector3(-0.255, 0, -0.117)
+
+[node name="FloorFixingRight" type="Marker3D" parent="."]
+position = Vector3(0.255, 0, -0.117)

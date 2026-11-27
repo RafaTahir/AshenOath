@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/narrative_props/bell/ElnaBell.tscn" id="1_bell"]
+[ext_resource type="PackedScene" path="res://assets/narrative_props/bell/temporary_striker.glb" id="2_striker"]
+[ext_resource type="PackedScene" path="res://assets/narrative_props/bell/waxed_wool.glb" id="3_wool"]
+
+[node name="ElnaBellRigged" instance=ExtResource("1_bell")]
+
+[node name="StrikerPivot" type="Node3D" parent="."]
+position = Vector3(0, 0.082, 0)
+
+[node name="TemporaryStriker" parent="StrikerPivot" instance=ExtResource("2_striker")]
+
+[node name="WaxedWool" parent="." instance=ExtResource("3_wool")]

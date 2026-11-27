@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/narrative_props/brace/tor_left_wrist_brace.res" id="1_brace"]
+
+[node name="TorLeftWristBrace" type="Node3D"]
+metadata/socket_bone = &"lowerarm_l"
+
+[node name="SplintsAndLinen" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_brace")
+
+[node name="WristCrease" type="Marker3D" parent="."]
+position = Vector3(0, 0.24042016, 0)

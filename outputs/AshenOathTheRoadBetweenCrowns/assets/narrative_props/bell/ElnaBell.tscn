@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/narrative_props/bell/harl_cart_bell.glb" id="1_body"]
+
+[node name="ElnaBell" type="Node3D"]
+
+[node name="CartBell" parent="." instance=ExtResource("1_body")]
+
+[node name="Grip" type="Marker3D" parent="."]
+position = Vector3(0, 0.135, 0)
+
+[node name="FiledMarks" type="Marker3D" parent="."]
+position = Vector3(-0.004, 0.012, 0.054)
+
+[node name="StrikerEye" type="Marker3D" parent="."]
+position = Vector3(0, 0.082, 0)
