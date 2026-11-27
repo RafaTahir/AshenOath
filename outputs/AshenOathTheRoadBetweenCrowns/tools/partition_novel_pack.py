@@ -17,6 +17,8 @@ FIELD_VIEW_DEPENDENCIES = {
     "scripts/views/novel/field_stage.gd",
 }
 WEB_ROOT_PRESETS = {"Web Browser", "Web QA Browser"}
+DEPARTURE_RULES = "scripts/core/novel/departure_rules.gd"
+COMMUNITY_BOOT_SCRIPT = "scripts/community_campaign.gd"
 PROP_CATALOG = PROP_DIRECTORY + "library.json"
 ACT_FILES = {f"{ACT_DIRECTORY}act_{act}.json" for act in range(1, 5)}
 # Exact closures of the five field scenes. Their textures are embedded in these
@@ -122,8 +124,21 @@ def partition_novel_pack(project, config, sections, manifest):
 
     field_presets = {manifest["pack_presets"][pack]: paths
                      for pack, paths in FIELD_PACK_PATHS.items() if has_field}
-    field_views = {path for path in FIELD_VIEW_DEPENDENCIES if has_field and (project / path).is_file()}
-    view_resources = {"res://" + path for path in field_views}
+    root_scripts = {path for path in FIELD_VIEW_DEPENDENCIES if has_field and (project / path).is_file()}
+    if (project / DEPARTURE_RULES).is_file():
+        if not (project / COMMUNITY_BOOT_SCRIPT).is_file():
+            raise ValueError("Web departure rules require " + COMMUNITY_BOOT_SCRIPT)
+        # The root loads departure rules before any supplemental pack can mount.
+        # Their shared rules script reads community data only at point of use.
+        root_scripts.add(COMMUNITY_BOOT_SCRIPT)
+        resource = "res://" + COMMUNITY_BOOT_SCRIPT
+        manifest["community_resource_owners"][resource] = "base"
+        community = manifest["packs"]["community"]
+        community["contents"] = [path for path in community["contents"] if path != resource]
+        base = manifest["packs"]["base"]
+        if resource not in base["contents"]:
+            base["contents"].append(resource)
+    root_resources = {"res://" + path for path in root_scripts}
     for name, section in sections.items():
         preset = config[section]
         encoded = preset.get("export_files", "PackedStringArray()")
@@ -158,15 +173,14 @@ def partition_novel_pack(project, config, sections, manifest):
             excludes.add(FIELD_DIRECTORY + "*")
         else:
             excludes.update({ACT_DIRECTORY + "*", PROP_DIRECTORY + "*"})
-        # Typed field scenes inherit these root view scripts. The scene owner
-        # relies on base for them, so no supplemental exports carry copies.
+        # Supplemental packs depend on base for the shared scripts.
         if name in WEB_ROOT_PRESETS:
-            selected.update(view_resources)
-            excludes.difference_update(field_views)
+            selected.update(root_resources)
+            excludes.difference_update(root_scripts)
         else:
-            selected.difference_update(view_resources)
-            includes.difference_update(field_views)
-            excludes.update(field_views)
+            selected.difference_update(root_resources)
+            includes.difference_update(root_scripts)
+            excludes.update(root_scripts)
         excludes.update(SOURCE_BOOK_FILTERS)
         preset["export_files"] = "PackedStringArray(" + ", ".join(map(json.dumps, sorted(selected))) + ")"
         preset["include_filter"] = json.dumps(",".join(sorted(includes)))

@@ -6,7 +6,10 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from partition_novel_pack import FIELD_PACK_PATHS, FIELD_VIEW_DEPENDENCIES, TYPED_FIELD_RUNTIME, partition_novel_pack
+from partition_novel_pack import (
+    COMMUNITY_BOOT_SCRIPT, DEPARTURE_RULES, FIELD_PACK_PATHS, FIELD_VIEW_DEPENDENCIES,
+    TYPED_FIELD_RUNTIME, partition_novel_pack,
+)
 from runtime_pack_validation import require_valid_pack_graph
 from verify_web_preset_parity import filters, selected, selected_files
 
@@ -15,6 +18,41 @@ PROJECT = Path(__file__).resolve().parents[1]
 
 
 class NovelPack(unittest.TestCase):
+    def test_boot_preload_moves_rules_to_root_and_leaves_community_data_deferred(self):
+        resource = "res://" + COMMUNITY_BOOT_SCRIPT
+        data = "data/community_campaign.json"
+        sections = {"Web Browser": "web", "Web QA Browser": "qa",
+                    "Runtime Pack Opening": "opening", "Runtime Pack community": "community"}
+        config = {
+            "web": {"exclude_filter": json.dumps(COMMUNITY_BOOT_SCRIPT)},
+            "qa": {"exclude_filter": json.dumps(COMMUNITY_BOOT_SCRIPT)},
+            "opening": {},
+            "community": {"export_files": f"PackedStringArray({json.dumps(resource)})",
+                          "include_filter": json.dumps(data)},
+        }
+        manifest = {
+            "pack_presets": {"opening": "Runtime Pack Opening"},
+            "packs": {"base": {"contents": []}, "opening": {},
+                      "community": {"contents": [resource, "res://" + data]}},
+            "community_resource_owners": {resource: "community", "res://" + data: "community"},
+        }
+        with tempfile.TemporaryDirectory() as temporary:
+            project = Path(temporary)
+            for path in (DEPARTURE_RULES, COMMUNITY_BOOT_SCRIPT):
+                asset = project / path
+                asset.parent.mkdir(parents=True, exist_ok=True)
+                asset.touch()
+            partition_novel_pack(project, config, sections, manifest)
+            partition_novel_pack(project, config, sections, manifest)
+        self.assertEqual({resource}, selected_files(config["web"]))
+        self.assertEqual({resource}, selected_files(config["qa"]))
+        self.assertNotIn(resource, selected_files(config["community"]))
+        self.assertIn(COMMUNITY_BOOT_SCRIPT, filters(config["community"], "exclude_filter"))
+        self.assertIn(data, filters(config["community"], "include_filter"))
+        self.assertEqual("base", manifest["community_resource_owners"][resource])
+        self.assertEqual([resource], manifest["packs"]["base"]["contents"])
+        self.assertEqual(["res://" + data], manifest["packs"]["community"]["contents"])
+
     def test_runtime_layer_requires_field_assets_even_when_all_are_missing(self):
         config = {"opening": {}}
         sections = {"Runtime Pack Opening": "opening"}
