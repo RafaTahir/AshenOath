@@ -2,6 +2,7 @@ extends Node
 
 ## Installed by the published sector's StoryActivityDirector. Scene progress
 ## belongs to StoryState so a discarded sector can reconstruct unfinished work.
+const Edition = preload("res://scripts/novel/novel_campaign.gd")
 const Tableau = preload("res://scripts/novel/tabletop.gd")
 const LAYER := "NovelScenes"
 static var books: Dictionary = {}
@@ -48,7 +49,7 @@ static func _book(act: int) -> Array:
 		books[act] = parsed.scenes
 	return books[act]
 
-static func route(state, objective: String) -> Dictionary:
+static func route(state, objective: String, quests: Node = null) -> Dictionary:
 	if state == null or not objective.begins_with("novel_"): return {}
 	var id := objective.trim_prefix("novel_")
 	for act in range(1,5):
@@ -56,7 +57,7 @@ static func route(state, objective: String) -> Dictionary:
 			if str(scene.id) != id: continue
 			var index := int(state.get_flag("novel_step_"+id,0))
 			if index < 0 or index >= scene.beats.size(): return {}
-			var beat: Dictionary = scene.beats[index]
+			var beat := resolve_beat(scene.beats[index],state,quests)
 			return {"destination_zone":beat.zone,"destination_name":str(beat.zone).replace("_"," ").capitalize(),"next_action":beat.prompt,"target_ids":[beat.get("actor","novel_"+id+"_"+str(index))],"route_hint":str(beat.get("place",scene.title)),"pinpoint":true}
 	return {}
 
@@ -74,13 +75,11 @@ func refresh() -> void:
 	preload("res://scripts/novel/working_places.gd").project(self,zone,game.story_state)
 	for act in range(1, 5):
 		for scene: Dictionary in _book(act):
+			var quest := Edition.owning_quest(scene.id)
+			if not quest.is_empty() and not game.quests.is_active(quest): continue
 			var index := int(game.story_state.get_flag("novel_step_" + str(scene.id), 0))
 			if index < 0 or index >= scene.beats.size(): continue
-			var beat: Dictionary = scene.beats[index]
-			for variant: Dictionary in beat.get("variants",[]):
-				if _allows(variant.get("when",{})):
-					beat = beat.merged(variant,true)
-					break
+			var beat := resolve_beat(scene.beats[index],game.story_state,game.quests)
 			if beat.zone != zone or not _allows(scene.get("when", {})) or not _allows(beat.get("when", {})): continue
 			var key := str(scene.id)
 			turns[key] = {"scene":scene, "index":index, "beat":beat}
@@ -95,24 +94,39 @@ func refresh() -> void:
 		if not enabled: game._remove_interaction_candidate(area)
 	game.interaction_focus_dirty = true
 
+static func resolve_beat(base: Dictionary, state, quests) -> Dictionary:
+	for variant: Dictionary in base.get("variants",[]):
+		if matches_rule(variant.get("when",{}),state,quests):
+			var resolved := base.merged(variant,true)
+			resolved["when"] = base.get("when",{})
+			return resolved
+	return base
+
 func _allows(rule: Dictionary) -> bool:
+	return matches_rule(rule,game.story_state,game.quests)
+
+static func matches_rule(rule: Dictionary, state, quests) -> bool:
 	var q := str(rule.get("quest",""))
-	if q != "" and not (game.quests.is_active(q) or game.quests.is_completed(q)): return false
+	if q != "" and (quests == null or not (quests.is_active(q) or quests.is_completed(q))): return false
 	for closed: String in rule.get("before", []):
-		if game.quests.is_completed(closed): return false
+		if quests == null or quests.is_completed(closed): return false
 	for id: String in rule.get("complete", []):
-		if not game.quests.is_completed(id): return false
+		if quests == null or not quests.is_completed(id): return false
 	for pair: Array in rule.get("objectives", []):
-		if not game.quests.is_objective_done(str(pair[0]), str(pair[1])): return false
+		if quests == null or not quests.is_objective_done(str(pair[0]), str(pair[1])): return false
 	for key: String in rule.get("flags", {}):
-		if game.story_state.get_flag(key, null) != rule.flags[key]: return false
+		if state.get_flag(key, null) != rule.flags[key]: return false
 	for key: String in rule.get("unless", {}):
-		if game.story_state.get_flag(key, null) == rule.unless[key]: return false
+		if state.get_flag(key, null) == rule.unless[key]: return false
 	return true
 
 func _station(key: String, index: int, beat: Dictionary) -> Node3D:
 	var id := "novel_" + key + "_" + str(index)
-	if stations.has(id): return stations[id]
+	if stations.has(id):
+		var existing: Node3D = stations[id]
+		existing.state_label = str(beat.prompt)
+		existing.display_name = str(beat.get("place",turns[key].scene.title))
+		return existing
 	var ground := Vector3(beat.at[0], 0, beat.at[1])
 	owner_director._point(game.zone_root, id, str(beat.prompt), ground, "", Color.WHITE)
 	var area := game.zone_root.find_child(id, true, false) as Node3D
@@ -139,8 +153,11 @@ func _valid(key: String, index: int, area: Node3D) -> bool:
 	if not is_instance_valid(area) or not is_instance_valid(game.player) or not turns.has(key): return false
 	var turn: Dictionary = turns[key]
 	if game.zone_transition_pending or game.current_zone_id != zone or owner_director.get_parent() != game.zone_root or not game.zone_root.is_ancestor_of(area): return false
+	var required := Edition.owning_quest(key)
+	if not required.is_empty() and not game.quests.is_active(required): return false
 	if not area.is_visible_in_tree() or not area.is_interaction_enabled() or game.player.global_position.distance_to(area.global_position) > 3.6 or game._story_has_active_combat(): return false
 	if index != int(game.story_state.get_flag("novel_step_"+key,0)) or index != turn.index or not _allows(turn.scene.get("when", {})) or not _allows(turn.beat.get("when", {})): return false
+	if resolve_beat(turn.scene.beats[index],game.story_state,game.quests) != turn.beat: return false
 	if turn.beat.has("actor"): return _actor_id(area) == str(turn.beat.actor)
 	return str(area.get_meta("novel_scene","")) == key and int(area.get_meta("novel_index",-1)) == index
 
@@ -269,7 +286,7 @@ func _finish() -> void:
 		if outcome.has("evidence"): state.record_evidence("novel:"+str(outcome.evidence.id),{"zone":zone,"title":outcome.evidence.title,"text":outcome.evidence.text,"kind":outcome.evidence.get("kind","observed")})
 	if int(request.index)+1 == turn.scene.beats.size():
 		state.set_flag("novel_done_"+str(request.key),true)
-		preload("res://scripts/novel/novel_campaign.gd").finish_scene(game.quests,str(request.key))
+		Edition.finish_scene(game.quests,str(request.key))
 	state.end_change()
 	game.story_save_pending = true
 	game.call_deferred("_persist_story_action")

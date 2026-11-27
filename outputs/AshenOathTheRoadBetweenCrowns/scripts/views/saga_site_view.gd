@@ -39,7 +39,7 @@ func refresh() -> void:
 		_activities.write_tag(point, "saga_wanted", false)
 	for id: String in _activities.Catalog.PEOPLE:
 		var person: Dictionary = _activities.Catalog.PEOPLE[id]
-		var location: Dictionary = _activities.Catalog.person_location(id, _activities.host.quests)
+		var location: Dictionary = _activities.Catalog.person_location(id, _activities.host.quests,_activities.host.story_state)
 		if id == "saga_maren":
 			if str(location.zone) == _activities.zone:
 				_activities._maren_arrived_this_visit = true

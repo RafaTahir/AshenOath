@@ -233,7 +233,7 @@ func _handle_interaction(area) -> void:
 		elif area.interaction_id == "post_victory_token":
 			story_state.set_flag("road_token_recovered", true)
 			_try_complete_oren_thread_trace()
-			hud.toast("Oren's token is complete. Vargan binding wire is wound through the scratched name.")
+			hud.toast(preload("res://scripts/novel/road_account.gd").field_note(story_state,"post_victory_token","Oren's token is complete. Vargan binding wire is wound through the scratched name."))
 			_show_current_objective_guidance(6.0)
 			audio.play_event("reveal", 0.02)
 		elif area.interaction_id == "chapel_door":

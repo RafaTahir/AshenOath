@@ -4,7 +4,18 @@ const Garden = preload("res://scripts/novel/garden_petition.gd")
 
 static func quest_row(id: String, state) -> Dictionary:
 	var record: Dictionary = QUESTS.get(id,{})
-	return Garden.row(record) if Garden.active(id,state) else record
+	if Garden.active(id,state): return Garden.row(record)
+	if id == "side_escort_06" and _refuge_receiving(state):
+		var steps: Array = record.steps.duplicate(true)
+		steps[0] = ["handover_relief","Unload the relief tray beside the refuge freight door","receiving","work",["Lay the wet gear out to dry","Give the receiving clerk the copy of the boat tally"],"Count the people received and the property lost separately. A missing blanket is not a missing passenger."]
+		steps[1][1] = "Leave Nera a choice about the supper at the refuge"
+		steps[1][2] = "receiving"
+		steps[2] = ["return_home","Hand over the freight tally and collect the signed receipt","arrivals","work",["Compare the arrival count with the two passenger tallies","Give the next shift the receipt and put down the board"],"Nera collects the relief cord. The next departure will run to her freight schedule.",{"zone":"hearthward"}]
+		return record.merged({"zone":"hearthward","completed_zone":"hearthward","site":"receiving","steps":steps},true)
+	return record
+
+static func _refuge_receiving(state) -> bool:
+	return state != null and state.get_flag("novel_edition",0)==1 and state.get_flag("final_covenant","")=="open_road" and state.get_flag("open_road_relocation_completed",false)==true
 
 const PERFORMANCE_PATH := "res://data/regional_performances.json"
 static var _performances: Dictionary = {}
@@ -142,6 +153,7 @@ const PEOPLE := {
 ## These shoulders are outside the existing main route and combat lanes.
 ## The activity owner fits them to the shared spatial occupancy contract.
 const SITES := {
+	"hearthward":{"receiving":Vector3(-3.8,0,6.6),"arrivals":Vector3(-2.2,0,8.5)},
 	"greyfen":{"kitchen":Vector3(-3.7,0,7.4), "cart":Vector3(-5.6,0,10.3), "store":Vector3(-9.0,0,10.3), "bell":Vector3(-11,0,-7), "basket":Vector3(-9,0,-6), "door":Vector3(9,0,8.8), "timber":Vector3(6.2,0,12.5), "table":Vector3(-7,0,12.1), "arrivals":Vector3(-2.8,0,13.5), "courtyard":Vector3(4,0,10), "well":Vector3(-2.8,0,1.4), "letter":Vector3(8,0,10.4)},
 	"wychwood":{"workers":Vector3(-5.8,0,10.2), "grove":Vector3(-8.2,0,8), "boundary":Vector3(-10,0,6.7), "shelter":Vector3(6,0,10), "snares":Vector3(8,0,7.8), "deadfall":Vector3(-5,0,12), "blind":Vector3(-10,0,10.8), "water":Vector3(7.7,0,-5.8), "pots":Vector3(10,0,-6), "pots_natural":Vector3(10,0,-4.3), "bog":Vector3(3.6,0,-7.0)},
 	"old_mill":{"dispatch":Vector3(-3.6,0,7.5), "sacks":Vector3(-6,0,8.3), "slip":Vector3(-8,0,7), "shelter":Vector3(-4.5,0,11), "timber":Vector3(-7.3,0,10), "records":Vector3(-2.4,0,9.5), "hatch":Vector3(-7.8,0,1.1)},
@@ -388,12 +400,13 @@ static func region_for_prefix(prefix: String) -> String:
 static func region_for_quest(id: String) -> String:
 	return str(QUESTS.get(id, {}).get("region", region_for_prefix(id.get_slice("_", 1))))
 
-static func step_zone(id: String, step: Array) -> String:
+static func step_zone(id: String, step: Array, state = null) -> String:
+	var row := quest_row(id,state)
 	if step.size() > 6:
-		return str(step[6].get("zone", QUESTS[id].zone))
-	return str(QUESTS[id].get("completed_zone", QUESTS[id].zone) if step.is_empty() else QUESTS[id].zone)
+		return str(step[6].get("zone", row.zone))
+	return str(row.get("completed_zone", row.zone) if step.is_empty() else row.zone)
 
-static func person_location(id: String, quests) -> Dictionary:
+static func person_location(id: String, quests, state = null) -> Dictionary:
 	var person: Dictionary = PEOPLE[id]
 	if id != "saga_maren":
 		return {"zone":person.zone, "site":person.site}
@@ -401,12 +414,12 @@ static func person_location(id: String, quests) -> Dictionary:
 		var quest_id := "side_escort_%02d" % index
 		if quests.is_completed(quest_id):
 			continue
-		var quest: Dictionary = QUESTS[quest_id]
+		var quest := quest_row(quest_id,state)
 		for step: Array in quest.steps:
 			if quests.is_objective_done(quest_id, str(step[0])):
 				continue
-			return {"zone":step_zone(quest_id, step), "site":"causeway" if quest_id == "side_escort_04" and quests.is_objective_done(quest_id, "cross_with_crew") else str(step[2]) if index == 6 else str(quest.site)}
-	return {"zone":"greyfen", "site":"arrivals"}
+			return {"zone":step_zone(quest_id, step,state), "site":"causeway" if quest_id == "side_escort_04" and quests.is_objective_done(quest_id, "cross_with_crew") else str(step[2]) if index == 6 else str(quest.site)}
+	return {"zone":"hearthward" if _refuge_receiving(state) else "greyfen", "site":"arrivals"}
 
 static func quest_xp(id: String) -> int:
 	if id.begins_with("side_escort_"):
@@ -447,6 +460,6 @@ static func route(quest_id: String, objective_id: String, state) -> Dictionary:
 			for index in range(step[4].size()):
 				if state == null or not bool(state.get_flag(target + ":seen:" + str(index), false)):
 					targets.append(target + ":inspect:" + str(index))
-		var zone := step_zone(quest_id, step)
+		var zone := step_zone(quest_id, step,state)
 		return {"destination_zone":zone, "destination_name":zone.replace("_"," ").capitalize(), "target_ids":targets, "route_hint":str(step[1]) + " - " + site.replace("_"," "), "purpose":opening(quest_id,state), "next_action":step[1], "pinpoint":true}
 	return {}

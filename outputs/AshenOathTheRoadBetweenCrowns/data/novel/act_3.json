@@ -796,6 +796,383 @@
           ]
         }
       ]
+    },
+    {
+      "chapter": 22,
+      "id": "counterpart",
+      "title": "The counterpart of the warrant",
+      "when": {
+        "flags": {
+          "novel_rook_ribs": true
+        },
+        "quest": "main_blood_under_stone"
+      },
+      "beats": [
+        {
+          "zone": "vargan_approach",
+          "at": [
+            -4.6,
+            7.1
+          ],
+          "object": "bedding",
+          "prompt": "Set dry linen by the washroom stove",
+          "seconds": 1.6,
+          "result": "The person on the litter goes in first. A woman asks about her mother. The bench fits two."
+        },
+        {
+          "zone": "vargan_approach",
+          "actor": "vargan_steward",
+          "prompt": "Ask what the office actually authorized",
+          "line": "I told Rook there might be a delay. I knew there could be a seizure. He gave me no homes.",
+          "result": "The counterpart gives a time and a place. The space for expected persons is blank.",
+          "speaker": "Merrow",
+          "reply": "Keep the office copy and leave the sickroom quiet",
+          "evidence": {
+            "id": "warrant_counterpart",
+            "title": "Counterpart of the inspection warrant",
+            "text": "Merrow authorized holding grain and records. This copy names no households and does not direct the patrol to the weak bank.",
+            "kind": "record"
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 22,
+      "id": "north_drain",
+      "title": "Six hands and a cupboard",
+      "when": {
+        "quest": "main_blood_under_stone"
+      },
+      "beats": [
+        {
+          "zone": "vargan_court",
+          "at": [
+            2.7,
+            4.9
+          ],
+          "object": "sill",
+          "prompt": "Wedge the cupboard while Toma empties the ash shelves",
+          "seconds": 2,
+          "result": "The wood gives at the joint. Toma slips the wedge closer and the shelves stay in one piece."
+        },
+        {
+          "zone": "vargan_court",
+          "at": [
+            3.9,
+            4.2
+          ],
+          "object": "water",
+          "prompt": "Pull the rag and plaster out of the north drain",
+          "seconds": 1.8,
+          "result": "Water moves into the yard. A pale Inkblind leaves the wet paste for the shadow beneath the cupboard."
+        },
+        {
+          "zone": "record_hall",
+          "actor": "vargan_record_keeper",
+          "prompt": "Return Vale’s second pen",
+          "line": "You can keep the first when you find it. The last man put a wet book in a fire. I’ll take a missing pen.",
+          "result": "She seats the copy stool on the dry patch. The household packet stays in its owner’s hands.",
+          "speaker": "Vale",
+          "reply": "Set out the stool and leave her the lamp"
+        }
+      ]
+    },
+    {
+      "chapter": 22,
+      "id": "weekly_count",
+      "title": "The weekly cash count",
+      "when": {
+        "flags": {
+          "novel_done_counterpart": true
+        },
+        "before": [
+          "main_last_witness"
+        ]
+      },
+      "beats": [
+        {
+          "zone": "vargan_approach",
+          "actor": "vargan_steward",
+          "prompt": "Ask why the ordinary grain book has no refusal column",
+          "line": "Because the answer is in another book. The seal key goes back tonight. Come while I can open it.",
+          "result": "Merrow agrees to show the duplicate. He has made no promise to surrender it.",
+          "speaker": "Merrow",
+          "reply": "Go without the households’ chest"
+        },
+        {
+          "zone": "record_hall",
+          "at": [
+            -4.7,
+            1.7
+          ],
+          "object": "strongbox",
+          "prompt": "Look below the coin tray at the kitchen count",
+          "line": "An absent spouse. No undertaking. Beside them, zero and half. Merrow keeps his hand on the lid.",
+          "result": "The two keys turn again. The duplicate remains under the bench.",
+          "choices": [
+            {
+              "label": "Ask for the ledger",
+              "result": "Merrow closes the lid. “Who takes the desk tomorrow?” He will not give it up today."
+            },
+            {
+              "label": "Remember the column without copying the names",
+              "result": "Kael steps away. From the cold hearth he hears both locks turn."
+            }
+          ],
+          "evidence": {
+            "id": "refusal_glimpse",
+            "title": "The weekly refusal column",
+            "text": "Kael saw the steward’s duplicate at the weekly count. The book is still in the kitchen. No household names were copied.",
+            "kind": "observed"
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 24,
+      "id": "pear_and_broth",
+      "title": "The rug was ugly already",
+      "when": {
+        "objectives": [
+          [
+            "main_blood_under_stone",
+            "recover_ledger"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "vargan_court",
+          "at": [
+            -2.5,
+            5.3
+          ],
+          "object": "bucket",
+          "prompt": "Carry a clean basin to the woman beside the kitchen",
+          "seconds": 1.5,
+          "result": "She tries to apologize for the rug. Edric says it was ugly already and waits until she can laugh without coughing."
+        },
+        {
+          "zone": "vargan_court",
+          "at": [
+            1.2,
+            4.4
+          ],
+          "object": "meal",
+          "prompt": "Bring broth and check the number on her ration slip",
+          "seconds": 1.5,
+          "result": "One transposed number. It is put right before she goes. At the next hatch another clerk still has orders to give half."
+        }
+      ]
+    },
+    {
+      "chapter": 25,
+      "id": "under_the_bracket",
+      "title": "The scratched star",
+      "when": {
+        "flags": {
+          "novel_done_felt_under_iron": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "undercroft",
+          "at": [
+            -2.1,
+            5.6
+          ],
+          "object": "copy",
+          "prompt": "Sketch the rim and the bracket where the helm lay",
+          "seconds": 1.7,
+          "result": "The little star has five very unequal arms. Record the marks before moving anything.",
+          "evidence": {
+            "id": "helm_star",
+            "title": "Star cut into the rim",
+            "text": "A child-sized scratch on the dented helmet. Neither the star nor the broken buckle gives the child’s name."
+          }
+        },
+        {
+          "zone": "undercroft",
+          "at": [
+            -2.8,
+            6.5
+          ],
+          "object": "door",
+          "prompt": "Wedge the sanctuary door open as you leave",
+          "seconds": 1.2,
+          "result": "The felt keeps the lamp quiet. Kael leaves the newer suppression paper folded in its own wrapper."
+        }
+      ]
+    },
+    {
+      "chapter": 26,
+      "id": "twenty_nine",
+      "title": "Two children under the flour sheet",
+      "when": {
+        "flags": {
+          "novel_done_omitted_return": true
+        },
+        "unless": {
+          "novel_kael_correction": "declined"
+        }
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "actor": "saga_nera",
+          "prompt": "Let Nera count the old escort",
+          "line": "Twenty-seven on your list. Twenty-nine on the road. The two under the flour sheet brought us water. You don’t go looking for them to finish something.",
+          "result": "Nera puts her finger on the space for affiliation. “Write unknown.”",
+          "speaker": "Nera",
+          "choices": [
+            {
+              "label": "Offer a closed sleeve for her own account",
+              "result": "Jem died on the fourth morning. Leth lived two more days. Nera authorizes only the closed copy. Kael may speak for himself.",
+              "set": {
+                "novel_nera_private_account": "closed"
+              }
+            },
+            {
+              "label": "Put the pen down and listen",
+              "result": "Nera carries her own stool back to the cart. Kael has heard her. The page stays blank.",
+              "set": {
+                "novel_nera_private_account": "oral"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 26,
+      "id": "cold_hands",
+      "title": "Ink on Kael’s hand",
+      "when": {
+        "flags": {
+          "novel_done_twenty_nine": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "actor": "mira",
+          "prompt": "Walk a little way from the hearth with Mira",
+          "line": "Nera told me the part she wanted me to know. You let me think you’d tried afterwards. I thought you had.",
+          "result": "Mira lets Kael stand with the discomfort. Rook still needs somebody to help with the slate.",
+          "speaker": "Mira",
+          "choices": [
+            {
+              "label": "Hear her out and give her the morning",
+              "result": "She pulls a leaf apart and throws it into the water. “Go and be useful without making it a penance.”",
+              "set": {
+                "novel_mira_stream": "space"
+              }
+            },
+            {
+              "label": "Tell her you love her, then let her go to work",
+              "when": {
+                "flags": {
+                  "lr_commitment_partner": "mira"
+                }
+              },
+              "result": "“I love you,” she says crossly. “That hasn’t made me less angry.” She goes back on her own.",
+              "set": {
+                "novel_mira_stream": "lovers"
+              }
+            }
+          ]
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            -2.3,
+            5
+          ],
+          "object": "ledger",
+          "prompt": "Set Rook’s slate on the rolled blanket",
+          "seconds": 1.4,
+          "result": "The open sack was counted once by weight and once by meals. Both figures are right. Rook finds this especially annoying."
+        }
+      ]
+    },
+    {
+      "chapter": 27,
+      "id": "first_tenant",
+      "title": "A place that already has a tenant",
+      "when": {
+        "quest": "main_house_many_names"
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            -5.8,
+            4.1
+          ],
+          "object": "bedding",
+          "prompt": "Lift the damp wool clear of the warming box",
+          "seconds": 1.5,
+          "result": "A little Hearthscale opens one eye. Elna shifts the bed the other way. ‘First tenant.’ The creature keeps the corner.",
+          "set": {
+            "novel_warming_box_left": true
+          }
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            3.5,
+            5.9
+          ],
+          "object": "water",
+          "prompt": "Separate Toma’s washing pail from the water for boiling",
+          "seconds": 1.4,
+          "result": "Pell says boiled water tastes of spoons. Toma has never worked out what that means. He keeps the second draw for the stove."
+        }
+      ]
+    },
+    {
+      "chapter": 27,
+      "id": "first_fire",
+      "title": "The stone above the nest",
+      "when": {
+        "flags": {
+          "novel_done_first_night": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            2.8,
+            3.9
+          ],
+          "object": "ladder",
+          "prompt": "Pass up the stave for the chimney ladder",
+          "seconds": 1.8,
+          "result": "The nest was only half the trouble. A loose stone drops onto the hearth. Rook coughs that the smoke at least was free."
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            1,
+            5.2
+          ],
+          "object": "meal",
+          "prompt": "Set out the bowls once the second fire draws",
+          "seconds": 1.4,
+          "result": "The key lies beside the guard’s bowl. The stew goes through the doorway whether or not the occupant can testify. Nobody calls that an acquittal.",
+          "variants": [
+            {
+              "when": {
+                "unless": {
+                  "senn_fate": "testimony"
+                }
+              },
+              "result": "Merrow starts to apologize about the state of the house. Elna puts a bowl into his hands before he can make it formal."
+            }
+          ]
+        }
+      ]
     }
   ]
 }

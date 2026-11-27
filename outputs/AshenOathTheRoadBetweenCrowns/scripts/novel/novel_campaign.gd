@@ -20,13 +20,20 @@ static func saved_edition(payload: Dictionary) -> bool:
 
 static func extend(defs: Dictionary) -> void:
 	preload("res://scripts/novel/garden_petition.gd").project(defs)
+	if defs.has("main_road_of_crows"):
+		for objective: Dictionary in defs.main_road_of_crows.objectives:
+			if objective.id == "vargan_wire": objective.text = "Examine the two loops of wire at the broken cart."
 	for quest: String in REQUIRED:
 		if not defs.has(quest): continue
 		for scene: String in REQUIRED[quest]:
 			defs[quest].objectives.append({"id":"novel_"+scene,"text":REQUIRED[quest][scene]})
 
-static func finish_scene(quests, id: String) -> void:
+static func owning_quest(id: String) -> String:
 	for quest: String in REQUIRED:
-		if REQUIRED[quest].has(id) and quests.is_active(quest):
-			quests.complete_objective(quest,"novel_"+id)
-			return
+		if REQUIRED[quest].has(id): return quest
+	return ""
+
+static func finish_scene(quests, id: String) -> void:
+	var quest := owning_quest(id)
+	if not quest.is_empty() and quests.is_active(quest):
+		quests.complete_objective(quest,"novel_"+id)

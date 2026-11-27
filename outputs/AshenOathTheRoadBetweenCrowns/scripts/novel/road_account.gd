@@ -3,6 +3,7 @@ extends RefCounted
 ## Keep first-hand marks, Tor's material identification and the later archive
 ## comparison separate. Stable evidence IDs remain usable in both editions.
 const FIRST_READ := {
+	"post_victory_token":"The broken wrap fits the brass. Its two flat turns are still visible. Keep them for someone who knows metal.",
 	"claw_marks":"Two flat loops of blackened binding wire. Someone bent them with a tool.",
 	"black_feathers":"Red thread around the feathers. Grey burial thread crosses it. The two knots are different.",
 	"oren_token":"A crow painted in cart black on brass. A bare patch makes the eye. Under the paint you can make out AVEL."
@@ -11,6 +12,24 @@ const FIRST_READ := {
 static func field_note(state, id: String, older: String) -> String:
 	if state.get_flag("novel_edition",0) != 1: return older
 	return str(FIRST_READ.get(id,older))
+
+## DialogueManager resolves conditions and removes speaker prefixes before presentation.
+static func revise_page(state, page: Dictionary) -> void:
+	if state.get_flag("novel_edition",0) != 1: return
+	var spoken := str(page.get("text",""))
+	var revised := ""
+	if page.get("line_id","") == "wychwood.ring.call" or spoken.begins_with("A fleck of black paint, the colour of Oren"):
+		revised = "Black cart paint has dried in the hollow beneath the iron. Kael lifts the ring. It strikes twice, hangs for a breath, then strikes once more."
+	elif spoken.ends_with("Oren's wooden crow had his name scraped away."):
+		revised = "There was a crow in cart paint on the brass. A name underneath it. I don’t know who put it there."
+	elif spoken.ends_with("My knot. I tied that thread for Sella."):
+		revised = "I tied the grey over the red. The red was Sella’s. I’d know that knot anywhere."
+	elif spoken.ends_with("Vargan wire bound a name to the creatures. Someone tried to burn it off."):
+		revised = "I took two turns of flattened wire from the cart. Someone bent them. The wire can’t tell us who."
+	if not revised.is_empty():
+		page.text = revised
+		page.erase("voice_take")
+		page["voice"] = ""
 
 static func detail(state, id: String, original: Dictionary) -> Dictionary:
 	if state == null or state.get_flag("novel_edition",0) != 1 or id not in ["vargan_wire","oren","sella"]: return original
@@ -21,7 +40,7 @@ static func detail(state, id: String, original: Dictionary) -> Dictionary:
 			entry.source = "Two flat loops at the broken cart"
 			reading = "The site establishes how the wrap was made. The buyer is unknown."
 			if state.has_evidence("novel:two_pass"): reading = "Tor identified the two-pass fastening. He could not name its buyer."
-			if state.has_evidence("novel:archive_wire"): reading = "The flattened wire matches the supply coil beside the castle warrants. This supports later intervention at the cart."
+			if state.has_evidence("novel:archive_wire"): reading = "The flattened wire matches the supply coil beside the castle warrants. The match identifies a source of supply. It does not date the wire’s arrival at the cart."
 		"oren":
 			entry.source = "Oren’s painted brass crow"
 			reading = "An older name lies under the paint. The token alone cannot say where the child went."

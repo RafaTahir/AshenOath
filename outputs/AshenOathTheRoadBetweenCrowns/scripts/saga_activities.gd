@@ -64,7 +64,7 @@ func _step(id: String) -> Array:
 	return []
 
 func _quest_zone(id: String) -> String:
-	return Catalog.step_zone(id, _step(id)) if id == "side_escort_06" else str(Catalog.quest_row(id,host.story_state).zone)
+	return Catalog.step_zone(id, _step(id),host.story_state) if id == "side_escort_06" else str(Catalog.quest_row(id,host.story_state).zone)
 
 func _walk_sites(id: String, step: Array) -> Array:
 	if id == "side_escort_02" and str(host.story_state.get_flag(id + "_outcome", "")) == "work_line":

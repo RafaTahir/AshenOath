@@ -477,7 +477,10 @@
       "when": {
         "flags": {
           "final_choice_completed": true
-        }
+        },
+        "complete": [
+          "side_escort_06"
+        ]
       },
       "beats": [
         {
@@ -521,7 +524,10 @@
         "flags": {
           "final_choice_completed": true,
           "final_covenant": "open_road"
-        }
+        },
+        "complete": [
+          "side_escort_06"
+        ]
       },
       "beats": [
         {

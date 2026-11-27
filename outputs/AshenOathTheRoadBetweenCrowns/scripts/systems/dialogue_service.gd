@@ -360,6 +360,7 @@ func _prepare_dialogue_presence(content: Dictionary) -> Dictionary:
 	var result: Dictionary = content.duplicate(true)
 	var known_speakers: Dictionary = {}
 	for page: Dictionary in result.get("pages", []):
+		preload("res://scripts/novel/road_account.gd").revise_page(story_state,page)
 		var id := str(page.get("speaker_id", "narrator")).to_lower()
 		if id in DialogueRuntimeCoordinator.PLAYER_SPEAKERS or id in ["narrator", "system", ""]:
 			page.erase("speaker_actor_id")

@@ -21,7 +21,7 @@ import run_full_campaign_acceptance as full_runner
 PROJECT = Path(__file__).resolve().parents[1]
 GATE = PROJECT / ".release-gate/community-runtime"
 CASES = list(community_runner.CASES) + [case for case in full_runner.CASES if case != "full_six_endings"]
-SOURCES = ["scripts/save_manager.gd", "scripts/campaign_revision.gd", "scripts/quest_manager.gd",
+SOURCES = ["scripts/save_manager.gd", "scripts/models/save_payload_codec.gd", "scripts/campaign_revision.gd", "scripts/quest_manager.gd",
            "scripts/inventory_manager.gd", "scripts/health_component.gd", "scripts/stamina_component.gd",
            "scripts/equipment_loadout.gd", "data/quests.json", "data/campaign_dialogue.json",
            "data/community_campaign.json", "data/journal_evidence_details.json", "world_sector_manifest.json",
@@ -37,7 +37,7 @@ def read_json(relative):
 
 def gd_literal(relative, constant):
     source = (PROJECT / relative).read_text(encoding="utf-8-sig")
-    match = re.search(r"const " + re.escape(constant) + r"\s*:?=\s*(\{[\s\S]*?\}|\[[\s\S]*?\]|\d+)", source)
+    match = re.search(r"const " + re.escape(constant) + r"\s*(?::\s*\w+)?\s*:?=\s*(\{[\s\S]*?\}|\[[\s\S]*?\]|\d+)", source)
     if not match:
         raise ValueError("missing authoritative constant: " + constant)
     return json.loads(re.sub(r",\s*([}\]])", r"\1", match.group(1)))
@@ -130,7 +130,7 @@ def build_seed(case):
     manifest = read_json("world_sector_manifest.json")
     cell = manifest["sectors"][zone]["coordinate"]
     world = [local[0] + cell[0]*manifest["cell_size"][0], local[1], local[2] + cell[1]*manifest["cell_size"][1]]
-    seed = {"version":gd_literal("scripts/save_manager.gd", "CURRENT_VERSION"), "game_id":"ashen-oath",
+    seed = {"version":gd_literal("scripts/models/save_payload_codec.gd", "CURRENT_VERSION"), "game_id":"ashen-oath",
             "journey_id":"synthetic-acceptance-" + case, "slot_name":"SYNTHETIC BOUNDARY: " + case,
             "replay_session":False, "zone":zone, "world_sector":zone, "player_position":local, "world_position":world,
             "player_health":{"health":100.0,"max_health":100.0,"dead":False},

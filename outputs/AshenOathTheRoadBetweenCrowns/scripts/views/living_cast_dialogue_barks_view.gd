@@ -17,6 +17,8 @@ func _line_for_actor(entry: Dictionary) -> String:
 	for report in ["public"]:
 		if reaction.begins_with("reported_" + report):
 			return _life.model.post_report_line(report, int(entry.get("activity_cycles", 0)), true)
+	if entry.id == "shrine_pilgrim" and _life.host.story_state.get_flag("novel_edition",0)==1:
+		return "The boy got cart paint on my sleeve. I liked the little eye he left bare."
 	return str(_life.OCCUPATION_LINES.get(str(entry.id), _life.AMBIENT_LINES.get(str(entry.profile.get("line", "")), _life.AMBIENT_LINES.greyfen_keep_working)))
 
 func _tick_greeting(entry: Dictionary, delta: float) -> bool:
