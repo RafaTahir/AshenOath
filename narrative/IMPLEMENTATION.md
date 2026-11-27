@@ -2,7 +2,23 @@
 
 Recover from this document, DIRECTIVE.md and the unchanged originals in source/2026-11-27. Integration worktree D:/AOStory, branch codex/novel-campaign; D:/Projects/AshenOath-Novel-Work holds the authored staging files during checkout, base 7ed0867 (accepted runtime 7248219). Keep production and the art checkout untouched.
 
-## Current milestone
+## Local review build
+
+The full literary campaign is integrated in the local review build **novel-review-7b909c3-3df0808**. Open http://127.0.0.1:8734/ on this PC. The durable package is in D:/AshenOathReview/novel-review-7b909c3-3df0808/web. Start Review.cmd alongside that directory reopens it after a restart. Choose New Game to enter Sella’s prologue. Existing journeys retain their original edition.
+
+| Deliverable | Final evidence |
+|---|---|
+| Narrative coverage | Four acts, prologue, 36 chapters, epilogue and six covenant aftermaths. SCENES.md maps all 114 manuscript divisions. CONTINUITY.md traces the named cast. |
+| Source identity | Runtime 7b909c3 and export layout 3df0808. The layout moved the Community rules script into the Web startup bundle. The packaging source was merged back into codex/novel-campaign. The staging manifest records a dirty export workspace and both source revisions. |
+| Web archive | 59 files including the manifest, 181,870,900 bytes (173.45 MiB), below the 256 MiB ceiling. The 50 content packs include three deferred field sets. The review copy was compared file by file with the verified archive. Manifest SHA-256 c27645e994dd9e1f4804378d8daf4822de94bf8bf1f0ec82cf94e8b9fae01467. |
+| Game content and saves | All novel fixtures, the six modeled ending projections and five existing simulation suites passed. Native input and save/Continue evidence is indexed at the end of this ledger. |
+| Web startup | Six mounted-resource checks made 657 assertions. The cold Edge run reached the menu, advanced all four prologue scenes through ordinary input and reached Kael with zero recorded browser errors. The opening requested none of the three field sets or the rescue Stalker pack. |
+| Performance and signoff | The cold loopback run took 79.8 s to the menu and 148.7 s to first control, including the prologue. Peak sampled renderer private memory was 981.1 MiB. These observations exceed the existing startup and memory targets. Sustained frame rate, phone performance and the artistic experience of a complete player-led journey remain open. |
+| Release state | Local creator review. The public game was not updated during this assignment. |
+
+Package identity, the mounted-resource report and the complete cold browser record are in evidence/web. The dedicated source directory and local Git milestones remain available for subsequent sessions.
+
+## Implementation history
 
 All nine source files remain in source/2026-11-27. SCENES.md follows the 114 manuscript scenes in order. CONTINUITY.md follows Kael, the twelve supporting characters and all six endings. The chapter register identifies integrated content. A rendered sample covers only the actions named in the dated evidence below. The working branch and local candidate are separate from the public release.
 

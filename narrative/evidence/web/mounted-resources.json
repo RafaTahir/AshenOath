@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "scope": "immutable_export_packaging_and_resource_integrity",
+  "export": "C:\\Temp\\ao27\\.release-gate\\novel-review-7b909c3-3df0808\\export",
+  "source": {
+    "git_commit": "3df08088ec0b05327eb9e21791f9072a12cdc229",
+    "dirty": true,
+    "runtime_commit": "7b909c3480801d960a38b2b10f0b49d8e91c139b",
+    "packaging_commit": "3df08088ec0b05327eb9e21791f9072a12cdc229"
+  },
+  "receipts": {
+    "runtime_pack_manifest.json": {
+      "bytes": 246720,
+      "sha256": "eb30bc4d38b64cb99e97d1bd8387e627d38f808ca5000743f67c0be115fb352e"
+    },
+    "release_manifest.json": {
+      "bytes": 39044,
+      "sha256": "c27645e994dd9e1f4804378d8daf4822de94bf8bf1f0ec82cf94e8b9fae01467"
+    }
+  },
+  "packs_scanned": 50,
+  "owned_logical_resources": 79,
+  "transport_artifact_bytes": 181831856,
+  "deferred_field_transport_bytes": 706119,
+  "deferred_field_decoded_bytes": 788792,
+  "native_plans": 6,
+  "native_assertions": 657,
+  "all_native_stderr_empty": true,
+  "root_boot_before_mounts": true,
+  "model_payload_proof": {
+    ".godot/imported/Ranger_Bow.fbx-b27b647e58f8aa7e4181716da4485a63.scn": {
+      "bytes": 44260,
+      "sha256": "0bee5e3d35620139ecde654e02ea9dc8d6fa8df96577d5f3441a96aab0d2be84",
+      "byte_identical_to_df3": true
+    },
+    ".godot/imported/kael_arrow.glb-46f6f349d37dc61c7490e3f9b3c3167f.scn": {
+      "bytes": 6711,
+      "sha256": "9def56a9ecaca88869ae5a5c8d70db8382e13df9f53081cf4d3dfceb4d12d047",
+      "byte_identical_to_df3": true
+    },
+    "assets_external/characters_prepared/monsters/9b917237c5f1da73cb1ee634.scn": {
+      "bytes": 1224537,
+      "sha256": "ebf75f154a454f6e773759bd70070993c3ec30507aefd7ae9dfafe2c53128074",
+      "matches_prepared_catalog_certificate": true
+    }
+  },
+  "act_identities": {
+    "data/novel/act_1.json": {
+      "bytes": 21263,
+      "sha256": "d9f4da868e4069c2bf4b44c2fb30c1148ae68739eb7c912368ff0b33f53edbb4"
+    },
+    "data/novel/act_2.json": {
+      "bytes": 28630,
+      "sha256": "decf2c94bf34529c78e8a7d7991f346a5cda6d44566ca91ef57d9ad9f5a216f9"
+    },
+    "data/novel/act_3.json": {
+      "bytes": 41117,
+      "sha256": "bf07de8c018a9b23a33bb3f7865f77d0dc423ab97e048ef186ae35750a2cba8b"
+    },
+    "data/novel/act_4.json": {
+      "bytes": 47353,
+      "sha256": "54723ea5b7106c48d90346ce8c79df63494e3be7e697d9df41dc57af447a92d5"
+    }
+  },
+  "archive_report": "archive-result.json",
+  "native_report": "native-01/runner-result.json",
+  "scope_limit": "No browser, appearance, input, gameplay or performance acceptance is claimed."
+}

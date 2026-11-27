@@ -1,0 +1,369 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "export_dir": "C:\\Temp\\ao27\\.release-gate\\novel-review-7b909c3-3df0808\\export",
+  "runtime_manifest": "C:\\Temp\\ao27\\.release-gate\\novel-review-7b909c3-3df0808\\export\\runtime_pack_manifest.json",
+  "file_count": 59,
+  "total_bytes": 181870900,
+  "total_megabytes": 173.446,
+  "limits": {
+    "total_megabytes": 256.0,
+    "pck_megabytes": 60.0
+  },
+  "extras": [
+    "menu-background.png"
+  ],
+  "nested_files": [
+    "engine/83cf587bef14a05a98704c52/index.audio.position.worklet.js",
+    "engine/83cf587bef14a05a98704c52/index.audio.worklet.js",
+    "engine/83cf587bef14a05a98704c52/index.js",
+    "engine/83cf587bef14a05a98704c52/index.wasm",
+    "packs/actor_c01.pck",
+    "packs/actor_c02.pck",
+    "packs/actor_c03.pck",
+    "packs/actor_c04.pck",
+    "packs/actor_c05.pck",
+    "packs/actor_c06.pck",
+    "packs/actor_c07.pck",
+    "packs/actor_c08.pck",
+    "packs/actor_c09.pck",
+    "packs/actor_c10.pck",
+    "packs/actor_c11.pck",
+    "packs/actor_c12.pck",
+    "packs/actor_m01.pck",
+    "packs/actor_m02.pck",
+    "packs/actor_m03.pck",
+    "packs/actor_m04.pck",
+    "packs/actor_m05.pck",
+    "packs/actor_m06.pck",
+    "packs/actor_m07.pck",
+    "packs/actor_m08.pck",
+    "packs/actor_m09.pck",
+    "packs/actor_m10.pck",
+    "packs/actor_m11.pck",
+    "packs/actor_m12.pck",
+    "packs/actor_m13.pck",
+    "packs/actor_m14.pck",
+    "packs/actor_m15.pck",
+    "packs/actor_m16.pck",
+    "packs/actor_m17.pck",
+    "packs/actor_m18.pck",
+    "packs/actor_m19.pck",
+    "packs/actor_m20.pck",
+    "packs/actor_p01.pck",
+    "packs/actor_shared.pck",
+    "packs/adjacent.pck",
+    "packs/audio.pck",
+    "packs/campaign.pck",
+    "packs/characters.pck",
+    "packs/community.pck",
+    "packs/community_voice.pck",
+    "packs/leisure.pck",
+    "packs/living_cast_voice.pck",
+    "packs/masonry.pck",
+    "packs/monsters.pck",
+    "packs/novel_field_culvert.pck",
+    "packs/novel_field_gallery.pck",
+    "packs/novel_field_willow.pck",
+    "packs/opening.pck",
+    "packs/quality_materials.pck"
+  ],
+  "failures": [],
+  "files": {
+    "engine/83cf587bef14a05a98704c52/index.audio.position.worklet.js": {
+      "bytes": 2973,
+      "megabytes": 0.003,
+      "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8"
+    },
+    "engine/83cf587bef14a05a98704c52/index.audio.worklet.js": {
+      "bytes": 7298,
+      "megabytes": 0.007,
+      "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+    },
+    "engine/83cf587bef14a05a98704c52/index.js": {
+      "bytes": 78425,
+      "megabytes": 0.075,
+      "sha256": "db16363402e9cc61f000f25fd5b1f503409a6e20d378f73f540a37c8f611746d"
+    },
+    "engine/83cf587bef14a05a98704c52/index.wasm": {
+      "bytes": 9382282,
+      "megabytes": 8.948,
+      "sha256": "b86a73db5739d710bfbaaad9c0877d8d9f61069723bb16e8252371da8a8c6a01"
+    },
+    "index.html": {
+      "bytes": 49159,
+      "megabytes": 0.047,
+      "sha256": "9a00b27d2eabf923596bcc634453cda1ed49d96dc874d8d0a1cb48f3e607c4a9"
+    },
+    "index.pck": {
+      "bytes": 8427539,
+      "megabytes": 8.037,
+      "sha256": "5f6be67c102cc754c23629351df33290e238a5eddd0fcb93b7cf026135a674ec"
+    },
+    "index.png": {
+      "bytes": 21443,
+      "megabytes": 0.02,
+      "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e"
+    },
+    "menu-background.png": {
+      "bytes": 1718419,
+      "megabytes": 1.639,
+      "sha256": "6a792c6892a6d8ab440c8f17e496b8b969da45ce10d6f8d8de1114d6559d2239"
+    },
+    "packs/actor_c01.pck": {
+      "bytes": 4773843,
+      "megabytes": 4.553,
+      "sha256": "059d39e879ece66f23f037d05a1e4fd514f9a734a85298f3db94d3a89edc06c1"
+    },
+    "packs/actor_c02.pck": {
+      "bytes": 2002413,
+      "megabytes": 1.91,
+      "sha256": "887320d681dc46b1353c85ffabe1d9d911d0013e2ff42aebead66a6093f00aeb"
+    },
+    "packs/actor_c03.pck": {
+      "bytes": 1906665,
+      "megabytes": 1.818,
+      "sha256": "b07e352ccc885e695b2549d77dfd45117355135d5cdb67268b51bface9565ac8"
+    },
+    "packs/actor_c04.pck": {
+      "bytes": 1928178,
+      "megabytes": 1.839,
+      "sha256": "d065af27bcbd52a1dc1a27bbee66c3a63d4145abffadabf527b8d55f66d038d7"
+    },
+    "packs/actor_c05.pck": {
+      "bytes": 3166515,
+      "megabytes": 3.02,
+      "sha256": "5963c84effed2625979d8eeb401e0c2cc79112ff3fced31b370939e020ff1ba0"
+    },
+    "packs/actor_c06.pck": {
+      "bytes": 2119640,
+      "megabytes": 2.021,
+      "sha256": "8a21ea1456cbafd87df360cc7cc58a08fa04da9a2b6f6f5f53fc00b3eba20819"
+    },
+    "packs/actor_c07.pck": {
+      "bytes": 2375716,
+      "megabytes": 2.266,
+      "sha256": "a7ba7067ea34d3e8c807e8c5cc5d917fe7c5ae414f23c44f0ec2557fc01e51d1"
+    },
+    "packs/actor_c08.pck": {
+      "bytes": 2083192,
+      "megabytes": 1.987,
+      "sha256": "4c9a693cec85ce6952fe2e014d7525955276f8823bb27780844939ca35066a53"
+    },
+    "packs/actor_c09.pck": {
+      "bytes": 1990108,
+      "megabytes": 1.898,
+      "sha256": "c4e70f8c0bdc4a88686be33a453f361126d7506ec4c51629b6ddd813f2565556"
+    },
+    "packs/actor_c10.pck": {
+      "bytes": 2166229,
+      "megabytes": 2.066,
+      "sha256": "94d94980b82b28973a5780a9769675369e54a85bd615be139eaa32f7f3bff2e4"
+    },
+    "packs/actor_c11.pck": {
+      "bytes": 1948087,
+      "megabytes": 1.858,
+      "sha256": "ab355239730b1530dc4b32e64aa80a7dae24400df0a8fceab120689b848107fa"
+    },
+    "packs/actor_c12.pck": {
+      "bytes": 1893997,
+      "megabytes": 1.806,
+      "sha256": "8045d84d774d1601576947f634911c44667e6c159cdbba5cf14ba20837e2d091"
+    },
+    "packs/actor_m01.pck": {
+      "bytes": 1487649,
+      "megabytes": 1.419,
+      "sha256": "ebf0339b81e70db6e385fa73469cb292ae4b2c556b159b4972028661f2cc502c"
+    },
+    "packs/actor_m02.pck": {
+      "bytes": 4131753,
+      "megabytes": 3.94,
+      "sha256": "710945f3b55da7af1bad9ebd701a5612f3722debdf0c86112be6fac92d298b78"
+    },
+    "packs/actor_m03.pck": {
+      "bytes": 980021,
+      "megabytes": 0.935,
+      "sha256": "9e854a98ca195dc9b68bc5cda28669dbdcd1252935e185867751b73587fe92fc"
+    },
+    "packs/actor_m04.pck": {
+      "bytes": 1575967,
+      "megabytes": 1.503,
+      "sha256": "4bcae02596e813bbccb4ec9e83cb64ee4cbb971bbf6e9ec45956a51e692f56ef"
+    },
+    "packs/actor_m05.pck": {
+      "bytes": 1072034,
+      "megabytes": 1.022,
+      "sha256": "808e36b737d94f586196c68bb15d019c0d08cf51d5e3e3a5ec78762eface015b"
+    },
+    "packs/actor_m06.pck": {
+      "bytes": 2030306,
+      "megabytes": 1.936,
+      "sha256": "af08912c3dd0a16c046d4cd699c968633d1377514f052cd65704501809e1ce79"
+    },
+    "packs/actor_m07.pck": {
+      "bytes": 1611254,
+      "megabytes": 1.537,
+      "sha256": "ec16f42bc7d0c1f90e4e02b59ba6dc0391df5a13feb8dfd2800bbc78baade27b"
+    },
+    "packs/actor_m08.pck": {
+      "bytes": 1199163,
+      "megabytes": 1.144,
+      "sha256": "2d60a3f8873b76e971c9fc48a7ad54fb69fc403a624c12bb5c9e4594aa81c272"
+    },
+    "packs/actor_m09.pck": {
+      "bytes": 985595,
+      "megabytes": 0.94,
+      "sha256": "48f1cdc97206692cd9a4f6afdfa779e535971dda3681cc1ca0b8a08bf0bccff0"
+    },
+    "packs/actor_m10.pck": {
+      "bytes": 906919,
+      "megabytes": 0.865,
+      "sha256": "9ad47df2ece11fcd265b6dc0bd2a3eb3537e23a80c81df0bbbf8f155f63d0244"
+    },
+    "packs/actor_m11.pck": {
+      "bytes": 1067161,
+      "megabytes": 1.018,
+      "sha256": "fe267f5e1dd221f148428b17b16866925f5ed02f90adee847999a16ef0b1e9ba"
+    },
+    "packs/actor_m12.pck": {
+      "bytes": 931448,
+      "megabytes": 0.888,
+      "sha256": "e75d99a541fa2fdd791e73ffaab997b750c03d381ccbcb667b4f4cac8e35e25d"
+    },
+    "packs/actor_m13.pck": {
+      "bytes": 1975497,
+      "megabytes": 1.884,
+      "sha256": "f71033c9e7ebe9473d79139527aa9ad074f1fe8c70e651375748a7f79cba1ed9"
+    },
+    "packs/actor_m14.pck": {
+      "bytes": 1085077,
+      "megabytes": 1.035,
+      "sha256": "ea12a1bb19de93e2bb3968411040f7c1e9edd3d17471892c54bc229c9473d986"
+    },
+    "packs/actor_m15.pck": {
+      "bytes": 3922249,
+      "megabytes": 3.741,
+      "sha256": "b10dcb046ad20163e76b518b0a2f2062f48b7642d0095e481fbf5f88970d72b3"
+    },
+    "packs/actor_m16.pck": {
+      "bytes": 1070369,
+      "megabytes": 1.021,
+      "sha256": "7522ec083df4347130ecd3b7d6b35c24ed5e27f5d3cbb153959b56423eef65c2"
+    },
+    "packs/actor_m17.pck": {
+      "bytes": 1449632,
+      "megabytes": 1.382,
+      "sha256": "20730d1e4da9996e176baf72379f53559f67932fe2f829929b74ca362c9f9835"
+    },
+    "packs/actor_m18.pck": {
+      "bytes": 1188123,
+      "megabytes": 1.133,
+      "sha256": "5a2627f8b37a4a12f346eceb5fffc8a77f062d870a6797b8f27085308849fab5"
+    },
+    "packs/actor_m19.pck": {
+      "bytes": 1593804,
+      "megabytes": 1.52,
+      "sha256": "421b5a8994777a111a3bdedb7fa578a984b4be6591ff9a8f7ff2fb41a247be33"
+    },
+    "packs/actor_m20.pck": {
+      "bytes": 1615412,
+      "megabytes": 1.541,
+      "sha256": "521064258b34522c305f29d301b7c1691e626366d2b01197bc40562c7b804b29"
+    },
+    "packs/actor_p01.pck": {
+      "bytes": 2290988,
+      "megabytes": 2.185,
+      "sha256": "4e826535f700c80fec52022db04e50ae01902b3cbcec470ae57753ad7ec1d57f"
+    },
+    "packs/actor_shared.pck": {
+      "bytes": 5794508,
+      "megabytes": 5.526,
+      "sha256": "6ddc1ee42e4b1776866a3b4b17ed3bee8226d4ca465a5808ef46cb56e6d79695"
+    },
+    "packs/adjacent.pck": {
+      "bytes": 3403052,
+      "megabytes": 3.245,
+      "sha256": "619c2964691984c5366042068970d33ee8c9eebc862ac9ae88bdf72a184714b9"
+    },
+    "packs/audio.pck": {
+      "bytes": 18139492,
+      "megabytes": 17.299,
+      "sha256": "40fa1fc193d563fb9985ab4a743a25459041841e5b51a3ab92a893444ebcdeac"
+    },
+    "packs/campaign.pck": {
+      "bytes": 6815664,
+      "megabytes": 6.5,
+      "sha256": "36c31b0e68b334ff3e2be5984dd57289575a6ef13962e03b43ba6c3cf7aa671a"
+    },
+    "packs/characters.pck": {
+      "bytes": 49447,
+      "megabytes": 0.047,
+      "sha256": "bc0e959e063447b47903f68fb4ca0747b007c1d3e32af80f16a7263e9517b946"
+    },
+    "packs/community.pck": {
+      "bytes": 84322,
+      "megabytes": 0.08,
+      "sha256": "732a1b4430633e7513ed602bf0c04c1fa4e9b14cbf521ad36175337497d082b9"
+    },
+    "packs/community_voice.pck": {
+      "bytes": 4540247,
+      "megabytes": 4.33,
+      "sha256": "0a92308e5369e260928299a11778499574a7b2a5b5d6ed9d0b3cb534101a6c6a"
+    },
+    "packs/leisure.pck": {
+      "bytes": 200683,
+      "megabytes": 0.191,
+      "sha256": "b046fef87c5d5c5b555c4e08da77af697e4b05604c17d4f535f314f3f8b22f3f"
+    },
+    "packs/living_cast_voice.pck": {
+      "bytes": 7124982,
+      "megabytes": 6.795,
+      "sha256": "90c11d48b4b1452a583d6b3eff3344eb9d706e090e13aff1e28f06a59c8382e5"
+    },
+    "packs/masonry.pck": {
+      "bytes": 18293470,
+      "megabytes": 17.446,
+      "sha256": "d2587d7fa40782b5ba0b284517437e16bce9991a363213eb74baaa8ae428459c"
+    },
+    "packs/monsters.pck": {
+      "bytes": 135160,
+      "megabytes": 0.129,
+      "sha256": "f2b7820546a30c175b5a06c2fe2e4d5301091dac4272e9aad60e5648762a9e0c"
+    },
+    "packs/novel_field_culvert.pck": {
+      "bytes": 187959,
+      "megabytes": 0.179,
+      "sha256": "2b404b43fdbf0dc01ad87e3eded8b40e94e5eb28609e90e2a83db262284cefcf"
+    },
+    "packs/novel_field_gallery.pck": {
+      "bytes": 160075,
+      "megabytes": 0.153,
+      "sha256": "85ba013f57bc1a9782f3cf68e8558f403e64d64796d3805e4b19f002125f2609"
+    },
+    "packs/novel_field_willow.pck": {
+      "bytes": 358085,
+      "megabytes": 0.341,
+      "sha256": "1de2813b958f6149898cd0023b0361b72c715dd2d0a8db625d734e110a3ee371"
+    },
+    "packs/opening.pck": {
+      "bytes": 26930484,
+      "megabytes": 25.683,
+      "sha256": "851c39101cfa65de0ad07198054a555722eccc2787fa4011a997a581792c1dea"
+    },
+    "packs/quality_materials.pck": {
+      "bytes": 7154964,
+      "megabytes": 6.824,
+      "sha256": "90ee6eb45f7b78f67c7f54c876405489fb590e3f7e2b9e3e0e4cd9206c7cfcee"
+    },
+    "release_manifest.json": {
+      "bytes": 39044,
+      "megabytes": 0.037,
+      "sha256": "c27645e994dd9e1f4804378d8daf4822de94bf8bf1f0ec82cf94e8b9fae01467"
+    },
+    "runtime_pack_manifest.json": {
+      "bytes": 246720,
+      "megabytes": 0.235,
+      "sha256": "eb30bc4d38b64cb99e97d1bd8387e627d38f808ca5000743f67c0be115fb352e"
+    }
+  }
+}
