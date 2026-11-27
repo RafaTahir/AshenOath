@@ -1,24 +1,7 @@
 extends "res://scripts/systems/game_bindings.gd"
 ## Owns interaction operations; configure() injects dependencies.
+const Greyfen = preload("res://scripts/views/novel/greyfen_interactions.gd")
 signal interaction_focus_updated(target: Node)
-
-func _wait_for_soldier_at_tracks(area: Area3D, pack: String) -> void:
-	if area.get_meta("waiting_for_soldier", false):
-		return
-	area.set_meta("waiting_for_soldier", true)
-	var requested: bool = runtime_packs.retry_pack(pack, 0) if runtime_packs.get_state(pack) in ["cancelled", "failed"] else runtime_packs.request_pack(pack, 0)
-	while requested and is_instance_valid(area) and active_interactable == area and not resource_shutdown_prepared:
-		if runtime_packs.is_ready(pack):
-			area.remove_meta("waiting_for_soldier")
-			_systems["session"]._dispatch_gameplay_action("interact", area.get_instance_id())
-			return
-		if runtime_packs.get_state(pack) in ["failed", "cancelled"] or _journey_load_pending():
-			break
-		await _host.get_tree().process_frame
-	if is_instance_valid(area):
-		area.remove_meta("waiting_for_soldier")
-		if active_interactable == area and not resource_shutdown_prepared and runtime_packs.get_state(pack) == "failed":
-			hud.toast("The soldier could not be loaded. Use the tracks to retry.")
 
 func _handle_interaction(area) -> void:
 	if area != null and area.interaction_type == "road_status":
@@ -36,7 +19,7 @@ func _handle_interaction(area) -> void:
 	if area != null and area.interaction_id == "empty_grave_tracks" and OS.has_feature("web"):
 		var pack: String = runtime_packs.actor_pack("returned_soldier")
 		if not runtime_packs.is_ready(pack):
-			_wait_for_soldier_at_tracks(area, pack)
+			Greyfen.wait_for_soldier(self,area,pack)
 			return
 	var prop_activated := false
 	if world_props != null and area != null and area.has_meta("world_prop_id"):
@@ -174,11 +157,11 @@ func _handle_interaction(area) -> void:
 		elif area.interaction_id == "corpse":
 			hud.toast("Bram's ledger. A page of debts, all crossed out. His hand still grips the cart brake.", 5.5)
 		elif area.interaction_id == "claw_marks":
-			hud.toast(preload("res://scripts/novel/road_account.gd").field_note(story_state, "claw_marks", "Vargan binding wire. Someone fastened a name to these creatures, then tried to burn it off."), 5.5)
+			hud.toast(preload("res://scripts/core/novel/road_account.gd").field_note(story_state, "claw_marks", "Vargan binding wire. Someone fastened a name to these creatures, then tried to burn it off."), 5.5)
 		elif area.interaction_id == "black_feathers":
-			hud.toast(preload("res://scripts/novel/road_account.gd").field_note(story_state, "black_feathers", "Sella's red thread. The knot is Anwen's. The feathers were tied here, not scattered by a bird."), 5.5)
+			hud.toast(preload("res://scripts/core/novel/road_account.gd").field_note(story_state, "black_feathers", "Sella's red thread. The knot is Anwen's. The feathers were tied here, not scattered by a bird."), 5.5)
 		elif area.interaction_id == "oren_token":
-			hud.toast(preload("res://scripts/novel/road_account.gd").field_note(story_state, "oren_token", "Oren's wooden crow. The wings are worn smooth; only his name has been scraped away."), 5.5)
+			hud.toast(preload("res://scripts/core/novel/road_account.gd").field_note(story_state, "oren_token", "Oren's wooden crow. The wings are worn smooth; only his name has been scraped away."), 5.5)
 		elif area.interaction_id == "chapel_names":
 			story_state.set_flag("chapel_names_read", true)
 			_try_complete_oren_thread_trace()
@@ -233,7 +216,7 @@ func _handle_interaction(area) -> void:
 		elif area.interaction_id == "post_victory_token":
 			story_state.set_flag("road_token_recovered", true)
 			_try_complete_oren_thread_trace()
-			hud.toast(preload("res://scripts/novel/road_account.gd").field_note(story_state,"post_victory_token","Oren's token is complete. Vargan binding wire is wound through the scratched name."))
+			hud.toast(preload("res://scripts/core/novel/road_account.gd").field_note(story_state,"post_victory_token","Oren's token is complete. Vargan binding wire is wound through the scratched name."))
 			_show_current_objective_guidance(6.0)
 			audio.play_event("reveal", 0.02)
 		elif area.interaction_id == "chapel_door":
@@ -285,19 +268,7 @@ func _handle_interaction(area) -> void:
 		hud.toast(str(area.get_meta("message", "That road is barred tonight.")))
 
 func _handle_village_place(id: String) -> void:
-	match id:
-		"village_well":
-			player.stamina_component.restore(5.0)
-			hud.toast("Cold iron in the water. Kael catches his breath.")
-		"forge_corner": hud.toast("Vargan iron, hammered into Greyfen hinges. Tor never mentions the crest marks.")
-		"shrine_prayer":
-			var activities := zone_root.get_node_or_null("StoryActivities")
-			if activities != null:
-				activities.activate("shrine_prayer")
-		"river_water":
-			player.stamina_component.restore(18.0)
-			hud.toast("Cold river water. Clean enough above Greyfen, for now.")
-		_: hud.toast("Greyfen has made use of everything it could keep.")
+	Greyfen.visit(self,id)
 
 func _on_minigame_result(game_id: String, outcome: String) -> void:
 	if str(minigames.competition_id)!="":

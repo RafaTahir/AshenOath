@@ -1,33 +1,9 @@
-extends RefCounted
+extends "res://scripts/core/novel/saga_edition.gd"
 
-const Garden = preload("res://scripts/novel/garden_petition.gd")
+static func quest_row(id: String, state: Object) -> Dictionary:
+	return project_row(QUESTS.get(id,{}),id,state)
 
-static func quest_row(id: String, state) -> Dictionary:
-	var record: Dictionary = QUESTS.get(id,{})
-	if Garden.active(id,state): return Garden.row(record)
-	if id == "side_escort_06" and _refuge_receiving(state):
-		var steps: Array = record.steps.duplicate(true)
-		steps[0] = ["handover_relief","Unload the relief tray beside the refuge freight door","receiving","work",["Lay the wet gear out to dry","Give the receiving clerk the copy of the boat tally"],"Count the people received and the property lost separately. A missing blanket is not a missing passenger."]
-		steps[1][1] = "Leave Nera a choice about the supper at the refuge"
-		steps[1][2] = "receiving"
-		steps[2] = ["return_home","Hand over the freight tally and collect the signed receipt","arrivals","work",["Compare the arrival count with the two passenger tallies","Give the next shift the receipt and put down the board"],"Nera collects the relief cord. The next departure will run to her freight schedule.",{"zone":"hearthward"}]
-		return record.merged({"zone":"hearthward","completed_zone":"hearthward","site":"receiving","steps":steps},true)
-	return record
-
-static func _refuge_receiving(state) -> bool:
-	return state != null and state.get_flag("novel_edition",0)==1 and state.get_flag("final_covenant","")=="open_road" and state.get_flag("open_road_relocation_completed",false)==true
-
-const PERFORMANCE_PATH := "res://data/regional_performances.json"
-static var _performances: Dictionary = {}
-
-static func performance(id: String) -> Dictionary:
-	if _performances.is_empty():
-		var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(PERFORMANCE_PATH))
-		if data is Dictionary and int(data.get("version", 0)) == 1:
-			_performances = data.get("quests", {})
-	return _performances.get(id, {})
-
-static func opening(id: String, state = null) -> String:
+static func opening(id: String, state: Object = null) -> String:
 	if Garden.active(id,state): return Garden.HOOK
 	return str(performance(id).get("opening", QUESTS.get(id, {}).get("hook", "")))
 
@@ -41,14 +17,14 @@ static func work_performance(id: String, step: Array, part: int) -> Dictionary:
 	var duration := float(durations[part]) if part >= 0 and part < durations.size() else 1.25
 	return {"activity": activity, "duration": clampf(duration, 0.45, 3.0)}
 
-static func observation(id: String, step: Array, index: int, state = null) -> String:
+static func observation(id: String, step: Array, index: int, state: Object = null) -> String:
 	if Garden.active(id,state): return str(step[4][index]) + ". " + str(step[5])
 	var clues: Array = performance(id).get("clues", QUESTS.get(id, {}).get("observations", {})).get(str(step[0]), [])
 	if index >= 0 and index < clues.size():
 		return str(clues[index])
 	return str(step[4][index]) + ". Compare this with the other marked evidence before drawing a conclusion."
 
-static func aftermath(id: String, outcome: String, state = null) -> String:
+static func aftermath(id: String, outcome: String, state: Object = null) -> String:
 	if Garden.active(id,state): return Garden.aftermath(outcome)
 	if id == "saga_wyc_q05" and outcome not in ["side_channel", "natural_run"]:
 		return "The work is recorded as complete, but this saved account does not identify the chosen watercourse. No branch has been inferred."
@@ -100,7 +76,7 @@ const GREETINGS := {
 	"saga_oris":"I put the chisel down for a little while. A surprisingly difficult piece of work."
 }
 
-static func part_site(id: String, step: Array, part: int, state = null) -> String:
+static func part_site(id: String, step: Array, part: int, state: Object = null) -> String:
 	var site := str(step[2])
 	if id == "saga_wyc_q05" and str(step[0]) == "place_clean_pots" and state != null and str(state.get_flag(id + "_outcome", "")) == "natural_run":
 		return "pots_natural"
@@ -400,13 +376,13 @@ static func region_for_prefix(prefix: String) -> String:
 static func region_for_quest(id: String) -> String:
 	return str(QUESTS.get(id, {}).get("region", region_for_prefix(id.get_slice("_", 1))))
 
-static func step_zone(id: String, step: Array, state = null) -> String:
+static func step_zone(id: String, step: Array, state: Object = null) -> String:
 	var row := quest_row(id,state)
 	if step.size() > 6:
 		return str(step[6].get("zone", row.zone))
 	return str(row.get("completed_zone", row.zone) if step.is_empty() else row.zone)
 
-static func person_location(id: String, quests, state = null) -> Dictionary:
+static func person_location(id: String, quests: Object, state: Object = null) -> Dictionary:
 	var person: Dictionary = PEOPLE[id]
 	if id != "saga_maren":
 		return {"zone":person.zone, "site":person.site}
@@ -436,7 +412,7 @@ static func quest_definitions() -> Dictionary:
 		result[id] = {"title":quest.title, "type":"side", "description":opening(id), "objectives":objectives, "story_depth":"personal" if id.begins_with("side_escort_") else "regional", "saga_zone":quest.zone}
 	return result
 
-static func route(quest_id: String, objective_id: String, state) -> Dictionary:
+static func route(quest_id: String, objective_id: String, state: Object) -> Dictionary:
 	var quest: Dictionary = quest_row(quest_id,state)
 	for step: Array in quest.get("steps", []):
 		if str(step[0]) != objective_id:

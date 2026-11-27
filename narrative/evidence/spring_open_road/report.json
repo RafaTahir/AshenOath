@@ -1,0 +1,327 @@
+{
+	"capture_desktop": "",
+	"case": "spring-after-handover",
+	"completed_work": [],
+	"elapsed_ms": 216819,
+	"execution_mode": "background-rendered",
+	"failures": [],
+	"full_campaign_proof": false,
+	"headless": false,
+	"input_events": 57,
+	"input_mode": "keyboard_mouse",
+	"kind": "community_world_real_input",
+	"no_focus": true,
+	"observations": [
+		{
+			"elapsed_ms": 149774,
+			"flags": {
+				"ashwing_defeated": true,
+				"assembly_relief_ready": true,
+				"bell_eater_defeated": true,
+				"bog_core_fate": "returned",
+				"campaign_empty_tables_completed": true,
+				"campaign_house_many_names_completed": true,
+				"campaign_revision": 2,
+				"campaign_road_kept_open_completed": true,
+				"campaign_what_we_promise_completed": true,
+				"castle_access_granted": true,
+				"castle_haunting_cleared": true,
+				"command_ledger_copied": true,
+				"command_proof_recovered": true,
+				"community_account:main_empty_tables": true,
+				"community_account:main_house_many_names": true,
+				"community_account:main_road_kept_open": true,
+				"community_account:main_what_we_promise": true,
+				"community_aftermath:main_empty_tables": true,
+				"community_aftermath:main_house_many_names": true,
+				"community_aftermath:main_road_kept_open": true,
+				"community_aftermath:main_what_we_promise": true,
+				"community_distribution": "central",
+				"community_kitchen_ready": true,
+				"community_records": "protected",
+				"community_refuge_ready": true,
+				"community_rota_posted": true,
+				"community_route": "ferry",
+				"community_route_load_carried": false,
+				"community_route_load_crossed": true,
+				"community_route_ready": true,
+				"community_survey:far": true,
+				"community_survey:near": true,
+				"community_work:ferry_landing": true,
+				"community_work:ferry_load": true,
+				"community_work:ferry_rope": true,
+				"community_work:kitchen_places": true,
+				"community_work:kitchen_screen": true,
+				"community_work:kitchen_trestle": true,
+				"community_work:promise_alarm": true,
+				"community_work:promise_meal": true,
+				"community_work:promise_records": true,
+				"community_work:refuge_bunks": true,
+				"community_work:refuge_places": true,
+				"community_work:refuge_shelves": true,
+				"confession_method": "witnesses",
+				"covenant_ritual_step": 3.0,
+				"covenant_rules_known": true,
+				"crisis_cause_known": true,
+				"crow_shrine_state": "cleansed",
+				"edric_stance": "cooperate",
+				"escort_abandonment_acknowledged": true,
+				"everyday_wear": {
+					"anwen": {
+						"soil": 0.0,
+						"wet": 0.0
+					},
+					"nessa": {
+						"soil": 0.0,
+						"wet": 0.0
+					},
+					"rook": {
+						"soil": 0.0,
+						"wet": 0.0
+					},
+					"tor": {
+						"soil": 0.0,
+						"wet": 0.0
+					}
+				},
+				"evidence_report": "public",
+				"final_choice_completed": true,
+				"final_covenant": "open_road",
+				"halvern_fate": "witness",
+				"halvern_is_fragment": true,
+				"hart_complete_account_access": false,
+				"human_records_preserved": true,
+				"kael_confessed": true,
+				"mill_fate": "preserved",
+				"mill_operation": "closed",
+				"mill_records_preserved": true,
+				"mira_truth_known": true,
+				"moon_oil_mastery": true,
+				"names_policy": "published",
+				"novel_departure_handover": true,
+				"novel_departure_legs": 3.0,
+				"novel_edition": 1.0,
+				"novel_prologue_closed": true,
+				"novel_step_spring_open_road": 1.0,
+				"open_road_crossing_progress": 1.0,
+				"open_road_households": [
+					"water_carrier",
+					"quality_sweeper"
+				],
+				"open_road_named_roster": [],
+				"open_road_player_crossed": true,
+				"open_road_protection_dismantled": true,
+				"open_road_relocation_completed": true,
+				"open_road_relocation_started": true,
+				"open_road_route_crossed": true,
+				"open_road_route_delivered": true,
+				"protected_family_addresses": true,
+				"renewal_announced": true,
+				"renewal_stopped": true,
+				"rootbound_colossus_defeated": true,
+				"senn_account_recovered": true,
+				"senn_fate": "testimony",
+				"territorial_protection_active": false,
+				"vargan_ledger_left_copied": true,
+				"witness_consent_edric": "voluntary",
+				"witness_consent_senn": "voluntary",
+				"wychwood_pack_cleared": true
+			},
+			"image": "D:\\AOPlay\\evidence\\spring-after-handover/00_reload_spring_open_road_in_progress.png",
+			"input_events": 36,
+			"label": "reload_spring_open_road_in_progress",
+			"position": "(-2.799999, 0.015, 8.799988)",
+			"quests": {
+				"active": {
+
+				},
+				"completed": {
+					"main_ash_at_the_mill": true,
+					"main_bell_beneath_greyfen": true,
+					"main_blood_under_stone": true,
+					"main_crowns_without_mercy": true,
+					"main_empty_tables": true,
+					"main_hart_remembers": true,
+					"main_house_many_names": true,
+					"main_last_witness": true,
+					"main_names_they_burned": true,
+					"main_road_kept_open": true,
+					"main_road_of_crows": true,
+					"main_soldier_without_banner": true,
+					"main_teeth_in_rain": true,
+					"main_what_we_promise": true
+				},
+				"completed_objectives": {
+					"main_ash_at_the_mill": {
+						"escort_mill_workers": false,
+						"inspect_millstones": false,
+						"mill_choice": true,
+						"mill_encounter": true,
+						"novel_tor_wrist": false,
+						"open_mill_sluice": false,
+						"reach_mill": true
+					},
+					"main_bell_beneath_greyfen": {
+						"cemetery_ambush": true,
+						"crow_shrine_choice": true,
+						"grave_child": true,
+						"grave_harl": true,
+						"grave_soldier": false,
+						"grave_truth": true,
+						"meet_anwen_gate": true,
+						"novel_two_doors": false,
+						"open_chapel": true
+					},
+					"main_blood_under_stone": {
+						"castle_evidence_ready": false,
+						"enter_courtyard": true,
+						"evidence_gate_notice": true,
+						"evidence_iron_binding": false,
+						"evidence_ledger_fragment": false,
+						"evidence_mile_marker": true,
+						"evidence_supply_cart": true,
+						"last_witness_hook": true,
+						"ledger_choice": true,
+						"locate_record_hall": true,
+						"novel_culvert": false,
+						"novel_seals": false,
+						"reach_castle": true,
+						"recover_ledger": true,
+						"speak_guard": true,
+						"survive_haunting": true
+					},
+					"main_crowns_without_mercy": {
+						"confession_choice": true,
+						"gather_witnesses": true,
+						"greyfen_assembly": true
+					},
+					"main_empty_tables": {
+						"hear_households": true,
+						"novel_rook_schedule": false,
+						"prepare_kitchen": true,
+						"reach_lantern_reach": true,
+						"settle_tables": true
+					},
+					"main_hart_remembers": {
+						"enter_glade": true,
+						"final_choice": true,
+						"hear_testimony": true
+					},
+					"main_house_many_names": {
+						"hear_households": true,
+						"novel_dry_floor": false,
+						"novel_omitted_return": false,
+						"prepare_refuge": true,
+						"reach_hearthward": true,
+						"settle_records": true
+					},
+					"main_last_witness": {
+						"break_halvern_guard": true,
+						"halvern_choice": true,
+						"novel_felt_under_iron": false,
+						"reach_undercroft": true
+					},
+					"main_names_they_burned": {
+						"fragment_anwen": true,
+						"fragment_mira": false,
+						"fragment_rook": true,
+						"fragment_tor": true,
+						"names_choice": true,
+						"novel_tally_house": false,
+						"reconstruct_register": true
+					},
+					"main_road_kept_open": {
+						"agree_route": true,
+						"open_route": true,
+						"secure_route": true,
+						"survey_crossing": true
+					},
+					"main_road_of_crows": {
+						"bram": true,
+						"drag_marks": false,
+						"evidence_ready": true,
+						"fight_ghoulkin": true,
+						"oren": true,
+						"return_village": true,
+						"sella": true,
+						"speak_anwen": true,
+						"vargan_wire": false
+					},
+					"main_soldier_without_banner": {
+						"novel_levy_inventory": false,
+						"reach_bandit_road": true,
+						"senn_choice": true,
+						"senn_confrontation": true
+					},
+					"main_teeth_in_rain": {
+						"bog_core_choice": true,
+						"craft_moon_oil": false,
+						"fight_bog_wretch": true,
+						"name_the_dead": true,
+						"novel_willow_frame": false,
+						"read_chapel_names": true,
+						"speak_mira": true
+					},
+					"main_what_we_promise": {
+						"carry_promise": true,
+						"choose_responsibilities": true,
+						"gather_cast": true,
+						"novel_alarm_test": false,
+						"test_arrangements": true
+					}
+				},
+				"evidence_history": {
+
+				},
+				"tracked_quest_id": "",
+				"tracked_quest_is_manual": false,
+				"tracker_context_zone": "hearthward",
+				"unlocked": {
+					"main_ash_at_the_mill": true,
+					"main_bell_beneath_greyfen": true,
+					"main_blood_under_stone": true,
+					"main_crowns_without_mercy": true,
+					"main_empty_tables": true,
+					"main_hart_remembers": true,
+					"main_house_many_names": true,
+					"main_last_witness": true,
+					"main_names_they_burned": true,
+					"main_road_kept_open": true,
+					"main_road_of_crows": true,
+					"main_soldier_without_banner": true,
+					"main_teeth_in_rain": true,
+					"main_what_we_promise": true,
+					"side_bitter_roots": true,
+					"side_black_dog": true,
+					"side_bracken_rescue": true,
+					"side_childs_charm": true,
+					"side_empty_grave": true,
+					"side_iron_remembers": true,
+					"side_millers_measure": true,
+					"side_rooks_map": true,
+					"side_soldiers_debt": true,
+					"side_three_candles": true,
+					"side_widows_bell": true
+				},
+				"world_flags": {
+
+				}
+			},
+			"zone": "hearthward"
+		}
+	],
+	"physical_phone_coverage": false,
+	"progression_injection": false,
+	"renderer": "gl_compatibility",
+	"scene": "spring_open_road",
+	"schema_version": 1,
+	"seed": "synthetic_boundary",
+	"status": "pass",
+	"touch_input_coverage": false,
+	"user_data_dir": "D:/AOPlay/evidence/spring-after-handover/user/Godot/app_userdata/Ashen Oath- The Road Between Crowns",
+	"viewport": "(960, 540)",
+	"viewport_size": [
+		960,
+		540
+	]
+}

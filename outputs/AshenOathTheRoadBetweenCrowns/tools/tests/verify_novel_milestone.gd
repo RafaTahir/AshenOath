@@ -17,16 +17,37 @@ func _ready(expected: String) -> void:
 	_fail("No playable arrival at "+expected)
 
 func _interact(id: String) -> void:
-	# A player can turn and Use from the aisle without circling a reading desk.
-	var target := game.zone_root.find_child(id,true,false) as Node3D
-	if target != null and target.is_visible_in_tree() and game.player.global_position.distance_to(target.global_position)<3.0:
-		await _face(target.global_position)
-		await _frames(6)
-		if game.active_interactable==target:
+	if not failures.is_empty(): return
+	var area := game.zone_root.find_child(id,true,false) as Node3D
+	if area==null or not area.is_visible_in_tree():
+		_fail("No visible action "+id)
+		return
+	var approaches: Array[Vector3]=[]
+	for i in range(8):
+		var angle := TAU*i/8
+		var point := _ground_point(area.global_position+Vector3(sin(angle),0,cos(angle))*1.05)
+		if point.is_finite() and not game.spatial_service.is_position_occupied(point,0.36,1.65):
+			approaches.append(point)
+	var origin: Vector3 = game.player.global_position
+	approaches.sort_custom(func(first: Vector3, second: Vector3) -> bool: return origin.distance_squared_to(first)<origin.distance_squared_to(second))
+	if origin.distance_to(area.global_position)<3.0: approaches.push_front(origin)
+	var selected := ""
+	for point: Vector3 in approaches:
+		if game.player.global_position.distance_to(point)>0.38:
+			var path := _live_route(point)
+			if path.is_empty(): continue
+			for waypoint: Vector3 in path:
+				await _walk_direct(waypoint)
+				if not failures.is_empty(): return
+		await _face(area.global_position)
+		var look_until := Time.get_ticks_msec()+1400
+		while game.active_interactable!=area and Time.get_ticks_msec()<look_until: await process_frame
+		if game.active_interactable==area:
 			await _tap(KEY_E)
 			await _frames(6)
 			return
-	await super._interact(id)
+		selected = str(game.active_interactable)
+	_fail("No clear displayed approach to "+id+"; last focus "+selected)
 
 func _walk_direct(target: Vector3, stop_zone: String="") -> void:
 	if not failures.is_empty(): return
@@ -67,7 +88,7 @@ func _initialize() -> void:
 	output = OS.get_environment("ASHEN_NOVEL_EVIDENCE")
 	case_id = output.get_file()
 	var scene_key := str(FileAccess.get_file_as_string(output.path_join("scene.txt"))).strip_edges()
-	if output.is_empty() or scene_key not in ["tor_wrist","seals","dry_floor","spring_open_road"] or DisplayServer.get_name().to_lower()=="headless":
+	if output.is_empty() or scene_key not in ["tor_wrist","seals","dry_floor","spring_open_road","old_gate_memory","omitted_return"] or DisplayServer.get_name().to_lower()=="headless":
 		quit(2)
 		return
 	start_ms = Time.get_ticks_msec()
@@ -86,7 +107,7 @@ func _initialize() -> void:
 		if available or game.startup_prepare_failed: break
 		await process_frame
 	await _button("Continue")
-	region = {"tor_wrist":"old_mill","seals":"record_hall","dry_floor":"hearthward","spring_open_road":"hearthward"}[scene_key]
+	region = {"tor_wrist":"old_mill","seals":"record_hall","dry_floor":"hearthward","spring_open_road":"hearthward","old_gate_memory":"hart_glade","omitted_return":"hearthward"}[scene_key]
 	await _ready(region)
 	report_extra={"seed":"synthetic_boundary","scene":scene_key,"full_campaign_proof":false}
 	if not failures.is_empty():
@@ -104,7 +125,9 @@ func _initialize() -> void:
 	for index in range(int(story.get_flag("novel_step_"+scene_key,0)),sequence.size()):
 		if not failures.is_empty(): break
 		await _interact("novel_%s_%d"%[scene_key,index])
-		if sequence[index].has("choices"): await _dialogue_button(sequence[index].choices[0].label)
+		if sequence[index].has("choices"):
+			var choice_index := -1 if scene_key=="omitted_return" else 0
+			await _dialogue_button(sequence[index].choices[choice_index].label)
 		var limit := Time.get_ticks_msec()+18000
 		while failures.is_empty() and int(story.get_flag("novel_step_"+scene_key,0))==index and Time.get_ticks_msec()<limit: await process_frame
 		_check(int(story.get_flag("novel_step_"+scene_key,0))==index+1,"Earned "+str(sequence[index].prompt))
@@ -114,6 +137,8 @@ func _initialize() -> void:
 			_check(int(story.get_flag("novel_step_"+scene_key,0))==1,"Continue restored the next physical step")
 	if failures.is_empty():
 		_check(bool(story.get_flag("novel_done_"+scene_key,false)),"Reached the scene consequence")
+		if scene_key=="omitted_return": _check(story.get_flag("novel_kael_correction","")=="declined","The refusal survived the protected record handover")
+		if scene_key=="old_gate_memory": _check(story.get_flag("novel_hart_question","")=="escort","The Hart answered within its own witnessed history")
 		if scene_key=="spring_open_road": _check(int(game.day_night.day_count)==original_day+180,"Explicit spring visit advanced 180 days once")
 		await RenderingServer.frame_post_draw
 		_check(root.get_texture().get_image().save_png(output.path_join(scene_key+".png"))==OK,"Recorded the playable scene")

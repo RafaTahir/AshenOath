@@ -299,7 +299,7 @@ static func _evidence_entries(campaign: Dictionary, quests, state, zone_id: Stri
 			var id: String = str(evidence.get("id", ""))
 			if id == "":
 				continue
-			var authored: Dictionary = preload("res://scripts/novel/road_account.gd").detail(state,id,authored_by_id.get(id, {}))
+			var authored: Dictionary = preload("res://scripts/core/novel/road_account.gd").detail(state,id,authored_by_id.get(id, {}))
 			var blocks: Array[Dictionary] = _evidence_blocks(authored, quests, state)
 			var recorded_text: String = str(evidence.get("text", "")) if authored.is_empty() else ""
 			var compact: String = recorded_text

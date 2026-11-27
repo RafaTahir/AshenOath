@@ -29,6 +29,23 @@ static func dress(parent: Node3D, kind: String, height: float = 0.0) -> Node3D:
 	parent.add_child(stand)
 	stand.position.y = height
 	match kind:
+		"spoon":
+			box(stand,Vector3(0,0.25,0),Vector3(0.70,0.50,0.38),WOOD.darkened(0.27))
+			var surface := SurfaceTool.new()
+			surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+			var center := Vector3(-0.052,0.51,0)
+			for i in 16:
+				var a := TAU*float(i)/16.0
+				var b := TAU*float(i+1)/16.0
+				surface.add_vertex(center)
+				surface.add_vertex(center+Vector3(cos(a)*0.052,0.014,sin(a)*0.038))
+				surface.add_vertex(center+Vector3(cos(b)*0.052,0.014,sin(b)*0.038))
+			surface.generate_normals()
+			var bowl := MeshInstance3D.new()
+			bowl.mesh=surface.commit()
+			stand.add_child(bowl)
+			var handle := box(stand,Vector3(0.11,0.523,0),Vector3(0.22,0.014,0.020),WOOD.lightened(0.27))
+			bowl.material_override=handle.material_override
 		"seed_bed":
 			box(stand,Vector3(0,0.05,0),Vector3(0.78,0.10,0.44),Color("#544438"))
 			for i in 5:
@@ -110,6 +127,15 @@ static func dress(parent: Node3D, kind: String, height: float = 0.0) -> Node3D:
 			surface.height = 0.008
 			part(stand,surface,Vector3(0,0.239,0),Color(0.45,0.34,0.17) if kind=="meal" else Color(0.27,0.43,0.45))
 	return stand
+
+## The household barrel stays locked. The old bench gives at the pried corner.
+static func loosen_chest(workpiece: Node3D, fraction: float) -> void:
+	if workpiece == null or workpiece.get_child_count()==0: return
+	var chest := workpiece.get_child(0)
+	var hinge := chest.get_node_or_null("LidHinge") as Node3D
+	if hinge == null: return
+	hinge.rotation.z = -0.16 * clampf(fraction,0,1)
+	hinge.position.y = 0.218 + 0.04 * clampf(fraction,0,1)
 
 static func box(parent: Node3D, pos: Vector3, size: Vector3, color: Color) -> MeshInstance3D:
 	var mesh := BoxMesh.new()

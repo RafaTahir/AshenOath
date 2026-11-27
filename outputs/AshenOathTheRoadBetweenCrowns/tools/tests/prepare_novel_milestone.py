@@ -13,6 +13,8 @@ CASES = {
     "tor_wrist": ("lantern_crossing", "old_mill", "main_ash_at_the_mill", "mill_encounter", [2.7, 1, 7.3]),
     "seals": ("hearth_distributed", "record_hall", "main_blood_under_stone", "recover_ledger", [-3.4, 1, 6.6]),
     "dry_floor": ("hearth_distributed", "hearthward", "main_house_many_names", "reach_hearthward", [3.5, 1, 4.6]),
+    "old_gate_memory": ("seeded_departure_ferry", "hart_glade", "main_hart_remembers", "hear_testimony", [-2.3, 1, -3.7]),
+    "omitted_return": ("hearth_distributed", "hearthward", "main_house_many_names", "reach_hearthward", [-1.3, 1, 6.6]),
     "spring_open_road": ("seeded_departure_ferry", "hearthward", "main_hart_remembers", "enter_glade", [-2.8, 1, 8.8]),
 }
 

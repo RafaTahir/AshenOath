@@ -3,8 +3,8 @@ extends SceneTree
 ## World actions enter as objective receipts. Rendered input has a separate driver.
 const Quest = preload("res://scripts/quest_manager.gd")
 const Story = preload("res://scripts/story_state.gd")
-const Edition = preload("res://scripts/novel/novel_campaign.gd")
-const Scenes = preload("res://scripts/novel/novel_scenes.gd")
+const Edition = preload("res://scripts/core/novel/novel_campaign.gd")
+const Scenes = preload("res://scripts/views/novel/novel_scenes.gd")
 const Revision = preload("res://scripts/campaign_revision.gd")
 const Codec = preload("res://scripts/models/save_payload_codec.gd")
 const Ending = preload("res://scripts/community_ending.gd")

@@ -169,11 +169,7 @@ func _make_terrain_patch_raw(name: String, pos: Vector3, size: Vector3, color: C
 func river_safe_position(pos: Vector3, margin: float = 0.55) -> Vector3:
 	if _scope.spatial_service != null:
 		return _scope.spatial_service.validate_position(pos, margin)
-	var validator: Variant = _host.ZoneSpatialService.new()
-	validator.configure(_scope.zone_id, _host._river_center(), _host._zone_half_extents(_scope.zone_id))
-	var result: Vector3 = validator.validate_position(pos, margin, validator.bank_for(pos))
-	validator.free()
-	return result
+	return preload("res://scripts/builders/unbuilt_zone_navigation.gd").position(_scope.zone_id,_host._river_center(),_host._zone_half_extents(_scope.zone_id),pos,margin)
 func validate_walkable_position(pos: Vector3) -> Vector3:
 	if _scope.spatial_service != null:
 		return _scope.spatial_service.validate_position(pos, 0.90)

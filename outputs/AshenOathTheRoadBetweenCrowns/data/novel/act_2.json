@@ -847,6 +847,11 @@
               "result": "She takes your hand and kisses your fingers. The lamp goes out. In the morning she has her own work.",
               "set": {
                 "novel_mira_lamp": "kiss"
+              },
+              "when": {
+                "flags": {
+                  "lr_commitment_partner": "mira"
+                }
               }
             },
             {

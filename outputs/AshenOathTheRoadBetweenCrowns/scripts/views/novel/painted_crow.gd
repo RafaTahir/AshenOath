@@ -31,10 +31,10 @@ var previous_mouse: int
 var cursor := 0
 var done := false
 
-static func present(host) -> bool:
+static func present(host: Node) -> bool:
 	if host.story_state.get_flag("novel_edition",0) != 1 or host.story_state.get_flag("novel_prologue_closed", false): return false
 	if host.get_node_or_null("PaintedCrowMemory") != null: return true
-	var memory = load("res://scripts/novel/painted_crow.gd").new()
+	var memory = load("res://scripts/views/novel/painted_crow.gd").new()
 	memory.name = "PaintedCrowMemory"
 	memory.game = host
 	memory.process_mode = Node.PROCESS_MODE_ALWAYS

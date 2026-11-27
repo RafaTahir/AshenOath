@@ -8,7 +8,7 @@ static func add(_host: Api, area: Node3D, scale_override: Vector3) -> void:
 	token_root.scale = scale_override
 	area.add_child(token_root)
 	if _host.story_state.get_flag("novel_edition",0) == 1:
-		var scene := preload("res://scripts/novel/tabletop.gd").keepsake("oren_crow","recovered")
+		var scene := preload("res://scripts/builders/novel/tabletop.gd").keepsake("oren_crow","recovered")
 		if scene != null:
 			token_root.scale = Vector3.ONE
 			var crow := scene.instantiate() as Node3D

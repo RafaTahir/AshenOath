@@ -84,7 +84,7 @@ const IMPLEMENTED_SIDE_QUESTS := {
 }
 
 func load_quests(path: String) -> void:
-	var parsed = _read_json(path)
+	var parsed: Variant = CampaignRevision.read_quests(path)
 	if typeof(parsed) == TYPE_DICTIONARY:
 		source_quest_defs = parsed
 		source_quest_defs.merge(preload("res://scripts/saga_catalog.gd").quest_definitions(), true)
@@ -102,7 +102,7 @@ func configure_campaign_revision(revision: int, novel: bool = false) -> bool:
 	campaign_revision = revision
 	quest_defs = CampaignRevision.project_quests(source_quest_defs, revision)
 	novel_edition = novel and revision == CampaignRevision.EXPANDED
-	if novel_edition: preload("res://scripts/novel/novel_campaign.gd").extend(quest_defs)
+	if novel_edition: preload("res://scripts/core/novel/novel_campaign.gd").extend(quest_defs)
 	return true
 
 func start_quest(id: String) -> bool:
@@ -634,11 +634,3 @@ func _migrate_teeth_in_rain() -> void:
 	var insert_at := mini(1, objectives.size())
 	objectives.insert(insert_at, migrated)
 	active["main_teeth_in_rain"]["objectives"] = objectives
-
-func _read_json(path: String):
-	if not FileAccess.file_exists(path):
-		push_warning("Missing JSON: %s" % path)
-		return {}
-	var file = FileAccess.open(path, FileAccess.READ)
-	var parsed = JSON.parse_string(file.get_as_text())
-	return parsed if parsed != null else {}

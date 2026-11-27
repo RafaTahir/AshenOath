@@ -9,12 +9,12 @@ const FIRST_READ := {
 	"oren_token":"A crow painted in cart black on brass. A bare patch makes the eye. Under the paint you can make out AVEL."
 }
 
-static func field_note(state, id: String, older: String) -> String:
+static func field_note(state: Node, id: String, older: String) -> String:
 	if state.get_flag("novel_edition",0) != 1: return older
 	return str(FIRST_READ.get(id,older))
 
 ## DialogueManager resolves conditions and removes speaker prefixes before presentation.
-static func revise_page(state, page: Dictionary) -> void:
+static func revise_page(state: Node, page: Dictionary) -> void:
 	if state.get_flag("novel_edition",0) != 1: return
 	var spoken := str(page.get("text",""))
 	var revised := ""
@@ -31,7 +31,7 @@ static func revise_page(state, page: Dictionary) -> void:
 		page.erase("voice_take")
 		page["voice"] = ""
 
-static func detail(state, id: String, original: Dictionary) -> Dictionary:
+static func detail(state: Node, id: String, original: Dictionary) -> Dictionary:
 	if state == null or state.get_flag("novel_edition",0) != 1 or id not in ["vargan_wire","oren","sella"]: return original
 	var entry := original.duplicate(true)
 	var reading := ""

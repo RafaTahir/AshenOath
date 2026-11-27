@@ -131,7 +131,7 @@ func _run_deferred_visual_roles(root: Node3D) -> void:
 			push_error("Deferred runtime visual failed for role '%s'" % role)
 			marker.queue_free()
 			continue
-		var parent := _deferred_visual_host(root, marker)
+		var parent: Node = marker.get_parent() if root.is_ancestor_of(marker) else null
 		if parent == null:
 			visual.queue_free()
 			continue
@@ -940,12 +940,3 @@ func _defer_opening_renderables(published_nodes: Array[Node]) -> void:
 			descendant.visible = false
 			descendant.set_meta("opening_visual_bucket", visual_index % OPENING_GAMEPLAY_VISUAL_BUCKETS)
 			visual_index += 1
-
-func _deferred_visual_host(branch: Node, marker: Node) -> Node:
-	for child in branch.get_children():
-		if child == marker:
-			return branch
-		var found := _deferred_visual_host(child, marker)
-		if found != null:
-			return found
-	return null

@@ -7,12 +7,7 @@ func _handle_dialogue_action(action: Dictionary) -> void:
 		preload("res://scripts/views/monster_road_signs_view.gd").answer_road_sign(_host, action)
 		return
 	if str(action.get("type", "")) in ["novel_visit", "novel_reply"]:
-		var novel: Node = preload("res://scripts/novel/novel_scenes.gd").current(_host)
-		if str(action.type) == "novel_visit":
-			_host._resume_game()
-			if novel != null: novel.activate(str(action.id),int(action.index),instance_from_id(int(action.source)) as Node3D)
-		elif novel != null: novel.reply(action)
-		else: _host._resume_game()
+		preload("res://scripts/views/novel/novel_scenes.gd").choose(_host,action)
 		return
 	if str(action.get("type", "")) == "community_action":
 		preload("res://scripts/story_activity_director.gd").choose_community(_host, action)
@@ -360,7 +355,7 @@ func _prepare_dialogue_presence(content: Dictionary) -> Dictionary:
 	var result: Dictionary = content.duplicate(true)
 	var known_speakers: Dictionary = {}
 	for page: Dictionary in result.get("pages", []):
-		preload("res://scripts/novel/road_account.gd").revise_page(story_state,page)
+		preload("res://scripts/core/novel/road_account.gd").revise_page(story_state,page)
 		var id := str(page.get("speaker_id", "narrator")).to_lower()
 		if id in DialogueRuntimeCoordinator.PLAYER_SPEAKERS or id in ["narrator", "system", ""]:
 			page.erase("speaker_actor_id")

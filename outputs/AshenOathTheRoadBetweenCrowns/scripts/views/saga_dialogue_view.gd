@@ -182,7 +182,7 @@ func _open(area: Node3D, title: String, text: String, actions: Array, speaker_id
 	if _activities.Catalog.PEOPLE.has(speaker_id):
 		_activities.append_cast_topics(area, content, speaker_id)
 	if _activities.Catalog.PEOPLE.has(speaker_id) and not bool(_activities.read_tag(area,"saga_topic_only",false)) and speaker_id != "narrator":
-		var novel: Node = preload("res://scripts/novel/novel_scenes.gd").current(_activities.host)
+		var novel: Node = preload("res://scripts/views/novel/novel_scenes.gd").current(_activities.host)
 		if novel != null: novel.invitations(area,content)
 	if not pages.is_empty():
 		content["pages"] = pages

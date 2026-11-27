@@ -262,7 +262,7 @@ func tick_session(delta: float) -> void:
 	if opening_scene_pending and not zone_transition_pending and not zone_load_request_pending and input_router.is_gameplay_context() and player.can_control:
 		var life := zone_root.find_child("GreyfenLifeController", true, false) if is_instance_valid(zone_root) else null
 		if life != null:
-			if preload("res://scripts/novel/painted_crow.gd").present(_host): return
+			if preload("res://scripts/views/novel/painted_crow.gd").present(_host): return
 			opening_scene_pending = false
 			life.begin_opening_scene()
 	if is_instance_valid(zone_root) and bool(zone_root.get_meta("opening_scene_active", false)):

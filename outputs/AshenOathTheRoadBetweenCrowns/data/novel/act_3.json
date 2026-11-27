@@ -1225,8 +1225,8 @@
         {
           "zone": "hearthward",
           "at": [
-            -3.5,
-            5.2
+            8.6,
+            4.4
           ],
           "object": "door",
           "prompt": "Test the latch from the watch side",
@@ -1236,8 +1236,8 @@
         {
           "zone": "hearthward",
           "at": [
-            -4.6,
-            7.2
+            9.6,
+            1.2
           ],
           "object": "meal",
           "prompt": "Carry an ordinary portion to the guarded room",

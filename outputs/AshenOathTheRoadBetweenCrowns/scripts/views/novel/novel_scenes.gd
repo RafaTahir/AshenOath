@@ -2,8 +2,8 @@ extends Node
 
 ## Installed by the published sector's StoryActivityDirector. Scene progress
 ## belongs to StoryState so a discarded sector can reconstruct unfinished work.
-const Edition = preload("res://scripts/novel/novel_campaign.gd")
-const Tableau = preload("res://scripts/novel/tabletop.gd")
+const Edition = preload("res://scripts/core/novel/novel_campaign.gd")
+const Tableau = preload("res://scripts/builders/novel/tabletop.gd")
 const LAYER := "NovelScenes"
 static var books: Dictionary = {}
 var owner_director: Node
@@ -21,7 +21,7 @@ var board_turn: Dictionary = {}
 var alarm_count := 0
 var alarm_silence := 0.0
 
-static func current(host) -> Node:
+static func current(host: Node) -> Node:
 	if not is_instance_valid(host.zone_root): return null
 	return host.zone_root.get_node_or_null("StoryActivities/" + LAYER)
 
@@ -30,7 +30,7 @@ static func install(director: Node) -> void:
 	if director.get_parent() != host.zone_root or host.story_state.get_flag("novel_edition", 0) != 1: return
 	var layer: Node = director.get_node_or_null(LAYER)
 	if layer == null:
-		layer = load("res://scripts/novel/novel_scenes.gd").new()
+		layer = load("res://scripts/views/novel/novel_scenes.gd").new()
 		layer.name = LAYER
 		layer.owner_director = director
 		layer.game = host
@@ -51,7 +51,7 @@ static func _book(act: int) -> Array:
 		books[act] = parsed.scenes
 	return books[act]
 
-static func route(state, objective: String, quests: Node = null) -> Dictionary:
+static func route(state: Node, objective: String, quests: Node = null) -> Dictionary:
 	if state == null or not objective.begins_with("novel_"): return {}
 	var id := objective.trim_prefix("novel_")
 	for act in range(1,5):
@@ -74,7 +74,7 @@ func refresh() -> void:
 	turns.clear()
 	var active: Dictionary = {}
 	_refresh_burden()
-	preload("res://scripts/novel/working_places.gd").project(self,zone,game.story_state)
+	preload("res://scripts/builders/novel/working_places.gd").project(self,zone,game.story_state)
 	for act in range(1, 5):
 		for scene: Dictionary in _book(act):
 			var quest := Edition.owning_quest(scene.id)
@@ -96,7 +96,7 @@ func refresh() -> void:
 		if not enabled: game._remove_interaction_candidate(area)
 	game.interaction_focus_dirty = true
 
-static func resolve_beat(base: Dictionary, state, quests) -> Dictionary:
+static func resolve_beat(base: Dictionary, state: Node, quests: Node) -> Dictionary:
 	for variant: Dictionary in base.get("variants",[]):
 		if matches_rule(variant.get("when",{}),state,quests):
 			var resolved := base.merged(variant,true)
@@ -107,7 +107,7 @@ static func resolve_beat(base: Dictionary, state, quests) -> Dictionary:
 func _allows(rule: Dictionary) -> bool:
 	return matches_rule(rule,game.story_state,game.quests)
 
-static func matches_rule(rule: Dictionary, state, quests) -> bool:
+static func matches_rule(rule: Dictionary, state: Node, quests: Node) -> bool:
 	if rule.get("before_covenant",false) and str(state.get_flag("final_covenant","")) != "": return false
 	if rule.has("stayed_home") and str(rule.stayed_home) in state.get_flag("open_road_named_roster",[]): return false
 	var q := str(rule.get("quest",""))
@@ -136,15 +136,12 @@ func _station(key: String, index: int, beat: Dictionary) -> Node3D:
 	var area := game.zone_root.find_child(id, true, false) as Node3D
 	area.state_label = str(beat.prompt)
 	area.display_name = str(beat.get("place",turns[key].scene.title))
-	area.set_meta("novel_scene", key)
-	area.set_meta("novel_index", index)
+	area.add_to_group("novel_scene")
 	Tableau.dress(area, str(beat.get("object","")), float(beat.get("height",0)))
 	stations[id] = area
 	return area
 
 func _actor_id(area: Node3D) -> String:
-	if area.has_meta("community_actor_id"):
-		return str(preload("res://scripts/community_campaign.gd").ACTORS.get(str(area.get_meta("community_actor_id")), ""))
 	var identity := str(area.get("interaction_id"))
 	return "saga_nera" if identity=="saga_maren" else identity
 
@@ -164,7 +161,24 @@ func _valid(key: String, index: int, area: Node3D) -> bool:
 	if index != int(game.story_state.get_flag("novel_step_"+key,0)) or index != turn.index or not _allows(turn.scene.get("when", {})) or not _allows(turn.beat.get("when", {})): return false
 	if resolve_beat(turn.scene.beats[index],game.story_state,game.quests) != turn.beat: return false
 	if turn.beat.has("actor"): return _actor_id(area) == str(turn.beat.actor)
-	return str(area.get_meta("novel_scene","")) == key and int(area.get_meta("novel_index",-1)) == index
+	return stations.get("novel_%s_%d"%[key,index]) == area
+
+static func use_station(host: Node, area: Node3D) -> void:
+	var layer := current(host)
+	if layer == null: return
+	for key: String in layer.turns:
+		var index := int(layer.turns[key].index)
+		if layer.stations.get("novel_%s_%d"%[key,index]) == area:
+			layer.activate(key,index,area)
+			return
+
+static func choose(host: Node, action: Dictionary) -> void:
+	var layer := current(host)
+	if str(action.type)=="novel_visit":
+		host._resume_game()
+		if layer != null: layer.activate(str(action.id),int(action.index),instance_from_id(int(action.source)) as Node3D)
+	elif layer != null: layer.reply(action)
+	else: host._resume_game()
 
 func activate(key: String, index: int, area: Node3D) -> void:
 	if not _valid(key,index,area) or not pending.is_empty(): return
@@ -214,15 +228,16 @@ func _refresh_burden() -> void:
 	if returning in [2,3]: kind = "frame"
 	if int(game.story_state.get_flag("novel_step_culvert",0)) == 3: kind = "frame"
 	if int(game.story_state.get_flag("novel_step_loaded_ground",0)) == 1: kind = "load"
+	if zone=="hearthward" and int(game.story_state.get_flag("novel_step_ordinary_freight",0))==1: kind="bedding"
 	var prop := game.player.get_node_or_null("NovelBurden") as Node3D
-	if prop != null and prop.get_meta("kind","") == kind: return
+	if prop != null and prop.is_in_group("novel_burden_"+kind): return
 	if prop != null:
 		game.player.remove_child(prop)
 		prop.queue_free()
 	if kind.is_empty(): return
 	prop = Tableau.dress(game.player,kind)
 	prop.name = "NovelBurden"
-	prop.set_meta("kind",kind)
+	prop.add_to_group("novel_burden_"+kind)
 	prop.position = Vector3(-0.43,0.72,0.26)
 	prop.rotation.z = -0.08
 
@@ -280,6 +295,8 @@ func _physics_process(delta: float) -> void:
 		cancel()
 		return
 	elapsed += delta
+	if pending.key=="refusal_book" and turns[pending.key].beat.get("mechanic","")=="pry":
+		Tableau.loosen_chest(area.get_node_or_null("Workpiece"),elapsed/float(turns[pending.key].beat.seconds))
 	if elapsed >= float(turns[pending.key].beat.get("seconds",0)): _finish()
 
 func _notification(what: int) -> void:
@@ -287,6 +304,9 @@ func _notification(what: int) -> void:
 
 func cancel() -> void:
 	if pending.is_empty(): return
+	if pending.key=="refusal_book":
+		var station: Node3D = pending.area.get_ref()
+		if is_instance_valid(station): Tableau.loosen_chest(station.get_node_or_null("Workpiece"),0.0)
 	pending = {}
 	if is_instance_valid(game) and is_instance_valid(game.player) and game.player.animation_driver != null and game.player.animation_driver.current_state == "story_offer":
 		game.player.animation_driver.stop_action("idle",0.12)

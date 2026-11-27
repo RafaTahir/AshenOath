@@ -264,10 +264,7 @@ func _start_new_game_world() -> void:
 		return
 	new_game_start_pending = false
 	save_manager.begin_new_journey()
-	quests.configure_campaign_revision(revision, revision == preload("res://scripts/campaign_revision.gd").EXPANDED)
-	story_state.set_flag("campaign_revision", revision)
-	if revision == preload("res://scripts/campaign_revision.gd").EXPANDED:
-		story_state.set_flag("novel_edition", 1)
+	preload("res://scripts/core/novel/novel_campaign.gd").begin_journey(quests,story_state,revision)
 	hud.load_text_history([])
 	if hud != null and hud.has_method("set_new_game_ready"):
 		hud.set_new_game_ready(true)
@@ -1022,11 +1019,7 @@ func river_safe_position(pos: Vector3, margin: float = 0.55) -> Vector3:
 func river_safe_path(points: Array, margin: float = 0.90) -> Array:
 	if spatial_service != null:
 		return spatial_service.validate_path(points, margin)
-	var validator := ZoneSpatialService.new()
-	validator.configure(current_zone_id, _river_center(), _zone_half_extents(current_zone_id))
-	var sanitized: Array = validator.validate_path(points, margin)
-	validator.free()
-	return sanitized
+	return preload("res://scripts/builders/unbuilt_zone_navigation.gd").path(current_zone_id,_river_center(),_zone_half_extents(current_zone_id),points,margin)
 
 func get_zone_half_extents(zone_id: String) -> Vector2:
 	return SpatialSurfaceContract.zone_half_extents(zone_id)

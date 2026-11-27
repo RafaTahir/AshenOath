@@ -78,7 +78,7 @@
             -4.4,
             5.4
           ],
-          "object": "sill",
+          "object": "spoon",
           "prompt": "Pare the bowl of a spoon across the grain",
           "seconds": 1.8,
           "result": "A curl of wood comes away. Soup would still run out one side."
@@ -281,7 +281,11 @@
           "object": "strongbox",
           "prompt": "Work the worn hinge clear of the bolted bench",
           "seconds": 2.8,
-          "result": "The inner lock holds. The old hinge gives. Inside is a thin volume in faded cloth."
+          "result": "The inner lock holds. The old hinge gives. Inside is a thin volume in faded cloth.",
+          "mechanic": "pry",
+          "set": {
+            "novel_hinge_open": true
+          }
         },
         {
           "zone": "record_hall",
