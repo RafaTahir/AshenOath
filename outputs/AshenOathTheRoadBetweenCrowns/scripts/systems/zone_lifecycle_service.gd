@@ -85,6 +85,7 @@ func _zone_encounter_packs(zone_id: String, recorded_journey: Dictionary = {}) -
 	var flags: Dictionary = story_state.flags if recorded_journey.is_empty() else recorded_journey.get("story_state",{}).get("flags",{})
 	var completed: Dictionary = quests.completed if recorded_journey.is_empty() else recorded_journey.get("quests",{}).get("completed",{})
 	if preload("res://scripts/campaign_story_overlay.gd").required_for(zone_id,flags,completed): encounter_packs.append("community")
+	encounter_packs.append_array(preload("res://scripts/novel/field_pack_requirements.gd").for_zone(zone_id,flags,completed))
 	if zone_id != "greyfen":
 		return encounter_packs
 	var bell_pending: bool
