@@ -15,6 +15,7 @@ from runtime_pack_validation import require_valid_pack_graph
 from partition_actor_packs import partition_actor_packs
 from prepared_forest_tree_layout import load_prepared_forest_trees
 from partition_living_campaign_packs import partition_living_campaign_packs
+from partition_novel_pack import partition_novel_pack
 from story_voice_catalog import authored_dialogue_inventory, canonical_speaker
 from natural_story_voices import pages
 
@@ -780,6 +781,7 @@ def compile_layout(defer_environment=False, require_prepared_forest=False):
     retire_environment_export_roots(PROJECT, config, sections)
     partition_road_masonry(config, sections, manifest, environment)
     partition_opening_dialogue(PROJECT, config, sections, manifest)
+    partition_novel_pack(PROJECT, config, sections, manifest)
     # Set traversal in the partitioners must not reorder the published manifest.
     owners = manifest["actor_resource_owners"]
     retained = [path for path in published_actor_paths if path in owners]
