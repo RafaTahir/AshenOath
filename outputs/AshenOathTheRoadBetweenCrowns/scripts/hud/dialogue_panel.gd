@@ -46,20 +46,20 @@ func clear_ambient_subtitle(owner_id: int) -> void:
 		_ambient_panel.hide()
 	_update_process_policy()
 
-func show_opening_scene_skip(skip: Callable) -> void:
+func show_opening_scene_action(label: String, action: Callable, focus: bool) -> void:
 	hide_opening_scene_skip()
 	var button := Button.new()
 	button.name = "OpeningSceneSkip"
-	button.text = "Skip introduction"
+	button.text = label
 	button.custom_minimum_size = Vector2(176, 48)
 	button.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
 	button.offset_left = -204
 	button.offset_right = -24
 	button.offset_top = 24
 	button.offset_bottom = 80
-	button.pressed.connect(skip)
+	button.pressed.connect(action)
 	hud_root.add_child(button)
-	button.grab_focus()
+	if focus: button.grab_focus()
 
 func hide_opening_scene_skip() -> void:
 	if not is_instance_valid(hud_root): return

@@ -164,7 +164,7 @@ func _physics_process(delta: float) -> void:
 	_tick_work_contact_effects(delta)
 	if not opening_scene.is_empty():
 		_tick_opening_scene(delta)
-		return
+		if opening_scene.get("watching", false): return
 	simulation_tick_accumulator += delta
 	var decision_tick: bool = simulation_tick_accumulator >= 1.0 / _simulation_hz()
 	if decision_tick:
@@ -190,7 +190,7 @@ func _physics_process(delta: float) -> void:
 			_crowd_index.update(entry.node, entry)
 	for entry in actors:
 		var actor_node: Node3D = entry.node
-		if not is_instance_valid(actor_node):
+		if not is_instance_valid(actor_node) or actor_node == opening_scene.get("actor"):
 			continue
 		var due := int(entry.get("decision_due_msec", now))
 		if now >= due:

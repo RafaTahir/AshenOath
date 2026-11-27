@@ -44,6 +44,8 @@ static func present(host: Node) -> bool:
 	return true
 
 func begin() -> void:
+	# The opaque memory owns its own 3D viewport. Leave Greyfen resident while it is covered.
+	game.get_viewport().disable_3d = true
 	previous_mouse = Input.mouse_mode
 	game.input_router.begin_context("dialogue")
 	game.get_tree().paused = true
@@ -175,6 +177,6 @@ func _close(skipped: bool) -> void:
 	game.story_state.set_flag("novel_prologue_presentation","skipped" if skipped else "witnessed")
 	game.story_save_pending = true
 	game.call_deferred("_persist_story_action")
+	queue_free()
 	game._resume_game()
 	Input.mouse_mode = previous_mouse
-	queue_free()

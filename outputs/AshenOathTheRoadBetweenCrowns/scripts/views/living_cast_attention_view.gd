@@ -96,17 +96,24 @@ func _world_walk_to(entry: Dictionary, target: Vector3, delta: float, arrival_ra
 func begin_opening_scene() -> bool:
 	if not _life.opening_scene.is_empty() or str(_life.host.current_zone_id) != "greyfen" or _life.get_tree().paused: return false
 	_life._end_social_exchange()
-	_life.opening_scene = {"index":0,"remaining":0.0,"actor":null,"entry":{},"activity":"","station":{},"control":_life.player.can_control}
-	_life.write_tag(_life.host.zone_root, "opening_scene_active", true)
-	_life.host.hud.clear_journey_transients(false)
-	_life.host.input_router.begin_context("dialogue")
-	_life.player.can_control = false
-	_life.host.hud.show_opening_scene_skip(_life.finish_opening_scene.bind("skipped"))
+	_life.opening_scene = {"index":0,"remaining":0.0,"actor":null,"entry":{},"activity":"","station":{},"watching":false}
+	_life.host.hud.show_opening_scene_action("Watch village arrival", _watch_arrival, false)
 	_life.host.audio.set_ambient_conversation(true)
 	return true
 
+func _watch_arrival() -> void:
+	if _life.opening_scene.is_empty() or not _life.host.input_router.is_gameplay_context() or not _life.player.can_control:
+		return
+	_life.opening_scene.watching = true
+	_life.write_tag(_life.host.zone_root, "opening_scene_active", true)
+	_life.host.input_router.begin_context("dialogue")
+	_life.player.can_control = false
+	_life.host.hud.show_opening_scene_action("Skip introduction", _life.finish_opening_scene.bind("skipped"), true)
+	if is_instance_valid(_life.opening_scene.actor):
+		_life.host.camera_rig.frame_story_action(_life.opening_scene.actor)
+
 func _tick_opening_scene(delta: float) -> void:
-	if _life.host.resource_shutdown_prepared or _life.host.zone_transition_pending or _life.host._journey_load_pending():
+	if _life.host.resource_shutdown_prepared or _life.host.zone_transition_pending or _life.host._journey_load_pending() or (not _life.opening_scene.watching and not _life.host.input_router.is_gameplay_context()):
 		_life.finish_opening_scene("interrupted")
 		return
 	if float(_life.opening_scene.remaining) > 0.0:
@@ -136,7 +143,7 @@ func _tick_opening_scene(delta: float) -> void:
 		var station: Dictionary = entry.profile.get("workstation", {})
 		if not station.is_empty() and entry.node.global_position.distance_to(station.get("stand", entry.node.global_position)) < 1.3:
 			entry.driver.set_life_workstation(station)
-	if _life.host.camera_rig != null: _life.host.camera_rig.frame_story_action(entry.node)
+	if _life.opening_scene.watching and _life.host.camera_rig != null: _life.host.camera_rig.frame_story_action(entry.node)
 	_life.opening_scene.remaining = float(beat.seconds)
 	_life.host.hud.show_ambient_subtitle(_life.get_instance_id(), str(beat.speaker), str(beat.text), float(beat.seconds))
 	_life.host.audio.play_nearby_speech(str(beat.actor), str(beat.text), entry.node)
@@ -156,7 +163,7 @@ func _release_opening_performer() -> void:
 func finish_opening_scene(reason: String = "skipped") -> void:
 	if _life.opening_scene.is_empty(): return
 	_life._release_opening_performer()
-	var control: Variant = bool(_life.opening_scene.control)
+	var watching := bool(_life.opening_scene.watching)
 	_life.opening_scene.clear()
 	if not is_instance_valid(_life.host): return
 	if is_instance_valid(_life.get_parent()): _life.write_tag(_life.get_parent(), "opening_scene_active", false)
@@ -166,14 +173,14 @@ func finish_opening_scene(reason: String = "skipped") -> void:
 	if is_instance_valid(_life.host.hud):
 		_life.host.hud.clear_ambient_subtitle(_life.get_instance_id())
 		_life.host.hud.hide_opening_scene_skip()
-	if is_instance_valid(_life.host.camera_rig): _life.host.camera_rig.release_dialogue_frame()
+	if watching and is_instance_valid(_life.host.camera_rig): _life.host.camera_rig.release_dialogue_frame()
 	if is_instance_valid(_life.host.audio): _life.host.audio.set_ambient_conversation(false)
-	if is_instance_valid(_life.player) and not _life.player.transition_locked:
-		_life.player.can_control = control and _life.player.health_component.health > 0.0
+	if watching and is_instance_valid(_life.player) and not _life.player.transition_locked:
+		_life.player.can_control = _life.player.health_component.health > 0.0
 	if _life.host.resource_shutdown_prepared or not _life.host.is_inside_tree(): return
 	_life.host.story_state.set_flag("opening_arrival_presentation", reason)
-	if not _life.get_tree().paused and not _life.host._journey_load_pending() and not _life.host.zone_transition_pending and not _life.host.zone_load_request_pending and _life.get_parent() == _life.host.zone_root:
-		_life.host.input_router.begin_context("gameplay")
+	if (watching or _life.host.input_router.is_gameplay_context()) and not _life.get_tree().paused and not _life.host._journey_load_pending() and not _life.host.zone_transition_pending and not _life.host.zone_load_request_pending and _life.get_parent() == _life.host.zone_root:
+		if watching: _life.host.input_router.begin_context("gameplay")
 		_life.host._show_current_objective_guidance(7.0)
 		_life.host.hud.toast("Anwen needs the northern road investigated. Nera's relief work can wait until you choose to help.", 7.0)
 	_life.host.story_save_pending = true

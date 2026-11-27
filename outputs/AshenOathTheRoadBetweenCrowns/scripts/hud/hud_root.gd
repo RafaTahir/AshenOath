@@ -33,7 +33,7 @@ func _build_ambient_subtitles() -> void: dialogue_panel._build_ambient_subtitles
 func ambient_subtitle_available(owner_id: int) -> bool: return dialogue_panel.ambient_subtitle_available(owner_id)
 func show_ambient_subtitle(owner_id: int, speaker: String, words: String, duration: float) -> bool: return dialogue_panel.show_ambient_subtitle(owner_id, speaker, words, duration)
 func clear_ambient_subtitle(owner_id: int) -> void: dialogue_panel.clear_ambient_subtitle(owner_id)
-func show_opening_scene_skip(skip: Callable) -> void: dialogue_panel.show_opening_scene_skip(skip)
+func show_opening_scene_action(label: String, action: Callable, focus: bool) -> void: dialogue_panel.show_opening_scene_action(label, action, focus)
 func hide_opening_scene_skip() -> void: dialogue_panel.hide_opening_scene_skip()
 func _on_honor_changed(entry: Dictionary) -> void: combat_feedback._on_honor_changed(entry)
 func _gameplay_surface_blocked() -> bool: return combat_feedback._gameplay_surface_blocked()

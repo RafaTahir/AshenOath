@@ -12,6 +12,7 @@ var route_zone_signatures: Dictionary = {}
 var route_spatial_cache: Dictionary = {}
 var retired_zone_roots: Array[Node] = []
 var pending_zone_retirements := 0
+var shutting_down := false
 var retired_skinned_actor_pool: Node3D
 var skinned_resource_anchors: Dictionary = {}
 var retired_material_anchors: Dictionary = {}
@@ -86,7 +87,7 @@ func _release_retiring_resources(root: Node) -> void:
 				driver.call("_clear_playback")
 		if node is CollisionShape3D or node is NavigationRegion3D or node is GeometryInstance3D:
 			geometry.append(node)
-		if Time.get_ticks_usec()-slice >= 500:
+		if not shutting_down and Time.get_ticks_usec()-slice >= 500:
 			await get_tree().process_frame
 			if not is_instance_valid(root): return
 			slice = Time.get_ticks_usec()
@@ -104,7 +105,7 @@ func _release_retiring_resources(root: Node) -> void:
 			node.material_override = null; node.mesh = null
 		elif node is MultiMeshInstance3D:
 			node.visible = false; node.material_override = null; node.multimesh = null
-		if Time.get_ticks_usec()-slice >= 500:
+		if not shutting_down and Time.get_ticks_usec()-slice >= 500:
 			await get_tree().process_frame
 			if not is_instance_valid(root): return
 			slice = Time.get_ticks_usec()

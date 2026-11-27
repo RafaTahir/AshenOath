@@ -769,6 +769,8 @@ func _clear_route_zone_cache(preserve_root: Node3D = null) -> void:
 func prepare_resource_shutdown() -> void:
 	if resource_shutdown_prepared:
 		return
+	# Keep the renderer grace frames, then drain every retirement before its owner exits.
+	zone_residency.shutting_down = true
 	world_transition.teardown()
 	resource_shutdown_prepared = true
 	journey_loading.cancel(_host, "", false, true)
