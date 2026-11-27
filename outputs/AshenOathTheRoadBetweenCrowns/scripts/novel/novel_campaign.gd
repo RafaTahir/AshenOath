@@ -9,7 +9,7 @@ const REQUIRED := {
 	"main_ash_at_the_mill":{"tor_wrist":"Help make the south gallery safe."},
 	"main_empty_tables":{"rook_schedule":"Work a serving turn and hear from the crew."},
 	"main_soldier_without_banner":{"levy_inventory":"Inventory the seized goods and return the seed barley."},
-	"main_blood_under_stone":{"seals":"Establish the dates and custody of the orders."},
+	"main_blood_under_stone":{"culvert":"Bring the relief convoy in from the marsh road.","seals":"Establish the dates and custody of the orders."},
 	"main_last_witness":{"felt_under_iron":"Bring the old command to the gate and preserve the hearing’s limits."},
 	"main_house_many_names":{"dry_floor":"Make room for the first arrivals and put the records under cover.","omitted_return":"Meet at the writing board after the work is done."},
 	"main_what_we_promise":{"alarm_test":"Try the refuge alarm from both sides of the house."}
@@ -19,6 +19,7 @@ static func saved_edition(payload: Dictionary) -> bool:
 	return payload.get("story_state",{}).get("flags",{}).get("novel_edition",0) == 1
 
 static func extend(defs: Dictionary) -> void:
+	preload("res://scripts/novel/garden_petition.gd").project(defs)
 	for quest: String in REQUIRED:
 		if not defs.has(quest): continue
 		for scene: String in REQUIRED[quest]:

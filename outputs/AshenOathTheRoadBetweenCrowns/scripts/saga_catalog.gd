@@ -1,5 +1,11 @@
 extends RefCounted
 
+const Garden = preload("res://scripts/novel/garden_petition.gd")
+
+static func quest_row(id: String, state) -> Dictionary:
+	var record: Dictionary = QUESTS.get(id,{})
+	return Garden.row(record) if Garden.active(id,state) else record
+
 const PERFORMANCE_PATH := "res://data/regional_performances.json"
 static var _performances: Dictionary = {}
 
@@ -10,7 +16,8 @@ static func performance(id: String) -> Dictionary:
 			_performances = data.get("quests", {})
 	return _performances.get(id, {})
 
-static func opening(id: String) -> String:
+static func opening(id: String, state = null) -> String:
+	if Garden.active(id,state): return Garden.HOOK
 	return str(performance(id).get("opening", QUESTS.get(id, {}).get("hook", "")))
 
 static func account(id: String, step: Array) -> String:
@@ -23,13 +30,15 @@ static func work_performance(id: String, step: Array, part: int) -> Dictionary:
 	var duration := float(durations[part]) if part >= 0 and part < durations.size() else 1.25
 	return {"activity": activity, "duration": clampf(duration, 0.45, 3.0)}
 
-static func observation(id: String, step: Array, index: int) -> String:
+static func observation(id: String, step: Array, index: int, state = null) -> String:
+	if Garden.active(id,state): return str(step[4][index]) + ". " + str(step[5])
 	var clues: Array = performance(id).get("clues", QUESTS.get(id, {}).get("observations", {})).get(str(step[0]), [])
 	if index >= 0 and index < clues.size():
 		return str(clues[index])
 	return str(step[4][index]) + ". Compare this with the other marked evidence before drawing a conclusion."
 
-static func aftermath(id: String, outcome: String) -> String:
+static func aftermath(id: String, outcome: String, state = null) -> String:
+	if Garden.active(id,state): return Garden.aftermath(outcome)
 	if id == "saga_wyc_q05" and outcome not in ["side_channel", "natural_run"]:
 		return "The work is recorded as complete, but this saved account does not identify the chosen watercourse. No branch has been inferred."
 	return str(performance(id).get("outcomes", QUESTS[id].get("outcomes", {})).get(outcome, QUESTS[id].steps.back()[5]))
@@ -415,7 +424,7 @@ static func quest_definitions() -> Dictionary:
 	return result
 
 static func route(quest_id: String, objective_id: String, state) -> Dictionary:
-	var quest: Dictionary = QUESTS.get(quest_id, {})
+	var quest: Dictionary = quest_row(quest_id,state)
 	for step: Array in quest.get("steps", []):
 		if str(step[0]) != objective_id:
 			continue
@@ -439,5 +448,5 @@ static func route(quest_id: String, objective_id: String, state) -> Dictionary:
 				if state == null or not bool(state.get_flag(target + ":seen:" + str(index), false)):
 					targets.append(target + ":inspect:" + str(index))
 		var zone := step_zone(quest_id, step)
-		return {"destination_zone":zone, "destination_name":zone.replace("_"," ").capitalize(), "target_ids":targets, "route_hint":str(step[1]) + " - " + site.replace("_"," "), "purpose":opening(quest_id), "next_action":step[1], "pinpoint":true}
+		return {"destination_zone":zone, "destination_name":zone.replace("_"," ").capitalize(), "target_ids":targets, "route_hint":str(step[1]) + " - " + site.replace("_"," "), "purpose":opening(quest_id,state), "next_action":step[1], "pinpoint":true}
 	return {}

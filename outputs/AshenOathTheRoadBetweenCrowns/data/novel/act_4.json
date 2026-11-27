@@ -239,6 +239,18 @@
       },
       "beats": [
         {
+          "zone": "vargan_approach",
+          "actor": "vargan_steward",
+          "speaker": "Merrow",
+          "prompt": "Ask about the second refusal entry",
+          "line": "I kept a duplicate. If anyone ever asked, I wanted to prove I wasn’t the only hand. Yes, sometimes I was. The strongbox is under the old chopping bench. I have one key.",
+          "reply": "Take the flat key he offers",
+          "result": "Merrow entrusts the clerk’s key. Edric still holds the inner key.",
+          "set": {
+            "novel_refusal_key": true
+          }
+        },
+        {
           "zone": "record_hall",
           "at": [
             -3.5,
@@ -571,7 +583,7 @@
           "object": "sill",
           "prompt": "Visit again in the spring",
           "line": "The immediate work is recorded. Spend the winter here before coming back to this place?",
-          "result": "",
+          "result": "The season turns after the immediate work is complete.",
           "choices": [
             {
               "label": "Return six months later",
@@ -627,7 +639,7 @@
           "object": "sill",
           "prompt": "Visit again in the spring",
           "line": "The immediate work is recorded. Spend the winter here before coming back to this place?",
-          "result": "",
+          "result": "The season turns after the immediate work is complete.",
           "choices": [
             {
               "label": "Return six months later",
@@ -683,7 +695,7 @@
           "object": "sill",
           "prompt": "Visit again in the spring",
           "line": "The immediate work is recorded. Spend the winter here before coming back to this place?",
-          "result": "",
+          "result": "The season turns after the immediate work is complete.",
           "choices": [
             {
               "label": "Return six months later",
@@ -739,7 +751,7 @@
           "object": "sill",
           "prompt": "Visit again in the spring",
           "line": "The immediate work is recorded. Spend the winter here before coming back to this place?",
-          "result": "",
+          "result": "The season turns after the immediate work is complete.",
           "choices": [
             {
               "label": "Return six months later",
@@ -795,7 +807,7 @@
           "object": "sill",
           "prompt": "Visit again in the spring",
           "line": "The immediate work is recorded. Spend the winter here before coming back to this place?",
-          "result": "",
+          "result": "The season turns after the immediate work is complete.",
           "choices": [
             {
               "label": "Return six months later",
@@ -851,7 +863,7 @@
           "object": "sill",
           "prompt": "Visit again in the spring",
           "line": "The immediate work is recorded. Spend the winter here before coming back to this place?",
-          "result": "",
+          "result": "The season turns after the immediate work is complete.",
           "choices": [
             {
               "label": "Return six months later",

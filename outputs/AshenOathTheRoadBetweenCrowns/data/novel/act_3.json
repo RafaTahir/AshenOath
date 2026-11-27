@@ -242,20 +242,56 @@
           "speaker": "Toma",
           "choices": [
             {
-              "label": "Bring the petition yourself while Toma stays with Pell",
-              "result": "Toma sees you off from his own doorstep.",
+              "label": "Carry his petition while he stays with Pell",
+              "result": "Toma stays home. He will entrust his written account to you.",
               "set": {
                 "novel_pell_care": "toma"
-              },
-              "when": {}
+              }
             },
             {
-              "label": "Take the afternoon watch while Toma files it",
-              "result": "Toma returns before you leave for the gate.",
+              "label": "Ask Elna whether she can keep the afternoon watch",
+              "result": "You still need her answer. Toma stays with his daughter until someone actually takes the watch.",
               "set": {
-                "novel_pell_care": "kael_relieved"
+                "novel_pell_care": "asked"
+              }
+            }
+          ]
+        },
+        {
+          "zone": "greyfen",
+          "actor": "farmer_toma",
+          "speaker": "Toma",
+          "prompt": "Collect the signed sheet for the gate",
+          "line": "Three marks, and my name under them. I can stay here with her if you can find the right door.",
+          "reply": "Fold the signed sheet",
+          "result": "The signed petition goes to the gate with Kael.",
+          "variants": [
+            {
+              "when": {
+                "flags": {
+                  "novel_pell_care": "asked"
+                }
               },
-              "when": {}
+              "actor": "widow_elna",
+              "speaker": "Elna",
+              "prompt": "Ask if she wants the afternoon watch",
+              "line": "This afternoon. The evening is mine. Tell him if the queue goes past the bell he sends you straight back.",
+              "choices": [
+                {
+                  "label": "Accept only the shift she offers",
+                  "result": "Pell is in Elna’s care for the agreed afternoon.",
+                  "set": {
+                    "novel_pell_care": "elna"
+                  }
+                },
+                {
+                  "label": "Carry the petition and keep Toma home",
+                  "result": "Elna keeps her afternoon. Toma stays with Pell.",
+                  "set": {
+                    "novel_pell_care": "toma"
+                  }
+                }
+              ]
             }
           ]
         },
@@ -268,7 +304,10 @@
           "object": "petition",
           "prompt": "Present the three workers’ marks at the lower gate",
           "seconds": 1.6,
-          "result": "Two charges appear twice. One tool bond had already expired."
+          "result": "Two charges appear twice. One tool bond had already expired.",
+          "set": {
+            "novel_petition_filed": true
+          }
         },
         {
           "zone": "vargan_court",
@@ -277,11 +316,16 @@
             5
           ],
           "object": "copy",
-          "prompt": "File the workers’ tool claims with the release",
+          "prompt": "Collect the workers’ stamped receipt after the garden handover",
           "seconds": 1.8,
-          "result": "Their tools can leave with them. The third worker asks whether the cart job actually pays.",
+          "result": "Their tools have already been released. Toma’s receipt protects the workers if a clerk tries to charge them again.",
           "set": {
             "novel_workers_release": true
+          },
+          "when": {
+            "complete": [
+              "saga_var_q03"
+            ]
           }
         }
       ]
@@ -309,6 +353,22 @@
           "prompt": "Trace the date and seal on the old closure order",
           "seconds": 1.8,
           "result": "The office seal acknowledges a closure thirty-two years ago. Edric was a child then."
+        },
+        {
+          "zone": "record_hall",
+          "at": [
+            3.5,
+            3.8
+          ],
+          "object": "wire",
+          "prompt": "Compare the flattened stock beside the warrant tray",
+          "seconds": 1.5,
+          "result": "The tray contains flattened wire worked the same way. This links the stock to an office, not a command to attack.",
+          "evidence": {
+            "id": "archive_wire",
+            "title": "Stock at the warrant tray",
+            "text": "The flattened sections match the wire from Wychwood. Material and authority are different pieces of evidence."
+          }
         },
         {
           "zone": "record_hall",
@@ -507,6 +567,13 @@
                 "novel_kael_correction": "protected"
               },
               "when": {}
+            },
+            {
+              "label": "Decline to give a correction now",
+              "result": "Vale lifts her pen. Nera keeps the right to speak about the night as she lived it.",
+              "set": {
+                "novel_kael_correction": "declined"
+              }
             }
           ]
         },
@@ -519,7 +586,18 @@
           "object": "ledger",
           "prompt": "Dry the two accounts separately",
           "seconds": 1.8,
-          "result": "Nera’s record belongs to Nera. Kael’s name and choice stay on his page. Nothing here asks her to forgive him."
+          "result": "Nera’s record belongs to Nera. Kael’s name and choice stay on his page. Nothing here asks her to forgive him.",
+          "variants": [
+            {
+              "when": {
+                "flags": {
+                  "novel_kael_correction": "declined"
+                }
+              },
+              "prompt": "Put away the unused sheet",
+              "result": "Kael has given no correction. Nera owes him neither her story nor a reply."
+            }
+          ]
         }
       ]
     },
@@ -581,6 +659,141 @@
           "prompt": "Draw the first bucket and clear the smoky flue",
           "seconds": 2,
           "result": "A leaf floats in the first bucket. The second comes up clean. There is one night of shelter here, and still a house to build."
+        }
+      ]
+    },
+    {
+      "chapter": 20,
+      "id": "elna_ring",
+      "title": "The hand without a ring",
+      "when": {
+        "flags": {
+          "senn_fate": "testimony",
+          "novel_elna_account": "paragraph"
+        }
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "actor": "widow_elna",
+          "prompt": "Offer to return her folded scrap",
+          "line": "I took my ring off before I went to see him. Spent the whole road choosing which hand I’d slap him with. He offered to stand! Imagine walking that far for a man to offer to help.",
+          "result": "Mira’s laugh lasts half a breath. Elna puts the ring on herself. Her private letter stays folded.",
+          "speaker": "Elna",
+          "reply": "Wait beside her"
+        }
+      ]
+    },
+    {
+      "chapter": 22,
+      "id": "vale_splinter",
+      "title": "A stool brought upside down",
+      "when": {
+        "objectives": [
+          [
+            "main_blood_under_stone",
+            "locate_record_hall"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "record_hall",
+          "actor": "vargan_record_keeper",
+          "prompt": "Offer to mend the snag in her cuff",
+          "line": "I need a stool, a witness, and one person willing to pull this splinter. There isn’t a form. I did look.",
+          "result": "She rolls her cuff back. It is the first time you have seen her lend anyone the tweezers.",
+          "speaker": "Vale",
+          "choices": [
+            {
+              "label": "Hold the light while she takes it out",
+              "result": "Vale gets it on the second try.",
+              "set": {
+                "novel_vale_splinter": "light"
+              },
+              "when": {}
+            },
+            {
+              "label": "Use the tweezers only when she says to",
+              "result": "“Now,” she says, and the splinter lifts clear.",
+              "set": {
+                "novel_vale_splinter": "asked"
+              },
+              "when": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 24,
+      "id": "merrow_receipt",
+      "title": "The man who signed it",
+      "when": {
+        "objectives": [
+          [
+            "main_blood_under_stone",
+            "recover_ledger"
+          ]
+        ]
+      },
+      "beats": [
+        {
+          "zone": "vargan_approach",
+          "actor": "vargan_steward",
+          "prompt": "Compare the office signature with the culvert warrant",
+          "line": "I authorized inspection. I left that space blank. Those are both things I did. Don’t copy the blank out of it.",
+          "result": "A copy can show what Merrow ordered without excusing what he left to others.",
+          "speaker": "Merrow",
+          "when": {
+            "flags": {
+              "novel_rook_ribs": true
+            }
+          },
+          "evidence": {
+            "id": "merrow_warrant",
+            "title": "Merrow’s office copy",
+            "text": "Merrow authorized the load inspection. The culvert instructions were added in a different hand.",
+            "kind": "testimony"
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 26,
+      "id": "jem_crumbs",
+      "title": "The first night",
+      "when": {
+        "flags": {
+          "novel_done_omitted_return": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "actor": "saga_nera",
+          "prompt": "Listen without putting your correction in her account",
+          "line": "He put crumbs in my blanket. Said I’d always know where to find breakfast. I put a beetle in his boot. My mother lived another two days. I decide which part of that goes on a page.",
+          "result": "Her hand stays on the paper.",
+          "speaker": "Nera",
+          "choices": [
+            {
+              "label": "Return both stools without making a copy",
+              "result": "The exact words remain private.",
+              "set": {
+                "novel_nera_own_words": "private"
+              },
+              "when": {}
+            },
+            {
+              "label": "Ask whether she wants any of it kept",
+              "result": "She releases the dates alone. She takes the page with Jem’s story back.",
+              "set": {
+                "novel_nera_own_words": "dates"
+              },
+              "when": {}
+            }
+          ]
         }
       ]
     }

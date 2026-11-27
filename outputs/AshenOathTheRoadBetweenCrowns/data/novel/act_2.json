@@ -642,6 +642,130 @@
           }
         }
       ]
+    },
+    {
+      "chapter": 12,
+      "id": "jem_at_the_fork",
+      "title": "A fish with legs",
+      "when": {
+        "flags": {
+          "novel_done_freight_sill": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "lantern_reach",
+          "actor": "saga_nera",
+          "prompt": "Offer a fresh sheet before the next load",
+          "line": "Jem drew a fish with legs. I still don’t know what for. I can tell you about him. That doesn’t give you a story to carry to the Assembly.",
+          "result": "Nera folds the sheet herself.",
+          "speaker": "Nera",
+          "choices": [
+            {
+              "label": "Put the pen away and listen",
+              "result": "His drawing stays in her story. Kael listens with empty hands.",
+              "set": {
+                "novel_jem": "private"
+              },
+              "when": {}
+            },
+            {
+              "label": "Let her keep it for another day",
+              "result": "There is no written or spoken account to repeat.",
+              "set": {
+                "novel_jem": "deferred"
+              },
+              "when": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 13,
+      "id": "short_chest",
+      "title": "The load that did not arrive",
+      "when": {
+        "flags": {
+          "novel_done_freight_sill": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "old_mill",
+          "at": [
+            -4.4,
+            6.8
+          ],
+          "object": "linen",
+          "prompt": "Sort the dressings that made it to the yard",
+          "seconds": 1.8,
+          "result": "The medicine chest arrived. Lay out the splints with a borrowed auger.",
+          "variants": [
+            {
+              "when": {
+                "flags": {
+                  "novel_freight_lost": "medicine"
+                }
+              },
+              "object": "sill",
+              "prompt": "Make clean splints with the salvaged tools",
+              "result": "The medicine chest went into the water. Mira washes the remaining linen twice. The tools will give her clean splints."
+            }
+          ]
+        },
+        {
+          "zone": "old_mill",
+          "at": [
+            -2.3,
+            8.1
+          ],
+          "object": "load",
+          "prompt": "Deliver the substitute at the workers’ bench",
+          "seconds": 1.8,
+          "result": "It serves this job. The missing chest remains missing."
+        }
+      ]
+    },
+    {
+      "chapter": 14,
+      "id": "measured_tenderness",
+      "title": "Bread cut small",
+      "when": {
+        "flags": {
+          "novel_tor_braced": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "lantern_reach",
+          "actor": "blacksmith_tor",
+          "prompt": "Hold the lamp while he loosens the dressing",
+          "line": "The left one is my own hand. I should be able to tell you what it’s doing. I can’t. Little finger first, if you please.",
+          "result": "Tor opens each finger as far as it will go. Someone has cut his bread small enough to eat one-handed.",
+          "speaker": "Tor",
+          "reply": "Keep the light still"
+        }
+      ]
+    },
+    {
+      "chapter": 17,
+      "id": "three_marks_after_supper",
+      "title": "After the last pot",
+      "when": {
+        "quest": "main_empty_tables"
+      },
+      "beats": [
+        {
+          "zone": "lantern_reach",
+          "actor": "saga_nessa",
+          "prompt": "Take the ladle until her bowl is empty",
+          "line": "I’m going to eat this sitting down. If somebody has an emergency, see if it’s still an emergency after I’ve swallowed.",
+          "result": "At the next table Bera has beaten Rook at Three Marks. He tries to lose with dignity and gets sauce on his sleeve.",
+          "speaker": "Nessa",
+          "reply": "Slide her a chair"
+        }
+      ]
     }
   ]
 }

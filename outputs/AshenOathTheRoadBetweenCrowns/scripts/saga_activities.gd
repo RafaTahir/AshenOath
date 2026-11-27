@@ -58,13 +58,13 @@ func _available(quest: Dictionary) -> bool: return saga_site_view._available(que
 func _late_road_open() -> bool: return saga_site_view._late_road_open()
 func _secret_available(secret: Array) -> bool: return saga_site_view._secret_available(secret)
 func _step(id: String) -> Array:
-	for step: Array in Catalog.QUESTS.get(id, {}).get("steps", []):
+	for step: Array in Catalog.quest_row(id,host.story_state).get("steps", []):
 		if not host.quests.is_objective_done(id, str(step[0])):
 			return _method_step(id, step)
 	return []
 
 func _quest_zone(id: String) -> String:
-	return Catalog.step_zone(id, _step(id)) if id == "side_escort_06" else str(Catalog.QUESTS[id].zone)
+	return Catalog.step_zone(id, _step(id)) if id == "side_escort_06" else str(Catalog.quest_row(id,host.story_state).zone)
 
 func _walk_sites(id: String, step: Array) -> Array:
 	if id == "side_escort_02" and str(host.story_state.get_flag(id + "_outcome", "")) == "work_line":
@@ -108,6 +108,7 @@ func _account(id: String, step: Array) -> String:
 		return str(_method_step(id, step)[5])
 	if str(host.story_state.get_flag(id + "_outcome", "")) in ["coerced", "falsified", "conditional_pass"]:
 		return str(_method_step(id, step)[5])
+	if Catalog.Garden.active(id,host.story_state): return str(step[5])
 	return Catalog.account(id, step)
 
 func _part(id: String, objective: String) -> int:
@@ -121,7 +122,7 @@ func _nearby_speaker(id: String) -> String: return saga_dialogue_view._nearby_sp
 func _open(area: Node3D, title: String, text: String, actions: Array, speaker_id: String = "narrator", recall: String = "", pages: Array = []) -> void: saga_dialogue_view._open(area, title, text, actions, speaker_id, recall, pages)
 func choose(action: Dictionary) -> void: saga_dialogue_view.choose(action)
 func _resume_known_inspections(id: String) -> void:
-	if not host.quests.is_active(id) or not bool(Catalog.QUESTS[id].get("early_clues", false)):
+	if not host.quests.is_active(id) or not bool(Catalog.quest_row(id,host.story_state).get("early_clues", false)):
 		return
 	var step := _step(id)
 	if step.is_empty() or str(step[3]) != "inspect":
@@ -164,7 +165,7 @@ func _complete_step(id: String, step: Array, chosen_outcome: String = "") -> voi
 	if str(step[3]) in ["choice", "signal"]:
 		var outcome := str(host.story_state.get_flag(id + "_outcome", ""))
 		host.story_state.record_decision(id + ":" + str(step[0]), {"label":str(step[4].get(outcome, outcome)), "result":_account(id, step), "sets_flags":{id + "_outcome":outcome}})
-	var quest: Dictionary = Catalog.QUESTS[id]
+	var quest: Dictionary = Catalog.quest_row(id,host.story_state)
 	if str(step[0]) == str(quest.steps.back()[0]):
 		if str(host.story_state.get_flag(id + "_outcome", "")) == "":
 			push_error("Saga quest cannot finish without its recorded branch: " + id)
@@ -192,7 +193,7 @@ func _complete_step(id: String, step: Array, chosen_outcome: String = "") -> voi
 	_commit()
 
 func _collect_delivery(id: String) -> void:
-	var quest: Dictionary = Catalog.QUESTS[id]
+	var quest: Dictionary = Catalog.quest_row(id,host.story_state)
 	host.inventory.deliver_once("saga:quest:" + id, {"items":quest.get("items", {}), "ingredients":quest.get("ingredients", {})})
 	if host.inventory.has_pending_delivery("saga:quest:" + id):
 		host.hud.toast("Some supplies remain here for collection after you make room.")

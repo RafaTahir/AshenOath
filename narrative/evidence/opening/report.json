@@ -1,0 +1,26 @@
+{
+	"capture_desktop": "",
+	"case": "novel_opening",
+	"completed_work": [],
+	"elapsed_ms": 324476,
+	"execution_mode": "background-rendered",
+	"failures": [],
+	"headless": false,
+	"input_events": 38,
+	"input_mode": "keyboard_mouse",
+	"kind": "community_world_real_input",
+	"no_focus": true,
+	"observations": [],
+	"physical_phone_coverage": false,
+	"progression_injection": false,
+	"renderer": "gl_compatibility",
+	"schema_version": 1,
+	"status": "pass",
+	"touch_input_coverage": false,
+	"user_data_dir": "D:/AOPlay/evidence/opening-candidate/user/Godot/app_userdata/Ashen Oath- The Road Between Crowns",
+	"viewport": "(960, 540)",
+	"viewport_size": [
+		960,
+		540
+	]
+}

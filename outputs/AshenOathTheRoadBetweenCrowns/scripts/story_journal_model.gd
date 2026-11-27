@@ -299,7 +299,7 @@ static func _evidence_entries(campaign: Dictionary, quests, state, zone_id: Stri
 			var id: String = str(evidence.get("id", ""))
 			if id == "":
 				continue
-			var authored: Dictionary = authored_by_id.get(id, {})
+			var authored: Dictionary = preload("res://scripts/novel/road_account.gd").detail(state,id,authored_by_id.get(id, {}))
 			var blocks: Array[Dictionary] = _evidence_blocks(authored, quests, state)
 			var recorded_text: String = str(evidence.get("text", "")) if authored.is_empty() else ""
 			var compact: String = recorded_text
@@ -337,7 +337,7 @@ static func _evidence_entries(campaign: Dictionary, quests, state, zone_id: Stri
 			})
 	if state != null:
 		for id: String in state.evidence:
-			if not (id.begins_with("saga_") or id.begins_with("everyday_")) or not state.evidence[id] is Dictionary:
+			if not (id.begins_with("saga_") or id.begins_with("everyday_") or id.begins_with("novel:")) or not state.evidence[id] is Dictionary:
 				continue
 			var record: Dictionary = state.evidence[id]
 			var words := str(record.get("text", ""))
@@ -349,6 +349,10 @@ static func _evidence_entries(campaign: Dictionary, quests, state, zone_id: Stri
 						if str(rumour.id)==id.trim_prefix("everyday_rumour:"):
 							words+="\n\n"+(str(rumour.finding) if quests.is_completed(str(rumour.quest)) else "Unconfirmed. This remains testimony, not a discovered fact.")
 			entries.append({"id":"evidence:" + id, "detail_id":"evidence:" + id, "title":str(record.get("title", id)), "body":words + "\n\nRecorded at: " + place, "kind":"observed", "kind_label":"Regional record", "source":"This journey's recorded regional work", "place":place, "place_label":"Recorded at", "zone":str(record.get("zone", "")), "recorded_text":words, "text_label":"Recorded account", "blocks":[], "known_relevance":[], "links":[]})
+			if id.begins_with("novel:"):
+				entries.back().kind = str(record.get("kind","observed"))
+				entries.back().kind_label = "Document" if entries.back().kind=="document" else _evidence_kind_label(entries.back().kind)
+				entries.back().source = "Kael’s dated account"
 			if id.begins_with("everyday_"):
 				entries.back().kind=str(record.get("kind","observed"))
 				entries.back().kind_label="Local account" if entries.back().kind=="testimony" else "Observed on the road"

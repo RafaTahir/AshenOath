@@ -174,11 +174,11 @@ func _handle_interaction(area) -> void:
 		elif area.interaction_id == "corpse":
 			hud.toast("Bram's ledger. A page of debts, all crossed out. His hand still grips the cart brake.", 5.5)
 		elif area.interaction_id == "claw_marks":
-			hud.toast("Vargan binding wire. Someone fastened a name to these creatures, then tried to burn it off.", 5.5)
+			hud.toast(preload("res://scripts/novel/road_account.gd").field_note(story_state, "claw_marks", "Vargan binding wire. Someone fastened a name to these creatures, then tried to burn it off."), 5.5)
 		elif area.interaction_id == "black_feathers":
-			hud.toast("Sella's red thread. The knot is Anwen's. The feathers were tied here, not scattered by a bird.", 5.5)
+			hud.toast(preload("res://scripts/novel/road_account.gd").field_note(story_state, "black_feathers", "Sella's red thread. The knot is Anwen's. The feathers were tied here, not scattered by a bird."), 5.5)
 		elif area.interaction_id == "oren_token":
-			hud.toast("Oren's wooden crow. The wings are worn smooth; only his name has been scraped away.", 5.5)
+			hud.toast(preload("res://scripts/novel/road_account.gd").field_note(story_state, "oren_token", "Oren's wooden crow. The wings are worn smooth; only his name has been scraped away."), 5.5)
 		elif area.interaction_id == "chapel_names":
 			story_state.set_flag("chapel_names_read", true)
 			_try_complete_oren_thread_trace()

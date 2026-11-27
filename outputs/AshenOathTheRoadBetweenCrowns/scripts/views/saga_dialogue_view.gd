@@ -15,7 +15,7 @@ func append_cast_topics(actor: Node3D, content: Dictionary, exclude_id: String =
 			continue
 		var title: Variant = "The work here"
 		for quest_id: String in _activities.Catalog.QUESTS:
-			var quest: Dictionary = _activities.Catalog.QUESTS[quest_id]
+			var quest: Dictionary = _activities.Catalog.quest_row(quest_id,_activities.host.story_state)
 			if str(quest.get("actor", "")) == id and _activities._quest_zone(quest_id) == _activities.zone and _activities._available(quest):
 				title = str(quest.title)
 				if not _activities.host.quests.is_completed(quest_id):
@@ -45,7 +45,7 @@ func activate(id: String) -> void:
 	var quest_id: Variant = id.get_slice(":", 0)
 	if not _activities.Catalog.QUESTS.has(quest_id):
 		return
-	var quest: Dictionary = _activities.Catalog.QUESTS[quest_id]
+	var quest: Dictionary = _activities.Catalog.quest_row(quest_id,_activities.host.story_state)
 	if bool(_activities.read_tag(area, "saga_early_clue", false)):
 		for clue_step: Array in quest.steps:
 			if str(clue_step[0]) != id.get_slice(":", 1):
@@ -56,10 +56,10 @@ func activate(id: String) -> void:
 			var action: Variant = _activities._action(area, "observe", quest_id, str(area.prompt))
 			action["clue_objective"] = str(clue_step[0])
 			action["inspect_index"] = index
-			_activities._open(area, str(quest.title), _activities.Catalog.observation(quest_id, clue_step, index), [action])
+			_activities._open(area, str(quest.title), _activities.Catalog.observation(quest_id, clue_step, index,_activities.host.story_state), [action])
 			return
 	if id.ends_with(":offer"):
-		_activities._open(area, str(quest.title), _activities.Catalog.opening(quest_id), [_activities._action(area, "accept", quest_id, "Offer a hand")])
+		_activities._open(area, str(quest.title), _activities.Catalog.opening(quest_id,_activities.host.story_state), [_activities._action(area, "accept", quest_id, "Offer a hand")])
 		return
 	if id.ends_with(":after"):
 		_activities._collect_delivery(quest_id)
@@ -106,7 +106,7 @@ func activate(id: String) -> void:
 		if area.has_meta("saga_inspect_index"):
 			var index: Variant = int(_activities.read_tag(area, "saga_inspect_index"))
 			action["inspect_index"] = index
-			account = _activities.Catalog.observation(quest_id, step, index)
+			account = _activities.Catalog.observation(quest_id, step, index,_activities.host.story_state)
 		var performance: Dictionary = _activities.Catalog.performance(quest_id)
 		var dialogue: Dictionary = performance.get("dialogue_" + str(_activities.host.story_state.get_flag(quest_id + "_outcome", "")), performance.get("dialogue", {}))
 		var lines: Array = dialogue.get(str(step[0]), [])
@@ -122,7 +122,7 @@ func _open_person(area: Node3D, id: String) -> void:
 	var finished: Variant = false
 	var remembered: Variant = ""
 	for quest_id: String in _activities.Catalog.QUESTS:
-		var quest: Dictionary = _activities.Catalog.QUESTS[quest_id]
+		var quest: Dictionary = _activities.Catalog.quest_row(quest_id,_activities.host.story_state)
 		if str(quest.get("actor", "")) != id or _activities._quest_zone(quest_id) != _activities.zone or not _activities._available(quest):
 			continue
 		finished = finished or _activities.host.quests.is_completed(quest_id)
@@ -132,7 +132,7 @@ func _open_person(area: Node3D, id: String) -> void:
 			actions.append(_activities._action(area, "offer", quest_id, str(quest.title)))
 		elif _activities.host.quests.is_active(quest_id):
 			actions.append(_activities._action(area, "directions", quest_id, "About " + str(quest.title)))
-	var written: bool = (bool(person.get("alias", false)) and not bool(_activities.read_tag(area, "saga_alias_present", false))) or (id == "saga_odran" and _activities.host.quests.is_completed("saga_var_q03") and str(_activities.host.story_state.get_flag("saga_var_q03_outcome", "")) == "departed")
+	var written: bool = (id=="saga_odran" and _activities.Catalog.Garden.active("saga_var_q03",_activities.host.story_state) and _activities.host.story_state.get_flag("novel_pell_care","")!="elna") or (bool(person.get("alias", false)) and not bool(_activities.read_tag(area, "saga_alias_present", false))) or (id == "saga_odran" and _activities.host.quests.is_completed("saga_var_q03") and str(_activities.host.story_state.get_flag("saga_var_q03_outcome", "")) == "departed")
 	if not written and bool(_activities.host.story_state.honor_view(id).known):
 		actions.append(_activities._action(area, "honor", "", "How do things stand between us?"))
 	var words: Variant = str(_activities.Catalog.GREETINGS.get(id, person.line)) if finished else str(person.line)
@@ -142,6 +142,8 @@ func _open_person(area: Node3D, id: String) -> void:
 		if acknowledgement != "":
 			words = acknowledgement
 			remembered = _activities._aftermath_text("saga_wyc_q05")
+	if id == "saga_odran" and _activities.Catalog.Garden.active("saga_var_q03",_activities.host.story_state):
+		words = "Three marks from three hired hands. I can show the duplicated charges and the tool bond. The choice of work is theirs." if not written else "Toma’s filed petition carries three marks. The workers’ tool bonds have been settled."
 	if id == "saga_maren":
 		words = _activities._maren_greeting()
 	if not written and bool(_activities.host.story_state.honor_view(id).grievance):
@@ -168,7 +170,7 @@ func _action(area: Node3D, operation: String, quest_id: String, label: String, p
 	return {"type":"saga_action", "label":label, "operation":operation, "quest":quest_id, "area":area.get_instance_id(), "objective":str(step[0]) if not step.is_empty() else "", "part":part if part >= 0 else (_activities._part(quest_id, str(step[0])) if not step.is_empty() else 0)}
 
 func _nearby_speaker(id: String) -> String:
-	var speaker: Variant = str(_activities.Catalog.QUESTS.get(id, {}).get("actor", ""))
+	var speaker: Variant = str(_activities.Catalog.quest_row(id,_activities.host.story_state).get("actor", ""))
 	var person: Node3D = _activities.points.get(speaker)
 	if not is_instance_valid(person) or (person.get_node_or_null("Person") == null and not bool(_activities.read_tag(person, "saga_alias_present", false))) or not person.is_visible_in_tree() or person.global_position.distance_to(_activities.host.player.global_position) > 5.0:
 		return "narrator"
@@ -179,6 +181,9 @@ func _open(area: Node3D, title: String, text: String, actions: Array, speaker_id
 	var content: Variant = {"name":title, "pages":[{"speaker":str(_activities.Catalog.PEOPLE.get(speaker_id, {}).get("name", title)), "speaker_id":speaker_id, "text":text, "performance":load("res://scripts/story_scene_direction.gd").for_regional(speaker_id)}], "actions":actions}
 	if _activities.Catalog.PEOPLE.has(speaker_id):
 		_activities.append_cast_topics(area, content, speaker_id)
+	if _activities.Catalog.PEOPLE.has(speaker_id) and not bool(_activities.read_tag(area,"saga_topic_only",false)) and speaker_id != "narrator":
+		var novel: Node = preload("res://scripts/novel/novel_scenes.gd").current(_activities.host)
+		if novel != null: novel.invitations(area,content)
 	if not pages.is_empty():
 		content["pages"] = pages
 		for page: Dictionary in pages:
@@ -228,12 +233,12 @@ func choose(action: Dictionary) -> void:
 		_activities._claim_secret(str(action.get("secret", "")), bool(action.get("sealed", false)))
 		return
 	var id: Variant = str(action.get("quest", ""))
-	var quest: Dictionary = _activities.Catalog.QUESTS.get(id, {})
+	var quest: Dictionary = _activities.Catalog.quest_row(id,_activities.host.story_state)
 	if quest.is_empty() or _activities._quest_zone(id) != _activities.zone or not _activities._available(quest):
 		_activities.host._resume_game()
 		return
 	if operation == "offer":
-		_activities._open(area, str(quest.title), _activities.Catalog.opening(id), [_activities._action(area, "accept", id, "Offer a hand")])
+		_activities._open(area, str(quest.title), _activities.Catalog.opening(id,_activities.host.story_state), [_activities._action(area, "accept", id, "Offer a hand")])
 		return
 	if operation == "observe" and bool(quest.get("early_clues", false)):
 		var objective: Variant = str(action.get("clue_objective", ""))
@@ -293,9 +298,9 @@ func _outcome_name(id: String) -> String:
 	return str(_activities.host.story_state.get_flag(id + "_outcome", "recorded")).replace("_", " ")
 
 func _aftermath_text(id: String) -> String:
-	var text: Variant = _activities.Catalog.aftermath(id, str(_activities.host.story_state.get_flag(id + "_outcome", "")))
+	var text: Variant = _activities.Catalog.aftermath(id, str(_activities.host.story_state.get_flag(id + "_outcome", "")),_activities.host.story_state)
 	if str(_activities.host.story_state.get_flag(id + "_outcome", "")) in ["coerced", "falsified", "conditional_pass"]:
-		text = str(_activities._method_step(id, _activities.Catalog.QUESTS[id].steps.back())[5])
+		text = str(_activities._method_step(id, _activities.Catalog.quest_row(id,_activities.host.story_state).steps.back())[5])
 	if id == "saga_har_q05":
 		text += "\nCovenant: " + str(_activities.host.story_state.get_flag("final_covenant", "")) + ". The original journey home remains separate."
 	return text

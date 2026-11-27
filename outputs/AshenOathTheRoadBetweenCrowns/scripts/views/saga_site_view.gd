@@ -70,6 +70,10 @@ func refresh() -> void:
 					_activities.write_tag(area, "saga_alias_present", false)
 					if area.get_node_or_null("WorkProp") == null:
 						_activities._add_work_prop(area, "record")
+			elif id == "saga_odran" and _activities.host.story_state.get_flag("novel_edition",0)==1 and _activities.host.story_state.get_flag("novel_pell_care","")!="elna":
+				var person_body: Node3D = area.get_node_or_null("Person")
+				if person_body != null: person_body.visible = false
+				if area.get_node_or_null("WorkProp") == null: _activities._add_work_prop(area,"record")
 			elif id == "saga_odran" and _activities.host.quests.is_completed("saga_var_q03") and str(_activities.host.story_state.get_flag("saga_var_q03_outcome", "")) == "departed":
 				var body: Variant = area.get_node_or_null("Person") as Node3D
 				if body != null:
@@ -79,7 +83,7 @@ func refresh() -> void:
 			elif area != null and area.get_node_or_null("Person") == null:
 				_activities._add_person(area, person, id)
 	for id: String in _activities.Catalog.QUESTS:
-		var quest: Dictionary = _activities.Catalog.QUESTS[id]
+		var quest: Dictionary = _activities.Catalog.quest_row(id,_activities.host.story_state)
 		if _activities._quest_zone(id) != _activities.zone or not _activities._available(quest):
 			continue
 		if bool(quest.get("early_clues", false)) and not _activities.host.quests.is_completed(id):
@@ -324,6 +328,7 @@ func _prop_kind(mode: String, prompt: String) -> String:
 	return "load" if mode in ["carry", "escort"] else "tool"
 
 func _available(quest: Dictionary) -> bool:
+	if quest.get("needs_garden_petition",false) and not _activities._flag("novel_petition_filed"): return false
 	if str(quest.get("previous", "")) != "" and not _activities.host.quests.is_completed(str(quest.previous)):
 		return false
 	if _activities.zone == "ruins" and not _activities._late_road_open():
@@ -366,7 +371,7 @@ func _ensure_assembly(id: String) -> void:
 	if not is_instance_valid(assembly):
 		var anchor: Variant = Node3D.new()
 		anchor.name = id + "_workplace"
-		var site: Variant = str(_activities.Catalog.PRESENTATION_SITES.get(id, _activities.Catalog.QUESTS[id].site))
+		var site: Variant = str(_activities.Catalog.PRESENTATION_SITES.get(id, _activities.Catalog.quest_row(id,_activities.host.story_state).site))
 		if id == "side_escort_06" and _activities.zone == "greyfen":
 			site = "arrivals"
 		anchor.position = _activities._site_position(site, id + "_workplace")

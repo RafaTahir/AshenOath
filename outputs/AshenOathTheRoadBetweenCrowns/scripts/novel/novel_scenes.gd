@@ -71,11 +71,16 @@ func refresh() -> void:
 	turns.clear()
 	var active: Dictionary = {}
 	_refresh_burden()
+	preload("res://scripts/novel/working_places.gd").project(self,zone,game.story_state)
 	for act in range(1, 5):
 		for scene: Dictionary in _book(act):
 			var index := int(game.story_state.get_flag("novel_step_" + str(scene.id), 0))
 			if index < 0 or index >= scene.beats.size(): continue
 			var beat: Dictionary = scene.beats[index]
+			for variant: Dictionary in beat.get("variants",[]):
+				if _allows(variant.get("when",{})):
+					beat = beat.merged(variant,true)
+					break
 			if beat.zone != zone or not _allows(scene.get("when", {})) or not _allows(beat.get("when", {})): continue
 			var key := str(scene.id)
 			turns[key] = {"scene":scene, "index":index, "beat":beat}
@@ -254,6 +259,8 @@ func _finish() -> void:
 	cancel()
 	var state = game.story_state
 	state.begin_change()
+	if beat.has("actor"):
+		state.set_flag("novel_heard_"+str(beat.actor)+"_"+str(request.key),true)
 	state.set_flag("novel_step_"+str(request.key),int(request.index)+1)
 	if option.get("set",{}).get("novel_season") == "spring" and state.get_flag("novel_season","") != "spring":
 		game.day_night.set_time(game.day_night.get_time(),int(game.day_night.day_count)+180)

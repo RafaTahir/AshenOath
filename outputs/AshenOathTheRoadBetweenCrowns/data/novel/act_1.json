@@ -106,7 +106,7 @@
             1.6,
             5.2
           ],
-          "object": "wire",
+          "object": "pin",
           "prompt": "Compare the loops with the split cart wire",
           "seconds": 1.8,
           "result": "Two flat turns. A brush bound with hair lies under the splinter. You can carry both without deciding who made the cut.",
@@ -293,6 +293,13 @@
                 "novel_bell_custody": "loan"
               },
               "when": {}
+            },
+            {
+              "label": "Let her keep it",
+              "result": "You can follow the physical scars without borrowing the bell.",
+              "set": {
+                "novel_bell_custody": "declined"
+              }
             }
           ]
         },
@@ -305,7 +312,19 @@
           "object": "bell",
           "prompt": "Set the borrowed bell against the worn groove",
           "seconds": 1.6,
-          "result": "The arc lines up. A mark can tell you where metal struck. It cannot speak for Harl."
+          "result": "The arc lines up. A mark can tell you where metal struck. It cannot speak for Harl.",
+          "variants": [
+            {
+              "when": {
+                "flags": {
+                  "novel_bell_custody": "declined"
+                }
+              },
+              "object": "wire",
+              "prompt": "Trace the clapper arc against its groove",
+              "result": "Iron travelled this arc. Elna still has the bell at home."
+            }
+          ]
         }
       ]
     },
@@ -601,6 +620,38 @@
           "prompt": "Mark the reason on the wayboard",
           "seconds": 1.6,
           "result": "“Foot passage on the left. Loaded wheel sinks under the brush.” Someone can use that without having met you."
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "id": "above_the_flour",
+      "title": "A room above the flour store",
+      "when": {
+        "flags": {
+          "novel_done_mira_basin": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "actor": "saga_nessa",
+          "speaker": "Nessa",
+          "prompt": "Ask what the room above the flour costs",
+          "line": "You can have the bed by the window. Mind the flour dust. It makes a grey man of anyone who tries to get dressed in a hurry.",
+          "reply": "Carry up the spare blanket",
+          "result": "A quiet night is available without taking another job."
+        },
+        {
+          "zone": "greyfen",
+          "at": [
+            -3.6,
+            8.4
+          ],
+          "object": "bedding",
+          "prompt": "Leave the shutters open a finger’s width",
+          "seconds": 1.4,
+          "result": "From the bed you can hear the bell. Nobody is holding the rope."
         }
       ]
     }

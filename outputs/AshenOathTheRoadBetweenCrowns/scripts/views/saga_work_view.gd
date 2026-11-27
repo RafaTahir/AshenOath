@@ -195,7 +195,7 @@ func _tick_walk_steps() -> void:
 
 func _tick_return_steps() -> void:
 	for id: String in ["saga_har_q03", "saga_roa_q04"]:
-		if not _activities.host.quests.is_active(id) or str(_activities.Catalog.QUESTS[id].zone) != _activities.zone:
+		if not _activities.host.quests.is_active(id) or str(_activities.Catalog.quest_row(id,_activities.host.story_state).zone) != _activities.zone:
 			continue
 		var step: Variant = _activities._step(id)
 		if step.is_empty() or str(step[3]) not in ["return", "signal"]:
