@@ -1,19 +1,21 @@
 extends SkeletonModifier3D
 ## Contact correction sampled after the character's ordinary native animation.
 ## Marker -Z points forwards for standing actors and towards the head of a bed.
+const ActorMark = preload("res://scripts/views/novel/field_actor_mark.gd")
+const AnimationDriver = preload("res://scripts/character_animation_driver.gd")
 const ArmIK = preload("res://scripts/views/character_arm_ik.gd")
 
-var mark: Marker3D
-var driver: Node
+var mark: ActorMark
+var driver: AnimationDriver
 var kind := ""
 var pelvis := -1
 var arms: Array[Dictionary] = []
 var legs: Array[Dictionary] = []
 
-func bind(point: Marker3D, animation: Node) -> void:
+func bind(point: ActorMark, animation: AnimationDriver) -> void:
 	mark = point
 	driver = animation
-	kind = str(mark.get_meta("pose", "watch"))
+	kind = mark.pose
 	var rig := get_skeleton()
 	pelvis = rig.find_bone("pelvis")
 	for side in ["l", "r"]:
@@ -76,8 +78,8 @@ func _support(rig: Skeleton3D, right: Vector3, forward: Vector3) -> void:
 	elif kind == "seated":
 		target.origin = surface + Vector3.UP * 0.12
 	else:
-		var height := float(mark.get_meta("kneel_height", 0.45))
-		var lean := deg_to_rad(float(mark.get_meta("lean_degrees", 32.0)))
+		var height := mark.kneel_height
+		var lean := deg_to_rad(mark.lean_degrees)
 		target.origin = surface + Vector3.UP * height
 		target.basis = Basis(right, -lean) * before.basis
 	var local := frame.affine_inverse() * target

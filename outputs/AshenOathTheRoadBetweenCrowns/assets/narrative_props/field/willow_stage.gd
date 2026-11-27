@@ -1,5 +1,6 @@
-extends Node3D
+extends "res://scripts/views/novel/field_stage.gd"
 ## Only the scene owner advances these poses. Work may be interrupted at any time.
+const ActorMark = preload("res://scripts/views/novel/field_actor_mark.gd")
 const BANK_SHIFT := Vector3(-0.9, 0.0, 2.0)
 const FOUND := Vector3(1.40, 0.077, -3.18)
 const LOADED := Vector3(0.73, 0.112, -3.14)
@@ -46,23 +47,23 @@ func set_work(progress: float) -> void:
 	# Lift the shoulders first; the far heel skims the bank and frame.
 	$Bank/CoveredOren.rotation.x = .153 * sin(PI * lift)
 	if beat == 1:
-		var mira := $Actors/Mira as Marker3D
+		var mira := $Actors/Mira as ActorMark
 		var effort := sin(PI * lift)
-		mira.set_meta("kneel_height", .36 + .16 * effort)
-		mira.set_meta("lean_degrees", 49.0 - 20.0 * effort)
+		mira.kneel_height = .36 + .16 * effort
+		mira.lean_degrees = 49.0 - 20.0 * effort
 		mira.position = Vector3(1.27,0,-3.30).lerp(Vector3(.68,0,-3.24),lift) + BANK_SHIFT - Vector3.BACK * (.07 * effort)
 		var cloth_frame: Transform3D = $Bank.transform * $Bank/CoveredOren.transform
 		mira.get_node("LeftHand").position = mira.transform.affine_inverse() * (cloth_frame * Vector3(.128,.32,.29))
 		mira.get_node("RightHand").position = mira.transform.affine_inverse() * (cloth_frame * Vector3(-.128,.32,.29))
 
-func _actor(label: String, identity: String, role: String, pose: String, foot: Vector3, yaw: float) -> Marker3D:
-	var marker := Marker3D.new()
+func _actor(label: String, identity: String, role: String, pose: String, foot: Vector3, yaw: float) -> ActorMark:
+	var marker := ActorMark.new()
 	marker.name = label
 	marker.position = foot
 	marker.rotation.y = yaw
-	marker.set_meta("identity",identity)
-	marker.set_meta("role",role)
-	marker.set_meta("pose",pose)
+	marker.identity = identity
+	marker.role = role
+	marker.pose = pose
 	$Actors.add_child(marker)
 	return marker
 

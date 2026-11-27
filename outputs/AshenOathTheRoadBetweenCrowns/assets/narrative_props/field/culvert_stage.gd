@@ -1,6 +1,7 @@
-extends Node3D
+extends "res://scripts/views/novel/field_stage.gd"
 ## Visual projection only. The active station and the route still belong to the novel director.
 ## The origin stays clear for Use. Actors/-Z points headward on beds and faces the work otherwise.
+const ActorMark = preload("res://scripts/views/novel/field_actor_mark.gd")
 var _beat := -1
 const CART_AT := Vector3(-0.76, 0.33, -1.69)
 const LEVER_AT := Vector3(-0.76, 0.82, -1.61)
@@ -28,7 +29,7 @@ func set_beat(index: int) -> void:
 			$Lever.show()
 			set_work(0)
 			var trapped := _person("patrolman","castle_guard_human","kneel",Vector3(-1.79,0,-0.93), Vector3(-1.66,0,-1.64))
-			trapped.set_meta("lean_degrees",21.0)
+			trapped.lean_degrees = 21.0
 			_hand(trapped,"LeftHand",Vector3(-1.55,0.56,-1.50))
 			_hand(trapped,"RightHand",Vector3(-1.74,0.58,-1.50))
 			var nera := _person("saga_nera","saga_nera","brace",Vector3(0.57,0,-1.19),Vector3(-0.52,0,-1.55))
@@ -36,7 +37,7 @@ func set_beat(index: int) -> void:
 			_hand(nera,"RightHand",LEVER_AT+Vector3(1.03,0.22,0.26))
 			# The low stone at the foot of the milestone supports Rook after the shaft catches him.
 			var seated := _person("rook","rook_human","seated",Vector3(1.49,0.35,-2.14),Vector3(-1.43,0,-1.32))
-			seated.set_meta("support","milestone")
+			seated.support = "milestone"
 		2:
 			$Litter.transform = Transform3D(Basis.IDENTITY,LITTER_AT)
 			$Litter.show()
@@ -45,7 +46,7 @@ func set_beat(index: int) -> void:
 			# The torn sleeve is on the broken axle now, and the patrolman is clear of the water.
 			_person("patrolman","castle_guard_human","rest",Vector3(1.44,0,-1.53),Vector3(-0.83,0,-1.48))
 			var patient := _person("rook","rook_human","supported",LITTER_AT+Vector3(0,-0.079,1.27),LITTER_AT+Vector3(0,0,0.27))
-			patient.set_meta("support","ground_litter")
+			patient.support = "ground_litter"
 			_person("mira","mira_human","kneel",LITTER_AT+Vector3(-0.70,-0.14,0.74),LITTER_AT+Vector3(0,0,0.74))
 		3,4:
 			$Ward.position = WARD_AT
@@ -53,7 +54,7 @@ func set_beat(index: int) -> void:
 			_person("saga_nera","saga_nera","guard",WARD_AT+Vector3(1.01,0,1.20),Vector3(1.74,0,1.15))
 			if index == 4:
 				var patient := _person("rook","rook_human","supported",WARD_AT+Vector3(-0.66,0.522,-0.44),WARD_AT+Vector3(-0.66,0,-1.44))
-				patient.set_meta("support","washroom_bed")
+				patient.support = "washroom_bed"
 				# Kael and Elna have set the empty carrier against the outside of the linen screen.
 				$Litter.transform = Transform3D(Basis(Vector3.RIGHT,-1.16), WARD_AT+Vector3(1.58,0.035,-1.45))
 				$Litter.show()
@@ -74,15 +75,15 @@ func set_work(progress: float) -> void:
 			if target != null:
 				target.position = nera.transform.affine_inverse() * ($Lever.transform * Vector3(spec[1]))
 
-func _person(id: String, role: String, pose: String, position_at: Vector3, facing: Vector3) -> Marker3D:
-	var marker := Marker3D.new()
+func _person(id: String, role: String, pose: String, position_at: Vector3, facing: Vector3) -> ActorMark:
+	var marker := ActorMark.new()
 	marker.name = id
 	marker.position = position_at
 	var direction := facing-position_at
 	marker.rotation.y = atan2(-direction.x,-direction.z)
-	marker.set_meta("identity",id)
-	marker.set_meta("role",role)
-	marker.set_meta("pose",pose)
+	marker.identity = id
+	marker.role = role
+	marker.pose = pose
 	$Actors.add_child(marker)
 	return marker
 

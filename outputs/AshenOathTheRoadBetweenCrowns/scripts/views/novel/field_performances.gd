@@ -1,13 +1,15 @@
 extends Node3D
 ## Called at the end of NovelScenes.refresh, after the source stations and burden
 ## have been reconciled. Reads the current beat and its clock; owns only visuals.
-const Artist = preload("res://scripts/novel/field_cast.gd")
+const Artist = preload("res://scripts/views/novel/field_cast.gd")
+const ActorMark = preload("res://scripts/views/novel/field_actor_mark.gd")
+const Stage = preload("res://scripts/views/novel/field_stage.gd")
 const ART := "res://assets/narrative_props/field/"
 const SCENES := {"willow_frame":"willow", "tor_wrist":"gallery", "culvert":"culvert"}
 const WAKE_DISTANCE := 26.0
 
 var layer: Node
-var ground: Node3D
+var ground: Stage
 var anchor: Node3D
 var ground_key := ""
 var ground_index := -1
@@ -18,20 +20,20 @@ var holder: Node3D
 var hidden_work: Node3D
 var hidden_bench: Node3D
 var hidden_burden: Array[Node3D] = []
-var leases: Dictionary = {}
+var leases: Dictionary[String, Artist] = {}
 var requested_packs := {}
 var rescan := 0.0
 var work_position := -1.0
-var front_pose: SkeletonModifier3D
+var front_pose: Artist.Pose
 
 static func project(owner_layer: Node) -> void:
 	var active := false
 	for key: String in SCENES:
 		if owner_layer.turns.has(key): active = true
-	var burden := owner_layer.game.player.get_node_or_null("NovelBurden") as Node3D if is_instance_valid(owner_layer.game.player) else null
+	var burden := _carried_frame(owner_layer.game.player)
 	var aftermath := _in_washroom(owner_layer)
 	var field := owner_layer.get_node_or_null("FieldPerformances")
-	if not active and not aftermath and (burden == null or burden.get_meta("kind", "") != "frame"):
+	if not active and not aftermath and burden == null:
 		if field != null: field.retire()
 		return
 	if field == null:
@@ -40,6 +42,14 @@ static func project(owner_layer: Node) -> void:
 		field.layer = owner_layer
 		owner_layer.add_child(field)
 	field.reconcile(burden, aftermath)
+
+static func _carried_frame(player: Node3D) -> Node3D:
+	if not is_instance_valid(player): return null
+	var prop := player.get_node_or_null("NovelBurden") as Node3D
+	if prop == null or prop.is_in_group(&"novel_burden_load"): return null
+	if prop.is_in_group(&"novel_burden_frame"): return prop
+	# Earlier scene controllers identified the same transient prop with a tag.
+	return prop if player.read_presentation_tag(prop, &"kind", "") == "frame" else null
 
 static func _in_washroom(owner_layer: Node) -> bool:
 	if owner_layer.zone != "vargan_approach": return false
@@ -75,7 +85,7 @@ func reconcile(burden: Node3D, aftermath: bool) -> void:
 	if ground_key != key or ground_index != index or ground_generation != position_at or (anchor != site):
 		_clear_ground()
 		if not key.is_empty() and (is_instance_valid(site) or aftermath):
-			ground = _instance(SCENES[key])
+			ground = _instance(SCENES[key]) as Stage
 			if ground != null:
 				ground_key = key
 				ground_index = index
@@ -95,7 +105,7 @@ func reconcile(burden: Node3D, aftermath: bool) -> void:
 			hidden_bench = bench
 			bench.hide()
 	var carried := ""
-	if is_instance_valid(burden) and burden.get_meta("kind", "") == "frame":
+	if is_instance_valid(burden):
 		if int(layer.game.story_state.get_flag("novel_step_culvert", 0)) == 3: carried = "culvert"
 		elif int(layer.game.story_state.get_flag("novel_step_willow_frame", 0)) in [2,3]: carried = "willow"
 	if carry_key != carried or holder != burden or (not carried.is_empty() and not is_instance_valid(carry)):
@@ -130,12 +140,12 @@ func _physics_process(delta: float) -> void:
 		if seconds > 0: progress = clampf(float(layer.elapsed) / seconds, 0.0, 1.0)
 	if not is_equal_approx(progress, work_position):
 		work_position = progress
-		if is_instance_valid(ground) and ground.has_method("set_work"):
+		if is_instance_valid(ground):
 			ground.set_work(progress)
 	if is_instance_valid(carry):
 		_place_carry(progress)
 		for lease in leases.values():
-			if is_instance_valid(lease.mark) and carry.is_ancestor_of(lease.mark) and lease.mark.get_meta("pose", "") == "carry":
+			if is_instance_valid(lease.mark) and carry.is_ancestor_of(lease.mark) and lease.mark.pose == "carry":
 				lease.follow_bearer(layer.game.player.global_position.y, delta)
 	rescan -= delta
 	if rescan <= 0.0:
@@ -164,9 +174,9 @@ func _place_carry(progress: float) -> void:
 func _bind_front_grip() -> void:
 	var driver = layer.game.player.animation_driver
 	if not is_instance_valid(driver) or not driver.is_valid(): return
-	var point := Marker3D.new()
+	var point := ActorMark.new()
 	point.name = "KaelGrip"
-	point.set_meta("pose", "front_carry")
+	point.pose = "front_carry"
 	carry.add_child(point)
 	var left := Marker3D.new()
 	left.name = "LeftHand"
@@ -184,7 +194,7 @@ func _bind_front_grip() -> void:
 	front_pose.bind(point, driver)
 
 func _reconcile_people() -> void:
-	var desired := {}
+	var desired: Dictionary[String, ActorMark] = {}
 	var game = layer.game
 	if is_instance_valid(game.player) and not game.zone_transition_pending and not game._story_has_active_combat():
 		if is_instance_valid(ground) and ground.global_position.distance_squared_to(game.player.global_position) <= WAKE_DISTANCE * WAKE_DISTANCE:
@@ -193,7 +203,7 @@ func _reconcile_people() -> void:
 			_collect(carry, desired)
 	for id: String in leases.keys():
 		var lease = leases[id]
-		var point: Marker3D = desired.get(id)
+		var point: ActorMark = desired.get(id)
 		if lease.interrupted and is_instance_valid(lease.actor) and Artist.Presence.has_protected_owner(lease.actor):
 			desired.erase(id)
 			continue
@@ -204,22 +214,22 @@ func _reconcile_people() -> void:
 		lease.release()
 		leases.erase(id)
 	for id: String in desired:
-		var mark: Marker3D = desired[id]
+		var mark: ActorMark = desired[id]
 		var offset: Vector3 = mark.global_position - game.player.global_position
 		if absf(offset.y) < 1.9 and Vector2(offset.x, offset.z).length_squared() < 0.84 * 0.84:
 			continue
 		var lease := Artist.new()
-		var role := str(mark.get_meta("role"))
+		var role := mark.role
 		if carry_key == "willow" and layer.zone == "greyfen" and mark.name == &"RearBearer":
 			role = "sister_anwen_human"
 		if lease.take(game, self, mark, id, role, requested_packs): leases[id] = lease
 
-func _collect(art: Node3D, desired: Dictionary) -> void:
+func _collect(art: Node3D, desired: Dictionary[String, ActorMark]) -> void:
 	var markers := art.get_node_or_null("Actors")
 	if markers == null: return
 	for mark in markers.get_children():
-		if mark is Marker3D and mark.is_visible_in_tree():
-			var id := str(mark.get_meta("identity"))
+		if mark is ActorMark and mark.is_visible_in_tree():
+			var id: String = mark.identity
 			if art == carry and carry_key == "willow" and layer.zone == "greyfen" and mark.name == &"RearBearer":
 				id = "sister_anwen"
 			desired[id] = mark

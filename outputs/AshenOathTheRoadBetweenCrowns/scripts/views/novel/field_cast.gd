@@ -4,13 +4,15 @@ const Cast = preload("res://scripts/story_cast_profile.gd")
 const Presence = preload("res://scripts/character_presence.gd")
 const Area = preload("res://scripts/interactable.gd")
 const Presentation = preload("res://scripts/character_presentation.gd")
-const Pose = preload("res://scripts/novel/field_body_pose.gd")
+const ActorMark = preload("res://scripts/views/novel/field_actor_mark.gd")
+const AnimationDriver = preload("res://scripts/character_animation_driver.gd")
+const Pose = preload("res://scripts/views/novel/field_body_pose.gd")
 
 var actor: Node3D
-var driver: Node
-var mark: Marker3D
+var driver: AnimationDriver
+var mark: ActorMark
 var relay: RemoteTransform3D
-var pose: SkeletonModifier3D
+var pose: Pose
 var temporary := false
 var prior_transform := Transform3D.IDENTITY
 var prior_clock := {}
@@ -36,14 +38,14 @@ static func request_missing_actor(game: Node, role: String, path: String, reques
 	requested[pack_id] = true
 	packs.request_pack(pack_id, 20)
 
-func take(game: Node, parent: Node3D, point: Marker3D, identity: String, role: String, requested: Dictionary = {}) -> bool:
+func take(game: Node, parent: Node3D, point: ActorMark, identity: String, role: String, requested: Dictionary = {}) -> bool:
 	id = identity
 	mark = point
 	actor = resident(game.zone_root, id)
 	if actor != null:
 		if not actor.is_visible_in_tree() or Presence.has_protected_owner(actor) or actor.is_queued_for_deletion():
 			return false
-		driver = actor.find_child("CharacterAnimationDriver", true, false)
+		driver = actor.find_child("CharacterAnimationDriver", true, false) as AnimationDriver
 	else:
 		# Prepared native packs may mount after the beat is reconstructed.
 		var path: String = game.asset_helper.role_resource_path(role, true)
@@ -67,14 +69,14 @@ func take(game: Node, parent: Node3D, point: Marker3D, identity: String, role: S
 		actor = body
 		Presentation.apply_npc(body, id if Cast.canonical_identity(id) != "" else role, false)
 		if game._configure_npc_animation(visual, id):
-			driver = visual.get_node_or_null("CharacterAnimationDriver")
+			driver = visual.get_node_or_null("CharacterAnimationDriver") as AnimationDriver
 	if not is_instance_valid(driver) or not driver.is_valid() or driver.dead or driver.story_dialogue_active or driver.has_active_action():
 		_discard_temporary()
 		return false
 	if not Presence.claim(actor, "work", get_instance_id()):
 		_discard_temporary()
 		return false
-	actor.set_meta("cast_work_cancel", _yield_to_dialogue)
+	game.player.write_presentation_tag(actor, &"cast_work_cancel", _yield_to_dialogue)
 	prior_transform = actor.transform
 	prior_clock = driver.capture_clock()
 	driver.set_distance_suspended(false)

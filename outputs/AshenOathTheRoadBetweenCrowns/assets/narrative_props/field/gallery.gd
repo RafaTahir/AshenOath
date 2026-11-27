@@ -1,7 +1,8 @@
-extends Node3D
+extends "res://scripts/views/novel/field_stage.gd"
 
 ## The three station origins follow tor_wrist in act 2. Bank and load keep
 ## their original world position as the point of work moves into the yard.
+const ActorMark = preload("res://scripts/views/novel/field_actor_mark.gd")
 const BANK_OFFSETS := [Vector3.ZERO, Vector3(4.6,0,-2.9), Vector3(1.5,0,-3.1)]
 const HINGE := Vector3(-1.24, 1.53, -1.52)
 const FALLEN_ANGLE := -17.0
@@ -43,7 +44,7 @@ func set_beat(index: int) -> void:
 			_hand(tor, "LeftHand", Vector3(.20,.89,-.98))
 			_hand(tor, "RightHand", Vector3(.04,.90,-.94))
 			var mira := _actor("mira", "mira", "kneel", Vector3(.63,0,-.71), Vector3(-.82,0,-.57))
-			mira.set_meta("kneel_height", .50)
+			mira.kneel_height = .50
 			_hand(mira, "LeftHand", Vector3(.27,.88,-1.03))
 			_hand(mira, "RightHand", Vector3(.18,.91,-.93))
 		2:
@@ -68,14 +69,14 @@ func set_work(progress: float) -> void:
 			var contact: Vector3 = HINGE + Basis(Vector3.BACK, deg_to_rad(angle)) * Vector3(along,-.144,.15)
 			tor.get_node(hand).position = tor.transform.affine_inverse() * contact
 
-func _actor(id: String, role: String, pose: String, at: Vector3, forward: Vector3) -> Marker3D:
-	var marker := Marker3D.new()
+func _actor(id: String, role: String, pose: String, at: Vector3, forward: Vector3) -> ActorMark:
+	var marker := ActorMark.new()
 	marker.name = id
 	marker.position = at
 	marker.rotation.y = atan2(-forward.x, -forward.z)
-	marker.set_meta("identity", id)
-	marker.set_meta("role", role)
-	marker.set_meta("pose", pose)
+	marker.identity = id
+	marker.role = role
+	marker.pose = pose
 	get_node("Actors").add_child(marker)
 	return marker
 
