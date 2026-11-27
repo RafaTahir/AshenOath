@@ -21,7 +21,18 @@ func _line_for_actor(entry: Dictionary) -> String:
 		return "The boy got cart paint on my sleeve. I liked the little eye he left bare."
 	return str(_life.OCCUPATION_LINES.get(str(entry.id), _life.AMBIENT_LINES.get(str(entry.profile.get("line", "")), _life.AMBIENT_LINES.greyfen_keep_working)))
 
+func _at_flood_landing() -> bool:
+	if _life.host.current_zone_id != "lantern_reach": return false
+	var state: Node = _life.host.story_state
+	return state.get_flag("novel_edition",0) == 1 and state.get_flag("open_road_relocation_started",false) and not state.get_flag("open_road_route_delivered",false)
+
 func _tick_greeting(entry: Dictionary, delta: float) -> bool:
+	if _at_flood_landing():
+		if entry.get("greeting_started",false):
+			_life.host.audio.stop_nearby_speech(entry.node)
+			_life.host.hud.clear_ambient_subtitle(_life.get_instance_id())
+		_cancel_greeting(entry)
+		return false
 	var node: Node3D = entry.node
 	var distance: Variant = node.global_position.distance_to(_life.player.global_position)
 	if distance > 4.6:
@@ -81,6 +92,7 @@ func _try_social_exchange(entry: Dictionary) -> void:
 	pass
 
 func _social_actor_available(entry: Dictionary) -> bool:
+	if _at_flood_landing(): return false
 	if not is_instance_valid(entry.node) or not entry.node.is_visible_in_tree() or _life.Presence.protected(entry.node):
 		return false
 	if bool(entry.profile.get("sleeping", false)) or float(entry.get("greeting_remaining", 0.0)) > 0.0:
