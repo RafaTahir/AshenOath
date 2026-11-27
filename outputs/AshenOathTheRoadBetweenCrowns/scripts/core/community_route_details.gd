@@ -81,7 +81,9 @@ static func departure(state: Variant) -> Dictionary:
 	result.action = row.action
 	result.destination_zone = row.zone
 	result.target_ids = row.get("target_ids", []).duplicate()
-	if state.get_flag("open_road_load_carried", false) == true and state.get_flag("open_road_route_crossed", false) != true:
+	if ending_rules.novel_departure(state):
+		result.route_hint = row.get("route_hint", "")
+	elif state.get_flag("open_road_load_carried", false) == true and state.get_flag("open_road_route_crossed", false) != true:
 		match str(state.get_flag("community_route", "")):
 			"crossing":
 				result.target_ids = []

@@ -7,6 +7,13 @@ const Ending = preload("res://scripts/community_ending.gd")
 const Covenant = preload("res://scripts/covenant_resolution.gd")
 const Decisions = preload("res://scripts/story_decision_coordinator.gd")
 const StoryPerformance = preload("res://scripts/story_performance.gd")
+const FERRY_PATH := "CommunityWork/PublicRoute_ferry/Ferry"
+const RESCUE_STATIONS := {
+	"departure_load": "Read back Bera’s and Siv’s shelter requests and prepare the lower landing",
+	"departure_delivery": "Count the rescued households and help Anwen at the east landing",
+	"departure_arrival": "Check all seven inside Hearthward and help Mira settle them",
+}
+const PASSENGER_SEATS := [Vector3(-0.42,0.25,-0.43), Vector3(0.25,0.25,-0.43), Vector3(-0.42,0.25,0.43), Vector3(0.25,0.25,0.43)]
 var director: Node
 var game
 var zone := ""
@@ -25,6 +32,8 @@ var ferry_safe := Vector3.ZERO
 var published_shift := ""
 var cohort: Node3D
 var cohort_drivers: Array[Node] = []
+var rescue_cast: Node3D
+var rescue_visuals: Dictionary = {}
 
 func configure(owner: Node, build_stations: bool = true) -> void:
 	director = owner
@@ -46,7 +55,11 @@ func configure(owner: Node, build_stations: bool = true) -> void:
 		_station("survey:near","Inspect the near landing and read the current",Vector3(1,0,-1),{"operation":"survey","id":"near","seconds":3.0,"kind":"inspect"})
 		_station("survey:far","Inspect the far landing and its approach",Vector3(11,0,-1),{"operation":"survey","id":"far","seconds":3.0,"kind":"inspect"})
 		_station("delivery","Set down the first load at the far landing",Vector3(11,0,1.5),{"operation":"delivery","quest":"main_road_kept_open","seconds":3.0,"kind":"haul"})
-		_station("ferry","Board the ferry with the first load",Vector3(3.0,0,0.8),{"operation":"ferry","seconds":7.5,"kind":"haul"})
+		_station("ferry","Board the ferry with the first load",Vector3(3.0,0,0.8),{"operation":"ferry","dock":"west","seconds":7.5,"kind":"haul"})
+		_station("departure_return_ferry","Return with the ferryman for Siv’s household",Vector3(10.5,0,0.8),{"operation":"ferry","dock":"east","seconds":7.5,"kind":"haul"})
+		_station("departure_second_rescue","Help Siv’s father aboard and free the snagged bow strap",Vector3(2,0,-1.5),{"operation":"departure_second_rescue","seconds":4.0,"kind":"haul"})
+	if zone == "hearthward":
+		_station("departure_handover","Reconcile arrivals and take the stores check with Merrow",Vector3(-4.5,0,4.5),{"operation":"departure_handover","seconds":5.0,"kind":"sort"})
 	for operation: String in ["departure_load","departure_delivery","departure_arrival"]:
 		var entry: Dictionary=Rules.data().departure_journey[operation]
 		if str(entry.zone)==zone:
@@ -76,11 +89,19 @@ func refresh() -> void:
 	var life: Node = game.zone_root.get_node_or_null("RegionalLifeController")
 	if life != null: life.enroll_region()
 	load("res://scripts/community_presentation.gd").refresh(game.zone_root,game.story_state)
-	_refresh_cohort()
+	if Ending.novel_departure(game.story_state): _refresh_rescue_cast()
+	else: _refresh_cohort()
 	for id: String in stations:
 		var area: Node3D = stations[id].get_ref()
 		if not is_instance_valid(area): continue
 		var enabled := _available(area.get_meta("community_action"))
+		if Ending.novel_departure(game.story_state) and RESCUE_STATIONS.has(id):
+			area.set("prompt",str(RESCUE_STATIONS[id]))
+			area.set("display_name",str(RESCUE_STATIONS[id]))
+		if id == "ferry" and enabled:
+			var leg := Ending.next_departure_leg(game.story_state) if _novel_rescue_active() else {}
+			area.set("prompt", "Board the ferry with the first load" if leg.is_empty() else "Cross with %s’s household (%d of %d aboard)" % [str(leg.group).capitalize(), int(leg.aboard), int(leg.capacity)])
+			if not leg.is_empty(): area.set("display_name",str(area.get("prompt")))
 		area.visible = enabled
 		area.set_interaction_enabled(enabled)
 		if not enabled: game._remove_interaction_candidate(area)
@@ -127,15 +148,23 @@ func _actor_alive(area: Node3D) -> bool:
 	return driver == null or driver.get("dead") != true
 
 func _available(action: Dictionary) -> bool:
-	if str(action.get("operation","")).begins_with("departure_"): return _cohort_ready() and Ending.action_available(str(action.operation),zone,game.story_state)
-	match str(action.get("operation","")):
+	var operation := str(action.get("operation",""))
+	if operation.begins_with("departure_"):
+		if not Ending.action_available(operation,zone,game.story_state): return false
+		return _rescue_cast_ready() if Ending.novel_departure(game.story_state) else _cohort_ready()
+	match operation:
 		"board": return Rules.enabled(game.story_state)
 		"work": return Rules.work_available(str(action.get("id","")),zone,game.story_state,game.quests)
 		"survey": return zone == "lantern_reach" and Rules.current_objective("main_road_kept_open",game.quests) == "survey_crossing" and not Rules._true(game.story_state,"community_survey:"+str(action.id))
 		"aftermath":
 			return Rules.aftermath_available(str(action.get("quest","")),zone,game.story_state,game.quests) and (str(action.quest) != "main_road_kept_open" or not Rules._true(game.story_state,"community_route_load_carried"))
 		"delivery": return Rules.aftermath_available("main_road_kept_open",zone,game.story_state,game.quests) and Rules._true(game.story_state,"community_route_load_carried") and Rules._true(game.story_state,"community_route_load_crossed")
-		"ferry": return zone=="lantern_reach" and str(game.story_state.get_flag("community_route",""))=="ferry" and not Rules.Endings.concord_route_closed(game.story_state) and (Ending.crossing_needed(game.story_state) or (Rules.aftermath_available("main_road_kept_open",zone,game.story_state,game.quests) and Rules._true(game.story_state,"community_route_load_carried") and not Rules._true(game.story_state,"community_route_load_crossed")))
+		"ferry":
+			var dock := str(action.get("dock","west"))
+			if _novel_rescue_active():
+				var leg := Ending.next_departure_leg(game.story_state)
+				return zone == "lantern_reach" and _rescue_cast_ready() and dock == str(leg.get("from",""))
+			return dock == "west" and zone=="lantern_reach" and str(game.story_state.get_flag("community_route",""))=="ferry" and not Rules.Endings.concord_route_closed(game.story_state) and (Ending.crossing_needed(game.story_state) or (Rules.aftermath_available("main_road_kept_open",zone,game.story_state,game.quests) and Rules._true(game.story_state,"community_route_load_carried") and not Rules._true(game.story_state,"community_route_load_crossed")))
 	return false
 
 func _open_board(area: Node3D) -> void:
@@ -219,6 +248,9 @@ func _show(source: Node3D, title: String, pages: Array, actions: Array[Dictionar
 	published.append({"type":"close","label":"Leave the conversation"})
 	var content := {"name":title,"pages":pages,"actions":published}
 	if source.has_meta("community_actor_id"):
+		var novel: Node = director.get_node_or_null("NovelScenes")
+		if novel != null and novel.has_method("invitations"):
+			novel.call("invitations", source, content)
 		game._stage_dialogue_moment(source)
 		StoryPerformance.begin(source,game.player,content,game.story_state)
 	game.audio.set_dialogue_active(true)
@@ -281,6 +313,7 @@ func _participant_source(source: Node3D, id: String, departure: bool = false) ->
 	return _source_valid(source) and id in Rules.REGIONAL_ACTORS.get(zone,[]) and str(source.get_meta("community_actor_id","")) == id and str(source.get("interaction_id")) == str(Rules.ACTORS.get(id,"!")) and (Ending.offers_available(id,game.story_state,game.quests) if departure else Rules.consent_available(id,game.story_state,game.quests))
 
 func _begin_work(area: Node3D, action: Dictionary) -> void:
+	if work.has("rescue_leg"): return
 	if director._rest_unavailable(area) != "" or not _available(action): return
 	director._cancel_rest()
 	director._cancel_friend_work()
@@ -289,19 +322,26 @@ func _begin_work(area: Node3D, action: Dictionary) -> void:
 	work["source"] = weakref(area)
 	work_start = game.player.global_position
 	if str(action.operation)=="ferry":
-		ferry_safe = game.zone_root.to_global(Vector3(3,0.02,1.5))
+		ferry_safe = _ferry_landing(str(action.get("dock","west")))
+		if _novel_rescue_active(): work["rescue_leg"] = Ending.next_departure_leg(game.story_state)
+		var boat := game.zone_root.get_node_or_null(FERRY_PATH) as Node3D
+		if boat != null: boat.set_meta("open_road_in_transit",true)
 		ferry_control = game.player.can_control
 		game.player.can_control = false
-	game.player._request_equipment(game.player.weapon_mode,game.player.get_selected_blade_id(),false)
-	game.hud.set_guidance_hint(str(area.get("prompt"))+". Stay beside the work; move to stop.",float(action.seconds)+3.0)
+		game.player._request_equipment(game.player.weapon_mode,game.player.get_selected_blade_id(),false)
+		var guidance := ". Hold steady until you reach the landing." if work.has("rescue_leg") else ". Stay beside the work; move to stop."
+		game.hud.set_guidance_hint(str(area.get("prompt"))+guidance,float(action.seconds)+3.0)
+	else:
+		game.hud.set_guidance_hint(str(area.get("prompt"))+". Stay beside the work; move to stop.",float(action.seconds)+3.0)
 
 func tick(delta: float) -> void:
 	if director.get_parent()!=game.zone_root or str(game.current_zone_id)!=zone:
 		cancel()
 		return
 	if published_shift != Rules.presence_shift(_minutes()): refresh()
-	_tick_crossing()
-	_tick_cohort(delta)
+	if not _novel_rescue_active():
+		_tick_crossing()
+		_tick_cohort(delta)
 	if work.is_empty(): return
 	if str(work.operation)=="ferry":
 		_tick_ferry(delta)
@@ -331,8 +371,10 @@ func tick(delta: float) -> void:
 	var applied := false
 	var result := ""
 	if str(completed.operation).begins_with("departure_"):
-		applied=Ending.complete_action(str(completed.operation),zone,game.story_state)
-		result=str(Rules.data().departure_journey[str(completed.operation)].text)
+		var operation := str(completed.operation)
+		applied = Ending.complete_action(operation,zone,game.story_state)
+		if applied:
+			result = Ending.novel_action_text(operation) if Ending.novel_departure(game.story_state) else str(Rules.data().departure_journey[operation].text)
 	match str(completed.operation):
 		"work":
 			applied = Rules.complete_work(str(completed.id),zone,game.story_state,game.quests)
@@ -350,7 +392,12 @@ func tick(delta: float) -> void:
 		game.hud.toast(result)
 		game.hud.set_guidance_hint(result,8.0)
 		refresh()
-		if str(completed.operation)=="departure_arrival": Covenant.finish_if_ready(game)
+		match str(completed.operation):
+			"departure_arrival": Covenant.finish_if_ready(game)
+			"departure_handover":
+				# Closing the read-back releases the covenant completion through the
+				# usual dialogue resume path. The finished work is already durable.
+				_show(area,"Hearthward handover",[{"speaker":"The road","speaker_id":"narrator","text":result,"read_only":true}],[])
 
 func cancel(invalidate_menu: bool = true) -> void:
 	_cohort_motion(Vector3.ZERO)
@@ -359,9 +406,10 @@ func cancel(invalidate_menu: bool = true) -> void:
 			if not game.player.transition_locked and float(game.player.health_component.health)>0: game.player.can_control = ferry_control
 			game.player.velocity = Vector3.ZERO
 			game.player.global_position = ferry_safe
-		var boat := game.zone_root.get_node_or_null("CommunityWork/PublicRoute_ferry/Ferry") as Node3D if is_instance_valid(game.zone_root) else null
-		if boat != null: boat.position.x = 3.5
+		var boat := game.zone_root.get_node_or_null(FERRY_PATH) as Node3D if is_instance_valid(game.zone_root) else null
+		if boat != null: boat.remove_meta("open_road_in_transit")
 		if director.get_parent()==game.zone_root and is_instance_valid(cohort): _refresh_cohort()
+		if director.get_parent()==game.zone_root and work.has("rescue_leg"): _refresh_rescue_cast()
 	if gesture != "" and game != null and is_instance_valid(game.player) and game.player.animation_driver != null and game.player.animation_driver.current_state == gesture:
 		game.player.animation_driver.stop_action("idle",0.12)
 	work.clear()
@@ -389,8 +437,9 @@ func _tick_crossing() -> void:
 		_crossing_finished()
 
 func _tick_ferry(delta: float) -> void:
-	var boat := game.zone_root.get_node_or_null("CommunityWork/PublicRoute_ferry/Ferry") as Node3D
-	if boat==null or (Ending.crossing_needed(game.story_state) and not _cohort_ready()) or director.get_parent()!=game.zone_root or str(game.current_zone_id)!=zone or not _available(work) or game._journey_load_pending() or game.zone_transition_pending or game.zone_load_request_pending or not game.pending_player_restore.is_empty() or director._danger_near(game) or float(game.player.health_component.health)<=0 or float(game.player.hurt_react_time)>0:
+	var boat := game.zone_root.get_node_or_null(FERRY_PATH) as Node3D
+	var leg: Dictionary = work.get("rescue_leg",{})
+	if boat==null or (leg.is_empty() and Ending.crossing_needed(game.story_state) and not _cohort_ready()) or director.get_parent()!=game.zone_root or str(game.current_zone_id)!=zone or not _available(work) or game._journey_load_pending() or game.zone_transition_pending or game.zone_load_request_pending or not game.pending_player_restore.is_empty() or game.player.transition_locked or director._danger_near(game) or float(game.player.health_component.health)<=0 or float(game.player.hurt_react_time)>0:
 		cancel()
 		return
 	if game.player.equipment_loadout.is_transitioning(): return
@@ -398,24 +447,36 @@ func _tick_ferry(delta: float) -> void:
 		cancel()
 		return
 	elapsed += maxf(delta,0)
-	boat.position.x = lerpf(3.5,9.5,clampf(elapsed/float(work.seconds),0,1))
+	var destination := str(leg.get("to","east"))
+	var eastbound := destination == "east"
+	boat.position.x = lerpf(3.5 if eastbound else 9.5,9.5 if eastbound else 3.5,clampf(elapsed/float(work.seconds),0,1))
 	game.player.velocity=Vector3.ZERO
 	# FerryDeck is centred at .15 with .18 height: feet rest just above .24.
-	game.player.global_position=boat.to_global(Vector3(0,0.25,0))
-	if is_instance_valid(cohort) and Ending.crossing_needed(game.story_state):
+	game.player.global_position=boat.to_global(Vector3(0 if leg.is_empty() else .68,0.25,0))
+	if not leg.is_empty():
+		_place_rescue_aboard(boat,leg)
+	elif is_instance_valid(cohort) and Ending.crossing_needed(game.story_state):
 		cohort.position=Vector3(boat.position.x,0.25,0)
 		for index in cohort.get_child_count(): cohort.get_child(index).position=Vector3(-.72 if index==0 else .72,0,0)
 		_cohort_motion(Vector3.ZERO)
 	if elapsed<float(work.seconds): return
-	ferry_safe=game.zone_root.to_global(Vector3(10.5,0.02,1.5))
-	var applied := _record_crossing("ferry")
+	var applied := _record_crossing("ferry") if leg.is_empty() else Ending.complete_departure_leg(int(leg.leg),game.story_state)
+	if applied: ferry_safe = _ferry_landing(destination)
 	cancel()
-	if applied: _crossing_finished()
+	if applied: _crossing_finished(int(leg.get("leg",0)))
 
-func _crossing_finished() -> void:
+func _ferry_landing(dock: String) -> Vector3:
+	return game.zone_root.to_global(Vector3(10.5 if dock=="east" else 3.0,0.02,1.5))
+
+func _crossing_finished(rescue_leg: int = 0) -> void:
 	game.story_save_pending=true
 	game.call_deferred("_persist_story_action")
-	game.hud.set_guidance_hint("The households and load have crossed. Secure them at the far landing." if Ending.departing(game.story_state) else "The first load has crossed. Set it down at the far landing.",6.0)
+	var hint := "The households and load have crossed. Secure them at the far landing." if Ending.departing(game.story_state) else "The first load has crossed. Set it down at the far landing."
+	match rescue_leg:
+		1: hint = "Bera’s four are safely ashore. Return with the ferryman for Siv’s three."
+		2: hint = "The ferry is back on the west bank. Help Siv get her father aboard."
+		3: hint = "All seven are across. Count them ashore and help Anwen at the east landing."
+	game.hud.set_guidance_hint(hint,6.0)
 	refresh()
 
 static func _position(value: Array) -> Vector3:
@@ -424,6 +485,90 @@ static func _position(value: Array) -> Vector3:
 func _record_crossing(route: String) -> bool:
 	if Ending.crossing_needed(game.story_state) and not _cohort_ready(): return false
 	return Ending.player_crossed(route,game.story_state) if Ending.crossing_needed(game.story_state) else Rules.record_route_crossing(route,game.story_state,game.quests)
+
+func _novel_rescue_active() -> bool:
+	return Ending.novel_departure(game.story_state) and Ending.journey_open(game.story_state)
+
+func _refresh_rescue_cast() -> void:
+	var state = game.story_state
+	var delivered := Rules._true(state,"open_road_route_delivered")
+	var visible := Rules._true(state,"open_road_relocation_started") and ((zone=="lantern_reach" and not delivered) or (zone=="hearthward" and delivered))
+	if not visible:
+		if is_instance_valid(rescue_cast): rescue_cast.queue_free()
+		rescue_cast = null
+		return
+	var manifest := Ending.departure_manifest(state)
+	if manifest.is_empty(): return
+	if not is_instance_valid(rescue_cast):
+		rescue_cast = Node3D.new()
+		rescue_cast.name = "OpenRoadRescue"
+		game.zone_root.add_child(rescue_cast)
+		for group: Dictionary in manifest.groups:
+			var household := Node3D.new()
+			household.name = str(group.id)
+			rescue_cast.add_child(household)
+			for index: int in group.members.size():
+				var id := str(group.members[index])
+				var role := "villager_human" if id == "siv_father" else "villager_female_human"
+				var height := 1.0
+				match id:
+					"bera_child_1": height = 0.68
+					"bera_child_2": height = 0.56
+				_add_rescue_actor(household,id,str(group.labels[index]),role,height)
+		if zone == "lantern_reach": _add_rescue_actor(rescue_cast,"ferryman","Ferryman","villager_human")
+	var boat := game.zone_root.get_node_or_null(FERRY_PATH) as Node3D
+	if boat != null and boat.get_meta("open_road_in_transit",false) == true: return
+	for group: Dictionary in manifest.groups:
+		var household := rescue_cast.get_node(str(group.id)) as Node3D
+		var bera := str(group.id) == "bera"
+		if zone == "hearthward":
+			household.position = Vector3(-8.8,0,3.0) if bera else Vector3(-7.0,0,3.0)
+		elif bool(group.arrived):
+			household.position = Vector3(11.2,0,-1.3 if bera else 1.1)
+		else:
+			household.position = Vector3(1.9,0,1.1 if bera else -1.5)
+		for index: int in household.get_child_count():
+			household.get_child(index).position = Vector3((index % 2)*0.72,0,0.65 if index >= 2 else 0.0)
+	var ferryman := rescue_cast.get_node_or_null("ferryman") as Node3D
+	if ferryman != null:
+		var dock := Ending.departure_dock(state)
+		ferryman.position = Vector3(10.4 if dock=="east" else 2.6,0,-0.45)
+
+func _add_rescue_actor(parent: Node3D, id: String, label_text: String, role: String, height: float = 1.0) -> void:
+	if not rescue_visuals.has(role):
+		rescue_visuals[role] = load("res://scripts/community_presentation.gd").rescue_passenger_visual(game,role)
+	var visual: PackedScene = rescue_visuals[role]
+	if visual == null: return
+	var body := Node3D.new()
+	body.name = id
+	body.rotation.y = -PI/2.0
+	body.scale = Vector3.ONE * height
+	parent.add_child(body)
+	body.add_child(visual.instantiate())
+	var label := Label3D.new()
+	label.text = label_text
+	label.position.y = 1.92
+	label.font_size = 21
+	label.pixel_size = 0.0035
+	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	label.visibility_range_end = 7.0
+	body.add_child(label)
+
+func _rescue_cast_ready() -> bool:
+	if not is_instance_valid(rescue_cast): return false
+	for group: Dictionary in Ending.NOVEL_GROUPS:
+		var household := rescue_cast.get_node_or_null(str(group.id))
+		if household == null or household.get_child_count() != int(group.passengers): return false
+	return zone != "lantern_reach" or rescue_cast.has_node("ferryman")
+
+func _place_rescue_aboard(boat: Node3D, leg: Dictionary) -> void:
+	var ferryman := rescue_cast.get_node("ferryman") as Node3D
+	ferryman.global_position = boat.to_global(Vector3(-0.72,0.25,0))
+	if int(leg.passengers) == 0: return
+	var household := rescue_cast.get_node(str(leg.group)) as Node3D
+	household.global_position = boat.global_position
+	for index: int in household.get_child_count():
+		household.get_child(index).position = PASSENGER_SEATS[index]
 
 func _refresh_cohort() -> void:
 	var state=game.story_state

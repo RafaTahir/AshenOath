@@ -22,7 +22,12 @@ const STEPS := {
 const POSITIONS := [Vector3(-4.5, 0.0, -2.5), Vector3(0.0, 0.0, -5.0), Vector3(4.5, 0.0, -2.5)]
 
 static func steps_for(ending: String, state) -> Array:
-	return STEPS[ending] if STEPS.has(ending) else preload("res://scripts/campaign_story_overlay.gd").ritual(ending,state)
+	if STEPS.has(ending): return STEPS[ending]
+	var steps := preload("res://scripts/campaign_story_overlay.gd").ritual(ending,state)
+	if ending == "depart" and not steps.is_empty() and load("res://scripts/community_ending.gd").novel_departure(state):
+		steps[0] = ["Read Bera’s and Siv’s shelter requests", "Vale reads both requests aloud. Siv asks for beds and help carrying her father. Bera asks for a place her grandchildren can reach and somewhere to dry their boots. Shelter is available without an oath, testimony or a place on the keeper rota."]
+		steps[2] = ["Meet the households at Lantern Reach", "The ward is gone and the human copies are already under protection. Bera and Siv wait with their families at Lantern Reach. Bring them across and make sure all seven reach Hearthward."]
+	return steps
 
 static func relocation_pending(state) -> bool:
 	return preload("res://scripts/campaign_revision.gd").from_state(state)==2 and str(state.get_flag("final_covenant",""))=="open_road" and state.get_flag("open_road_relocation_started",false)==true and state.get_flag("final_choice_completed",false)!=true

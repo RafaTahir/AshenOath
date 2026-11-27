@@ -3,6 +3,7 @@ extends RefCounted
 ## Retained craft materials and reusable joinery, projected from durable work.
 ## No process callbacks: the one activity director refreshes changed state.
 const Rules = preload("res://scripts/community_campaign.gd")
+const Ending = preload("res://scripts/community_ending.gd")
 const WOOD := Color(0.27,0.18,0.11)
 const LINEN := Color(0.61,0.58,0.46)
 const IRON := Color(0.20,0.23,0.22)
@@ -194,7 +195,13 @@ static func _choice_arrangements(host, root: Node3D, zone: String) -> void:
 			else:
 				for x in [3.0,10.0]:
 					_box(host,route,Vector3(x,0.8,-1),Vector3(0.15,1.6,0.15),WOOD)
-				_box(host,route,Vector3(6.5,1.1,-1),Vector3(7,0.035,0.035),LINEN)
+				var guide := _box(host,route,Vector3(6.5,1.1,-1),Vector3(7,0.035,0.035),LINEN)
+				guide.name="FerryGuide"
+				var haul_rig := Node3D.new()
+				haul_rig.name="HaulRig"
+				route.add_child(haul_rig)
+				for x in [3.0,10.0]: _box(host,haul_rig,Vector3(x,0.55,1),Vector3(0.13,1.1,0.13),WOOD)
+				_box(host,haul_rig,Vector3(6.5,0.8,1),Vector3(7,0.045,0.045),LINEN.lightened(0.12))
 				var ferry := Node3D.new()
 				ferry.name="Ferry"
 				ferry.position=Vector3(3.5,0,0)
@@ -206,9 +213,13 @@ static func _choice_arrangements(host, root: Node3D, zone: String) -> void:
 static func refresh(root: Node3D, state) -> void:
 	var work := root.get_node_or_null("CommunityWork")
 	if work == null: return
+	var rescue := Ending.journey_open(state) and Ending.novel_departure(state)
 	for assembly: Node3D in work.get_children():
 		if assembly.has_meta("community_choice"):
 			assembly.visible = str(state.get_flag(str(assembly.get_meta("community_choice_flag")),"")) == str(assembly.get_meta("community_choice"))
+			if rescue and str(assembly.name).begins_with("PublicRoute_"):
+				# The rescue uses the ferry without rewriting the earlier route choice.
+				assembly.visible = str(assembly.name)=="PublicRoute_ferry"
 			var usable: bool = assembly.visible and (not str(assembly.name).begins_with("PublicRoute_") or Rules._true(state,"community_route_ready"))
 			for shape: CollisionShape3D in assembly.find_children("*","CollisionShape3D",true,false): shape.set_deferred("disabled",not usable)
 			for barrier: Node3D in assembly.get_children():
@@ -216,10 +227,19 @@ static func refresh(root: Node3D, state) -> void:
 				barrier.visible=usable and Rules.Endings.concord_route_closed(state)
 				for shape: CollisionShape3D in barrier.find_children("*","CollisionShape3D",true,false): shape.set_deferred("disabled",not barrier.visible)
 			if str(assembly.name)=="PublicRoute_ferry":
+				var guide := assembly.get_node_or_null("FerryGuide") as Node3D
+				var haul := assembly.get_node_or_null("HaulRig") as Node3D
+				var guide_lost := Ending.novel_departure(state) and Rules._true(state,"novel_departure_upstream_guide_lost")
+				if guide != null: guide.visible=not guide_lost
+				if haul != null: haul.visible=rescue or (guide_lost and Rules._true(state,"novel_departure_hauling_line_retained"))
 				var ferry := assembly.get_node_or_null("Ferry") as Node3D
-				if ferry != null:
-					var departing := str(state.get_flag("final_covenant",""))=="open_road"
-					ferry.position.x=9.5 if Rules._true(state,"open_road_route_crossed" if departing else "community_route_load_crossed") else 3.5
+				if ferry != null and not bool(ferry.get_meta("open_road_in_transit",false)):
+					if rescue:
+						var dock := Ending.departure_dock(state)
+						if dock in ["west","east"]: ferry.position.x=3.5 if dock=="west" else 9.5
+					else:
+						var departing := str(state.get_flag("final_covenant",""))=="open_road"
+						ferry.position.x=9.5 if Rules._true(state,"open_road_route_crossed" if departing else "community_route_load_crossed") else 3.5
 		if not assembly.has_meta("community_work"): continue
 		var piece := assembly.get_node_or_null("WorkingPart") as Node3D
 		if piece != null: piece.rotation = Vector3.ZERO if Rules._true(state,"community_work:"+str(assembly.get_meta("community_work"))) else piece.get_meta("unfinished_rotation",Vector3.ZERO)
@@ -227,6 +247,42 @@ static func refresh(root: Node3D, state) -> void:
 static func animate_work(root: Node3D, id: String, fraction: float) -> void:
 	var piece := root.get_node_or_null("CommunityWork/"+id+"/WorkingPart") as Node3D
 	if piece != null: piece.rotation = (piece.get_meta("unfinished_rotation",Vector3.ZERO) as Vector3).lerp(Vector3.ZERO,clampf(fraction,0,1))
+
+static func rescue_passenger_visual(game, role: String) -> PackedScene:
+	# Share two idle mesh poses across the seven dependents and ferryman. The
+	# ferry moves them as a group and the regular cast keeps its animation budget.
+	var source: Node3D = game._make_role_visual(role,"characters",Vector3.ONE)
+	if source == null:
+		push_error("Required Open Road character visual is unavailable: "+role)
+		return null
+	game.zone_root.add_child(source)
+	game._configure_npc_animation(source,"open_road_pose:"+role)
+	var driver := source.get_node_or_null("CharacterAnimationDriver")
+	if driver != null: driver.sample_pose()
+	for skeleton: Skeleton3D in source.find_children("*","Skeleton3D",true,false):
+		skeleton.force_update_all_bone_transforms()
+	var posed := Node3D.new()
+	var world_to_zone: Transform3D = game.zone_root.global_transform.affine_inverse()
+	for original: MeshInstance3D in source.find_children("*","MeshInstance3D",true,false):
+		if original.mesh == null or not original.is_visible_in_tree(): continue
+		var part := MeshInstance3D.new()
+		var baked := original.bake_mesh_from_current_skeleton_pose() if original.skin != null else null
+		part.mesh = baked if baked != null else original.mesh
+		part.transform = world_to_zone * original.global_transform
+		part.layers = original.layers
+		part.cast_shadow = original.cast_shadow
+		for index in part.mesh.get_surface_count():
+			part.set_surface_override_material(index,original.get_active_material(index))
+		posed.add_child(part)
+		part.owner = posed
+	source.free()
+	var packed := PackedScene.new()
+	var valid := posed.get_child_count() > 0 and packed.pack(posed) == OK
+	posed.free()
+	if not valid:
+		push_error("Required Open Road character mesh is unavailable: "+role)
+		return null
+	return packed
 
 static func _table(host, parent: Node3D, height: float = 0.8) -> void:
 	for x in [-0.6,0.6]:
