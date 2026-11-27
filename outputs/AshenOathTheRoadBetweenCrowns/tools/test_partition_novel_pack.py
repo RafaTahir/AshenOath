@@ -35,21 +35,34 @@ class NovelPack(unittest.TestCase):
         manifest = json.loads((PROJECT / "runtime_pack_manifest.json").read_text(encoding="utf-8-sig"))
         opening = manifest["pack_presets"]["opening"]
         acts = {f"data/novel/act_{act}.json" for act in range(1, 5)}
-        prop = "assets/narrative_props/ferry_rope.tscn"
+        catalog = "assets/narrative_props/library.json"
+        props = {
+            "assets/narrative_props/bell/ElnaBell.tscn",
+            "assets/narrative_props/brace/tor_left_wrist_brace.tscn",
+            "assets/narrative_props/crow/OrenPaintedCrow.tscn",
+            "assets/narrative_props/crow/OrenWrappedCrow.tscn",
+            "assets/narrative_props/strongbox/merrow_strongbox.tscn",
+        }
+        novel_paths = acts | props | {catalog}
         draft = "data/novel/authoring_draft.json"
         book = "books/AshenOath_The_Road_Between_Crowns.epub"
         root = config[sections["Web Browser"]]
         root["export_files"] = "PackedStringArray(" + ", ".join(map(json.dumps, sorted(
-            selected_files(root) | {"res://" + prop, "res://data/novel/act_1.json"}
+            selected_files(root) | {"res://assets/narrative_props/brace/tor_left_wrist_brace.tscn",
+                                    "res://data/novel/act_1.json"}
         ))) + ")"
-        root["include_filter"] = json.dumps(",".join(sorted(filters(root, "include_filter") | {"data/novel/*"})))
+        root["include_filter"] = json.dumps(",".join(sorted(
+            filters(root, "include_filter") | {"data/novel/*", "assets/narrative_props/*"}
+        )))
         owner = config[sections[opening]]
         owner["include_filter"] = json.dumps(",".join(sorted(filters(owner, "include_filter") | {"data/*.json", "books/*"})))
-        owner["exclude_filter"] = json.dumps(",".join(sorted(filters(owner, "exclude_filter") | {"data/novel/*"})))
+        owner["exclude_filter"] = json.dumps(",".join(sorted(
+            filters(owner, "exclude_filter") | {"data/novel/*", "assets/narrative_props/*"}
+        )))
         manifest["packs"]["base"]["contents"].append("res://data/novel/act_1.json")
         with tempfile.TemporaryDirectory() as temporary:
             project = Path(temporary)
-            for path in acts | {prop, draft, book}:
+            for path in novel_paths | {draft, book}:
                 asset = project / path
                 asset.parent.mkdir(parents=True, exist_ok=True)
                 asset.touch()
@@ -61,11 +74,12 @@ class NovelPack(unittest.TestCase):
             self.assertEqual(contents_before, manifest["packs"]["opening"]["contents"])
         for name, section in sections.items():
             with self.subTest(preset=name):
-                effective = {path for path in acts | {prop, draft, book} if selected(config[section], "res://" + path)}
-                self.assertEqual(acts | {prop} if name == opening else set(), effective)
-        self.assertTrue(acts <= filters(owner, "include_filter"))
-        self.assertIn("res://" + prop, selected_files(owner))
-        self.assertTrue({"res://" + path for path in acts | {prop}} <= set(contents_before))
+                effective = {path for path in novel_paths | {draft, book}
+                             if selected(config[section], "res://" + path)}
+                self.assertEqual(novel_paths if name == opening else set(), effective)
+        self.assertTrue(acts | {catalog} <= filters(owner, "include_filter"))
+        self.assertTrue({"res://" + path for path in props} <= selected_files(owner))
+        self.assertTrue({"res://" + path for path in novel_paths} <= set(contents_before))
         self.assertNotIn("res://data/novel/act_1.json", manifest["packs"]["base"]["contents"])
         self.assertIn("opening", manifest["startup_dependencies"])
         for zone, dependencies in manifest["zone_dependencies"].items():

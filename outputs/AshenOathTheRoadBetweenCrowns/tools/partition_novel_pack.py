@@ -6,6 +6,7 @@ import json
 
 ACT_DIRECTORY = "data/novel/"
 PROP_DIRECTORY = "assets/narrative_props/"
+PROP_CATALOG = PROP_DIRECTORY + "library.json"
 ACT_FILES = {f"{ACT_DIRECTORY}act_{act}.json" for act in range(1, 5)}
 SOURCE_BOOK_FILTERS = {
     f"*AshenOath_The_Road_Between_Crowns.{extension}"
@@ -28,9 +29,10 @@ def partition_novel_pack(project, config, sections, manifest):
         raise ValueError("Novel acts missing from the project: " + ", ".join(sorted(ACT_FILES - present_acts)))
     props = {
         path.relative_to(project).as_posix()
-        for path in (project / PROP_DIRECTORY).glob("*.tscn")
+        for path in (project / PROP_DIRECTORY).rglob("*.tscn")
         if path.is_file()
     }
+    catalog = {PROP_CATALOG} if (project / PROP_CATALOG).is_file() else set()
     other_novel_files = {
         path.relative_to(project).as_posix()
         for path in (project / ACT_DIRECTORY).rglob("*")
@@ -48,12 +50,12 @@ def partition_novel_pack(project, config, sections, manifest):
         if name == opening:
             # JSON is read via FileAccess. Select scenes as resources so Godot
             # discovers their dependencies during export.
-            includes.update(ACT_FILES)
+            includes.update(ACT_FILES | catalog)
             selected.update("res://" + path for path in props)
             excludes = {pattern for pattern in excludes if not (
                 _is_novel_path(pattern) and any(
                     fnmatch.fnmatchcase(path.casefold(), pattern.removeprefix("res://").casefold())
-                    for path in ACT_FILES | props
+                    for path in ACT_FILES | catalog | props
                 )
             )}
             excludes.update(other_novel_files)
@@ -64,7 +66,7 @@ def partition_novel_pack(project, config, sections, manifest):
         preset["include_filter"] = json.dumps(",".join(sorted(includes)))
         preset["exclude_filter"] = json.dumps(",".join(sorted(excludes)))
 
-    present = {"res://" + path for path in present_acts | props}
+    present = {"res://" + path for path in present_acts | catalog | props}
     for pack_id, pack in manifest["packs"].items():
         existing = pack.get("contents", [])
         if any(_is_novel_path(path) for path in existing) or (pack_id == "opening" and present):
