@@ -328,6 +328,7 @@ if (@(Get-ChildItem -LiteralPath $ResourceCheckRoot -Force).Count -gt 0) {
 }
 # The Web root exports the full script dependency graph, unlike standalone base.
 # Mount only exported files so authored resources cannot hide missing content.
+Invoke-BuildProcess $GodotPath @("--headless", "--path", $ResourceCheckRoot, "--main-pack", (Join-Path $ExportRoot "index.pck"), "--script", (Join-Path $PSScriptRoot "verify_web_root_startup.gd")) "web-root-startup-script"
 # This instantiates resources without running a world, before gzip transport.
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ResourceCheckRoot, "--main-pack", (Join-Path $ExportRoot "index.pck"), "--script", (Join-Path $PSScriptRoot "verify_prepared_actor_package.gd"), "--", "--pack-dir", $PackRoot) "prepared-actor-package"
 Copy-Item -LiteralPath $runtimeManifest -Destination (Join-Path $ExportRoot "runtime_pack_manifest.json") -Force
