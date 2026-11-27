@@ -1,0 +1,12 @@
+diff --git a/scu_builders.py b/scu_builders.py
+index 3efb8bf..e0d4627 100644
+--- a/scu_builders.py
++++ b/scu_builders.py
+@@ -287,7 +287,6 @@ def generate_scu_files(max_includes_per_scu):
+     process_folder(["drivers/png"])
+ 
+     process_folder(["drivers/gles3/effects"])
+-    process_folder(["drivers/gles3/storage"])
+ 
+     process_folder(["editor"], [], 32)
+     process_folder(["editor/animation"])

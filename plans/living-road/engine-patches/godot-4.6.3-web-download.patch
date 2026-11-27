@@ -1,0 +1,65 @@
+diff --git a/platform/web/js/engine/engine.js b/platform/web/js/engine/engine.js
+index 1aeeb62..1b23f63 100644
+--- a/platform/web/js/engine/engine.js
++++ b/platform/web/js/engine/engine.js
+@@ -92,8 +92,9 @@ const Engine = (function () {
+ 					// Make sure to test that when refactoring.
+ 					return new Promise(function (resolve, reject) {
+ 						promise.then(function (response) {
+-							const cloned = new Response(response.clone().body, { 'headers': [['content-type', 'application/wasm']] });
+-							Godot(me.config.getModuleConfig(loadPath, cloned)).then(function (module) {
++							const input = me['ownsWasmDownload'] === true && me.config.unloadAfterInit ? response : response.clone();
++							const wasm = new Response(input.body, { 'headers': [['content-type', 'application/wasm']] });
++							Godot(me.config.getModuleConfig(loadPath, wasm)).then(function (module) {
+ 								const paths = me.config.persistentPaths;
+ 								module['initFS'](paths).then(function (err) {
+ 									me.rtenv = module;
+diff --git a/platform/web/js/engine/preloader.js b/platform/web/js/engine/preloader.js
+index 564c68d..92697a9 100644
+--- a/platform/web/js/engine/preloader.js
++++ b/platform/web/js/engine/preloader.js
+@@ -1,27 +1,24 @@
+ const Preloader = /** @constructor */ function () { // eslint-disable-line no-unused-vars
+ 	function getTrackedResponse(response, load_status) {
+-		function onloadprogress(reader, controller) {
+-			return reader.read().then(function (result) {
+-				if (load_status.done) {
+-					return Promise.resolve();
+-				}
+-				if (result.value) {
+-					controller.enqueue(result.value);
+-					load_status.loaded += result.value.length;
+-				}
+-				if (!result.done) {
+-					return onloadprogress(reader, controller);
+-				}
+-				load_status.done = true;
+-				return Promise.resolve();
+-			});
+-		}
+ 		const reader = response.body.getReader();
+ 		return new Response(new ReadableStream({
+-			start: function (controller) {
+-				onloadprogress(reader, controller).then(function () {
+-					controller.close();
+-				});
++			async pull(controller) {
++				try {
++					const result = await reader.read();
++					if (result.done) {
++						load_status.done = true;
++						controller.close();
++						reader.releaseLock();
++					} else {
++						load_status.loaded += result.value.byteLength;
++						controller.enqueue(result.value);
++					}
++				} catch (error) {
++					controller.error(error);
++				}
++			},
++			cancel(reason) {
++				return reader.cancel(reason);
+ 			},
+ 		}), { headers: response.headers });
+ 	}

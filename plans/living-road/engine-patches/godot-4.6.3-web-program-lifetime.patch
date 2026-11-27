@@ -1,8 +1,68 @@
 diff --git a/drivers/gles3/shader_gles3.cpp b/drivers/gles3/shader_gles3.cpp
-index 709195a..e505649 100644
+index 709195a..76d37ea 100644
 --- a/drivers/gles3/shader_gles3.cpp
 +++ b/drivers/gles3/shader_gles3.cpp
-@@ -461,6 +461,15 @@ void ShaderGLES3::_compile_specialization(Version::Specialization &spec, uint32_
+@@ -319,6 +319,7 @@ void ShaderGLES3::_compile_specialization(Version::Specialization &spec, uint32_
+ 		glShaderSource(spec.vert_id, 1, &cstr, &cstr_len);
+ 		glCompileShader(spec.vert_id);
+ 
++#ifndef WEB_ENABLED
+ 		glGetShaderiv(spec.vert_id, GL_COMPILE_STATUS, &status);
+ 		if (status == GL_FALSE) {
+ 			GLsizei iloglen;
+@@ -352,6 +353,7 @@ void ShaderGLES3::_compile_specialization(Version::Specialization &spec, uint32_
+ 
+ 			ERR_FAIL();
+ 		}
++#endif
+ 	}
+ 
+ 	//fragment stage
+@@ -367,6 +369,7 @@ void ShaderGLES3::_compile_specialization(Version::Specialization &spec, uint32_
+ 		glShaderSource(spec.frag_id, 1, &cstr, &cstr_len);
+ 		glCompileShader(spec.frag_id);
+ 
++#ifndef WEB_ENABLED
+ 		glGetShaderiv(spec.frag_id, GL_COMPILE_STATUS, &status);
+ 		if (status == GL_FALSE) {
+ 			GLsizei iloglen;
+@@ -400,6 +403,7 @@ void ShaderGLES3::_compile_specialization(Version::Specialization &spec, uint32_
+ 
+ 			ERR_FAIL();
+ 		}
++#endif
+ 	}
+ 
+ 	glAttachShader(spec.id, spec.frag_id);
+@@ -425,6 +429,27 @@ void ShaderGLES3::_compile_specialization(Version::Specialization &spec, uint32_
+ 
+ 	glGetProgramiv(spec.id, GL_LINK_STATUS, &status);
+ 	if (status == GL_FALSE) {
++#ifdef WEB_ENABLED
++		// The link waits for both stages. Retrieve individual diagnostics only on failure.
++		auto report_stage = [&](GLuint shader, StageType stage, const char *label) {
++			GLint compiled = GL_FALSE;
++			glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
++			if (compiled == GL_TRUE) {
++				return;
++			}
++			GLint length = 0;
++			glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
++			Vector<char> log;
++			log.resize(length > 0 ? length : 4096);
++			GLsizei written = 0;
++			glGetShaderInfoLog(shader, log.size(), &written, log.ptrw());
++			StringBuilder code;
++			_build_variant_code(code, p_variant, p_version, stage, p_specialization);
++			_display_error_with_code(name + ": " + label + " shader compilation failed:\n" + String::utf8(log.ptr(), written), code.as_string());
++		};
++		report_stage(spec.vert_id, STAGE_TYPE_VERTEX, "Vertex");
++		report_stage(spec.frag_id, STAGE_TYPE_FRAGMENT, "Fragment");
++#endif
+ 		GLsizei iloglen;
+ 		glGetProgramiv(spec.id, GL_INFO_LOG_LENGTH, &iloglen);
+ 
+@@ -461,6 +486,15 @@ void ShaderGLES3::_compile_specialization(Version::Specialization &spec, uint32_
  		ERR_FAIL();
  	}
  
@@ -18,7 +78,7 @@ index 709195a..e505649 100644
  	_get_uniform_locations(spec, p_version);
  
  	spec.ok = true;
-@@ -687,8 +696,12 @@ void ShaderGLES3::_clear_version(Version *p_version) {
+@@ -687,8 +721,12 @@ void ShaderGLES3::_clear_version(Version *p_version) {
  	for (int i = 0; i < variant_count; i++) {
  		for (KeyValue<uint64_t, Version::Specialization> &kv : p_version->variants[i]) {
  			if (kv.value.id != 0) {
@@ -33,7 +93,7 @@ index 709195a..e505649 100644
  				glDeleteProgram(kv.value.id);
  			}
  		}
-@@ -707,9 +720,11 @@ void ShaderGLES3::_initialize_version(Version *p_version) {
+@@ -707,9 +745,11 @@ void ShaderGLES3::_initialize_version(Version *p_version) {
  	for (int i = 0; i < variant_count; i++) {
  		AHashMap<uint64_t, Version::Specialization> variant;
  		p_version->variants.push_back(variant);

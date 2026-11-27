@@ -827,6 +827,8 @@
             return;
           }
           engine = new Engine(GODOT_CONFIG);
+          // This page owns a single engine and releases its download after init.
+          engine.ownsWasmDownload = true;
           const restoreAudioConstructors = captureEngineAudioContext();
           // startGame downloads/initializes WASM and the root PCK together.
           try {
