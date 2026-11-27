@@ -238,10 +238,9 @@ func _restore_active_world_view() -> void:
 		return
 	if zone_transition_pending or zone_load_request_pending or opening_pack_waiting or campaign_pack_waiting or _journey_load_pending():
 		return
-	if str(zone_root.get_meta("zone_resource_owner", "active")) != "active":
-		return
 	var memory: Node = _host.get_node_or_null("PaintedCrowMemory")
-	if is_instance_valid(memory) and not memory.is_queued_for_deletion(): return
+	if str(zone_root.get_meta("zone_resource_owner", "active")) != "active" or (is_instance_valid(memory) and not memory.is_queued_for_deletion()):
+		return
 	# Only a fully published active world may take rendering back from the
 	# menu/preparation path. HUD visibility is not a substitute for this handoff.
 	zone_root.visible = true

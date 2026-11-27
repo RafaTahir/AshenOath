@@ -769,8 +769,6 @@ func _clear_route_zone_cache(preserve_root: Node3D = null) -> void:
 func prepare_resource_shutdown() -> void:
 	if resource_shutdown_prepared:
 		return
-	# Keep the renderer grace frames, then drain every retirement before its owner exits.
-	zone_residency.shutting_down = true
 	world_transition.teardown()
 	resource_shutdown_prepared = true
 	journey_loading.cancel(_host, "", false, true)
@@ -797,15 +795,8 @@ func prepare_resource_shutdown() -> void:
 	_cancel_owned_timers()
 	if performance_budget_monitor != null:
 		performance_budget_monitor.suspend()
-	if zone_root != null and is_instance_valid(zone_root):
-		_retire_zone_root(zone_root)
+	zone_residency.retire_worlds_for_shutdown(zone_root)
 	zone_root = null
-	for cached_root in route_zone_cache.values().duplicate():
-		if cached_root != null and is_instance_valid(cached_root):
-			_retire_zone_root(cached_root)
-	route_zone_cache.clear()
-	route_enemy_cache.clear()
-	route_zone_signatures.clear()
 	for raw_id in route_spatial_cache.keys().duplicate():
 		_release_route_spatial_service(str(raw_id))
 	if greyfen_prewarm_spatial_service != null and is_instance_valid(greyfen_prewarm_spatial_service):

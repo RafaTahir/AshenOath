@@ -25,6 +25,18 @@ var _road_preview = preload("res://scripts/views/resident_road_preview.gd").new(
 func configure(validator: Callable) -> void:
 	validate_resources = validator
 
+func retire_worlds_for_shutdown(active: Node) -> void:
+	# Keep the renderer grace period, then drain retirees before the tree exits.
+	shutting_down = true
+	if is_instance_valid(active):
+		_retire_zone_root(active)
+	for cached in route_zone_cache.values():
+		if is_instance_valid(cached):
+			_retire_zone_root(cached)
+	route_zone_cache.clear()
+	route_enemy_cache.clear()
+	route_zone_signatures.clear()
+
 func release_shared_anchors() -> void:
 	for raw_branch in skinned_resource_anchors.values():
 		var branch := raw_branch as Node

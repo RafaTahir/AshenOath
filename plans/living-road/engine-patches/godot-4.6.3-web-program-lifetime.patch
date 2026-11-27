@@ -1,0 +1,47 @@
+diff --git a/drivers/gles3/shader_gles3.cpp b/drivers/gles3/shader_gles3.cpp
+index 709195a..e505649 100644
+--- a/drivers/gles3/shader_gles3.cpp
++++ b/drivers/gles3/shader_gles3.cpp
+@@ -461,6 +461,15 @@ void ShaderGLES3::_compile_specialization(Version::Specialization &spec, uint32_
+ 		ERR_FAIL();
+ 	}
+ 
++#ifdef WEB_ENABLED
++	// The linked program owns its executable. No Web code relinks these objects.
++	glDetachShader(spec.id, spec.vert_id);
++	glDetachShader(spec.id, spec.frag_id);
++	glDeleteShader(spec.vert_id);
++	glDeleteShader(spec.frag_id);
++	spec.vert_id = 0;
++	spec.frag_id = 0;
++#endif
+ 	_get_uniform_locations(spec, p_version);
+ 
+ 	spec.ok = true;
+@@ -687,8 +696,12 @@ void ShaderGLES3::_clear_version(Version *p_version) {
+ 	for (int i = 0; i < variant_count; i++) {
+ 		for (KeyValue<uint64_t, Version::Specialization> &kv : p_version->variants[i]) {
+ 			if (kv.value.id != 0) {
+-				glDeleteShader(kv.value.vert_id);
+-				glDeleteShader(kv.value.frag_id);
++				if (kv.value.vert_id) {
++					glDeleteShader(kv.value.vert_id);
++				}
++				if (kv.value.frag_id) {
++					glDeleteShader(kv.value.frag_id);
++				}
+ 				glDeleteProgram(kv.value.id);
+ 			}
+ 		}
+@@ -707,9 +720,11 @@ void ShaderGLES3::_initialize_version(Version *p_version) {
+ 	for (int i = 0; i < variant_count; i++) {
+ 		AHashMap<uint64_t, Version::Specialization> variant;
+ 		p_version->variants.push_back(variant);
++#ifndef WEB_ENABLED
+ 		Version::Specialization spec;
+ 		_compile_specialization(spec, i, p_version, specialization_default_mask);
+ 		p_version->variants[i].insert(specialization_default_mask, spec);
++#endif // WebGL links the exact specialization on first bind.
+ 	}
+ 	if (use_cache) {
+ 		_save_to_cache(p_version);
