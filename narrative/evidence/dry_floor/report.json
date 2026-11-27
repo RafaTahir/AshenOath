@@ -1,0 +1,29 @@
+{
+	"capture_desktop": "",
+	"case": "novel-dry_floor",
+	"completed_work": [],
+	"elapsed_ms": 118544,
+	"execution_mode": "background-rendered",
+	"failures": [],
+	"full_campaign_proof": false,
+	"headless": false,
+	"input_events": 47,
+	"input_mode": "keyboard_mouse",
+	"kind": "community_world_real_input",
+	"no_focus": true,
+	"observations": [],
+	"physical_phone_coverage": false,
+	"progression_injection": false,
+	"renderer": "gl_compatibility",
+	"scene": "dry_floor",
+	"schema_version": 1,
+	"seed": "synthetic_boundary",
+	"status": "pass",
+	"touch_input_coverage": false,
+	"user_data_dir": "D:/AOPlay/evidence/novel-dry_floor/user/Godot/app_userdata/Ashen Oath- The Road Between Crowns",
+	"viewport": "(960, 540)",
+	"viewport_size": [
+		960,
+		540
+	]
+}

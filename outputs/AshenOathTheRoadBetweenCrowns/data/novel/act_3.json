@@ -1173,6 +1173,78 @@
           ]
         }
       ]
+    },
+    {
+      "chapter": 21,
+      "id": "patrol_receipt",
+      "title": "The limit of the receipt",
+      "when": {
+        "flags": {
+          "novel_done_rook_schedule": true
+        },
+        "complete": [
+          "main_soldier_without_banner"
+        ]
+      },
+      "beats": [
+        {
+          "zone": "marsh_crossing",
+          "at": [
+            -2.7,
+            7
+          ],
+          "object": "order",
+          "prompt": "Read the inspection letter at the head of the causeway",
+          "seconds": 1.4,
+          "result": "Merrow says no person will be held. The road is one cart wide. A driver cannot leave disputed goods without leaving the cart."
+        },
+        {
+          "zone": "marsh_crossing",
+          "at": [
+            1.6,
+            6.3
+          ],
+          "object": "pin",
+          "prompt": "Pass the copy to the rear before unloading",
+          "seconds": 1.3,
+          "result": "The rear knows whom to ask for a receipt when a load is held. Rook’s exposure of the route is already on the crew’s account."
+        }
+      ]
+    },
+    {
+      "chapter": 27,
+      "id": "guarded_door",
+      "title": "A door that can be watched",
+      "when": {
+        "quest": "main_house_many_names",
+        "flags": {
+          "senn_fate": "testimony"
+        }
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            -3.5,
+            5.2
+          ],
+          "object": "door",
+          "prompt": "Test the latch from the watch side",
+          "seconds": 1.6,
+          "result": "The room is dry. A guard can see its only door from a chair. The hearing and the business of feeding the man are separate decisions."
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            -4.6,
+            7.2
+          ],
+          "object": "meal",
+          "prompt": "Carry an ordinary portion to the guarded room",
+          "seconds": 1.2,
+          "result": "The guard takes the bowl. No family is asked to visit or listen. Someone still has to wash it before breakfast."
+        }
+      ]
     }
   ]
 }

@@ -29,6 +29,42 @@ static func dress(parent: Node3D, kind: String, height: float = 0.0) -> Node3D:
 	parent.add_child(stand)
 	stand.position.y = height
 	match kind:
+		"seed_bed":
+			box(stand,Vector3(0,0.05,0),Vector3(0.78,0.10,0.44),Color("#544438"))
+			for i in 5:
+				var stem := box(stand,Vector3(-0.31+0.15*i,0.14,0.08*(i%2)),Vector3(0.020,0.13,0.020),Color("#626a40"))
+				for side in [-1,1]:
+					box(stem,Vector3(side*0.041,0.025,0),Vector3(0.10,0.022,0.041),Color("#869357")).rotation.z=side*0.35
+		"bound_wheel":
+			var rim := TorusMesh.new()
+			rim.inner_radius = 0.38
+			rim.outer_radius = 0.43
+			var wheel := part(stand,rim,Vector3(0,0.44,0),WOOD)
+			wheel.rotation = Vector3(PI/2,0,0.19)
+			for i in 5:
+				box(wheel,Vector3.ZERO,Vector3(0.77,0.032,0.033),WOOD).rotation.y = i*PI/5
+			for i in 3:
+				box(wheel,Vector3(0.24+i*0.025,0,0),Vector3(0.018,0.058,0.06),LINEN)
+		"child_pan":
+			var pan := CylinderMesh.new()
+			pan.top_radius = 0.14
+			pan.bottom_radius = 0.11
+			pan.height = 0.12
+			part(stand,pan,Vector3(0,0.07,0),IRON)
+			box(stand,Vector3(0.23,0.10,0),Vector3(0.23,0.026,0.035),WOOD)
+		"barred_gate":
+			for side in [-1,1]:
+				box(stand,Vector3(side*0.61,0.63,0),Vector3(0.14,1.26,0.14),WOOD)
+			for i in 5:
+				box(stand,Vector3(-0.45+i*0.22,0.49,0),Vector3(0.19,0.98,0.05),WOOD)
+			box(stand,Vector3(0,0.70,0.08),Vector3(1.43,0.092,0.09),IRON)
+		"kept_crow":
+			var token := keepsake("oren_crow","wrapped")
+			if token != null:
+				box(stand,Vector3(0,0.14,0),Vector3(0.41,0.28,0.35),WOOD)
+				var model := token.instantiate() as Node3D
+				stand.add_child(model)
+				model.position.y = 0.29
 		"bell", "strongbox", "crow":
 			var prop := keepsake("elna_bell" if kind=="bell" else ("oren_crow" if kind=="crow" else "merrow_strongbox"),"cemetery" if kind=="bell" else "")
 			if prop != null: stand.add_child(prop.instantiate())

@@ -480,12 +480,15 @@
         },
         "complete": [
           "side_escort_06"
-        ]
+        ],
+        "unless": {
+          "final_covenant": "open_road"
+        }
       },
       "beats": [
         {
           "zone": "greyfen",
-          "actor": "saga_maren",
+          "actor": "saga_nera",
           "prompt": "Ask Nera what company she wants tonight",
           "line": "An evening. It doesn’t have to mean we’ve settled every other evening.",
           "result": "The space between you has a purpose too.",
@@ -888,9 +891,531 @@
             5.6
           ],
           "object": "load",
-          "prompt": "Set Nera’s chair beside the wide freight door",
+          "prompt": "Fit the chair that Siv’s father lost",
           "seconds": 2,
-          "result": "Six months after the crossings, a new guide line hangs at the ferry. Nera has orders for freight with her own name above the door. Kael rests his calf on the step before taking the next crate."
+          "result": "Toma drives the peg while Tor holds the joint. Siv’s father leans back, complains about the angle and stays seated."
+        }
+      ]
+    },
+    {
+      "chapter": 28,
+      "id": "crooked_ditch",
+      "title": "Water won’t wait for your anniversary",
+      "when": {
+        "flags": {
+          "novel_first_beds": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            3.1,
+            8.4
+          ],
+          "object": "post",
+          "prompt": "Mark the place Bera’s cartwheel sank",
+          "seconds": 1.3,
+          "result": "Bera pushes a switch into the ground and sights past the post."
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            4.2,
+            9.2
+          ],
+          "object": "sill",
+          "prompt": "Take up the crooked board and give the water a way out",
+          "seconds": 1.8,
+          "result": "The ditch follows the ground. Bera says the ground could stand to improve itself.",
+          "set": {
+            "novel_ditch_open": true
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 29,
+      "id": "slate_appeal",
+      "title": "The judge is eating her second loaf",
+      "when": {
+        "quest": "main_what_we_promise"
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "actor": "vargan_record_keeper",
+          "prompt": "Offer Vale the next place at the slate",
+          "line": "“You couldn’t have gone through the other piece.” Pell shakes her head. “Under it.” Vale’s appeal reaches the girl with the bread and goes no further. She turns to you. “One round with the rules we started with?”",
+          "result": "Merrow has begun to count the pieces. He will regret taking sides.",
+          "speaker": "Vale",
+          "choices": [
+            {
+              "label": "Play a round of Three Marks with Vale",
+              "play": "slate",
+              "result": "The slate goes back to the children. Pell considers the arrangement between the grown-ups a local variation.",
+              "set": {
+                "novel_evening_slate": "played"
+              }
+            },
+            {
+              "label": "Watch the children try Merrow’s patience",
+              "result": "He explains his objection to a judge who has just finished her bread. The corner piece goes under again.",
+              "set": {
+                "novel_evening_slate": "watched"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 29,
+      "id": "safe_public_page",
+      "title": "Three houses are still too few",
+      "when": {
+        "flags": {
+          "novel_done_dry_floor": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            3.8,
+            5.8
+          ],
+          "object": "copy",
+          "prompt": "Read the description that could identify three families",
+          "seconds": 1.4,
+          "result": "The road, the winter and the trade would narrow it to three doors. Elna taps the line with her nail."
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            2.6,
+            5.4
+          ],
+          "object": "ledger",
+          "prompt": "Leave the identifying description off the wall copy",
+          "seconds": 1.7,
+          "result": "The reference stays in the packet with its access terms. The public page can still say what the order did.",
+          "set": {
+            "novel_public_redaction": true
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 29,
+      "id": "cuff_and_pear",
+      "title": "Time that belongs to Vale",
+      "when": {
+        "flags": {
+          "novel_done_seals": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "actor": "vargan_record_keeper",
+          "prompt": "Offer to take the last clean copy to the dry shelf",
+          "line": "I kept that pear through the whole argument. By the time we got outside it was a brown handful. I would like to eat this one sitting down.",
+          "result": "Vale closes the shutters on the copying bench.",
+          "speaker": "Vale",
+          "choices": [
+            {
+              "label": "Take the packet and leave her a quiet table",
+              "result": "She slides an uneaten slice across the board. It tastes of a perfectly ordinary pear.",
+              "set": {
+                "novel_vale_evening": "friends"
+              }
+            },
+            {
+              "label": "Sit with her while the ink dries",
+              "when": {
+                "flags": {
+                  "lr_commitment_partner": "vale"
+                }
+              },
+              "result": "Vale puts her warm hand over Kael’s wrist and turns it palm up. The ink can take as long as it likes.",
+              "set": {
+                "novel_vale_evening": "together"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 30,
+      "id": "lamp_round",
+      "title": "The second half of the watch",
+      "when": {
+        "flags": {
+          "novel_done_short_watch": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            4,
+            7.6
+          ],
+          "object": "post",
+          "prompt": "Take the lamp round the kitchen wall",
+          "seconds": 1.6,
+          "result": "At the back door the light reaches the latch. At the privy turn your shadow falls across it."
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            -1.8,
+            4.8
+          ],
+          "object": "post",
+          "prompt": "Hang the relief lamp where the next watcher can find it",
+          "seconds": 1.3,
+          "result": "Anwen stays on the bench until she can see the next lamp moving. Then, for once, she goes to bed."
+        }
+      ]
+    },
+    {
+      "chapter": 32,
+      "id": "receipt_without_a_name",
+      "title": "An open grain measure",
+      "when": {
+        "quest": "main_crowns_without_mercy"
+      },
+      "beats": [
+        {
+          "zone": "assembly",
+          "at": [
+            -3,
+            7.4
+          ],
+          "object": "meal",
+          "prompt": "Hold the empty measure while a family fills it",
+          "seconds": 2,
+          "result": "The woman tips the grain into her folded apron. Her boy licks a kernel and spits it back."
+        },
+        {
+          "zone": "assembly",
+          "at": [
+            -1.1,
+            5.9
+          ],
+          "object": "ledger",
+          "prompt": "Leave the statement column to its owner",
+          "line": "The woman watches the pen. “My father was there. He has asked me to say nothing here.” The next sack is already on the bench.",
+          "result": "She carries the grain away.",
+          "speaker": "Household carrier",
+          "choices": [
+            {
+              "label": "Mark only the weight",
+              "result": "Merrow records the measure. The testimony column stays blank.",
+              "set": {
+                "novel_grain_receipt": "weight"
+              }
+            },
+            {
+              "label": "Offer her a separate private page",
+              "result": "She leaves the page untouched. Vale takes it off the grain bench before the next family arrives.",
+              "set": {
+                "novel_grain_receipt": "private_offer"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 33,
+      "id": "old_gate_memory",
+      "title": "Where the road waited",
+      "when": {
+        "objectives": [
+          [
+            "main_hart_remembers",
+            "hear_testimony"
+          ]
+        ],
+        "before_covenant": true
+      },
+      "beats": [
+        {
+          "zone": "hart_glade",
+          "at": [
+            -2.3,
+            -5.5
+          ],
+          "object": "bound_wheel",
+          "prompt": "Kneel beside the spoke tied with wool",
+          "seconds": 2.3,
+          "result": "A man under the wheel asks for a tool. Another hand holds the spoke still. Nobody in the queue yet knows they will spend their last afternoon here."
+        },
+        {
+          "zone": "hart_glade",
+          "at": [
+            1.5,
+            -6.8
+          ],
+          "object": "child_pan",
+          "prompt": "Walk beside the child with the saucepan",
+          "seconds": 1.5,
+          "result": "The rim taps her knee. A father carries his son standing on his boots. Someone calls “Avel” and three people turn."
+        },
+        {
+          "zone": "hart_glade",
+          "at": [
+            -1,
+            -8
+          ],
+          "object": "barred_gate",
+          "prompt": "Stay until the keeper draws the bar",
+          "seconds": 2.6,
+          "result": "The keepers asked for concealment without bloodshed. The gate closes on the people already on the road. Halvern refuses the command and his men take hold of him.",
+          "set": {
+            "novel_saw_old_gate": true
+          }
+        },
+        {
+          "zone": "hart_glade",
+          "at": [
+            1.4,
+            -5.6
+          ],
+          "object": "copy",
+          "prompt": "Choose what to take from the witness",
+          "line": "Vale has left space between the words spoken at the gate and what she thinks she saw. The Hart waits.",
+          "result": "Vale closes the packet.",
+          "speaker": "Vale",
+          "choices": [
+            {
+              "label": "Ask about the escort eight years ago",
+              "result": "“I was not there.” Nera can choose to speak about her road. Nothing the Hart shows fills that gap.",
+              "set": {
+                "novel_hart_question": "escort"
+              }
+            },
+            {
+              "label": "Ask Vale to distinguish sight from testimony",
+              "result": "She circles the name she heard and leaves a question beside the face she thought she recognized.",
+              "set": {
+                "novel_hart_question": "limits"
+              }
+            },
+            {
+              "label": "Keep the last question to yourself",
+              "result": "You let the animal stand in the grass. Vale does not fill the space for you.",
+              "set": {
+                "novel_hart_question": "silent"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 36,
+      "id": "unaudited_goods",
+      "title": "The stores check",
+      "when": {
+        "flags": {
+          "novel_departure_handover": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            -2.2,
+            6.4
+          ],
+          "object": "load",
+          "prompt": "Unroll the damp sleeve around the stores sheet",
+          "seconds": 1.4,
+          "result": "The line says meal. There is bran in the stitching of the sack. Two bundles of blankets have the same chalk mark."
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            -3.4,
+            4.3
+          ],
+          "object": "ledger",
+          "prompt": "Separate the goods you can identify from the missing fittings",
+          "seconds": 2.4,
+          "result": "Vale initials the correction. The iron fittings stay unaccounted for. Merrow spells out the stores abbreviation, for anyone who can read.",
+          "set": {
+            "novel_stores_checked": true
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 36,
+      "id": "rook_bill",
+      "title": "The bill for nothing",
+      "when": {
+        "flags": {
+          "novel_departure_handover": true
+        },
+        "stayed_home": "rook"
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "actor": "rook",
+          "prompt": "Ask about Bram’s left gloves",
+          "line": "“Thirty-seven. He said thirty-seven. I never counted.” Rook catches you smiling. “I counted what he owed.”",
+          "result": "Rook marks the dry shelves on the wagon sheet. The storage charge is zero.",
+          "speaker": "Rook",
+          "reply": "Take the itemized receipt",
+          "set": {
+            "novel_rook_receipt": true
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 37,
+      "id": "ordinary_freight",
+      "title": "A cart after supper",
+      "when": {
+        "flags": {
+          "novel_season": "spring"
+        }
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            3.7,
+            7.3
+          ],
+          "object": "bedding",
+          "prompt": "Take one end of the new arrivals’ bedding",
+          "seconds": 1.6,
+          "result": "The pot lid bangs on its string. Siv has already taken the passenger’s arm. At your end the bedding is heavier than it looks."
+        },
+        {
+          "zone": "hearthward",
+          "at": [
+            -2.9,
+            5.5
+          ],
+          "object": "door",
+          "prompt": "Turn sideways together through the freight door",
+          "seconds": 2,
+          "result": "You set it down inside. The last people at the table pass their bowls along and make room for two more.",
+          "set": {
+            "novel_arrivals_settled": true
+          }
+        }
+      ]
+    },
+    {
+      "chapter": 37,
+      "id": "coast_money",
+      "title": "Three weeks of her own",
+      "when": {
+        "flags": {
+          "novel_season": "spring"
+        }
+      },
+      "beats": [
+        {
+          "zone": "hearthward",
+          "at": [
+            -4.2,
+            6.1
+          ],
+          "object": "order",
+          "prompt": "Leave the locum’s roster beside the medicine chest",
+          "seconds": 1.4,
+          "result": "Three names cover the herb beds and sick calls. Mira paid her coast deposit out of her own work. Nothing here gives anyone the key to her upstairs room."
+        },
+        {
+          "zone": "greyfen",
+          "at": [
+            -2.4,
+            8.5
+          ],
+          "object": "linen",
+          "prompt": "Exchange the used jars at the village well",
+          "seconds": 1.8,
+          "result": "Eggs for one visit, a mended cloth for another. There is still an empty place in the rack for the patient who could pay nothing."
+        }
+      ]
+    },
+    {
+      "chapter": 37,
+      "id": "graves_in_spring",
+      "title": "A morning at the graves",
+      "when": {
+        "flags": {
+          "novel_season": "spring",
+          "novel_oren_buried": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "cemetery",
+          "at": [
+            -2.3,
+            6.8
+          ],
+          "object": "kept_crow",
+          "prompt": "Turn the red cord until the brass catches the light",
+          "seconds": 1.8,
+          "result": "The cord has faded. Beneath the black bird the letters remain. AVEL."
+        },
+        {
+          "zone": "cemetery",
+          "at": [
+            0.2,
+            7.7
+          ],
+          "object": "linen",
+          "prompt": "Tuck the traveler’s wrapping away",
+          "seconds": 1.4,
+          "result": "Bram Kett. Sella Vey. Oren. The three graves have different patches of sun. You stay until the shadow clears the smallest."
+        }
+      ]
+    },
+    {
+      "chapter": 31,
+      "id": "kitchen_water",
+      "title": "What the kitchen guard asked for",
+      "when": {
+        "flags": {
+          "novel_done_refusal_book": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "record_hall",
+          "at": [
+            -3,
+            3.9
+          ],
+          "object": "water",
+          "prompt": "Set water within reach of the kitchen guard",
+          "seconds": 1.2,
+          "result": "His brother has a claim on the grain store. He wants to know whether that claim disappears with the book."
+        },
+        {
+          "zone": "record_hall",
+          "at": [
+            -4.5,
+            4.4
+          ],
+          "object": "order",
+          "prompt": "Leave the delivery hours beside the covered jar",
+          "seconds": 1.2,
+          "result": "The public hours are enough. His brother’s name goes on neither the packet nor a list of witnesses."
         }
       ]
     }

@@ -654,6 +654,39 @@
           "result": "From the bed you can hear the bell. Nobody is holding the rope."
         }
       ]
+    },
+    {
+      "chapter": 7,
+      "id": "two_root_beds",
+      "title": "Two beds of fever root",
+      "when": {
+        "quest": "main_teeth_in_rain"
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "at": [
+            -3.1,
+            6.2
+          ],
+          "object": "seed_bed",
+          "prompt": "Lift the covering from Mira’s upper bed",
+          "seconds": 1.4,
+          "result": "The little roots in the pale soil do not fill her palm. Below the stones the leaves are glossy and large."
+        },
+        {
+          "zone": "greyfen",
+          "actor": "mira",
+          "prompt": "Ask what she has told Pell’s father",
+          "line": "“I showed him the two beds and told him what I couldn’t tell from the leaves. He chose the upper one. Now I need to tell Pell.”",
+          "result": "Mira labels the pots. The choice of medicine belongs with her and Pell’s family.",
+          "speaker": "Mira",
+          "reply": "Help her carry the empty pots",
+          "set": {
+            "novel_pell_medicine": "upper_bed"
+          }
+        }
+      ]
     }
   ]
 }

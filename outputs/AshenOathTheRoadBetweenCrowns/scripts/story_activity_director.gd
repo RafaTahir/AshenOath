@@ -330,7 +330,7 @@ static func get_waypost_model(game) -> Dictionary:
 	return {"current_zone":current_zone, "routes":routes, "available":reason == "" and has_return, "reason":reason}
 
 static func _travel_unavailable_reason(game) -> String:
-	if game.player == null or game.zone_transition_in_progress:
+	if game.player == null or game.zone_transition_pending or game.zone_load_request_pending:
 		return "The road is still settling. Finish arriving before travelling."
 	if str(game.pending_ending) != "":
 		if preload("res://scripts/covenant_resolution.gd").relocation_pending(game.story_state):
@@ -346,7 +346,7 @@ static func _travel_open(game) -> bool:
 	return bool(game.story_state.get_flag("rootbound_colossus_defeated", false)) or str(game.story_state.get_flag("names_policy", "")) != "" or bool(game.story_state.get_flag("final_choice_completed", false))
 
 static func _danger_near(game) -> bool:
-	if game.player == null or (game.pending_ending != "" and not preload("res://scripts/covenant_resolution.gd").relocation_pending(game.story_state)) or game.zone_transition_in_progress:
+	if game.player == null or (game.pending_ending != "" and not preload("res://scripts/covenant_resolution.gd").relocation_pending(game.story_state)) or game.zone_transition_pending or game.zone_load_request_pending:
 		return true
 	for enemy in game.active_enemies:
 		if is_instance_valid(enemy) and not enemy.dead and enemy.encounter_active and not bool(enemy.get_meta("story_surrender_protected", false)) and enemy.global_position.distance_to(game.player.global_position) < 13.0:

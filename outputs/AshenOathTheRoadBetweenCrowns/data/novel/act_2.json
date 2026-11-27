@@ -766,6 +766,142 @@
           "reply": "Slide her a chair"
         }
       ]
+    },
+    {
+      "chapter": 14,
+      "id": "marks_under_iron",
+      "title": "The underside of the mill brace",
+      "when": {
+        "flags": {
+          "novel_tor_braced": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "old_mill",
+          "at": [
+            2.4,
+            6.5
+          ],
+          "object": "pin",
+          "prompt": "Turn the old iron over where the rain never reached",
+          "seconds": 1.6,
+          "result": "Three strokes joined by a shallow curve. The mark on the household tally was struck by a smith. A matching mark says whose work passed here. It cannot tell you who wrote the orders.",
+          "evidence": {
+            "id": "mill_iron",
+            "title": "Three cuts beneath the iron",
+            "text": "A sheltered maker’s mark matches the shape on the tally. It identifies work, without dating an order."
+          }
+        },
+        {
+          "zone": "old_mill",
+          "at": [
+            -2,
+            7.1
+          ],
+          "object": "sill",
+          "prompt": "Set the wedge at Tor’s measure",
+          "seconds": 1.6,
+          "result": "He lets someone else take the hammer and corrects the angle from his bucket. The wedge holds.",
+          "variants": [
+            {
+              "when": {
+                "flags": {
+                  "mill_operation": "supervised"
+                }
+              },
+              "result": "Under supervision the first clean test of coarse meal falls. Tor calls the angle while another hand takes the hammer."
+            },
+            {
+              "when": {
+                "flags": {
+                  "mill_operation": "closed"
+                }
+              },
+              "result": "The wedge holds the shut channel fast. Nessa sends for the reserves. Tor puts the hammer down without trying his wrist."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 15,
+      "id": "lamp_at_the_stairs",
+      "title": "A lamp someone may put out",
+      "when": {
+        "flags": {
+          "novel_done_burned_loaf": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "greyfen",
+          "actor": "mira",
+          "prompt": "Wait with Mira at the foot of the stairs",
+          "line": "Mira puts her medicine bag down. “This is my evening. It might be a short evening. Sit with me if you like.”",
+          "result": "You let her choose how long she stays.",
+          "speaker": "Mira",
+          "choices": [
+            {
+              "label": "Ask whether she wants a kiss",
+              "result": "She takes your hand and kisses your fingers. The lamp goes out. In the morning she has her own work.",
+              "set": {
+                "novel_mira_lamp": "kiss"
+              }
+            },
+            {
+              "label": "Stay and talk about the coast",
+              "result": "She wants to see what will grow where the air tastes of salt. She has already started saving.",
+              "set": {
+                "novel_mira_lamp": "talk"
+              }
+            },
+            {
+              "label": "Bring the lamp down for her",
+              "result": "She calls goodnight and closes her door. Nessa finds you a sack of onions downstairs.",
+              "set": {
+                "novel_mira_lamp": "apart"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 18,
+      "id": "sealed_bag",
+      "title": "Who carries the original",
+      "when": {
+        "flags": {
+          "novel_load_limits_known": true,
+          "novel_crew_briefed": true
+        }
+      },
+      "beats": [
+        {
+          "zone": "lantern_reach",
+          "actor": "rook",
+          "prompt": "Take the small bag while he steadies the first sack",
+          "line": "“If they stop you, the letter is mine. The other papers have other owners.” Rook puts the key down where everyone can see it.",
+          "result": "The route crew knows which papers belong in the bag.",
+          "speaker": "Rook",
+          "reply": "Ask the crew to witness the seal"
+        },
+        {
+          "zone": "lantern_reach",
+          "at": [
+            2.5,
+            6.8
+          ],
+          "object": "order",
+          "prompt": "Draw a line across the fold before it travels",
+          "seconds": 1.6,
+          "result": "The pressure of a thumb will break the line. Rook carries the light end only when Nera calls.",
+          "set": {
+            "novel_bag_witnessed": true
+          }
+        }
+      ]
     }
   ]
 }

@@ -26,12 +26,32 @@ static func extend(defs: Dictionary) -> void:
 	for quest: String in REQUIRED:
 		if not defs.has(quest): continue
 		for scene: String in REQUIRED[quest]:
-			defs[quest].objectives.append({"id":"novel_"+scene,"text":REQUIRED[quest][scene]})
+			defs[quest].objectives.append({"id":"novel_"+scene,"text":REQUIRED[quest][scene],"kind":"activity"})
 
 static func owning_quest(id: String) -> String:
 	for quest: String in REQUIRED:
 		if REQUIRED[quest].has(id): return quest
 	return ""
+
+## Commit only the next performed action. A replayed UI callback cannot publish it twice.
+static func record_step(state, quests, scene: Dictionary, beat: Dictionary, option: Dictionary, index: int) -> bool:
+	var id := str(scene.id)
+	if index < 0 or index >= scene.beats.size() or index != int(state.get_flag("novel_step_"+id,0)): return false
+	var quest := owning_quest(id)
+	if not quest.is_empty() and not quests.is_active(quest): return false
+	state.begin_change()
+	if beat.has("actor"): state.set_flag("novel_heard_"+str(beat.actor)+"_"+id,true)
+	state.set_flag("novel_step_"+id,index+1)
+	for outcome: Dictionary in [beat,option]:
+		for key: String in outcome.get("set",{}): state.set_flag(key,outcome.set[key])
+		if outcome.has("evidence"):
+			var item: Dictionary = outcome.evidence
+			state.record_evidence("novel:"+str(item.id),{"zone":beat.zone,"title":item.title,"text":item.text,"kind":item.get("kind","observed")})
+	if index+1 == scene.beats.size():
+		state.set_flag("novel_done_"+id,true)
+		finish_scene(quests,id)
+	state.end_change()
+	return true
 
 static func finish_scene(quests, id: String) -> void:
 	var quest := owning_quest(id)

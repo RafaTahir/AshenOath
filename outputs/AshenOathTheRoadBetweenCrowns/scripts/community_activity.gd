@@ -230,7 +230,8 @@ func _open_actor(actor: Node3D, reply: String = "") -> void:
 	if Ending.offers_available(id,game.story_state,game.quests):
 		var offer: Dictionary=Rules.data().departure_offers[id]
 		pages.append({"speaker":"Kael","speaker_id":"player","text":str(offer.question),"performance":{"gesture":"guarded_listening"}})
-		actions.append({"operation":"ask_departure_yes","id":id,"label":"Hear whether they choose to relocate."})
+		if not Ending.chooses_to_stay(id,game.story_state):
+			actions.append({"operation":"ask_departure_yes","id":id,"label":"Hear whether they choose to relocate."})
 		actions.append({"operation":"ask_departure_no","id":id,"label":"Hear their decision to remain."})
 		if game.story_state.get_flag(Ending.DEPARTURE_ANSWERS,{}).get(id)==true: actions.append({"operation":"withdraw_departure","id":id,"label":"Withdraw their recorded departure."})
 	_show(actor,str(row.get("name",id.capitalize())),pages,actions)

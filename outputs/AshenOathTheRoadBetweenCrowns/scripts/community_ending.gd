@@ -133,7 +133,12 @@ static func journey_open(state) -> bool:
 static func offers_available(id: String, state, quests) -> bool:
 	return Rules.actor_available(id,state,quests) and str(state.get_flag("final_covenant",""))=="" and quests!=null and quests.is_completed("main_house_many_names") and Rules.data().get("departure_offers",{}).has(id)
 
+static func chooses_to_stay(id: String, state) -> bool:
+	# Rook sends the relief on its way. His room, shop and obligations stay in Greyfen.
+	return id == "rook" and state.get_flag("novel_edition",0) == 1
+
 static func record_answer(id: String, accepted: bool, state, quests) -> bool:
+	if accepted and chooses_to_stay(id,state): return false
 	if not offers_available(id,state,quests): return false
 	var raw: Variant=state.get_flag(DEPARTURE_ANSWERS,{})
 	var answers: Dictionary=raw.duplicate(true) if raw is Dictionary else {}

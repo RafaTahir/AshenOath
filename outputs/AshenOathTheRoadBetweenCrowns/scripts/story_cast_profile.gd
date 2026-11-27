@@ -188,7 +188,7 @@ static func load_region_life(zone: String, path: String) -> bool:
 static func routine(id: String, zone: String, state, quests, phase: String, minutes: float = -1.0) -> Dictionary:
 	var definition: Dictionary = life_data().get("zones", {}).get(zone, {}).get(id, {}).duplicate(true)
 	if id == "saga_maren":
-		var location: Dictionary = preload("res://scripts/saga_catalog.gd").person_location(id, quests)
+		var location: Dictionary = preload("res://scripts/saga_catalog.gd").person_location(id, quests, state)
 		if str(location.zone) != zone:
 			location = {"site":{"greyfen":"arrivals", "wychwood":"workers", "old_mill":"shelter", "marsh_crossing":"causeway", "record_hall":"archive", "hart_glade":"plot"}.get(zone, "arrivals")}
 		var point: Vector3 = preload("res://scripts/saga_catalog.gd").SITES.get(zone, {}).get(str(location.site), Vector3(3, 0, 8))

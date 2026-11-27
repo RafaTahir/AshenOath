@@ -17,6 +17,7 @@ var generation := 0
 var elapsed := 0.0
 var work_start := Vector3.ZERO
 var refresh_queued := false
+var board_turn: Dictionary = {}
 var alarm_count := 0
 var alarm_silence := 0.0
 
@@ -25,13 +26,14 @@ static func current(host) -> Node:
 	return host.zone_root.get_node_or_null("StoryActivities/" + LAYER)
 
 static func install(director: Node) -> void:
-	if director.host.story_state.get_flag("novel_edition", 0) != 1: return
+	var host: Node = director.host.coordinator if director.host is ZoneConstructionApi else director.host
+	if director.get_parent() != host.zone_root or host.story_state.get_flag("novel_edition", 0) != 1: return
 	var layer: Node = director.get_node_or_null(LAYER)
 	if layer == null:
 		layer = load("res://scripts/novel/novel_scenes.gd").new()
 		layer.name = LAYER
 		layer.owner_director = director
-		layer.game = director.host
+		layer.game = host
 		layer.zone = director.zone
 		director.add_child(layer)
 		director.host.story_state.changed.connect(layer.schedule_refresh)
@@ -106,6 +108,8 @@ func _allows(rule: Dictionary) -> bool:
 	return matches_rule(rule,game.story_state,game.quests)
 
 static func matches_rule(rule: Dictionary, state, quests) -> bool:
+	if rule.get("before_covenant",false) and str(state.get_flag("final_covenant","")) != "": return false
+	if rule.has("stayed_home") and str(rule.stayed_home) in state.get_flag("open_road_named_roster",[]): return false
 	var q := str(rule.get("quest",""))
 	if q != "" and (quests == null or not (quests.is_active(q) or quests.is_completed(q))): return false
 	for closed: String in rule.get("before", []):
@@ -141,7 +145,8 @@ func _station(key: String, index: int, beat: Dictionary) -> Node3D:
 func _actor_id(area: Node3D) -> String:
 	if area.has_meta("community_actor_id"):
 		return str(preload("res://scripts/community_campaign.gd").ACTORS.get(str(area.get_meta("community_actor_id")), ""))
-	return str(area.get("interaction_id"))
+	var identity := str(area.get("interaction_id"))
+	return "saga_nera" if identity=="saga_maren" else identity
 
 func invitations(area: Node3D, content: Dictionary) -> void:
 	for key: String in turns:
@@ -239,6 +244,12 @@ func _strike(key: String, index: int, area: Node3D) -> void:
 
 func _begin_work(key: String, index: int, area: Node3D, option: Dictionary) -> void:
 	var beat: Dictionary = turns[key].beat
+	if option.get("play","") == "slate":
+		board_turn = {"key":key,"index":index,"area":weakref(area),"option":option}
+		if not game.minigames.result.is_connected(_board_result): game.minigames.result.connect(_board_result)
+		if not game.minigames.closed.is_connected(_board_closed): game.minigames.closed.connect(_board_closed)
+		game.minigames.open_game("tic_tac_toe","vale")
+		return
 	pending = {"key":key,"index":index,"area":weakref(area),"option":option}
 	work_start = game.player.global_position
 	elapsed = 0.0
@@ -248,6 +259,18 @@ func _begin_work(key: String, index: int, area: Node3D, option: Dictionary) -> v
 	if game.player.animation_driver != null:
 		game.player.animation_driver.trigger_action("story_offer",1.0,0.12,false,float(beat.seconds))
 	game.hud.set_guidance_hint(str(beat.get("working",beat.prompt)),float(beat.seconds))
+
+func _board_closed() -> void:
+	board_turn = {}
+
+func _board_result(kind: String, outcome: String) -> void:
+	if board_turn.is_empty() or kind != "tic_tac_toe" or game.minigames.opponent_id != "vale" or outcome not in ["win","loss","draw"]: return
+	var request := board_turn
+	board_turn = {}
+	var area: Node3D = request.area.get_ref()
+	if not _valid(request.key,request.index,area): return
+	pending = request
+	_finish()
 
 func _physics_process(delta: float) -> void:
 	if alarm_count > 0: alarm_silence += delta
@@ -275,19 +298,12 @@ func _finish() -> void:
 	var option: Dictionary = request.option
 	cancel()
 	var state = game.story_state
+	var spring: bool = option.get("set",{}).get("novel_season") == "spring" and state.get_flag("novel_season","") != "spring"
 	state.begin_change()
-	if beat.has("actor"):
-		state.set_flag("novel_heard_"+str(beat.actor)+"_"+str(request.key),true)
-	state.set_flag("novel_step_"+str(request.key),int(request.index)+1)
-	if option.get("set",{}).get("novel_season") == "spring" and state.get_flag("novel_season","") != "spring":
-		game.day_night.set_time(game.day_night.get_time(),int(game.day_night.day_count)+180)
-	for outcome: Dictionary in [beat,option]:
-		for key: String in outcome.get("set", {}): state.set_flag(key,outcome.set[key])
-		if outcome.has("evidence"): state.record_evidence("novel:"+str(outcome.evidence.id),{"zone":zone,"title":outcome.evidence.title,"text":outcome.evidence.text,"kind":outcome.evidence.get("kind","observed")})
-	if int(request.index)+1 == turn.scene.beats.size():
-		state.set_flag("novel_done_"+str(request.key),true)
-		Edition.finish_scene(game.quests,str(request.key))
+	var recorded := Edition.record_step(state,game.quests,turn.scene,beat,option,int(request.index))
+	if spring and recorded: game.day_night.set_time(game.day_night.get_time(),int(game.day_night.day_count)+180)
 	state.end_change()
+	if not recorded: return
 	game.story_save_pending = true
 	game.call_deferred("_persist_story_action")
 	refresh()

@@ -16,6 +16,53 @@ func _ready(expected: String) -> void:
 		await process_frame
 	_fail("No playable arrival at "+expected)
 
+func _interact(id: String) -> void:
+	# A player can turn and Use from the aisle without circling a reading desk.
+	var target := game.zone_root.find_child(id,true,false) as Node3D
+	if target != null and target.is_visible_in_tree() and game.player.global_position.distance_to(target.global_position)<3.0:
+		await _face(target.global_position)
+		await _frames(6)
+		if game.active_interactable==target:
+			await _tap(KEY_E)
+			await _frames(6)
+			return
+	await super._interact(id)
+
+func _walk_direct(target: Vector3, stop_zone: String="") -> void:
+	if not failures.is_empty(): return
+	var deadline := Time.get_ticks_msec()+150000
+	var distance := INF
+	var stagnant_ticks := 0
+	while Time.get_ticks_msec()<deadline:
+		if stop_zone!="" and (game.current_zone_id!=stop_zone or game.zone_transition_pending): break
+		var offset: Vector3 = target-game.player.global_position
+		offset.y = 0
+		if offset.length() < 0.36: break
+		if paused or not game.player.can_control:
+			_fail("Walking lost input ownership in "+str(game.hud.active_menu))
+			break
+		if offset.length()+0.035 < distance:
+			distance = offset.length()
+			stagnant_ticks = 0
+		else: stagnant_ticks += 2
+		if stagnant_ticks > 240: break
+		var direction := offset.normalized()
+		var forward: float = direction.dot(game.camera_rig.get_flat_forward())
+		var right: float = direction.dot(game.camera_rig.get_flat_right())
+		_key(KEY_W, forward>0.38)
+		_key(KEY_S, forward< -0.38)
+		_key(KEY_D, right>0.38)
+		_key(KEY_A, right< -0.38)
+		await physics_frame
+		await physics_frame
+	if Time.get_ticks_msec()>=deadline or stagnant_ticks>240:
+		var blockers: Array[String]=[]
+		for index in game.player.get_slide_collision_count():
+			var collision: KinematicCollision3D = game.player.get_slide_collision(index)
+			if collision.get_collider() is Node3D: blockers.append("%s at %s normal %s"%[collision.get_collider().get_path(),collision.get_collider().global_position,collision.get_normal()])
+		_fail("Walk to %s stopped at %s; velocity %s; colliders %s; menu %s"%[target,game.player.global_position,game.player.velocity,blockers,game.hud.active_menu])
+	await _release()
+
 func _initialize() -> void:
 	output = OS.get_environment("ASHEN_NOVEL_EVIDENCE")
 	case_id = output.get_file()
@@ -54,7 +101,7 @@ func _initialize() -> void:
 		return
 	var sequence: Array=layer.turns[scene_key].scene.beats
 	var original_day := int(game.day_night.day_count)
-	for index in sequence.size():
+	for index in range(int(story.get_flag("novel_step_"+scene_key,0)),sequence.size()):
 		if not failures.is_empty(): break
 		await _interact("novel_%s_%d"%[scene_key,index])
 		if sequence[index].has("choices"): await _dialogue_button(sequence[index].choices[0].label)

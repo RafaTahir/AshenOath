@@ -4,11 +4,9 @@ Recover from this document, DIRECTIVE.md and the unchanged originals in source/2
 
 ## Current milestone
 
-Intake complete. All nine supplied files retained; published source checksums matched. All 38 sections mapped below. No section has earned playable or artistic acceptance. Story interactions are being implemented against the existing director, HUD, actor presence and normal Use input. Full authoring, live integration and route evidence remain pending.
+All nine originals remain in source/2026-11-27. SCENES.md maps every one of the 114 manuscript scenes to gameplay in source order. The chapter register describes the adaptation intent. The dated checkpoints below distinguish source, model receipts, rendered play and remaining work. Production continues in D:/AOStory.
 
-The Game Assets chat owns the crow, cart bell, wrist brace and two-lock strongbox scenes. The packaging chat owns export selection for data/novel/act_1.json through act_4.json and assets/narrative_props. Both work outside this checkout.
-
-Existing ownership: quest manager advances main work and rewards; StoryState owns evidence, choices and consent; zone installation builds interactable scenes. Preserve revision 1 classic and existing revision 2 saves. Keep Sella and Rook’s private knowledge separate from Kael’s. Browser performance, package and representative gameplay evidence pending.
+QuestManager owns the existing campaign graph. StoryState holds evidence, choices and consent. A new journey opts into the novel edition. Older classic and expanded journeys retain their graphs. The art and packaging workstreams maintain separate local checkouts.
 
 ## Chapter register
 
@@ -63,3 +61,19 @@ Acts I–III now have first-pass interaction data for chapters 1–27. The secto
 - The isolated rendered New Game used 38 normal input events. Sella reached the gate, Kael received no field evidence from her viewpoint, and walking/Use advanced both Greyfen hub jobs. The earlier run timed out before New Game became available. The successful cold source run logged 217,413 ms to the menu on this machine; the shutdown reported an ObjectDB leak. These are open technical observations. Individual inputs, duration and images are in evidence/opening.
 - The first Godot model pass exercised 579 assertions, 56 scene sequences, 139 beats and 41 explicit options, including the six enacted-ending gates, older graph selection and save coordinates. Chapters with authored source remain awaiting integrated or representative play until separately evidenced.
 - Remaining: finish authored social/physical consequences and knowledge gates, integrate Tor/Rook performance and Open Road evacuation, inspect late-game play and branch/save continuity, package safeguards, and perform the final source/production review. No release has been made. The production worktree is D:/AOStory; staging edits and the source sandbox are D:/Projects/AshenOath-Novel-Work and D:/AOPlay respectively.
+
+## Castle, Hearthward and Open Road integration
+
+- ca5c852 preserves the first actual-input opening evidence, workers' petition and physical aftermaths. The following Godot pass counted 622 checks, 64 sequences, 149 steps and 47 choices in 38 sections.
+- 46211e0 integrates Tor's and Rook's ongoing injuries. c52419c adds the warrant counterpart, two-lock weekly count, drain, private correction and changed relief destination. The tracker and field dialogue now distinguish who accepted a role and what Kael actually learned. More scenes have been authored since the last numeric pass.
+- 07e6671 adds the four prologue sets. The art workstream reports 41 isolated checks per viewport, including input and restore. e601b4a integrates the two physical ferry trips, empty return, seven dependents, guide line, injury, losses and refuge handover. Its two focused native tests passed in the originating checkout. OPEN_ROAD.md and CAST_PERFORMANCE.md contain the contracts.
+- New independent boundary runs entered the Record Hall and Hearthward, earned the first physical action, saved, and continued. Both stopped on the walk to the second site. The Old Mill run exceeded its original arrival wait. These runs are diagnostic, not passed playthroughs. Hearthward exposed an obsolete transition-property access during the community loop. A corrective change is in progress.
+- D:/AOStory is now sufficiently hydrated for independent local Godot tools with its own ordinary import cache. The editable branch is authoritative. Do not copy prior staging scripts over newer source in this worktree. The packaging chat owns a local Web review candidate; Game Assets owns three dramatic field performances. No live release or push.
+
+## Manuscript and continuity milestone
+
+- Integrated all four movements with the prologue and six spring aftermaths. The source catalog has 92 sequences, 203 action/dialogue beats and 65 offered choices. Some native scenes and existing quests cover several source intervals. SCENES.md records the compression and alternate routes individually.
+- A new Godot replay drove all mandatory additions through the real quest graph and story receipt owner for six projected endings. It performed 18 JSON/codec restores and 954 assertions. Its existing-world and ending inputs are simulated receipts. The separate catalog and save suite passed 825 assertions across the 38 sections. Neither result constitutes a six-ending gameplay playthrough.
+- Rendered native input completed Tor’s mill accident, including saving and reopening the scene after the first action, and the four-piece Hearthward shelter sequence after resuming the earlier checkpoint. Capture and report pairs are in evidence/tor_wrist and evidence/dry_floor. A subsequent Record Hall attempt reached the last receipt but stalled during its approach. The old epilogue fixture failed the released departure consistency checks and never offered Continue. A corrected, separately labelled boundary journey supplies the required evacuation facts. Real save validation remains strict.
+- Open Road preserves Rook’s Greyfen trade. Mira and Vale can each refuse or accept closeness. The old gate memory requires the Hart's hearing before the covenant. The story now distinguishes Kael’s escort from that witness and the use of ration, public and private records. The player can help bring the last bedding indoors after any spring visit.
+- Remaining integration work includes the live field performances, the architecture ratchet, remaining rendered boundaries and source-aligned Web package. Native runs continue to report an ObjectDB warning on exit. Artistic acceptance remains open.

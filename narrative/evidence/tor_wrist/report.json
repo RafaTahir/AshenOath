@@ -1,0 +1,190 @@
+{
+	"capture_desktop": "",
+	"case": "novel-tor_wrist",
+	"completed_work": [],
+	"elapsed_ms": 146885,
+	"execution_mode": "background-rendered",
+	"failures": [],
+	"full_campaign_proof": false,
+	"headless": false,
+	"input_events": 55,
+	"input_mode": "keyboard_mouse",
+	"kind": "community_world_real_input",
+	"no_focus": true,
+	"observations": [
+		{
+			"elapsed_ms": 128359,
+			"flags": {
+				"ashwing_defeated": true,
+				"bell_eater_defeated": true,
+				"bog_core_fate": "returned",
+				"campaign_revision": 2,
+				"covenant_rules_known": true,
+				"crisis_cause_known": true,
+				"crow_shrine_state": "cleansed",
+				"everyday_wear": {
+					"player": {
+						"soil": 0.0,
+						"wet": 0.0
+					}
+				},
+				"evidence_report": "public",
+				"mill_fate": "preserved",
+				"mill_operation": "closed",
+				"mill_records_preserved": true,
+				"mira_truth_known": true,
+				"moon_oil_mastery": true,
+				"names_policy": "published",
+				"novel_edition": 1.0,
+				"novel_prologue_closed": true,
+				"novel_step_tor_wrist": 1.0,
+				"protected_family_addresses": true,
+				"renewal_announced": true,
+				"rootbound_colossus_defeated": true,
+				"wychwood_pack_cleared": true
+			},
+			"image": "D:\\AOPlay\\evidence\\novel-tor_wrist/00_reload_tor_wrist_in_progress.png",
+			"input_events": 39,
+			"label": "reload_tor_wrist_in_progress",
+			"position": "(2.7, 0.015, 6.457535)",
+			"quests": {
+				"active": {
+					"main_ash_at_the_mill": {
+						"objectives": [
+							{
+								"done": true,
+								"id": "reach_mill",
+								"text": "Reach the mill that supplies Greyfen."
+							},
+							{
+								"done": false,
+								"id": "inspect_millstones",
+								"optional": true,
+								"text": "Optional: compare the ash measure with the missing wagons."
+							},
+							{
+								"done": false,
+								"id": "open_mill_sluice",
+								"optional": true,
+								"story_flag": "mill_ventilation_open",
+								"text": "Optional: open the sluice to clear the workers' escape channel."
+							},
+							{
+								"done": false,
+								"id": "escort_mill_workers",
+								"optional": true,
+								"story_flag": "mill_workers_rescued",
+								"text": "Optional: stay with the workers until both reach the south yard."
+							},
+							{
+								"done": true,
+								"id": "mill_encounter",
+								"text": "Clear the ash-bound attackers from the workers' route."
+							},
+							{
+								"done": false,
+								"id": "mill_choice",
+								"text": "Overcome Ashwing, then decide how Greyfen receives flour."
+							},
+							{
+								"done": false,
+								"id": "novel_tor_wrist",
+								"text": "Help make the south gallery safe."
+							}
+						]
+					}
+				},
+				"completed": {
+					"main_bell_beneath_greyfen": true,
+					"main_names_they_burned": true,
+					"main_road_of_crows": true,
+					"main_teeth_in_rain": true
+				},
+				"completed_objectives": {
+					"main_bell_beneath_greyfen": {
+						"cemetery_ambush": true,
+						"crow_shrine_choice": true,
+						"grave_child": true,
+						"grave_harl": true,
+						"grave_soldier": false,
+						"grave_truth": true,
+						"meet_anwen_gate": true,
+						"novel_two_doors": false,
+						"open_chapel": true
+					},
+					"main_names_they_burned": {
+						"fragment_anwen": true,
+						"fragment_mira": false,
+						"fragment_rook": true,
+						"fragment_tor": true,
+						"names_choice": true,
+						"novel_tally_house": false,
+						"reconstruct_register": true
+					},
+					"main_road_of_crows": {
+						"bram": true,
+						"drag_marks": false,
+						"evidence_ready": true,
+						"fight_ghoulkin": true,
+						"oren": true,
+						"return_village": true,
+						"sella": true,
+						"speak_anwen": true,
+						"vargan_wire": false
+					},
+					"main_teeth_in_rain": {
+						"bog_core_choice": true,
+						"craft_moon_oil": false,
+						"fight_bog_wretch": true,
+						"name_the_dead": true,
+						"novel_willow_frame": false,
+						"read_chapel_names": true,
+						"speak_mira": true
+					}
+				},
+				"evidence_history": {
+
+				},
+				"tracked_quest_id": "main_ash_at_the_mill",
+				"tracked_quest_is_manual": false,
+				"tracker_context_zone": "old_mill",
+				"unlocked": {
+					"main_ash_at_the_mill": true,
+					"main_bell_beneath_greyfen": true,
+					"main_names_they_burned": true,
+					"main_road_of_crows": true,
+					"main_teeth_in_rain": true,
+					"side_bitter_roots": true,
+					"side_black_dog": true,
+					"side_bracken_rescue": true,
+					"side_childs_charm": true,
+					"side_empty_grave": true,
+					"side_iron_remembers": true,
+					"side_millers_measure": true,
+					"side_rooks_map": true,
+					"side_soldiers_debt": true,
+					"side_three_candles": true,
+					"side_widows_bell": true
+				},
+				"world_flags": {
+
+				}
+			},
+			"zone": "old_mill"
+		}
+	],
+	"physical_phone_coverage": false,
+	"progression_injection": false,
+	"renderer": "gl_compatibility",
+	"scene": "tor_wrist",
+	"schema_version": 1,
+	"seed": "synthetic_boundary",
+	"status": "pass",
+	"touch_input_coverage": false,
+	"user_data_dir": "D:/AOPlay/evidence/novel-tor_wrist/user/Godot/app_userdata/Ashen Oath- The Road Between Crowns",
+	"viewport": "(960, 540)",
+	"viewport_size": [
+		960,
+		540
+	]
+}

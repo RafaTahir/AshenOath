@@ -8,14 +8,23 @@ const PLACES := {
 	"cemetery":[["novel_oren_buried",true,"family_graves",[-2.2,7.4],"grave_flowers",""]],
 	"old_mill":[["novel_tor_braced",true,"measuring_bench",[-2.4,8.6],"work_bench",""]],
 	"lantern_reach":[["novel_done_hearth_cover",true,"relief_place",[-4.0,5.1],"rest_chair",""],["novel_load_limits_known",true,"load_board",[2.3,1.8],"load_board",""]],
-	"hearthward":[["novel_first_beds",true,"guest_bed",[-5.5,4.2],"guest_bed",""],["novel_alarm_heard",true,"wall_pan",[2.7,5.7],"wall_pan",""],["novel_season","spring","spring_chair",[2.8,6.8],"rest_chair",""]],
+	"hearthward":[["novel_first_beds",true,"guest_bed",[-5.5,4.2],"guest_bed",""],["novel_alarm_heard",true,"wall_pan",[2.7,5.7],"wall_pan",""]],
 	"hart_glade":[["final_covenant","ash","burnt_bed",[-3.0,6.3],"burnt_bed",""]]
 }
 
+const SPRING_WORK := {
+	"greyfen":[["witness",[-2.0,6.3],"public_copy"],["mercy",[-2.0,6.3],"closed_case"]],
+	"hart_glade":[["duty",[1.9,5.8],"watch_meal"],["ash",[1.9,5.8],"seed_bed"]],
+	"hearthward":[["concord",[-2.6,6.1],"shift_board"],["open_road",[2.8,6.8],"rest_chair"]]
+}
+
 static func project(owner: Node, zone: String, state) -> void:
-	if not PLACES.has(zone): return
+	var rows: Array = PLACES.get(zone,[]).duplicate()
+	for work: Array in SPRING_WORK.get(zone,[]):
+		rows.append(["novel_done_spring_"+str(work[0]),true,"spring_"+str(work[0]),work[1],work[2],""])
+	if rows.is_empty(): return
 	var layer: Node3D = owner.get_node_or_null("WorkAftermath")
-	for row: Array in PLACES[zone]:
+	for row: Array in rows:
 		var present: bool = state.get_flag(row[0],null) == row[1]
 		if row[2]=="burnt_bed": present = present and bool(state.get_flag("final_choice_completed",false))
 		if layer == null:
@@ -42,6 +51,21 @@ static func _build(root: Node3D, kind: String, variant: String) -> void:
 				hook.rotation.z = -0.015
 				instance.position = Vector3(0,0.68,0)
 				root.add_child(instance)
+		"public_copy":
+			Workpiece.dress(root,"ledger")
+			Workpiece.dress(root,"copy").position.x = 0.79
+		"closed_case":
+			Workpiece.dress(root,"strongbox")
+		"watch_meal":
+			Workpiece.dress(root,"meal")
+			Workpiece.dress(root,"post").position.x = 0.60
+		"seed_bed":
+			Workpiece.dress(root,"seed_bed")
+		"shift_board":
+			_build(root,"load_board","")
+			for i in 3:
+				var slip := Workpiece.box(root,Vector3(-0.15+0.13*i,0.52,0.09),Vector3(0.11,0.16,0.014),Workpiece.PAPER)
+				slip.rotation.z = -0.08*i
 		"grave_flowers":
 			for i in 3:
 				var stem := Workpiece.box(root,Vector3(i*0.39,0.12,0.04*(i%2)),Vector3(0.012,0.23,0.012),Color("#586141"))
