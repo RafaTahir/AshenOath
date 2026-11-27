@@ -1,0 +1,520 @@
+{
+  "format": "AshenOath novel adaptation planning map",
+  "edition": "2026-11-27",
+  "source_commit": "724821915f0b4a02677a862c7472a7fe5af3dcc7",
+  "narrative_words": 79435,
+  "pdf_pages": 266,
+  "planning_only": true,
+  "integration_note": "This is an authoring reference, not a runtime import payload. New scenes and literary particulars require deliberate adaptation. The game repository has not been modified.",
+  "literary_route": {
+    "ending_action": "depart",
+    "ending_outcome": "open_road",
+    "romance_partner": "mira"
+  },
+  "chapters": [
+    {
+      "number": 0,
+      "label": "Prologue",
+      "title": "The Painted Crow",
+      "word_count": 1846,
+      "pdf_start_page": 4,
+      "pdf_end_page": 8,
+      "existing_quest_anchors": [],
+      "anchor_context": "Proposed literary framing",
+      "adaptation_purpose": "Introduce the missing travelers before Kael arrives."
+    },
+    {
+      "number": 1,
+      "label": "Chapter 1",
+      "title": "A Hunter's Price",
+      "word_count": 2004,
+      "pdf_start_page": 9,
+      "pdf_end_page": 15,
+      "existing_quest_anchors": [
+        "main_road_of_crows"
+      ],
+      "anchor_context": "main_road_of_crows",
+      "adaptation_purpose": "Establish ordinary paid work, Greyfen's routines and Kael's intended departure. Cart assistance makes his first relationship concrete."
+    },
+    {
+      "number": 2,
+      "label": "Chapter 2",
+      "title": "The Broken Cart",
+      "word_count": 1994,
+      "pdf_start_page": 16,
+      "pdf_end_page": 20,
+      "existing_quest_anchors": [
+        "main_road_of_crows"
+      ],
+      "anchor_context": "main_road_of_crows",
+      "adaptation_purpose": "Recover bounded physical clues through Wychwood combat. Wire suggests intervention without establishing who caused the attack."
+    },
+    {
+      "number": 3,
+      "label": "Chapter 3",
+      "title": "What We Brought Back",
+      "word_count": 1891,
+      "pdf_start_page": 21,
+      "pdf_end_page": 26,
+      "existing_quest_anchors": [
+        "main_road_of_crows"
+      ],
+      "anchor_context": "main_road_of_crows",
+      "adaptation_purpose": "Make the reporting choice, custody and Kael's decision to stay playable rather than automatic."
+    },
+    {
+      "number": 4,
+      "label": "Chapter 4",
+      "title": "A Widow's Bell",
+      "word_count": 1931,
+      "pdf_start_page": 27,
+      "pdf_end_page": 32,
+      "existing_quest_anchors": [
+        "main_bell_beneath_greyfen",
+        "side_widows_bell"
+      ],
+      "anchor_context": "main_bell_beneath_greyfen; side_widows_bell",
+      "adaptation_purpose": "Connect cemetery investigation to Elna's marriage and Harl's incomplete account."
+    },
+    {
+      "number": 5,
+      "label": "Chapter 5",
+      "title": "The Rope",
+      "word_count": 1927,
+      "pdf_start_page": 33,
+      "pdf_end_page": 38,
+      "existing_quest_anchors": [
+        "main_bell_beneath_greyfen"
+      ],
+      "anchor_context": "main_bell_beneath_greyfen",
+      "adaptation_purpose": "Prepared Bell-Eater encounter; Anwen's novice account; temporary chapel containment."
+    },
+    {
+      "number": 6,
+      "label": "Chapter 6",
+      "title": "The One Who Returned",
+      "word_count": 1821,
+      "pdf_start_page": 39,
+      "pdf_end_page": 44,
+      "existing_quest_anchors": [
+        "side_escort_01",
+        "side_bracken_rescue"
+      ],
+      "anchor_context": "side_escort_01; side_bracken_rescue",
+      "adaptation_purpose": "Nera recognizes Kael during relief work. Bracken remains a dependent animal, without granting forgiveness."
+    },
+    {
+      "number": 7,
+      "label": "Chapter 7",
+      "title": "Under Green Water",
+      "word_count": 1879,
+      "pdf_start_page": 45,
+      "pdf_end_page": 50,
+      "existing_quest_anchors": [
+        "main_teeth_in_rain",
+        "side_black_dog",
+        "side_bitter_roots"
+      ],
+      "anchor_context": "main_teeth_in_rain; side_black_dog; side_bitter_roots",
+      "adaptation_purpose": "Toma's protection secret, Pell's treatment and Mira's disclosure precede the bog."
+    },
+    {
+      "number": 8,
+      "label": "Chapter 8",
+      "title": "The Name in the Reeds",
+      "word_count": 2033,
+      "pdf_start_page": 51,
+      "pdf_end_page": 56,
+      "existing_quest_anchors": [
+        "main_teeth_in_rain",
+        "side_childs_charm"
+      ],
+      "anchor_context": "main_teeth_in_rain; side_childs_charm",
+      "adaptation_purpose": "Oren's bounded fragment, private return and actual burial. Preserve the distinction between body, object and memory."
+    },
+    {
+      "number": 9,
+      "label": "Chapter 9",
+      "title": "No Footsteps Back",
+      "word_count": 1947,
+      "pdf_start_page": 57,
+      "pdf_end_page": 62,
+      "existing_quest_anchors": [
+        "side_escort_02",
+        "main_names_they_burned"
+      ],
+      "anchor_context": "side_escort_02; approach to main_names_they_burned",
+      "adaptation_purpose": "Nera's present survey challenges Kael's account. The novel's additional footbridge is proposed geography."
+    },
+    {
+      "number": 10,
+      "label": "Chapter 10",
+      "title": "The Names They Burned",
+      "word_count": 2281,
+      "pdf_start_page": 63,
+      "pdf_end_page": 69,
+      "existing_quest_anchors": [
+        "main_names_they_burned"
+      ],
+      "anchor_context": "main_names_they_burned",
+      "adaptation_purpose": "Recover partial registers; earn passage through the Colossus encounter; establish Anwen's full present concealment chain."
+    },
+    {
+      "number": 11,
+      "label": "Chapter 11",
+      "title": "The Widow's Version",
+      "word_count": 1924,
+      "pdf_start_page": 70,
+      "pdf_end_page": 75,
+      "existing_quest_anchors": [
+        "side_widows_bell",
+        "side_rooks_map",
+        "main_names_they_burned"
+      ],
+      "anchor_context": "side_widows_bell; side_rooks_map; main_names_they_burned aftermath",
+      "adaptation_purpose": "Separate institutional disclosure from Elna's private marriage memories and family addresses."
+    },
+    {
+      "number": 12,
+      "label": "Chapter 12",
+      "title": "What We Carried",
+      "word_count": 2028,
+      "pdf_start_page": 76,
+      "pdf_end_page": 81,
+      "existing_quest_anchors": [
+        "side_escort_03"
+      ],
+      "anchor_context": "side_escort_03",
+      "adaptation_purpose": "Physically recover the medicine load after consulting Nera, Mira and Tor."
+    },
+    {
+      "number": 13,
+      "label": "Chapter 13",
+      "title": "Ash at the Mill",
+      "word_count": 2087,
+      "pdf_start_page": 82,
+      "pdf_end_page": 87,
+      "existing_quest_anchors": [
+        "main_ash_at_the_mill",
+        "side_millers_measure"
+      ],
+      "anchor_context": "main_ash_at_the_mill; side_millers_measure",
+      "adaptation_purpose": "Ashwing, worker rescue and attributed accounts connect inherited harm to present livelihoods."
+    },
+    {
+      "number": 14,
+      "label": "Chapter 14",
+      "title": "Iron Remembers",
+      "word_count": 1919,
+      "pdf_start_page": 88,
+      "pdf_end_page": 93,
+      "existing_quest_anchors": [
+        "main_ash_at_the_mill",
+        "side_iron_remembers"
+      ],
+      "anchor_context": "main_ash_at_the_mill; side_iron_remembers",
+      "adaptation_purpose": "Supervised milling, replacement work and Tor's proposed lasting wrist injury."
+    },
+    {
+      "number": 15,
+      "label": "Chapter 15",
+      "title": "Bread and Ash",
+      "word_count": 2130,
+      "pdf_start_page": 94,
+      "pdf_end_page": 100,
+      "existing_quest_anchors": [
+        "main_ash_at_the_mill"
+      ],
+      "anchor_context": "main_ash_at_the_mill aftermath; existing Mira relationship scenes",
+      "adaptation_purpose": "Rest, intimacy and the renewal threat. No new compulsory romance quest."
+    },
+    {
+      "number": 16,
+      "label": "Chapter 16",
+      "title": "The Empty Tables",
+      "word_count": 2111,
+      "pdf_start_page": 101,
+      "pdf_end_page": 106,
+      "existing_quest_anchors": [
+        "main_empty_tables"
+      ],
+      "anchor_context": "main_empty_tables",
+      "adaptation_purpose": "Prepare the common kitchen. Rook's route-sharing betrayal is a proposed parallel scene."
+    },
+    {
+      "number": 17,
+      "label": "Chapter 17",
+      "title": "A Place at the Table",
+      "word_count": 2020,
+      "pdf_start_page": 107,
+      "pdf_end_page": 112,
+      "existing_quest_anchors": [
+        "main_empty_tables"
+      ],
+      "anchor_context": "main_empty_tables",
+      "adaptation_purpose": "Complete service and accounts; Rook admits the disclosure before the later interception."
+    },
+    {
+      "number": 18,
+      "label": "Chapter 18",
+      "title": "A Road Kept Open",
+      "word_count": 2423,
+      "pdf_start_page": 113,
+      "pdf_end_page": 119,
+      "existing_quest_anchors": [
+        "main_road_kept_open"
+      ],
+      "anchor_context": "main_road_kept_open",
+      "adaptation_purpose": "Choose the ferry, prepare both banks, accompany and unload a real first load."
+    },
+    {
+      "number": 19,
+      "label": "Chapter 19",
+      "title": "A Soldier Without a Banner",
+      "word_count": 2201,
+      "pdf_start_page": 120,
+      "pdf_end_page": 126,
+      "existing_quest_anchors": [
+        "main_soldier_without_banner"
+      ],
+      "anchor_context": "main_soldier_without_banner",
+      "adaptation_purpose": "Earn Senn's stand-down through a dangerous, spatially clear encounter."
+    },
+    {
+      "number": 20,
+      "label": "Chapter 20",
+      "title": "The Officer's Hand",
+      "word_count": 2180,
+      "pdf_start_page": 127,
+      "pdf_end_page": 134,
+      "existing_quest_anchors": [
+        "main_soldier_without_banner",
+        "side_soldiers_debt"
+      ],
+      "anchor_context": "main_soldier_without_banner; side_soldiers_debt",
+      "adaptation_purpose": "Custody, restitution inventory and separately voluntary testimony."
+    },
+    {
+      "number": 21,
+      "label": "Chapter 21",
+      "title": "Hold the Rear",
+      "word_count": 2443,
+      "pdf_start_page": 135,
+      "pdf_end_page": 143,
+      "existing_quest_anchors": [
+        "side_escort_04"
+      ],
+      "anchor_context": "side_escort_04",
+      "adaptation_purpose": "Protect the rear under Nera's direction. The patrol interception and Rook's injury expand the existing crossing."
+    },
+    {
+      "number": 22,
+      "label": "Chapter 22",
+      "title": "The Man Who Keeps Keys",
+      "word_count": 1917,
+      "pdf_start_page": 144,
+      "pdf_end_page": 151,
+      "existing_quest_anchors": [
+        "main_blood_under_stone",
+        "saga_var_q03"
+      ],
+      "anchor_context": "main_blood_under_stone; adaptation of saga_var_q03",
+      "adaptation_purpose": "Archive access, Merrow's choices and detained workers. Introduce the proposed Refusal Book."
+    },
+    {
+      "number": 23,
+      "label": "Chapter 23",
+      "title": "Blood Under Stone",
+      "word_count": 2001,
+      "pdf_start_page": 152,
+      "pdf_end_page": 158,
+      "existing_quest_anchors": [
+        "main_blood_under_stone",
+        "saga_var_q01"
+      ],
+      "anchor_context": "main_blood_under_stone; optional saga_var_q01 comparison",
+      "adaptation_purpose": "Distinguish the old command from Edric's later suppression. Copy and preserve primary proof."
+    },
+    {
+      "number": 24,
+      "label": "Chapter 24",
+      "title": "The Price of Bread",
+      "word_count": 2196,
+      "pdf_start_page": 159,
+      "pdf_end_page": 166,
+      "existing_quest_anchors": [
+        "main_blood_under_stone"
+      ],
+      "anchor_context": "main_blood_under_stone",
+      "adaptation_purpose": "Expose current coercion; refuse a settlement preserving household assent."
+    },
+    {
+      "number": 25,
+      "label": "Chapter 25",
+      "title": "The Last Witness",
+      "word_count": 2180,
+      "pdf_start_page": 167,
+      "pdf_end_page": 174,
+      "existing_quest_anchors": [
+        "main_last_witness"
+      ],
+      "anchor_context": "main_last_witness",
+      "adaptation_purpose": "Halvern's bounded hearing and release in the undercroft, after an earned defensive encounter."
+    },
+    {
+      "number": 26,
+      "label": "Chapter 26",
+      "title": "The Word Retreat",
+      "word_count": 2124,
+      "pdf_start_page": 175,
+      "pdf_end_page": 182,
+      "existing_quest_anchors": [
+        "side_escort_05"
+      ],
+      "anchor_context": "side_escort_05",
+      "adaptation_purpose": "Kael corrects his separate report. The novel relocates the conversation and marks remembered wording as reconstruction."
+    },
+    {
+      "number": 27,
+      "label": "Chapter 27",
+      "title": "The House That Was Empty",
+      "word_count": 2180,
+      "pdf_start_page": 183,
+      "pdf_end_page": 190,
+      "existing_quest_anchors": [
+        "main_house_many_names"
+      ],
+      "anchor_context": "main_house_many_names",
+      "adaptation_purpose": "Survey Hearthward and establish only basic first-night shelter."
+    },
+    {
+      "number": 28,
+      "label": "Chapter 28",
+      "title": "The House of Many Names",
+      "word_count": 2347,
+      "pdf_start_page": 191,
+      "pdf_end_page": 198,
+      "existing_quest_anchors": [
+        "main_house_many_names"
+      ],
+      "anchor_context": "main_house_many_names",
+      "adaptation_purpose": "Complete beds, care space and dry records; welcome actual first arrivals."
+    },
+    {
+      "number": 29,
+      "label": "Chapter 29",
+      "title": "What Remains Private",
+      "word_count": 2251,
+      "pdf_start_page": 199,
+      "pdf_end_page": 206,
+      "existing_quest_anchors": [
+        "main_house_many_names"
+      ],
+      "anchor_context": "main_house_many_names aftermath; relationship continuation",
+      "adaptation_purpose": "Protect intimate material; confront Kael without treating love as acquittal."
+    },
+    {
+      "number": 30,
+      "label": "Chapter 30",
+      "title": "What We Promise",
+      "word_count": 2046,
+      "pdf_start_page": 207,
+      "pdf_end_page": 213,
+      "existing_quest_anchors": [
+        "main_what_we_promise"
+      ],
+      "anchor_context": "main_what_we_promise",
+      "adaptation_purpose": "Test meals, alarm and handover; record individual answers; complete the first watch."
+    },
+    {
+      "number": 31,
+      "label": "Chapter 31",
+      "title": "The Refusal Book",
+      "word_count": 2167,
+      "pdf_start_page": 214,
+      "pdf_end_page": 221,
+      "existing_quest_anchors": [
+        "main_crowns_without_mercy"
+      ],
+      "anchor_context": "Proposed optional scene before main_crowns_without_mercy",
+      "adaptation_purpose": "Secure a current grain-refusal duplicate. It supplements guaranteed main proof."
+    },
+    {
+      "number": 32,
+      "label": "Chapter 32",
+      "title": "Crowns Without Mercy",
+      "word_count": 2208,
+      "pdf_start_page": 222,
+      "pdf_end_page": 228,
+      "existing_quest_anchors": [
+        "main_crowns_without_mercy",
+        "saga_var_q04"
+      ],
+      "anchor_context": "main_crowns_without_mercy; affinity with saga_var_q04",
+      "adaptation_purpose": "Remove the ration condition before witnesses speak. A supply-office side quest cannot substitute for Assembly completion."
+    },
+    {
+      "number": 33,
+      "label": "Chapter 33",
+      "title": "The Hart Remembers",
+      "word_count": 2278,
+      "pdf_start_page": 229,
+      "pdf_end_page": 236,
+      "existing_quest_anchors": [
+        "main_hart_remembers"
+      ],
+      "anchor_context": "main_hart_remembers",
+      "adaptation_purpose": "Hear the complete old account; weigh actual alternatives; select a method without instantly completing it."
+    },
+    {
+      "number": 34,
+      "label": "Chapter 34",
+      "title": "The Last Load",
+      "word_count": 2163,
+      "pdf_start_page": 237,
+      "pdf_end_page": 243,
+      "existing_quest_anchors": [
+        "main_hart_remembers"
+      ],
+      "anchor_context": "main_hart_remembers, depart enactment",
+      "adaptation_purpose": "Dismantle the territorial ward, lose Hart access and begin physical migration."
+    },
+    {
+      "number": 35,
+      "label": "Chapter 35",
+      "title": "The Man Who Came Back",
+      "word_count": 2299,
+      "pdf_start_page": 244,
+      "pdf_end_page": 251,
+      "existing_quest_anchors": [
+        "main_hart_remembers"
+      ],
+      "anchor_context": "main_hart_remembers, depart delivery",
+      "adaptation_purpose": "Rescue and deliver both dependent households. Flood failure and calf injury are proposed additions."
+    },
+    {
+      "number": 36,
+      "label": "Chapter 36",
+      "title": "The Relief Handover",
+      "word_count": 2017,
+      "pdf_start_page": 252,
+      "pdf_end_page": 258,
+      "existing_quest_anchors": [
+        "side_escort_06"
+      ],
+      "anchor_context": "side_escort_06 after covenant completion",
+      "adaptation_purpose": "Reconcile actual goods and routes; offer company without claiming reconciliation."
+    },
+    {
+      "number": 99,
+      "label": "Epilogue",
+      "title": "The Road Between Crowns",
+      "word_count": 2041,
+      "pdf_start_page": 259,
+      "pdf_end_page": 265,
+      "existing_quest_anchors": [],
+      "anchor_context": "Proposed literary framing",
+      "adaptation_purpose": "Show the selected route six months after the final migration."
+    }
+  ]
+}
